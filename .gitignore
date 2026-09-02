@@ -1,0 +1,19 @@
+# Next.js
+node_modules/
+.next/
+out/
+
+# Python
+__pycache__/
+*.py[cod]
+.venv/
+
+# Environment files and local data
+.env
+.env.local
+*.sqlite3
+
+# Editor / OS files
+.vscode/
+.DS_Store
+Thumbs.db

@@ -13,6 +13,12 @@ __pycache__/
 .env.local
 *.sqlite3
 
+# Local runtime logs and downloaded installers
+tmp/
+catan_app/.logs/
+*.stdout.log
+*.stderr.log
+
 # Editor / OS files
 .vscode/
 .DS_Store

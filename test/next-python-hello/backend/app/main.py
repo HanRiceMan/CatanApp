@@ -31,3 +31,10 @@ def hello(name: str = Query(default="ゲスト", min_length=1)) -> HelloResponse
         message=f"こんにちは、{name}さん。Python (FastAPI) から返答しました。",
         received_name=name,
     )
+
+
+@app.get("/api/lamp")
+def get_lamp() -> dict[str, bool]:
+    """画面のランプの点灯状態を返す。"""
+    # False に変更すると、次の点灯チェックで消灯する。
+    return {"is_on": True}

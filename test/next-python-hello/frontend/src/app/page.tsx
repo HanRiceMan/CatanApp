@@ -1,6 +1,6 @@
 "use client";
 
-import { FormEvent, useState } from "react";
+import { useState, type SubmitEvent } from "react";
 
 type HelloResponse = {
   message: string;
@@ -14,8 +14,36 @@ export default function Home() {
   const [result, setResult] = useState<HelloResponse | null>(null);
   const [error, setError] = useState("");
   const [isLoading, setIsLoading] = useState(false);
+  const [isLampOn, setIsLampOn] = useState(false);
+  const [isLamp2On, setIsLamp2On] = useState(false);
+  const [loadingLamp, setLoadingLamp] = useState<1 | 2 | null>(null);
+  const [lampError, setLampError] = useState("");
 
-  async function callPythonApi(event: FormEvent<HTMLFormElement>) {
+  async function checkLamp(lampId: 1 | 2) {
+    setLoadingLamp(lampId);
+    setLampError("");
+
+    try {
+      const response = await fetch(`${API_BASE_URL}/api/lamp`, { cache: "no-store" });
+      if (!response.ok) {
+        throw new Error(`API error: ${response.status}`);
+      }
+
+      const data: { is_on: boolean } = await response.json();
+      // 同じAPIを使い、押したボタンに対応するランプだけ更新する。
+      if (lampId === 1) {
+        setIsLampOn(data.is_on);
+      } else {
+        setIsLamp2On(data.is_on);
+      }
+    } catch {
+      setLampError(`ランプ${lampId}の状態を取得できません。Python API が起動しているか確認してください。`);
+    } finally {
+      setLoadingLamp(null);
+    }
+  }
+
+  async function callPythonApi(event: SubmitEvent<HTMLFormElement>) {
     event.preventDefault();
     setIsLoading(true);
     setError("");
@@ -61,6 +89,30 @@ export default function Home() {
           {isLoading ? "通信中…" : "Python API を呼ぶ"}
         </button>
       </form>
+
+      <section className="lamp-panel" aria-label="ランプの点灯チェック">
+        <button type="button" onClick={() => checkLamp(1)} disabled={loadingLamp !== null}>
+          {loadingLamp === 1 ? "確認中…" : "ランプ1を確認"}
+        </button>
+        <p role="status">
+          <span
+            className={`lamp ${isLampOn ? "lamp-on" : "lamp-off"}`}
+            aria-hidden="true"
+          />
+          ランプ1：{isLampOn ? "点灯しています" : "消灯しています"}
+        </p>
+        <button type="button" onClick={() => checkLamp(2)} disabled={loadingLamp !== null}>
+          {loadingLamp === 2 ? "確認中…" : "ランプ2を確認"}
+        </button>
+        <p role="status">
+          <span
+            className={`lamp ${isLamp2On ? "lamp-on" : "lamp-off"}`}
+            aria-hidden="true"
+          />
+          ランプ2：{isLamp2On ? "点灯しています" : "消灯しています"}
+        </p>
+        {lampError && <p className="error" role="alert">{lampError}</p>}
+      </section>
 
       {result && (
         <section className="result" aria-live="polite">

@@ -1,0 +1,603 @@
+/*
+ * 対局画面の最終レイアウト。
+ * 盤面の直下に自分の手札を置き、操作パネルは右側に保つ。
+ */
+.table-app.in-game .game-layout {
+  display: grid !important;
+  grid-template-columns: minmax(0, 1fr) minmax(270px, 310px) !important;
+  grid-template-areas: "board side" !important;
+  align-items: start !important;
+  gap: 12px !important;
+}
+
+.table-app.in-game .page-heading { display: none !important; }
+.table-app.in-game .board-heading { margin: 4px 2px !important; }
+.table-app.in-game .board-title-tools {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  min-width: 0;
+  flex: 1;
+}
+.table-app.in-game .board-title-tools h2 { flex: none; }
+.table-app.in-game .board-status { flex: none; }
+
+.table-app.in-game .board-section {
+  grid-area: board !important;
+  width: 100% !important;
+  min-width: 0 !important;
+  margin: 0 !important;
+}
+
+.table-app.in-game .island-stage {
+  display: grid;
+  grid-template-columns: clamp(112px, 12vw, 160px) minmax(0, 1fr);
+  grid-template-rows: minmax(300px, min(46vw, 530px));
+  gap: 10px;
+  min-width: 0;
+}
+.table-app.in-game .island-stage > .board-wrap {
+  grid-area: auto !important;
+  min-width: 0;
+  min-height: 0 !important;
+  height: 100% !important;
+  width: 100% !important;
+  display: flex;
+  justify-content: flex-end;
+  background: transparent;
+}
+.table-app.in-game .island-stage .board-svg {
+  width: 100% !important;
+  height: 100% !important;
+}
+/* 盤面は右端に合わせる。 */
+.table-app.in-game .island-stage .board-wrap { overflow: hidden; }
+
+.table-app.in-game .sidebar {
+  /* スクロールは外側の1か所だけ。子の操作カードを縮めたり重ねたりしない。 */
+  display: block !important;
+  grid-area: side !important;
+  width: 100% !important;
+  min-width: 0 !important;
+  height: auto !important;
+  min-height: 0 !important;
+  max-height: calc(100dvh - 64px - env(safe-area-inset-bottom, 0px)) !important;
+  overflow-y: auto !important;
+  overflow-x: hidden !important;
+  overscroll-behavior-y: contain;
+  scrollbar-gutter: stable;
+  padding: 0 3px max(16px, env(safe-area-inset-bottom, 0px)) 0 !important;
+  scroll-padding-block: 12px;
+  position: sticky !important;
+  top: 8px !important;
+}
+
+.table-app.in-game .sidebar > * + * { margin-top: 12px; }
+.table-app.in-game .sidebar > .quiet-link { display: block; }
+.table-app.in-game .sidebar .action-dock {
+  position: static !important;
+  inset: auto !important;
+  z-index: auto !important;
+  width: 100% !important;
+  height: auto !important;
+  max-height: none !important;
+  overflow: visible !important;
+  margin: 0 !important;
+  background: #fffdf8;
+  backdrop-filter: none !important;
+  box-shadow: none !important;
+}
+.table-app.in-game .sidebar .action-dock::before,
+.table-app.in-game .sidebar .action-dock::after { content: none !important; }
+.table-app.in-game .sidebar .action-categories {
+  position: static !important;
+  z-index: auto !important;
+  background: transparent;
+}
+
+.table-app.in-game .own-hand-column {
+  display: block !important;
+  width: 100% !important;
+  min-width: 0 !important;
+  margin-top: 7px !important;
+}
+
+.table-app.in-game .own-hand-column .seat {
+  display: grid !important;
+  grid-template-columns: minmax(0, 2fr) minmax(0, 1fr) !important;
+  grid-template-rows: 27px 72px !important;
+  gap: 3px 7px !important;
+  align-items: center !important;
+  width: 100% !important;
+  min-width: 0 !important;
+  min-height: 0 !important;
+  height: auto !important;
+  margin: 0 !important;
+  padding: 7px 9px !important;
+  overflow: hidden !important;
+  border-radius: 9px !important;
+}
+
+.table-app.in-game .own-hand-column .seat-header {
+  grid-column: 1 / -1 !important;
+  grid-row: 1 !important;
+  grid-template-columns: 22px minmax(0, 1fr) auto !important;
+  gap: 5px !important;
+  align-items: center !important;
+}
+
+.table-app.in-game .own-hand-column .seat-header > div:not(.seat-score) {
+  display: flex !important;
+  align-items: center !important;
+  min-width: 0 !important;
+  gap: 7px !important;
+}
+
+.table-app.in-game .own-hand-column .seat-marker {
+  width: 22px !important;
+  height: 22px !important;
+  font-size: 11px !important;
+}
+
+.table-app.in-game .own-hand-column .seat-header h3 {
+  font-size: 11px !important;
+  white-space: nowrap !important;
+  margin: 0 !important;
+}
+
+.table-app.in-game .own-hand-column .seat-header p {
+  font-size: 8px !important;
+  margin: 0 !important;
+  white-space: nowrap !important;
+}
+
+.table-app.in-game .own-hand-column .seat-score {
+  grid-column: 3 !important;
+  font-size: 17px !important;
+  text-align: right !important;
+}
+
+.table-app.in-game .own-hand-column .seat-score small {
+  display: inline !important;
+  margin-left: 2px !important;
+}
+
+.table-app.in-game .own-hand-column .own-hand {
+  grid-column: 1 !important;
+  grid-row: 2 !important;
+  display: grid !important;
+  grid-template-columns: minmax(0, 1fr) minmax(0, 1fr) !important;
+  grid-template-rows: 14px 55px !important;
+  gap: 2px 7px !important;
+  min-width: 0 !important;
+  margin: 0 !important;
+  padding: 0 !important;
+  border: 0 !important;
+}
+
+.table-app.in-game .own-hand-column .own-hand > .hand-label:nth-child(1) { grid-column: 1 !important; grid-row: 1 !important; }
+.table-app.in-game .own-hand-column .own-hand > .resource-hand { grid-column: 1 !important; grid-row: 2 !important; }
+.table-app.in-game .own-hand-column .own-hand > .hand-label:nth-child(3) { grid-column: 2 !important; grid-row: 1 !important; }
+.table-app.in-game .own-hand-column .own-hand > .development-hand { grid-column: 2 !important; grid-row: 2 !important; }
+
+.table-app.in-game .own-hand-column .hand-label {
+  margin: 0 !important;
+  font-size: 8px !important;
+  line-height: 14px !important;
+}
+
+.table-app.in-game .own-hand-column .resource-hand,
+.table-app.in-game .own-hand-column .development-hand {
+  display: grid !important;
+  grid-template-columns: repeat(5, minmax(0, 1fr)) !important;
+  gap: 2px !important;
+  min-width: 0 !important;
+}
+
+.table-app.in-game .own-hand-column .resource-face,
+.table-app.in-game .own-hand-column .development-face {
+  width: auto !important;
+  min-width: 0 !important;
+  padding: 2px 1px !important;
+  border-radius: 5px !important;
+}
+
+.table-app.in-game .own-hand-column .resource-face svg {
+  width: 20px !important;
+  height: 20px !important;
+}
+
+.table-app.in-game .own-hand-column .resource-face span,
+.table-app.in-game .own-hand-column .development-name {
+  display: block !important;
+  max-width: 100% !important;
+  overflow: hidden !important;
+  text-overflow: ellipsis !important;
+  white-space: nowrap !important;
+  font-size: 6px !important;
+}
+
+.table-app.in-game .own-hand-column .resource-face span { display: none !important; }
+
+.table-app.in-game .own-hand-column .resource-face strong,
+.table-app.in-game .own-hand-column .development-face strong {
+  font-size: 9px !important;
+  line-height: 10px !important;
+}
+
+.table-app.in-game .own-hand-column .development-face > span:first-child {
+  font-size: 15px !important;
+  line-height: 18px !important;
+}
+
+.table-app.in-game .own-hand-column .used-cards {
+  grid-column: 2 !important;
+  grid-row: 2 !important;
+  display: grid !important;
+  grid-template-rows: 14px 55px !important;
+  min-width: 0 !important;
+  margin: 0 !important;
+}
+
+.table-app.in-game .own-hand-column .used-development-hand {
+  display: grid !important;
+  grid-template-columns: repeat(4, minmax(0, 1fr)) !important;
+  gap: 2px !important;
+  min-width: 0 !important;
+}
+
+@media (max-width: 980px) and (orientation: landscape) {
+  .table-app.in-game .game-layout {
+    grid-template-columns: minmax(0, 1fr) minmax(220px, 250px) !important;
+    grid-template-areas: "board side" !important;
+    gap: 7px !important;
+  }
+
+  .table-app.in-game .island-stage {
+    grid-template-columns: 100px minmax(0, 1fr);
+    grid-template-rows: minmax(220px, calc(100dvh - 155px));
+    gap: 6px;
+  }
+
+  .table-app.in-game .own-hand-column .seat {
+    grid-template-columns: minmax(0, 2fr) minmax(0, 1fr) !important;
+    grid-template-rows: 24px 58px !important;
+    gap: 5px !important;
+    padding: 5px 6px !important;
+  }
+
+  .table-app.in-game .own-hand-column .own-hand,
+  .table-app.in-game .own-hand-column .used-cards {
+    grid-template-rows: 11px 45px !important;
+  }
+
+  .table-app.in-game .own-hand-column .resource-face svg { width: 16px !important; height: 16px !important; }
+  .table-app.in-game .own-hand-column .development-face > span:first-child { font-size: 12px !important; line-height: 14px !important; }
+}
+
+/* 自分の手札は、盤面下でカード情報だけを1段にまとめる。 */
+.table-app.in-game .own-hand-column .seat.hand-only-seat {
+  grid-template-columns: minmax(0, 2fr) minmax(0, 1fr) !important;
+  grid-template-rows: 72px !important;
+  gap: 7px !important;
+  padding: 5px 8px !important;
+  border: 2px solid var(--player-color) !important;
+  box-shadow: 0 3px 10px #393d3510 !important;
+}
+
+.table-app.in-game .own-hand-column .hand-only-seat .own-hand {
+  grid-column: 1 !important;
+  grid-row: 1 !important;
+}
+
+.table-app.in-game .own-hand-column .hand-only-seat .used-cards {
+  grid-column: 2 !important;
+  grid-row: 1 !important;
+}
+
+.table-app.in-game .board-corner-controls {
+  position: absolute;
+  top: 8px;
+  right: 8px;
+  z-index: 8;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.table-app.in-game .board-zoom-toggle {
+  position: static;
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  min-height: 34px;
+  padding: 6px 10px;
+  border: 1px solid #fff9;
+  border-radius: 999px;
+  color: #fffdf4;
+  background: #173f43de;
+  box-shadow: 0 3px 12px #102f3780;
+  font-size: 11px;
+  font-weight: 700;
+  backdrop-filter: blur(5px);
+}
+
+.table-app.in-game .board-zoom-toggle:hover { background: #24565b; }
+.table-app.in-game .board-zoom-toggle span { font-size: 18px; line-height: 1; }
+
+.table-app.in-game .dice-history-trigger {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 4px;
+  min-width: 45px;
+  min-height: 27px;
+  padding: 3px 8px;
+  border: 1px solid #c9d0c5;
+  border-radius: 999px;
+  color: #29433d;
+  background: #f7f7ef;
+  box-shadow: 0 2px 6px #293e3512;
+}
+
+.table-app.in-game .dice-history-trigger:hover { background: #edf1e7; }
+.table-app.in-game .dice-history-trigger > span { font-size: 14px; line-height: 1; }
+.table-app.in-game .dice-history-trigger > strong { font: 700 15px/1 Georgia, serif; font-variant-numeric: tabular-nums; }
+
+.dice-history-dialog {
+  width: min(360px, calc(100vw - 24px));
+  max-height: min(560px, calc(100dvh - 24px));
+  margin: auto;
+  padding: 0;
+  border: 1px solid #cfd5c8;
+  border-radius: 14px;
+  color: #293c37;
+  background: #fffdf7;
+  box-shadow: 0 18px 70px #0f2f2c66;
+  overflow: hidden;
+}
+
+.dice-history-dialog::backdrop { background: #102b2b70; backdrop-filter: blur(2px); }
+.dice-history-dialog > header { display: flex; align-items: center; justify-content: space-between; gap: 12px; padding: 14px 16px 11px; border-bottom: 1px solid #e2e3d9; }
+.dice-history-dialog > header small { color: #8b7861; font-size: 8px; font-weight: 700; letter-spacing: 1.5px; }
+.dice-history-dialog > header h2 { margin: 3px 0 0; font: 600 17px "Yu Mincho", Georgia, serif; }
+.dice-history-dialog > header button { min-height: 30px; padding: 4px 9px; border: 1px solid #cbd2c5; border-radius: 7px; background: #f1f3ea; color: inherit; font-size: 10px; }
+.dice-history-dialog ol { max-height: min(430px, calc(100dvh - 120px)); margin: 0; padding: 8px 12px 12px; overflow-y: auto; list-style: none; }
+.dice-history-dialog li { display: grid; grid-template-columns: 58px minmax(0, 1fr) auto; align-items: center; gap: 8px; min-height: 46px; padding: 7px 4px; border-bottom: 1px solid #ece9df; }
+.dice-history-dialog li:last-child { border-bottom: 0; }
+.dice-history-turn { color: #7a8074; font-size: 9px; }
+.dice-history-dialog li > strong { min-width: 0; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; font-size: 11px; }
+.dice-history-values { display: flex; align-items: center; gap: 4px; }
+.dice-history-values .die { width: 24px; height: 24px; padding: 3px; }
+.dice-history-values b { min-width: 24px; margin-left: 3px; font: 700 18px/1 Georgia, serif; text-align: center; }
+.dice-history-empty { margin: 0; padding: 24px 16px; color: #747b72; font-size: 11px; }
+
+.table-app.in-game .activity-history-trigger {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  min-width: 0;
+  max-width: clamp(90px, 22vw, 280px);
+  min-height: 27px;
+  padding: 3px 8px;
+  border: 1px solid #c9d0c5;
+  border-radius: 999px;
+  color: #29433d;
+  background: #f7f7ef;
+  font-size: 10px;
+  text-align: left;
+}
+.table-app.in-game .activity-history-trigger:hover { background: #edf1e7; }
+.activity-history-trigger > span:first-child { flex: none; font-size: 15px; line-height: 1; }
+.activity-latest-text { min-width: 0; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.activity-history-dialog {
+  width: min(480px, calc(100vw - 24px));
+  max-height: calc(100dvh - 24px);
+  margin: auto;
+  padding: 0;
+  border: 1px solid #cfd5c8;
+  border-radius: 14px;
+  color: #293c37;
+  background: #fffdf7;
+  box-shadow: 0 18px 70px #0f2f2c66;
+  overflow: hidden;
+}
+.activity-history-dialog::backdrop { background: #102b2b70; backdrop-filter: blur(2px); }
+.activity-history-dialog > header { display: flex; align-items: center; justify-content: space-between; gap: 12px; padding: 14px 16px 11px; border-bottom: 1px solid #e2e3d9; }
+.activity-history-dialog > header small { color: #8b7861; font-size: 8px; font-weight: 700; letter-spacing: 1.5px; }
+.activity-history-dialog > header h2 { margin: 3px 0 0; font: 600 17px "Yu Mincho", Georgia, serif; }
+.activity-history-dialog > header button { min-height: 30px; padding: 4px 9px; border: 1px solid #cbd2c5; border-radius: 7px; background: #f1f3ea; color: inherit; font-size: 10px; }
+.activity-history-dialog ol { max-height: calc(100dvh - 105px); margin: 0; padding: 8px 14px 12px; overflow-y: auto; list-style: none; }
+.activity-history-dialog li { display: grid; grid-template-columns: 66px minmax(0, 1fr); gap: 10px; padding: 9px 2px; border-bottom: 1px solid #ece9df; }
+.activity-history-dialog li:last-child { border-bottom: 0; }
+.activity-history-turn { padding-top: 2px; color: #7a8074; font-size: 10px; }
+.activity-history-dialog li strong { font-size: 11px; }
+.activity-history-dialog li p { margin: 3px 0 0; font-size: 11px; line-height: 1.6; overflow-wrap: anywhere; }
+.activity-history-empty { margin: 0; padding: 24px 16px; color: #747b72; font-size: 11px; }
+
+/* 拡大中は盤面と操作パネルだけを残す。右の操作パネルは通常時と同じ。 */
+.table-app.in-game.board-expanded .board-heading,
+.table-app.in-game.board-expanded .island-stage > nav,
+.table-app.in-game.board-expanded .own-hand-column,
+.table-app.in-game.board-expanded .award-strip,
+.table-app.in-game.board-expanded .board-caption {
+  display: none !important;
+}
+
+.table-app.in-game.board-expanded .island-stage {
+  grid-template-columns: minmax(0, 1fr) !important;
+  grid-template-rows: calc(100dvh - 54px) !important;
+  gap: 0 !important;
+}
+
+.table-app.in-game.board-expanded .island-stage > .board-wrap {
+  height: 100% !important;
+  justify-content: center;
+}
+
+@media (max-width: 980px) and (orientation: landscape) {
+  .table-app.in-game .own-hand-column .seat.hand-only-seat {
+    grid-template-rows: 58px !important;
+    padding: 3px 5px !important;
+  }
+
+  .table-app.in-game .own-hand-column .hand-only-seat .own-hand,
+  .table-app.in-game .own-hand-column .hand-only-seat .used-cards {
+    grid-template-rows: 11px 45px !important;
+  }
+
+  .table-app.in-game.board-expanded .island-stage {
+    grid-template-rows: calc(100dvh - 48px) !important;
+  }
+}
+
+@media (max-width: 600px) {
+  .table-app.in-game .own-hand-column .seat.hand-only-seat {
+    grid-template-rows: 62px !important;
+  }
+
+  .table-app.in-game.board-expanded .island-stage {
+    grid-template-rows: min(72dvh, 680px) !important;
+  }
+}
+
+@media (max-width: 600px) {
+  .table-app.in-game .island-stage {
+    grid-template-columns: 96px minmax(0, 1fr);
+    grid-template-rows: 255px;
+    gap: 5px;
+  }
+  .table-app.in-game .game-layout {
+    grid-template-columns: 1fr !important;
+    grid-template-areas: "board" "side" !important;
+    gap: 8px !important;
+  }
+
+  .table-app.in-game .sidebar {
+    position: static !important;
+    max-height: none !important;
+    overflow: visible !important;
+  }
+
+  .table-app.in-game .own-hand-column .seat {
+    grid-template-columns: minmax(0, 2fr) minmax(0, 1fr) !important;
+    grid-template-rows: 25px 62px !important;
+  }
+
+  .table-app.in-game .own-hand-column .seat-header { grid-column: 1 / -1 !important; grid-row: 1 !important; }
+  .table-app.in-game .own-hand-column .own-hand { grid-column: 1 !important; grid-row: 2 !important; }
+  .table-app.in-game .own-hand-column .used-cards { grid-column: 2 !important; grid-row: 2 !important; margin-top: 0 !important; }
+}
+
+/* ヘッダー右側に、画面の識別と操作担当の切り替えをまとめる。 */
+.table-app.in-game .topbar-actions {
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  gap: 6px;
+  min-width: 0;
+}
+
+.table-app.in-game .header-controller-toggle {
+  flex: 0 0 auto;
+  min-height: 28px;
+  padding: 4px 8px;
+  border: 1px solid #526f51;
+  border-radius: 999px;
+  background: #304b43;
+  color: #fffdf4;
+  font-size: 9px;
+  font-weight: 700;
+  white-space: nowrap;
+}
+
+.table-app.in-game .header-controller-toggle:hover:not(:disabled) { background: #3f6258; }
+
+/* 右の主操作は1画面に収まりやすい密度にする。 */
+.table-app.in-game .sidebar .action-dock {
+  padding: 9px !important;
+}
+
+.table-app.in-game .action-dock .turn-message {
+  margin: 6px 0 !important;
+  padding: 7px 8px !important;
+  font-size: 11px !important;
+  line-height: 1.45 !important;
+}
+
+.table-app.in-game .action-dock > .muted {
+  margin: 6px 0 !important;
+  font-size: 10px !important;
+  line-height: 1.55 !important;
+}
+
+.table-app.in-game .action-dock > .start-button {
+  min-height: 36px !important;
+  padding: 8px 7px !important;
+  font-size: 11px !important;
+  box-shadow: 0 2px 0 #873d2c !important;
+}
+
+.table-app.in-game .action-dock > .turn-card {
+  padding: 10px !important;
+  gap: 7px !important;
+}
+
+.table-app.in-game .action-dock > .turn-card h2 {
+  font-size: 14px !important;
+}
+
+.table-app.in-game .action-dock > .turn-card p {
+  margin: 3px 0 !important;
+  font-size: 10px !important;
+  line-height: 1.5 !important;
+}
+
+.table-app.in-game .action-dock > .turn-card .start-button {
+  min-height: 36px !important;
+  padding: 8px 7px !important;
+  font-size: 11px !important;
+  box-shadow: 0 2px 0 #873d2c !important;
+}
+
+.table-app.in-game .action-workspace {
+  gap: 7px !important;
+}
+
+.table-app.in-game .action-workspace > .action-menu-card {
+  padding: 4px !important;
+  gap: 0 !important;
+}
+
+.table-app.in-game .action-menu-card .action-categories {
+  grid-template-columns: repeat(4, minmax(0, 1fr)) !important;
+  gap: 3px !important;
+}
+
+.table-app.in-game .action-menu-card .action-categories button {
+  display: flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  gap: 3px !important;
+  min-width: 0 !important;
+  min-height: 32px !important;
+  padding: 4px 3px !important;
+  font-size: 9px !important;
+  line-height: 1 !important;
+  white-space: nowrap !important;
+}
+
+.table-app.in-game .action-menu-card .action-categories button > span {
+  font-size: 13px !important;
+  line-height: 1 !important;
+}
+
+@media (max-width: 600px) {
+  .table-app.in-game .topbar-actions { gap: 4px; }
+  .table-app.in-game .local-badge { padding: 4px 6px; }
+  .table-app.in-game .header-controller-toggle {
+    min-height: 24px;
+    padding: 3px 6px;
+    font-size: 8px;
+  }
+}

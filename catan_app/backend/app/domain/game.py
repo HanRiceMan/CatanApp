@@ -2,11 +2,17 @@
 
 from collections import Counter, defaultdict
 from dataclasses import asdict, dataclass, field
-from random import Random
-from secrets import randbelow, token_urlsafe
+from secrets import token_urlsafe
 from uuid import uuid4
 
 from .board import Board, BoardRules, create_board
+from .actions import (Action, BankTradeAction, BuildCityAction, BuildRoadAction, BuildSettlementAction,
+                      BuyDevelopmentAction, DiscardResourcesAction, EndTurnAction, MoveRobberAction,
+                      PlaceInitialRoadAction, PlaceInitialSettlementAction, ProposeCounterTradeAction,
+                      ProposeTradeAction, RespondToTradeAction, RollOrderAction, RollTurnDiceAction,
+                      SetPlayerControllerAction, StartGameAction, StealResourceAction, TradeOffer,
+                      UseDevelopmentAction)
+from .random_source import GameRandomSource
 
 RESOURCES = ("wood", "brick", "sheep", "wheat", "ore")
 RESOURCE_NAMES = {"wood": "木材", "brick": "レンガ", "sheep": "羊毛", "wheat": "小麦", "ore": "鉱石"}
@@ -25,6 +31,8 @@ class Player:
     name: str
     color: str
     is_ai: bool = False
+    # AIの種類はゲームルールと独立。現在のUI/APIでは既定の heuristic を使う。
+    agent_name: str = "heuristic"
     resources: dict[str, int] = field(default_factory=lambda: dict.fromkeys(RESOURCES, 0))
     development_cards: list[str] = field(default_factory=list)
     new_development_cards: list[str] = field(default_factory=list)
@@ -42,6 +50,7 @@ class GameState:
     rules: BoardRules
     players: list[Player]
     player_tokens: dict[int, str]
+    random_source: GameRandomSource = field(default_factory=lambda: GameRandomSource(0))
     phase: str = "rolling_order"
     revision: int = 0
     seat_order: list[int] = field(default_factory=lambda: [1, 2, 3, 4])
@@ -82,17 +91,18 @@ class GameState:
 
 
 def create_game(seed: int, rules: BoardRules | None = None, ai_player_ids: tuple[int, ...] = (),
-                ai_watch_mode: bool = False) -> GameState:
+                ai_watch_mode: bool = False, random_source: GameRandomSource | None = None) -> GameState:
     rules = rules or BoardRules()
     if any(type(player_id) is not int or player_id not in range(1, 5) for player_id in ai_player_ids):
         raise ValueError("AIプレイヤーIDは1〜4で指定してください。")
     players = [Player(i, f"プレイヤー {i}", color, i in ai_player_ids)
                for i, color in enumerate(("red", "cyan", "purple", "yellow"), 1)]
     deck = list(DEVELOPMENT_DECK)
-    Random(seed ^ 0xCA7A).shuffle(deck)
+    source = random_source or GameRandomSource(seed ^ 0xCA7A)
+    source.shuffle(deck)
     board = create_board(seed, rules)
     return GameState(str(uuid4()), seed, board, rules, players, {p.id: token_urlsafe(32) for p in players},
-                     development_deck=deck, robber_tile_id=board.robber_tile_id,
+                     random_source=source, development_deck=deck, robber_tile_id=board.robber_tile_id,
                      ai_watch_mode=ai_watch_mode)
 
 
@@ -168,7 +178,7 @@ def roll_for_order(game: GameState, player_id: int, expected_revision: int, requ
     if _request_is_repeat(game, player_id, request_id, fingerprint, expected_revision): return
     if game.phase != "rolling_order": raise GameActionError("順番は確定済みです。席は変更できません。")
     if not game.pending_rollers or player_id != game.pending_rollers[0]: raise GameActionError("まだあなたがサイコロを振る順番ではありません。")
-    dice = dice or (randbelow(6) + 1, randbelow(6) + 1)
+    dice = dice or game.random_source.roll_dice()
     if len(dice) != 2 or any(type(value) is not int or not 1 <= value <= 6 for value in dice): raise GameActionError("サイコロの値が不正です。")
     game.round_totals[player_id] = sum(dice)
     game.rolls.append({"player_id": player_id, "round": game.round_number, "dice": list(dice), "total": sum(dice)})
@@ -283,7 +293,7 @@ def roll_turn_dice(game: GameState, player_id: int, expected_revision: int, requ
     fingerprint = ("turn_roll", expected_revision)
     if _request_is_repeat(game, player_id, request_id, fingerprint, expected_revision): return
     if game.phase != "turn_pre_roll" or game.current_player_id != player_id: raise GameActionError("今はあなたが通常手番のサイコロを振る時間ではありません。")
-    dice = dice or (randbelow(6) + 1, randbelow(6) + 1)
+    dice = dice or game.random_source.roll_dice()
     if len(dice) != 2 or any(type(value) is not int or not 1 <= value <= 6 for value in dice): raise GameActionError("サイコロの値が不正です。")
     total = sum(dice); game.last_roll = {"player_id": player_id, "dice": list(dice), "total": total, "turn_number": game.turn_number}
     game.dice_history.append(dict(game.last_roll, dice=list(game.last_roll["dice"])))
@@ -335,7 +345,7 @@ def steal_with_robber(game: GameState, player_id: int, victim_id: int, expected_
     victim, player = player_for(game, victim_id), player_for(game, player_id)
     cards = [resource for resource in RESOURCES for _ in range(victim.resources[resource])]
     if not cards: raise GameActionError("相手の資源は既にありません。")
-    resource = cards[randbelow(len(cards))]; victim.resources[resource] -= 1; player.resources[resource] += 1
+    resource = game.random_source.choice(cards); victim.resources[resource] -= 1; player.resources[resource] += 1
     next_phase = "turn_pre_roll" if game.robber_reason == "knight" and game.last_roll is None else "action"
     game.robber_victim_ids = []; game.robber_reason = None; game.phase = next_phase
     _finish(game, player_id, request_id, fingerprint)
@@ -576,6 +586,158 @@ def set_player_controller(game: GameState, player_id: int, is_ai: bool,
     if type(is_ai) is not bool: raise GameActionError("操作担当の指定が不正です。")
     player_for(game, player_id).is_ai = is_ai
     _finish(game, player_id, request_id, fingerprint)
+
+
+def _old_development_cards(game: GameState, player_id: int) -> list[str]:
+    player = player_for(game, player_id)
+    return [card for card in ("knight", "road_building", "year_of_plenty", "monopoly")
+            if player.development_cards.count(card) > player.new_development_cards.count(card)]
+
+
+def _default_discard(game: GameState, player_id: int) -> dict[str, int]:
+    """組み合わせ空間を広げず、合法手の入口用に一つだけ破棄候補を返す。"""
+    remaining = sum(player_for(game, player_id).resources.values()) // 2
+    cards = dict.fromkeys(RESOURCES, 0)
+    for resource in RESOURCES:
+        take = min(remaining, player_for(game, player_id).resources[resource])
+        cards[resource] = take
+        remaining -= take
+        if not remaining:
+            break
+    return cards
+
+
+def legal_actions(game: GameState, player_id: int) -> list[Action]:
+    """現在のプレイヤーが選べる主要な離散 Action を返す。
+
+    交渉候補や破棄の全組み合わせは意図的に列挙しない。将来はここを
+    Action Mask / 観測層の入口として拡張する。
+    """
+    player = player_for(game, player_id)
+    phase = game.phase
+    if phase == "rolling_order":
+        return [RollOrderAction()] if game.pending_rollers and game.pending_rollers[0] == player_id else []
+    if phase == "setup_ready":
+        if setup_player_id(game) != player_id:
+            return []
+        if game.pending_settlement_id is None:
+            return [PlaceInitialSettlementAction(vertex_id) for vertex_id in legal_settlement_ids(game)]
+        return [PlaceInitialRoadAction(edge_id) for edge_id in legal_road_ids(game)]
+    if phase == "ready_to_play":
+        return [StartGameAction()] if game.seat_order[0] == player_id else []
+    if phase == "discarding":
+        return [DiscardResourcesAction(_default_discard(game, player_id))] if player_id in game.pending_discards else []
+    if phase == "robber_move":
+        return [MoveRobberAction(tile.id) for tile in game.board.tiles if player_id == game.current_player_id and tile.id != game.robber_tile_id]
+    if phase == "robber_steal":
+        return [StealResourceAction(victim_id) for victim_id in game.robber_victim_ids if player_id == game.current_player_id]
+    if phase == "trade_response":
+        trade = game.pending_trade
+        if not trade or trade["recipient_id"] != player_id:
+            return []
+        actions: list[Action] = [RespondToTradeAction("decline")]
+        actions.extend(RespondToTradeAction("accept", index) for index, offer in enumerate(trade["offers"])
+                       if _can_afford(player, offer["want"]))
+        if not trade["is_counter"]:
+            actions.append(RespondToTradeAction("counter"))
+        return actions
+    if phase == "trade_counter_offer":
+        trade = game.pending_trade
+        if not trade or trade["recipient_id"] != player_id:
+            return []
+        return [ProposeCounterTradeAction((TradeOffer({give: 1}, {want: 1}),))
+                for give in RESOURCES if player.resources[give] > 0
+                for want in RESOURCES if want != give]
+    if phase == "turn_pre_roll":
+        if game.current_player_id != player_id:
+            return []
+        actions = [RollTurnDiceAction()]
+        if not game.used_development_this_turn:
+            for card in _old_development_cards(game, player_id):
+                if card in {"knight", "road_building"}:
+                    actions.append(UseDevelopmentAction(card))
+                elif card == "year_of_plenty":
+                    actions.extend(UseDevelopmentAction(card, (first, second)) for first in RESOURCES for second in RESOURCES
+                                   if game.bank[first] >= 1 and game.bank[second] >= (2 if first == second else 1))
+                elif card == "monopoly":
+                    actions.extend(UseDevelopmentAction(card, (resource,)) for resource in RESOURCES)
+        return actions
+    if phase != "action" or game.current_player_id != player_id:
+        return []
+
+    actions = []
+    roads = legal_road_ids(game, player_id, initial=False)
+    if player.settlements < 5 and _can_afford(player, BUILD_COSTS["settlement"]):
+        actions.extend(BuildSettlementAction(vertex_id) for vertex_id in legal_settlement_ids(game, player_id, initial=False))
+    if player.cities < 4 and _can_afford(player, BUILD_COSTS["city"]):
+        actions.extend(BuildCityAction(vertex_id) for vertex_id in legal_city_ids(game, player_id))
+    if _road_count(game, player_id) < 15 and (game.free_road_remaining or _can_afford(player, BUILD_COSTS["road"])):
+        actions.extend(BuildRoadAction(edge_id) for edge_id in roads)
+    if game.development_deck and _can_afford(player, BUILD_COSTS["development"]) and not game.free_road_remaining:
+        actions.append(BuyDevelopmentAction())
+    if not game.free_road_remaining:
+        actions.extend(BankTradeAction(give, receive) for give in RESOURCES for receive in RESOURCES
+                       if give != receive and player.resources[give] >= _port_ratio(game, player_id, give) and game.bank[receive] > 0)
+        if not game.used_development_this_turn:
+            for card in _old_development_cards(game, player_id):
+                if card in {"knight", "road_building"}:
+                    actions.append(UseDevelopmentAction(card))
+                elif card == "year_of_plenty":
+                    actions.extend(UseDevelopmentAction(card, (first, second)) for first in RESOURCES for second in RESOURCES
+                                   if game.bank[first] >= 1 and game.bank[second] >= (2 if first == second else 1))
+                elif card == "monopoly":
+                    actions.extend(UseDevelopmentAction(card, (resource,)) for resource in RESOURCES)
+        actions.append(EndTurnAction())
+    return actions
+
+
+def apply_action(game: GameState, player_id: int, action: Action, expected_revision: int, request_id: str) -> None:
+    """Human / API / Agent 共通のルール適用入口。
+
+    実際の検証・状態変更は、既存の各ルール関数へ委譲する。
+    """
+    if isinstance(action, RollOrderAction):
+        return roll_for_order(game, player_id, expected_revision, request_id, action.dice)
+    if isinstance(action, PlaceInitialSettlementAction):
+        return place_initial_piece(game, player_id, "settlement", action.vertex_id, expected_revision, request_id)
+    if isinstance(action, PlaceInitialRoadAction):
+        return place_initial_piece(game, player_id, "road", action.edge_id, expected_revision, request_id)
+    if isinstance(action, StartGameAction):
+        return start_normal_game(game, player_id, expected_revision, request_id)
+    if isinstance(action, RollTurnDiceAction):
+        return roll_turn_dice(game, player_id, expected_revision, request_id, action.dice)
+    if isinstance(action, DiscardResourcesAction):
+        return discard_for_seven(game, player_id, dict(action.resources), expected_revision, request_id)
+    if isinstance(action, MoveRobberAction):
+        return move_robber(game, player_id, action.tile_id, expected_revision, request_id)
+    if isinstance(action, StealResourceAction):
+        return steal_with_robber(game, player_id, action.victim_id, expected_revision, request_id)
+    if isinstance(action, BuildRoadAction):
+        return build_piece(game, player_id, "road", action.edge_id, expected_revision, request_id)
+    if isinstance(action, BuildSettlementAction):
+        return build_piece(game, player_id, "settlement", action.vertex_id, expected_revision, request_id)
+    if isinstance(action, BuildCityAction):
+        return build_piece(game, player_id, "city", action.vertex_id, expected_revision, request_id)
+    if isinstance(action, BuyDevelopmentAction):
+        return build_piece(game, player_id, "development", None, expected_revision, request_id)
+    if isinstance(action, BankTradeAction):
+        return bank_trade(game, player_id, action.give_resource, action.receive_resource, expected_revision, request_id)
+    if isinstance(action, ProposeTradeAction):
+        offers = [{"give": dict(offer.give), "want": dict(offer.want)} for offer in action.offers]
+        return propose_trade(game, player_id, action.target_id, offers, expected_revision, request_id)
+    if isinstance(action, RespondToTradeAction):
+        return respond_to_trade(game, player_id, action.decision, action.offer_index, expected_revision, request_id)
+    if isinstance(action, ProposeCounterTradeAction):
+        offers = [{"give": dict(offer.give), "want": dict(offer.want)} for offer in action.offers]
+        return propose_counter_trade(game, player_id, offers, expected_revision, request_id)
+    if isinstance(action, UseDevelopmentAction):
+        resources = list(action.resources) if action.resources is not None else None
+        return use_development(game, player_id, action.card, expected_revision, request_id, resources=resources)
+    if isinstance(action, EndTurnAction):
+        return end_turn(game, player_id, expected_revision, request_id)
+    if isinstance(action, SetPlayerControllerAction):
+        return set_player_controller(game, player_id, action.is_ai, expected_revision, request_id)
+    raise TypeError(f"未対応の Action です: {type(action).__name__}")
 
 
 def _private_trade_view(game: GameState, viewer_id: int | None) -> dict | None:

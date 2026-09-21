@@ -8,14 +8,15 @@ from fastapi import FastAPI, Header, HTTPException
 from fastapi.middleware.cors import CORSMiddleware
 from pydantic import BaseModel, ConfigDict, Field
 
+from .domain.actions import (BankTradeAction, BuildCityAction, BuildRoadAction, BuildSettlementAction,
+                             BuyDevelopmentAction, DiscardResourcesAction, EndTurnAction, MoveRobberAction,
+                             PlaceInitialRoadAction, PlaceInitialSettlementAction, ProposeCounterTradeAction,
+                             ProposeTradeAction, RespondToTradeAction, RollOrderAction, RollTurnDiceAction,
+                             SetPlayerControllerAction, StartGameAction, StealResourceAction, TradeOffer,
+                             UseDevelopmentAction)
 from .domain.board import BoardRules
 from .domain.ai import run_ai_until_pause
-from .domain.game import (GameActionError, GameState, bank_trade, build_piece, create_game,
-                          discard_for_seven, end_turn, game_view, move_robber,
-                          place_initial_piece, propose_counter_trade, propose_trade,
-                          respond_to_trade, roll_for_order, roll_turn_dice,
-                          set_player_controller, start_normal_game, steal_with_robber,
-                          use_development)
+from .domain.game import GameActionError, GameState, apply_action, create_game, game_view
 
 app = FastAPI(title="CATAN Local Table API", version="0.4.0")
 app.add_middleware(
@@ -163,34 +164,14 @@ def get_game(game_id: str, x_player_token: str | None = Header(default=None)) ->
 @app.post("/api/games/{game_id}/order-rolls")
 def roll_dice(game_id: str, request: RollRequest,
               x_player_token: str | None = Header(default=None)) -> dict:
-    with game_lock:
-        game = find_game(game_id)
-        player_id = identify_player(game, x_player_token)
-        if player_id is None:
-            raise HTTPException(403, "プレイヤー用タブから操作してください。")
-        try:
-            roll_for_order(game, player_id, request.expected_revision, request.request_id)
-            auto_advance(game)
-        except GameActionError as error:
-            raise HTTPException(409, str(error)) from error
-        return game_view(game, player_id)
+    return action_response(RollOrderAction(), game_id, request, x_player_token)
 
 
 @app.post("/api/games/{game_id}/initial-placements")
 def place_piece(game_id: str, request: PlacementRequest,
                 x_player_token: str | None = Header(default=None)) -> dict:
-    with game_lock:
-        game = find_game(game_id)
-        player_id = identify_player(game, x_player_token)
-        if player_id is None:
-            raise HTTPException(403, "プレイヤー用タブから操作してください。")
-        try:
-            place_initial_piece(game, player_id, request.kind, request.target_id,
-                                request.expected_revision, request.request_id)
-            auto_advance(game)
-        except GameActionError as error:
-            raise HTTPException(409, str(error)) from error
-        return game_view(game, player_id)
+    action = PlaceInitialSettlementAction(request.target_id) if request.kind == "settlement" else PlaceInitialRoadAction(request.target_id)
+    return action_response(action, game_id, request, x_player_token)
 
 
 def player_action(game_id: str, token: str | None) -> tuple[GameState, int]:
@@ -205,7 +186,7 @@ def action_response(action, game_id: str, request: RollRequest, token: str | Non
     with game_lock:
         game, player_id = player_action(game_id, token)
         try:
-            action(game, player_id, request)
+            apply_action(game, player_id, action, request.expected_revision, request.request_id)
             auto_advance(game)
         except GameActionError as error:
             raise HTTPException(409, str(error)) from error
@@ -214,72 +195,87 @@ def action_response(action, game_id: str, request: RollRequest, token: str | Non
 
 @app.post("/api/games/{game_id}/start-play")
 def start_play(game_id: str, request: StartPlayRequest, x_player_token: str | None = Header(default=None)) -> dict:
-    return action_response(lambda game, pid, body: start_normal_game(game, pid, body.expected_revision, body.request_id), game_id, request, x_player_token)
+    return action_response(StartGameAction(), game_id, request, x_player_token)
 
 
 @app.post("/api/games/{game_id}/turn-rolls")
 def turn_roll(game_id: str, request: RollRequest, x_player_token: str | None = Header(default=None)) -> dict:
-    return action_response(lambda game, pid, body: roll_turn_dice(game, pid, body.expected_revision, body.request_id), game_id, request, x_player_token)
+    return action_response(RollTurnDiceAction(), game_id, request, x_player_token)
 
 
 @app.post("/api/games/{game_id}/discards")
 def discard(game_id: str, request: DiscardRequest, x_player_token: str | None = Header(default=None)) -> dict:
-    return action_response(lambda game, pid, body: discard_for_seven(game, pid, body.resources, body.expected_revision, body.request_id), game_id, request, x_player_token)
+    return action_response(DiscardResourcesAction(request.resources), game_id, request, x_player_token)
 
 
 @app.post("/api/games/{game_id}/robber")
 def robber(game_id: str, request: RobberRequest, x_player_token: str | None = Header(default=None)) -> dict:
-    return action_response(lambda game, pid, body: move_robber(game, pid, body.tile_id, body.expected_revision, body.request_id), game_id, request, x_player_token)
+    return action_response(MoveRobberAction(request.tile_id), game_id, request, x_player_token)
 
 
 @app.post("/api/games/{game_id}/robber-steals")
 def robber_steal(game_id: str, request: StealRequest, x_player_token: str | None = Header(default=None)) -> dict:
-    return action_response(lambda game, pid, body: steal_with_robber(game, pid, body.victim_id, body.expected_revision, body.request_id), game_id, request, x_player_token)
+    return action_response(StealResourceAction(request.victim_id), game_id, request, x_player_token)
 
 
 @app.post("/api/games/{game_id}/builds")
 def build(game_id: str, request: BuildRequest, x_player_token: str | None = Header(default=None)) -> dict:
-    return action_response(lambda game, pid, body: build_piece(game, pid, body.kind, body.target_id, body.expected_revision, body.request_id), game_id, request, x_player_token)
+    actions = {
+        "road": BuildRoadAction(request.target_id),
+        "settlement": BuildSettlementAction(request.target_id),
+        "city": BuildCityAction(request.target_id),
+        "development": BuyDevelopmentAction(),
+    }
+    return action_response(actions[request.kind], game_id, request, x_player_token)
 
 
 @app.post("/api/games/{game_id}/bank-trades")
 def trade_with_bank(game_id: str, request: BankTradeRequest, x_player_token: str | None = Header(default=None)) -> dict:
-    return action_response(lambda game, pid, body: bank_trade(game, pid, body.give_resource, body.receive_resource, body.expected_revision, body.request_id), game_id, request, x_player_token)
+    return action_response(BankTradeAction(request.give_resource, request.receive_resource), game_id, request, x_player_token)
 
 
 @app.post("/api/games/{game_id}/player-trades")
 def trade_with_player(game_id: str, request: TradeProposalRequest, x_player_token: str | None = Header(default=None)) -> dict:
-    return action_response(lambda game, pid, body: propose_trade(game, pid, body.target_id, [offer.model_dump() for offer in body.offers], body.expected_revision, body.request_id), game_id, request, x_player_token)
+    offers = tuple(TradeOffer(offer.give, offer.want) for offer in request.offers)
+    return action_response(ProposeTradeAction(request.target_id, offers), game_id, request, x_player_token)
 
 
 @app.post("/api/games/{game_id}/player-trades/respond")
 def respond_trade(game_id: str, request: TradeResponseRequest, x_player_token: str | None = Header(default=None)) -> dict:
-    return action_response(lambda game, pid, body: respond_to_trade(game, pid, body.decision, body.offer_index, body.expected_revision, body.request_id), game_id, request, x_player_token)
+    return action_response(RespondToTradeAction(request.decision, request.offer_index), game_id, request, x_player_token)
 
 
 @app.post("/api/games/{game_id}/player-trades/counter")
 def counter_trade(game_id: str, request: CounterTradeRequest, x_player_token: str | None = Header(default=None)) -> dict:
-    return action_response(lambda game, pid, body: propose_counter_trade(game, pid, [offer.model_dump() for offer in body.offers], body.expected_revision, body.request_id), game_id, request, x_player_token)
+    offers = tuple(TradeOffer(offer.give, offer.want) for offer in request.offers)
+    return action_response(ProposeCounterTradeAction(offers), game_id, request, x_player_token)
 
 
 @app.post("/api/games/{game_id}/developments/use")
 def development(game_id: str, request: DevelopmentRequest, x_player_token: str | None = Header(default=None)) -> dict:
-    return action_response(lambda game, pid, body: use_development(game, pid, body.card, body.expected_revision, body.request_id, resources=body.resources), game_id, request, x_player_token)
+    resources = tuple(request.resources) if request.resources is not None else None
+    return action_response(UseDevelopmentAction(request.card, resources), game_id, request, x_player_token)
 
 
 @app.post("/api/games/{game_id}/end-turn")
 def finish_turn(game_id: str, request: RollRequest, x_player_token: str | None = Header(default=None)) -> dict:
-    return action_response(lambda game, pid, body: end_turn(game, pid, body.expected_revision, body.request_id), game_id, request, x_player_token)
+    return action_response(EndTurnAction(), game_id, request, x_player_token)
 
 
 @app.post("/api/games/{game_id}/players/{player_id}/controller")
 def change_controller(game_id: str, player_id: int, request: ControllerRequest,
                       x_player_token: str | None = Header(default=None)) -> dict:
-    def change(game: GameState, authenticated_id: int, body: ControllerRequest) -> None:
+    with game_lock:
+        game, authenticated_id = player_action(game_id, x_player_token)
         if authenticated_id != player_id:
             raise HTTPException(403, "操作担当を切り替えられるのは、そのプレイヤー用タブだけです。")
-        set_player_controller(game, authenticated_id, body.is_ai, body.expected_revision, body.request_id)
-    return action_response(change, game_id, request, x_player_token)
+        try:
+            apply_action(game, authenticated_id, SetPlayerControllerAction(request.is_ai),
+                         request.expected_revision, request.request_id)
+            auto_advance(game)
+        except GameActionError as error:
+            raise HTTPException(409, str(error)) from error
+        return game_view(game, authenticated_id)
 
 
 @app.post("/api/games/{game_id}/ai/run")

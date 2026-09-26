@@ -10,6 +10,7 @@ from app.rl.candidate_policy import (
     BeliefGraphFamilyHierarchicalCandidateMaskablePolicy,
     ContextualBeliefGraphFamilyHierarchicalCandidateMaskablePolicy,
     GraphHierarchicalCandidateMaskablePolicy,
+    RobberBeliefGraphFamilyHierarchicalCandidateMaskablePolicy,
     initialize_belief_policy_from_graph,
 )
 from app.rl.observation import encode_observation, get_observation
@@ -38,6 +39,16 @@ class BeliefContextTests(unittest.TestCase):
         self.assertTrue(np.isfinite(encoded).all())
         self.assertGreaterEqual(float(encoded.min()), 0.0)
         self.assertLessEqual(float(encoded.max()), 1.0)
+
+    def test_v5_adds_absolute_self_seat_for_victim_action_mapping(self):
+        encoded = encode_observation(
+            get_observation(_stolen_game("wood"), 3, version="v5")
+        )
+
+        self.assertEqual(encoded.shape, (1722,))
+        np.testing.assert_array_equal(
+            encoded[-4:], np.asarray((0, 0, 1, 0), dtype=np.float32)
+        )
 
     def test_third_party_context_does_not_leak_private_resource(self):
         wood = encode_belief_context(_stolen_game("wood"), 3)
@@ -90,6 +101,40 @@ class BeliefContextTests(unittest.TestCase):
                 torch.cat((old, belief), dim=1)
             )
         torch.testing.assert_close(source_logits, target_logits, rtol=0, atol=1e-7)
+
+    def test_robber_policy_changes_only_robber_and_victim_candidates(self):
+        action_space = spaces.Discrete(377)
+        source = GraphHierarchicalCandidateMaskablePolicy(
+            spaces.Box(0, 1, shape=(1667,), dtype=np.float32), action_space,
+            lambda _: 1e-4, net_arch=[], ortho_init=False,
+        )
+        target = RobberBeliefGraphFamilyHierarchicalCandidateMaskablePolicy(
+            spaces.Box(0, 1, shape=(1722,), dtype=np.float32), action_space,
+            lambda _: 1e-4, net_arch=[], ortho_init=False,
+        )
+        initialize_belief_policy_from_graph(target, source)
+        old = torch.rand((2, 1667))
+        belief = torch.rand((2, BELIEF_CONTEXT_SIZE))
+        seats = torch.eye(4)[:2]
+        extended = torch.cat((old, belief, seats), dim=1)
+        with torch.no_grad():
+            baseline = target.mlp_extractor.forward_actor(extended)
+            target.mlp_extractor.robber_tile_head[-1].bias.fill_(1.0)
+            target.mlp_extractor.robber_victim_head[-1].bias.fill_(1.0)
+            changed = target.mlp_extractor.forward_actor(extended)
+        difference = changed - baseline
+        allowed = torch.zeros_like(difference, dtype=torch.bool)
+        extractor = target.mlp_extractor
+        allowed[:, extractor.ROBBER_START:extractor.ROBBER_START + extractor.ROBBER_COUNT] = True
+        allowed[:, extractor.VICTIM_START:extractor.VICTIM_START + extractor.VICTIM_COUNT] = True
+        torch.testing.assert_close(
+            difference[allowed], torch.ones_like(difference[allowed]),
+            rtol=0, atol=1e-6,
+        )
+        torch.testing.assert_close(
+            difference[~allowed], torch.zeros_like(difference[~allowed]),
+            rtol=0, atol=1e-7,
+        )
 
 
 if __name__ == "__main__":

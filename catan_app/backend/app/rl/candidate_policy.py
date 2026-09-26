@@ -8,7 +8,8 @@ from torch import nn
 from sb3_contrib.common.maskable.policies import MaskableActorCriticPolicy
 
 from app.domain.actions import (BuildCityAction, BuildRoadAction, BuildSettlementAction,
-                                MoveRobberAction, PlaceInitialRoadAction, PlaceInitialSettlementAction)
+                                MoveRobberAction, PlaceInitialRoadAction,
+                                PlaceInitialSettlementAction, StealResourceAction)
 from app.domain.board import create_topology
 
 from .action_space import ACTION_SPACE_SIZE, action_to_id
@@ -17,7 +18,7 @@ from .hierarchical_distribution import (FAMILY_COUNT,
                                         HierarchicalMaskableCategoricalDistribution)
 from .observation import OBSERVATION_VECTOR_SIZES
 from .goal_context import GOAL_CONTEXT_SIZE
-from .belief_context import BELIEF_CONTEXT_SIZE
+from .belief_context import BELIEF_CONTEXT_SIZE, BELIEF_FEATURES_PER_OPPONENT
 
 
 TILE_START = 29 + 42
@@ -60,9 +61,9 @@ class CandidateActorCritic(nn.Module):
         super().__init__()
         if observation_size not in {
             OBSERVATION_VECTOR_SIZES["v2"], OBSERVATION_VECTOR_SIZES["v3"],
-            OBSERVATION_VECTOR_SIZES["v4"],
+            OBSERVATION_VECTOR_SIZES["v4"], OBSERVATION_VECTOR_SIZES["v5"],
         }:
-            raise ValueError("候補方式はObservation v2/v3/v4専用です。")
+            raise ValueError("候補方式はObservation v2/v3/v4/v5専用です。")
         topology = create_topology()
         self.register_buffer("edge_vertices", torch.tensor([edge.vertex_ids for edge in topology.edges],
                                                            dtype=torch.long))
@@ -442,6 +443,96 @@ class ContextualBeliefGraphFamilyHierarchicalCandidateMaskablePolicy(
 
     def _build_mlp_extractor(self) -> None:
         self.mlp_extractor = ContextualBeliefGraphFamilyHierarchicalCandidateActorCritic(
+            self.features_dim
+        )
+
+
+class RobberBeliefGraphFamilyHierarchicalCandidateActorCritic(
+    GraphFamilyHierarchicalCandidateActorCritic
+):
+    """ベイズ残差を盗賊移動19候補・被害者4候補だけへ限定するv5方策。"""
+
+    ROBBER_START = _block_start(MoveRobberAction(0))
+    ROBBER_COUNT = 19
+    VICTIM_START = _block_start(StealResourceAction(1))
+    VICTIM_COUNT = 4
+    ROBBER_CONTEXT_SIZE = BELIEF_CONTEXT_SIZE + 4
+
+    def __init__(self, observation_size: int):
+        if observation_size != OBSERVATION_VECTOR_SIZES["v5"]:
+            raise ValueError("Robber Belief Graph方策はObservation v5専用です。")
+        super().__init__(observation_size)
+        # タイルはGNNの盤面状態と全相手の推定、被害者は対応する相手1人分の
+        # 推定・公開状態・既存logitから採点する。
+        self.robber_tile_head = nn.Sequential(
+            nn.Linear(128 + self.ROBBER_CONTEXT_SIZE + 1, 96), nn.ReLU(),
+            nn.Linear(96, 1),
+        )
+        self.robber_victim_head = nn.Sequential(
+            nn.Linear(BELIEF_FEATURES_PER_OPPONENT + 14 + 1, 64), nn.ReLU(),
+            nn.Linear(64, 1),
+        )
+        for head in (self.robber_tile_head[-1], self.robber_victim_head[-1]):
+            nn.init.zeros_(head.weight)
+            nn.init.zeros_(head.bias)
+
+    def forward_actor(self, observations: torch.Tensor) -> torch.Tensor:
+        logits = super().forward_actor(observations)
+        context = observations[:, BASE_OBSERVATION_SIZE:]
+        _, _, tile_state = self._encoded_spatial_states(observations)
+        base_candidates = logits[:, :ACTION_SPACE_SIZE].detach()
+        tile_base = base_candidates[
+            :, self.ROBBER_START:self.ROBBER_START + self.ROBBER_COUNT
+        ]
+        tile_features = torch.cat((
+            tile_state,
+            context[:, None, :].expand(-1, self.ROBBER_COUNT, -1),
+            tile_base[:, :, None],
+        ), dim=2)
+        tile_correction = self.robber_tile_head(tile_features).squeeze(-1)
+
+        batch = observations.shape[0]
+        relative_beliefs = context[:, :BELIEF_CONTEXT_SIZE].reshape(
+            batch, 3, BELIEF_FEATURES_PER_OPPONENT
+        )
+        relative_public = observations[:, 29:TILE_START].reshape(batch, 3, 14)
+        self_seat = context[:, BELIEF_CONTEXT_SIZE:].argmax(dim=1)
+        absolute = torch.arange(4, device=observations.device)[None, :]
+        offsets = (absolute - self_seat[:, None]) % 4
+        source = (offsets - 1).clamp(0, 2)
+        belief_index = source[:, :, None].expand(
+            -1, -1, BELIEF_FEATURES_PER_OPPONENT
+        )
+        public_index = source[:, :, None].expand(-1, -1, 14)
+        victim_beliefs = relative_beliefs.gather(1, belief_index)
+        victim_public = relative_public.gather(1, public_index)
+        is_opponent = (offsets != 0)[:, :, None]
+        victim_beliefs = victim_beliefs * is_opponent
+        victim_public = victim_public * is_opponent
+        victim_base = base_candidates[
+            :, self.VICTIM_START:self.VICTIM_START + self.VICTIM_COUNT
+        ]
+        victim_correction = self.robber_victim_head(torch.cat((
+            victim_beliefs, victim_public, victim_base[:, :, None],
+        ), dim=2)).squeeze(-1)
+
+        candidates = logits[:, :ACTION_SPACE_SIZE].clone()
+        candidates[:, self.ROBBER_START:self.ROBBER_START + self.ROBBER_COUNT] += (
+            tile_correction
+        )
+        candidates[:, self.VICTIM_START:self.VICTIM_START + self.VICTIM_COUNT] += (
+            victim_correction
+        )
+        return torch.cat((candidates, logits[:, ACTION_SPACE_SIZE:]), dim=1)
+
+
+class RobberBeliefGraphFamilyHierarchicalCandidateMaskablePolicy(
+    GraphFamilyHierarchicalCandidateMaskablePolicy
+):
+    """計画層から盗賊判断だけを移管するためのv4方策。"""
+
+    def _build_mlp_extractor(self) -> None:
+        self.mlp_extractor = RobberBeliefGraphFamilyHierarchicalCandidateActorCritic(
             self.features_dim
         )
 
@@ -872,7 +963,8 @@ def initialize_goal_policy_from_graph(
 
 def initialize_belief_policy_from_graph(
     belief_policy: (BeliefGraphFamilyHierarchicalCandidateMaskablePolicy
-                    | ContextualBeliefGraphFamilyHierarchicalCandidateMaskablePolicy),
+                    | ContextualBeliefGraphFamilyHierarchicalCandidateMaskablePolicy
+                    | RobberBeliefGraphFamilyHierarchicalCandidateMaskablePolicy),
     source_policy: GraphHierarchicalCandidateMaskablePolicy,
 ) -> tuple[str, ...]:
     """v2現行GNNをv4手札推定方策へ移し、初期logitを完全一致させる。"""

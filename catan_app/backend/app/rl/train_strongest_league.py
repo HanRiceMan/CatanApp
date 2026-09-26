@@ -29,6 +29,7 @@ from .candidate_policy import (GraphHierarchicalCandidateMaskablePolicy,
                                GraphFamilyHierarchicalCandidateMaskablePolicy,
                                BeliefGraphFamilyHierarchicalCandidateMaskablePolicy,
                                ContextualBeliefGraphFamilyHierarchicalCandidateMaskablePolicy,
+                               RobberBeliefGraphFamilyHierarchicalCandidateMaskablePolicy,
                                GoalGraphFamilyHierarchicalCandidateMaskablePolicy,
                                GatedGoalGraphFamilyHierarchicalCandidateMaskablePolicy,
                                initialize_belief_policy_from_graph,
@@ -147,7 +148,8 @@ def collect_teacher_examples(teacher, seeds: Iterable[int], *,
                              observation_version: str = "v2",
                              planner_overrides_only: bool = False,
                              include_strategic_actions: bool = False,
-                             collect_override_gate: bool = False) -> TeacherExamples:
+                             collect_override_gate: bool = False,
+                             robber_only: bool = False) -> TeacherExamples:
     league = SeededMixedLeagueAgent(teacher, learning_player_id=learning_player_id)
     opponents = {pid: league for pid in range(1, 5) if pid != learning_player_id}
     environment = CatanEnv(
@@ -205,12 +207,17 @@ def collect_teacher_examples(teacher, seeds: Iterable[int], *,
                 if is_strategic_action and not is_planner_override:
                     strategic_additions[type(action).__name__] += 1
                 selected_for_gate = collect_override_gate and game.phase == "action"
-                if mask.sum() >= 2 and (
+                selected_for_robber = robber_only and game.phase in {
+                    "robber_move", "robber_steal",
+                }
+                selected = (
+                    selected_for_robber if robber_only else
                     selected_for_gate
                     or not planner_overrides_only
                     or is_planner_override
                     or is_strategic_action
-                ):
+                )
+                if mask.sum() >= 2 and selected:
                     observations.append(np.asarray(observation, dtype=np.float32).copy())
                     masks.append(mask.copy())
                     labels.append(action_id)
@@ -239,6 +246,7 @@ def collect_teacher_examples(teacher, seeds: Iterable[int], *,
             "include_strategic_actions": include_strategic_actions,
             "strategic_addition_counts": dict(strategic_additions),
             "collect_override_gate": collect_override_gate,
+            "robber_only": robber_only,
             "gate_positive_examples": int(sum(override_labels)),
             "gate_negative_examples": int(len(override_labels) - sum(override_labels)),
             "label_counts": dict(families),
@@ -297,6 +305,22 @@ def _imitation_metrics(policy, examples: TeacherExamples) -> dict[str, float | i
         "family_negative_log_likelihood": float(-selected_families.log().mean()),
         "negative_log_likelihood": float(-selected.log().mean()),
     }
+    if isinstance(policy, RobberBeliefGraphFamilyHierarchicalCandidateMaskablePolicy):
+        extractor = policy.mlp_extractor
+        move = ((labels >= extractor.ROBBER_START)
+                & (labels < extractor.ROBBER_START + extractor.ROBBER_COUNT))
+        victim = ((labels >= extractor.VICTIM_START)
+                  & (labels < extractor.VICTIM_START + extractor.VICTIM_COUNT))
+        result.update({
+            "robber_move_examples": int(move.sum()),
+            "robber_move_agreement": float(
+                (predictions[move] == labels[move]).float().mean()
+            ) if move.any() else 0.0,
+            "robber_victim_examples": int(victim.sum()),
+            "robber_victim_agreement": float(
+                (predictions[victim] == labels[victim]).float().mean()
+            ) if victim.any() else 0.0,
+        })
     if (isinstance(policy, GatedGoalGraphFamilyHierarchicalCandidateMaskablePolicy)
             and examples.override_labels is not None):
         with torch.no_grad():
@@ -342,6 +366,11 @@ def configure_league_family_finetune(
         modules += (
             policy.mlp_extractor.belief_action_head,
             policy.mlp_extractor.belief_family_head,
+        )
+    elif isinstance(policy, RobberBeliefGraphFamilyHierarchicalCandidateMaskablePolicy):
+        modules += (
+            policy.mlp_extractor.robber_tile_head,
+            policy.mlp_extractor.robber_victim_head,
         )
     else:
         modules += (policy.mlp_extractor.graph_family_head,)
@@ -444,6 +473,11 @@ def distill_strongest_policy(
     train_family_labels = torch.as_tensor(train_families, dtype=torch.long)
     train_override_labels = (torch.as_tensor(train.override_labels, dtype=torch.float32)
                              if train.override_labels is not None else None)
+    effective_batch_size = (
+        min(batch_size, 64)
+        if isinstance(policy, RobberBeliefGraphFamilyHierarchicalCandidateMaskablePolicy)
+        else batch_size
+    )
     gate_positive_weight = None
     if isinstance(policy, GatedGoalGraphFamilyHierarchicalCandidateMaskablePolicy):
         if train_override_labels is None or validation.override_labels is None:
@@ -457,8 +491,8 @@ def distill_strongest_policy(
         policy.train()
         permutation = torch.randperm(len(train), generator=generator)
         losses = []
-        for start in range(0, len(train), batch_size):
-            indices = permutation[start:start + batch_size]
+        for start in range(0, len(train), effective_batch_size):
+            indices = permutation[start:start + effective_batch_size]
             observations = train_obs[indices].to(device)
             masks = train_masks[indices].to(device)
             labels = train_labels[indices].to(device)
@@ -479,6 +513,7 @@ def distill_strongest_policy(
                 GoalGraphFamilyHierarchicalCandidateMaskablePolicy,
                 BeliefGraphFamilyHierarchicalCandidateMaskablePolicy,
                 ContextualBeliefGraphFamilyHierarchicalCandidateMaskablePolicy,
+                RobberBeliefGraphFamilyHierarchicalCandidateMaskablePolicy,
             )):
                 action_probabilities = _probabilities(policy, observations, masks)
                 action_per_example = -action_probabilities.gather(
@@ -493,8 +528,16 @@ def distill_strongest_policy(
                     action_probabilities.log(), anchor_actions,
                     reduction="batchmean",
                 )
-                teacher_loss = teacher_loss + 0.25 * action_teacher_loss
-                anchor_loss = anchor_loss + 0.5 * action_anchor_loss
+                if isinstance(
+                    policy, RobberBeliefGraphFamilyHierarchicalCandidateMaskablePolicy
+                ):
+                    # 対象Actionが23個に限定されるため、汎用Family模倣より
+                    # ベイズ教師の候補選択を主損失にする。
+                    teacher_loss = teacher_loss + action_teacher_loss
+                    anchor_loss = anchor_loss + 0.25 * action_anchor_loss
+                else:
+                    teacher_loss = teacher_loss + 0.25 * action_teacher_loss
+                    anchor_loss = anchor_loss + 0.5 * action_anchor_loss
             loss = teacher_loss + anchor_weight * anchor_loss
             if isinstance(policy, GatedGoalGraphFamilyHierarchicalCandidateMaskablePolicy):
                 gate_labels = train_override_labels[indices].to(device)
@@ -514,8 +557,14 @@ def distill_strongest_policy(
             GoalGraphFamilyHierarchicalCandidateMaskablePolicy,
             BeliefGraphFamilyHierarchicalCandidateMaskablePolicy,
             ContextualBeliefGraphFamilyHierarchicalCandidateMaskablePolicy,
+            RobberBeliefGraphFamilyHierarchicalCandidateMaskablePolicy,
         )):
-            validation_loss += 0.25 * float(
+            action_weight = (
+                1.0 if isinstance(
+                    policy, RobberBeliefGraphFamilyHierarchicalCandidateMaskablePolicy
+                ) else 0.25
+            )
+            validation_loss += action_weight * float(
                 validation_metrics["negative_log_likelihood"]
             )
         if isinstance(policy, GatedGoalGraphFamilyHierarchicalCandidateMaskablePolicy):
@@ -563,6 +612,7 @@ def distill_strongest_policy(
         "best_validation_loss": best_loss,
         "history": history,
         "anchor_weight": anchor_weight,
+        "batch_size": effective_batch_size,
         "gate_calibration": gate_calibration,
     }
 
@@ -624,6 +674,8 @@ def main() -> None:
     parser.add_argument("--distill-epochs", type=int, default=8)
     parser.add_argument("--distill-learning-rate", type=float, default=1e-5)
     parser.add_argument("--ppo-learning-rate", type=float, default=1e-5)
+    parser.add_argument("--robber-teacher-reward", type=float, default=0.0,
+                        help="盗賊移管学習中の教師一致補助報酬。実戦評価には使わない。")
     parser.add_argument("--device", default="cpu")
     parser.add_argument("--dataset-artifact", type=Path, default=None,
                         help="既存のteacher_examples.npzを再利用する。")
@@ -633,6 +685,8 @@ def main() -> None:
                         help="v3の目標交差点・道路・不足資源・待ち時間をPPOへ入力する。")
     parser.add_argument("--belief-context", action="store_true",
                         help="v4の共同ベイズ相手手札推定をPPOへ入力する。")
+    parser.add_argument("--robber-migration", action="store_true",
+                        help="盗賊移動・被害者だけを収集し、候補では計画層の盗賊補正を外す。")
     parser.add_argument("--focus-planner-overrides", action="store_true",
                         help="現行PPOを計画層が変更したaction局面だけを教師にする。")
     parser.add_argument("--include-strategic-actions", action="store_true",
@@ -649,6 +703,12 @@ def main() -> None:
         parser.error("goal-gateにはgoal-contextが必要です。")
     if args.goal_context and args.belief_context:
         parser.error("goal-contextとbelief-contextは同時指定できません。")
+    if args.robber_migration and not args.belief_context:
+        parser.error("robber-migrationにはbelief-contextが必要です。")
+    if args.robber_teacher_reward < 0 or (
+        args.robber_teacher_reward > 0 and not args.robber_migration
+    ):
+        parser.error("robber-teacher-rewardはrobber-migration時だけ0以上で指定します。")
 
     root = Path(__file__).resolve().parents[2]
     output = root / "experiments" / args.experiment_id
@@ -664,6 +724,7 @@ def main() -> None:
     if not isinstance(source.model.policy, GraphHierarchicalCandidateMaskablePolicy):
         raise TypeError("移行元がGNN階層候補PPOではありません。")
     observation_version = (
+        "v5" if args.robber_migration else
         "v4" if args.belief_context else "v3" if args.goal_context else "v2"
     )
 
@@ -676,6 +737,7 @@ def main() -> None:
             planner_overrides_only=args.focus_planner_overrides,
             include_strategic_actions=args.include_strategic_actions,
             collect_override_gate=args.goal_gate,
+            robber_only=args.robber_migration,
         )
         validation = collect_teacher_examples(
             learner_teacher, range(train_end, validation_end),
@@ -683,6 +745,7 @@ def main() -> None:
             planner_overrides_only=args.focus_planner_overrides,
             include_strategic_actions=args.include_strategic_actions,
             collect_override_gate=args.goal_gate,
+            robber_only=args.robber_migration,
         )
         np.savez_compressed(
             output / "teacher_examples.npz",
@@ -723,6 +786,7 @@ def main() -> None:
             learning_player_id=1,
             allow_player_trades=True,
             observation_version=observation_version,
+            robber_teacher_reward=args.robber_teacher_reward,
         ),
         initial_placement_agent=frozen_teacher,
         opponent_agents={2: league, 3: league, 4: league},
@@ -734,6 +798,8 @@ def main() -> None:
         if args.goal_gate else
         GoalGraphFamilyHierarchicalCandidateMaskablePolicy
         if args.goal_context else
+        RobberBeliefGraphFamilyHierarchicalCandidateMaskablePolicy
+        if args.robber_migration else
         ContextualBeliefGraphFamilyHierarchicalCandidateMaskablePolicy
         if args.belief_context else
         GraphFamilyHierarchicalCandidateMaskablePolicy
@@ -823,6 +889,8 @@ def main() -> None:
             if args.goal_gate else
             "goal_gnn_family_hierarchical_candidate"
             if args.goal_context else
+            "robber_belief_gnn_family_hierarchical_candidate"
+            if args.robber_migration else
             "contextual_belief_gnn_family_hierarchical_candidate"
             if args.belief_context else
             "gnn_family_hierarchical_candidate"
@@ -834,6 +902,7 @@ def main() -> None:
             "player_trades_enabled": True,
             "goal_context_enabled": args.goal_context,
             "belief_context_enabled": args.belief_context,
+            "robber_migration_enabled": args.robber_migration,
             "planner_overrides_only": args.focus_planner_overrides,
             "include_strategic_actions": args.include_strategic_actions,
             "goal_gate_enabled": args.goal_gate,
@@ -846,8 +915,15 @@ def main() -> None:
                 "epochs": args.distill_epochs,
             },
             "ppo_learning_rate": args.ppo_learning_rate,
+            "robber_teacher_reward": args.robber_teacher_reward,
         },
     })
+    if args.robber_migration:
+        planning = source_config.get("settlement_planning")
+        if not isinstance(planning, dict):
+            raise ValueError("盗賊移管にはsettlement_planning設定が必要です。")
+        planning["belief_aware_robber"] = False
+        planning["opponent_aware_robber"] = False
     _write(model_directory / "config.json", source_config)
 
     candidate_base = PPOAgent(candidate_id, models_root=models_root, device=args.device)

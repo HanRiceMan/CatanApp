@@ -14,8 +14,9 @@ from app.agents.runner import get_agent_for_player, set_agent_for_player
 from app.agents.base import Agent
 from app.agents.heuristic import HeuristicAgent
 from app.domain.actions import (Action, BuildRoadAction, BuyDevelopmentAction,
-                                EndTurnAction, ProposeCounterTradeAction,
-                                ProposeTradeAction, RespondToTradeAction)
+                                EndTurnAction, MoveRobberAction,
+                                ProposeCounterTradeAction, ProposeTradeAction,
+                                RespondToTradeAction, StealResourceAction)
 from app.domain.board import BoardRules
 from app.domain.game import (GameState, apply_action, create_game, player_for,
                              setup_player_id)
@@ -67,6 +68,27 @@ class CatanEnvConfig:
     # 実際に選んだ時だけ小さな負の報酬を与える。通常UI・評価は既定値0。
     early_development_penalty: float = 0.0
     unproductive_road_penalty: float = 0.0
+    # 盗賊計画をPPOへ移管するカリキュラム専用。実戦・通常学習は0。
+    robber_teacher_reward: float = 0.0
+
+
+def robber_teacher_action(game: GameState, player_id: int) -> Action | None:
+    """公開情報の共同ベイズ教師が選ぶ盗賊Actionを返す。"""
+    if game.phase not in {"robber_move", "robber_steal"}:
+        return None
+    from .hand_belief import BayesianHandEstimator
+    from .victory_race import best_belief_robber_tile, best_belief_robber_victim
+    beliefs = BayesianHandEstimator().estimate(game, player_id)
+    if game.phase == "robber_move":
+        legal = [definition.action.tile_id for definition in ACTION_CATALOG
+                 if get_action_mask(game, player_id)[definition.id]
+                 and isinstance(definition.action, MoveRobberAction)]
+        return MoveRobberAction(best_belief_robber_tile(
+            game, player_id, legal, beliefs,
+        ))
+    return StealResourceAction(best_belief_robber_victim(
+        game, player_id, game.robber_victim_ids, beliefs,
+    ))
 
 
 def expansion_curriculum_mask(game: GameState, player_id: int,
@@ -180,8 +202,9 @@ class CatanEnv(gym.Env[np.ndarray, int]):
         if self.config.observation_version not in OBSERVATION_VECTOR_SIZES:
             raise ValueError(f"未対応のObservation版です: {self.config.observation_version}")
         if min(self.config.early_development_penalty,
-               self.config.unproductive_road_penalty) < 0:
-            raise ValueError("拡張方針のpenaltyは0以上にしてください。")
+               self.config.unproductive_road_penalty,
+               self.config.robber_teacher_reward) < 0:
+            raise ValueError("学習用penalty/rewardは0以上にしてください。")
         self._action_observer = action_observer
         self._initial_placement_agent = initial_placement_agent
         self._opponent_agents = dict(opponent_agents or {})
@@ -374,6 +397,7 @@ class CatanEnv(gym.Env[np.ndarray, int]):
             "expansion_curriculum": self.config.expansion_curriculum,
             "early_development_penalty": self.config.early_development_penalty,
             "unproductive_road_penalty": self.config.unproductive_road_penalty,
+            "robber_teacher_reward": self.config.robber_teacher_reward,
             "player_trades_enabled": self.config.allow_player_trades,
             "learner_auxiliary_actions": self._learner_auxiliary_actions,
             "fixed_opponent_ids": sorted(self._opponent_agents),
@@ -429,6 +453,15 @@ class CatanEnv(gym.Env[np.ndarray, int]):
         if not isinstance(action_id, Integral) or action_id < 0 or action_id >= ACTION_SPACE_SIZE or not mask[action_id]:
             raise IllegalPolicyAction(f"Action ID {action_id} は現在合法ではありません。")
         action = id_to_action(int(action_id))
+        teacher_action = (
+            robber_teacher_action(game, self.learning_player_id)
+            if self.config.robber_teacher_reward > 0 else None
+        )
+        robber_teacher_reward = (
+            self.config.robber_teacher_reward
+            * (1.0 if action == teacher_action else -1.0)
+            if teacher_action is not None else 0.0
+        )
         strategy_penalty = expansion_strategy_penalty(
             game, self.learning_player_id, mask, action,
             early_development=self.config.early_development_penalty,
@@ -445,8 +478,12 @@ class CatanEnv(gym.Env[np.ndarray, int]):
         self._is_truncated = truncated
         reward_components = breakdown.to_dict()
         reward_components["expansion_strategy_penalty"] = strategy_penalty
-        reward_components["total"] = breakdown.total + strategy_penalty
-        return (self._observation(), breakdown.total + strategy_penalty, terminated,
+        reward_components["robber_teacher_reward"] = robber_teacher_reward
+        reward_components["total"] = (
+            breakdown.total + strategy_penalty + robber_teacher_reward
+        )
+        return (self._observation(),
+                breakdown.total + strategy_penalty + robber_teacher_reward, terminated,
                 truncated, self._info(reward_components=reward_components))
 
     def step_external(self, player_id: int, action: int | Action) -> tuple[np.ndarray, dict[str, Any]]:

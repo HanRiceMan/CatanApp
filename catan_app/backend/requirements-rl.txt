@@ -1,0 +1,5 @@
+# PPO学習・TensorBoard用。通常のFastAPI起動には不要。
+-r requirements-dev.txt
+stable-baselines3>=2.9,<3.0
+sb3-contrib>=2.9,<3.0
+tensorboard>=2.21,<3.0

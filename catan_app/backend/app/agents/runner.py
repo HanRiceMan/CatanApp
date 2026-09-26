@@ -16,12 +16,53 @@ AGENT_FACTORIES: dict[str, type[Agent]] = {
     "heuristic": HeuristicAgent,
     "random": RandomAgent,
 }
+PPO_AGENT_PREFIX = "ppo:"
+PLANNED_PPO_AGENT_PREFIX = "ppo-plan:"
+_ppo_agents: dict[str, Agent] = {}
+
+
+def validate_agent_name(agent_name: str) -> None:
+    """API/UIから渡されたAI種別とPPOモデルの互換性を事前に検証する。"""
+    if agent_name in AGENT_FACTORIES:
+        return
+    prefix = next((value for value in (PLANNED_PPO_AGENT_PREFIX, PPO_AGENT_PREFIX)
+                   if agent_name.startswith(value)), None)
+    if prefix is None or not agent_name.removeprefix(prefix):
+        raise ValueError("未登録のAI種別です。")
+    model_id = agent_name.removeprefix(prefix)
+    try:
+        from app.agents.ppo import PPOAgent
+        # Registryに加えて、現在のPythonプロセスでPPO推論できることも確認する。
+        agent = PPOAgent(model_id)
+        if prefix == PLANNED_PPO_AGENT_PREFIX and agent.settlement_planning_config is None:
+            raise ValueError("このPPOモデルには開拓計画設定がありません。")
+    except (KeyError, ValueError, RuntimeError) as error:
+        raise ValueError(f"PPOモデルを利用できません: {error}") from error
 
 
 def get_agent_for_player(game: GameState, player_id: int) -> Agent:
     """プレイヤー単位の種類を解決する。未指定のAIは既存互換の heuristic。"""
     player = next(player for player in game.players if player.id == player_id)
     agent_name = getattr(player, "agent_name", "heuristic")
+    prefix = next((value for value in (PLANNED_PPO_AGENT_PREFIX, PPO_AGENT_PREFIX)
+                   if agent_name.startswith(value)), None)
+    if prefix is not None:
+        model_id = agent_name.removeprefix(prefix)
+        try:
+            from app.agents.ppo import PPOAgent
+            if agent_name not in _ppo_agents:
+                base = PPOAgent(model_id)
+                if prefix == PLANNED_PPO_AGENT_PREFIX:
+                    from app.rl.settlement_planning_agent import SettlementPlanningAgent
+                    config = base.settlement_planning_config
+                    if config is None:
+                        raise ValueError("このPPOモデルには開拓計画設定がありません。")
+                    _ppo_agents[agent_name] = SettlementPlanningAgent(base, **config)
+                else:
+                    _ppo_agents[agent_name] = base
+            return _ppo_agents[agent_name]
+        except (KeyError, ValueError, RuntimeError) as error:
+            raise GameActionError(f"PPOモデルを利用できません: {error}") from error
     try:
         return AGENT_FACTORIES[agent_name]()
     except KeyError as error:
@@ -30,8 +71,7 @@ def get_agent_for_player(game: GameState, player_id: int) -> Agent:
 
 def set_agent_for_player(game: GameState, player_id: int, agent_name: str) -> None:
     """将来の設定UIや実験コードから、ゲームエンジンを触れずにAIを差し替える入口。"""
-    if agent_name not in AGENT_FACTORIES:
-        raise ValueError(f"未登録のAI種別です: {agent_name}")
+    validate_agent_name(agent_name)
     next(player for player in game.players if player.id == player_id).agent_name = agent_name
 
 
@@ -103,7 +143,15 @@ def play_ai_step(game: GameState) -> str:
     agent = get_agent_for_player(game, player_id)
     action = agent.select_action(game, player_id)
     message = _message_for(player_id, action)
+    diagnostic = None
+    if game.phase in {"setup_ready", "action", "robber_move"}:
+        from app.rl.decision_diagnostics import diagnose_action
+        diagnostic = diagnose_action(game, player_id, action, agent)
     apply_action(game, player_id, action, game.revision, _request_id(game))
+    if diagnostic is not None:
+        game.ai_decisions.append(diagnostic)
+        if len(game.ai_decisions) > 500:
+            del game.ai_decisions[:-500]
     _record(game, message)
     return message
 

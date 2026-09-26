@@ -24,6 +24,7 @@ export const DEFAULT_RULES: BoardRules = {
 };
 export type Player = {
   id: number; name: string; color: PlayerColor; is_ai: boolean;
+  agent_name?: string;
   resource_count: number; development_count: number; public_score: number;
   played_knights: number; has_longest_road: boolean; has_largest_army: boolean;
   settlement_count: number; city_count: number; road_count: number;
@@ -32,6 +33,32 @@ export type Player = {
   // 資源・発展カードの内訳は通常本人だけ、AI観戦では全員分。score は常に本人だけ。
   resources?: Record<Resource, number>; development_cards?: string[]; new_development_cards?: string[]; score?: number;
 };
+export type AiModel = {
+  model_id: string;
+  algorithm: string;
+  observation_version: string;
+  observation_size: number;
+  action_space_version: string;
+  action_space_size: number;
+  training_steps: number;
+  training_seed: number;
+  created_at: string;
+  evaluation: { summary?: { episodes?: number; win_rate?: number; average_score?: number; average_turns?: number; illegal_action_count?: number } };
+  policy_architecture: "mlp" | "candidate" | "hierarchical_candidate" | "gnn_hierarchical_candidate";
+  heuristic_initial_placement: boolean;
+  initial_setup_policy: "ppo" | "heuristic" | "gnn";
+  settlement_planning?: {
+    target_sites: number; max_wait_rounds: number; evaluation_games?: number;
+    settlement_difference?: number; win_rate?: number; average_score?: number;
+    prioritize_affordable_city?: boolean; prioritize_immediate_win?: boolean;
+    prioritize_immediate_titles?: boolean;
+    title_horizon?: number; first_city_max_deficit?: number; buy_for_largest_army?: boolean;
+    expansion_aware_setup?: boolean;
+    endgame_point_reserve_score?: number;
+  } | null;
+  is_runtime_compatible: boolean;
+};
+export type AiModelsResponse = { models: AiModel[]; ppo_runtime_available: boolean; ppo_runtime_message: string | null };
 export type OrderRoll = { player_id: number; round: number; dice: [number, number]; total: number };
 export type ActivityEntry = {
   sequence: number; turn_number: number; player_id: number; kind: string; text: string; card?: string;

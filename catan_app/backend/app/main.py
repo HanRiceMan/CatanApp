@@ -3,6 +3,7 @@
 from secrets import compare_digest, randbelow
 from threading import RLock
 from typing import Literal
+import json
 
 from fastapi import FastAPI, Header, HTTPException
 from fastapi.middleware.cors import CORSMiddleware
@@ -12,11 +13,13 @@ from .domain.actions import (BankTradeAction, BuildCityAction, BuildRoadAction, 
                              BuyDevelopmentAction, DiscardResourcesAction, EndTurnAction, MoveRobberAction,
                              PlaceInitialRoadAction, PlaceInitialSettlementAction, ProposeCounterTradeAction,
                              ProposeTradeAction, RespondToTradeAction, RollOrderAction, RollTurnDiceAction,
-                             SetPlayerControllerAction, StartGameAction, StealResourceAction, TradeOffer,
+                             SetPlayerControllerAction, StartGameAction, StealResourceAction,
+                             TradeOffer as DomainTradeOffer,
                              UseDevelopmentAction)
 from .domain.board import BoardRules
-from .domain.ai import run_ai_until_pause
+from .domain.ai import run_ai_until_pause, validate_agent_name
 from .domain.game import GameActionError, GameState, apply_action, create_game, game_view
+from .rl.model_registry import ModelRegistry
 
 app = FastAPI(title="CATAN Local Table API", version="0.4.0")
 app.add_middleware(
@@ -37,6 +40,8 @@ class CreateGameRequest(BaseModel):
     seed: int | None = Field(default=None, ge=0, le=2**32 - 1)
     rules: BoardRules = Field(default_factory=BoardRules)
     ai_player_ids: list[int] = Field(default_factory=list, max_length=4)
+    # 既存のai_player_idsはそのまま使える。指定した席だけAI種別を上書きする。
+    ai_agents: dict[int, str] = Field(default_factory=dict)
     watch_ai: bool = False
 
 
@@ -77,7 +82,7 @@ class BankTradeRequest(RollRequest):
     receive_resource: str
 
 
-class TradeOffer(BaseModel):
+class TradeOfferRequest(BaseModel):
     model_config = ConfigDict(extra="forbid")
     give: dict[str, int]
     want: dict[str, int]
@@ -85,7 +90,7 @@ class TradeOffer(BaseModel):
 
 class TradeProposalRequest(RollRequest):
     target_id: int = Field(ge=1, le=4, strict=True)
-    offers: list[TradeOffer]
+    offers: list[TradeOfferRequest]
 
 
 class TradeResponseRequest(RollRequest):
@@ -94,7 +99,7 @@ class TradeResponseRequest(RollRequest):
 
 
 class CounterTradeRequest(RollRequest):
-    offers: list[TradeOffer]
+    offers: list[TradeOfferRequest]
 
 
 class DevelopmentRequest(RollRequest):
@@ -104,6 +109,7 @@ class DevelopmentRequest(RollRequest):
 
 class ControllerRequest(RollRequest):
     is_ai: bool
+    agent_name: str | None = Field(default=None, min_length=1, max_length=100)
 
 
 class AiRunRequest(BaseModel):
@@ -132,9 +138,49 @@ def auto_advance(game: GameState) -> dict:
     return run_ai_until_pause(game)
 
 
+def ppo_runtime_available() -> tuple[bool, str | None]:
+    """通常サーバーが保存済みPPOを推論できるかをUIへ明示する。"""
+    try:
+        import sb3_contrib  # noqa: F401
+    except ImportError:
+        return False, "PPOモデルを使うには、Python 3.12の .venv-rl でバックエンドを起動してください。"
+    return True, None
+
+
 @app.get("/api/health")
 def health() -> dict[str, str]:
     return {"status": "ok", "app": "catan"}
+
+
+@app.get("/api/ai-models")
+def list_ai_models() -> dict:
+    """現在のObservation/Action Spaceと互換性がある保存済みモデルだけを返す。"""
+    available, message = ppo_runtime_available()
+    registry = ModelRegistry()
+    models = []
+    for manifest in registry.list_available():
+        entry = manifest.to_dict()
+        config_path = registry.models_root / manifest.model_id / "config.json"
+        try:
+            config = json.loads(config_path.read_text(encoding="utf-8"))
+        except (FileNotFoundError, json.JSONDecodeError, OSError):
+            config = {}
+        entry.update({
+            "policy_architecture": config.get("policy_architecture", "mlp"),
+            "heuristic_initial_placement": config.get("heuristic_initial_placement", False) is True,
+            "initial_setup_policy": (
+                manifest.initial_setup.get("type")
+                if manifest.initial_setup is not None
+                else ("heuristic" if config.get("heuristic_initial_placement", False) is True else "ppo")
+            ),
+            "settlement_planning": config.get("settlement_planning"),
+        })
+        models.append(entry)
+    return {
+        "models": models,
+        "ppo_runtime_available": available,
+        "ppo_runtime_message": message,
+    }
 
 
 @app.post("/api/games", status_code=201)
@@ -142,7 +188,12 @@ def start_game(request: CreateGameRequest | None = None) -> dict:
     request = request or CreateGameRequest()
     seed = request.seed if request.seed is not None else randbelow(2**32)
     try:
-        game = create_game(seed, request.rules, tuple(request.ai_player_ids), request.watch_ai)
+        if any(player_id not in range(1, 5) for player_id in request.ai_agents):
+            raise ValueError("AI種別を指定できるプレイヤーIDは1〜4です。")
+        for agent_name in request.ai_agents.values():
+            validate_agent_name(agent_name)
+        ai_player_ids = tuple(sorted(set(request.ai_player_ids) | set(request.ai_agents)))
+        game = create_game(seed, request.rules, ai_player_ids, request.watch_ai, ai_agent_names=request.ai_agents)
     except ValueError as error:
         raise HTTPException(422, str(error)) from error
     with game_lock:
@@ -188,7 +239,7 @@ def action_response(action, game_id: str, request: RollRequest, token: str | Non
         try:
             apply_action(game, player_id, action, request.expected_revision, request.request_id)
             auto_advance(game)
-        except GameActionError as error:
+        except (GameActionError, ValueError) as error:
             raise HTTPException(409, str(error)) from error
         return game_view(game, player_id)
 
@@ -236,7 +287,7 @@ def trade_with_bank(game_id: str, request: BankTradeRequest, x_player_token: str
 
 @app.post("/api/games/{game_id}/player-trades")
 def trade_with_player(game_id: str, request: TradeProposalRequest, x_player_token: str | None = Header(default=None)) -> dict:
-    offers = tuple(TradeOffer(offer.give, offer.want) for offer in request.offers)
+    offers = tuple(DomainTradeOffer(offer.give, offer.want) for offer in request.offers)
     return action_response(ProposeTradeAction(request.target_id, offers), game_id, request, x_player_token)
 
 
@@ -247,7 +298,7 @@ def respond_trade(game_id: str, request: TradeResponseRequest, x_player_token: s
 
 @app.post("/api/games/{game_id}/player-trades/counter")
 def counter_trade(game_id: str, request: CounterTradeRequest, x_player_token: str | None = Header(default=None)) -> dict:
-    offers = tuple(TradeOffer(offer.give, offer.want) for offer in request.offers)
+    offers = tuple(DomainTradeOffer(offer.give, offer.want) for offer in request.offers)
     return action_response(ProposeCounterTradeAction(offers), game_id, request, x_player_token)
 
 
@@ -270,10 +321,12 @@ def change_controller(game_id: str, player_id: int, request: ControllerRequest,
         if authenticated_id != player_id:
             raise HTTPException(403, "操作担当を切り替えられるのは、そのプレイヤー用タブだけです。")
         try:
-            apply_action(game, authenticated_id, SetPlayerControllerAction(request.is_ai),
+            if request.agent_name is not None:
+                validate_agent_name(request.agent_name)
+            apply_action(game, authenticated_id, SetPlayerControllerAction(request.is_ai, request.agent_name),
                          request.expected_revision, request.request_id)
             auto_advance(game)
-        except GameActionError as error:
+        except (GameActionError, ValueError) as error:
             raise HTTPException(409, str(error)) from error
         return game_view(game, authenticated_id)
 

@@ -96,6 +96,46 @@ class ApiTests(unittest.TestCase):
         self.assertEqual(response.status_code, 200)
         self.assertFalse(response.json()["players"][0]["is_ai"])
 
+    def test_player_trade_and_counter_trade_api_use_domain_offers(self):
+        game = games[self.game_id]
+        game.phase = "action"
+        game.current_player_id = 1
+        game.players[0].resources["wood"] = 1
+        game.players[1].resources["brick"] = 1
+
+        proposal = self.client.post(
+            self.url + "/player-trades", headers=self.headers(1), json={
+                "expected_revision": 0,
+                "request_id": "trade-proposal-1",
+                "target_id": 2,
+                "offers": [{"give": {"wood": 1}, "want": {"brick": 1}}],
+            },
+        )
+        self.assertEqual(proposal.status_code, 200)
+        self.assertEqual(proposal.json()["phase"], "trade_response")
+        self.assertEqual(proposal.json()["pending_trade"]["offers"][0]["give"]["wood"], 1)
+
+        response = self.client.post(
+            self.url + "/player-trades/respond", headers=self.headers(2), json={
+                "expected_revision": 1,
+                "request_id": "trade-response-1",
+                "decision": "counter",
+            },
+        )
+        self.assertEqual(response.status_code, 200)
+        self.assertEqual(response.json()["phase"], "trade_counter_offer")
+
+        counter = self.client.post(
+            self.url + "/player-trades/counter", headers=self.headers(2), json={
+                "expected_revision": 2,
+                "request_id": "trade-counter-1",
+                "offers": [{"give": {"brick": 1}, "want": {"wood": 1}}],
+            },
+        )
+        self.assertEqual(counter.status_code, 200)
+        self.assertEqual(counter.json()["phase"], "trade_response")
+        self.assertTrue(counter.json()["pending_trade"]["is_counter"])
+
 
 if __name__ == "__main__":
     unittest.main()

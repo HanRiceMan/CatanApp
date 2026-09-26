@@ -49,6 +49,17 @@ class DiscardResourcesAction:
 
 
 @dataclass(frozen=True)
+class DiscardHalfAction:
+    """RL v1用の決定的な7枚超過時の破棄。
+
+    通常UIは ``DiscardResourcesAction`` で任意の内訳を渡し続ける。
+    固定長Action Spaceでは組合せ爆発を避けるため、このActionだけを
+    使い、ゲームエンジンが既存の決定的な破棄候補を適用する。
+    """
+    pass
+
+
+@dataclass(frozen=True)
 class MoveRobberAction:
     tile_id: int
 
@@ -115,11 +126,13 @@ class EndTurnAction:
 @dataclass(frozen=True)
 class SetPlayerControllerAction:
     is_ai: bool
+    # Noneなら、最後に選んだAI種別を維持する（既存API互換）。
+    agent_name: str | None = None
 
 
 Action: TypeAlias = (
     RollOrderAction | PlaceInitialSettlementAction | PlaceInitialRoadAction | StartGameAction
-    | RollTurnDiceAction | DiscardResourcesAction | MoveRobberAction | StealResourceAction
+    | RollTurnDiceAction | DiscardResourcesAction | DiscardHalfAction | MoveRobberAction | StealResourceAction
     | BuildRoadAction | BuildSettlementAction | BuildCityAction | BuyDevelopmentAction
     | BankTradeAction | ProposeTradeAction | RespondToTradeAction | ProposeCounterTradeAction
     | UseDevelopmentAction | EndTurnAction | SetPlayerControllerAction

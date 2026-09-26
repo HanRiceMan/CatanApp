@@ -7,6 +7,7 @@ out/
 __pycache__/
 *.py[cod]
 .venv/
+.venv-rl/
 
 # Environment files and local data
 .env
@@ -18,6 +19,13 @@ tmp/
 catan_app/.logs/
 *.stdout.log
 *.stderr.log
+*.log
+
+# Reproducible RL run outputs can be several GB. Keep summarized results in docs/.
+catan_app/backend/experiments/
+
+# Trained RL model binaries are local artifacts; manifests remain versionable.
+catan_app/backend/models/
 
 # Editor / OS files
 .vscode/

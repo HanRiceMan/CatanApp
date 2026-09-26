@@ -1,4 +1,4 @@
-import type { BoardRules, CreatedGame, GameSetup, PieceKind, Resource } from "./types";
+import type { AiModelsResponse, BoardRules, CreatedGame, GameSetup, PieceKind, Resource } from "./types";
 
 // スマホから8003番へ直接接続せず、同一オリジンのNext.js経由でPythonへ中継する。
 const API_BASE_URL = process.env.NEXT_PUBLIC_API_BASE_URL ?? "/python-api";
@@ -21,8 +21,11 @@ async function request<T>(path: string, init: RequestInit = {}, token?: string):
   return response.json();
 }
 
-export const createGame = (rules: BoardRules, aiPlayerIds: number[] = [], watchAi = false) =>
-  request<CreatedGame>("/api/games", { method: "POST", body: JSON.stringify({ rules, ai_player_ids: aiPlayerIds, watch_ai: watchAi }) });
+export const createGame = (rules: BoardRules, aiPlayerIds: number[] = [], watchAi = false,
+  aiAgents: Record<number, string> = {}) =>
+  request<CreatedGame>("/api/games", { method: "POST", body: JSON.stringify({ rules, ai_player_ids: aiPlayerIds, ai_agents: aiAgents, watch_ai: watchAi }) });
+
+export const getAiModels = () => request<AiModelsResponse>("/api/ai-models");
 
 export const getGame = (id: string, token?: string, signal?: AbortSignal) =>
   request<GameSetup>(`/api/games/${encodeURIComponent(id)}`, { signal }, token);
@@ -53,8 +56,10 @@ export const respondTrade = (id: string, token: string, revision: number, reques
 export const counterTrade = (id: string, token: string, revision: number, requestId: string, offers: TradeOffer[]) => action(id, token, "/player-trades/counter", revision, requestId, { offers });
 export const useDevelopment = (id: string, token: string, revision: number, requestId: string, card: "knight" | "road_building" | "year_of_plenty" | "monopoly", resources?: Resource[]) => action(id, token, "/developments/use", revision, requestId, { card, resources });
 export const endTurn = (id: string, token: string, revision: number, requestId: string) => action(id, token, "/end-turn", revision, requestId);
-export const setPlayerController = (id: string, token: string, playerId: number, revision: number, requestId: string, isAi: boolean) =>
-  action(id, token, `/players/${playerId}/controller`, revision, requestId, { is_ai: isAi });
+export const setPlayerController = (id: string, token: string, playerId: number, revision: number, requestId: string,
+  isAi: boolean, agentName?: string) =>
+  action(id, token, `/players/${playerId}/controller`, revision, requestId,
+    { is_ai: isAi, agent_name: agentName ?? null });
 
 export const advanceAi = (id: string, steps = 1) => request<{ game: GameSetup; result: { status: string; steps: number; phase: string; winner_id: number | null } }>(
   `/api/games/${encodeURIComponent(id)}/ai/run`, { method: "POST", body: JSON.stringify({ max_steps: steps }) });

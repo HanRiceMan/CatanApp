@@ -14,10 +14,10 @@ import { CommerceCutIn } from "../components/CommerceCutIn";
 import { ActivityHistory } from "../components/ActivityHistory";
 import { DiceHistory } from "../components/DiceHistory";
 import { buildUnavailableReason } from "../lib/actions";
-import { ApiError, advanceAi, bankTrade, buildPiece, counterTrade, createGame, discardCards, endTurn, getGame, moveRobber, placeInitialPiece, proposeTrade, respondTrade, rollForOrder, rollTurnDice, setPlayerController, startPlay, stealCard, useDevelopment } from "../lib/api";
+import { ApiError, advanceAi, bankTrade, buildPiece, counterTrade, createGame, discardCards, endTurn, getAiModels, getGame, moveRobber, placeInitialPiece, proposeTrade, respondTrade, rollForOrder, rollTurnDice, setPlayerController, startPlay, stealCard, useDevelopment } from "../lib/api";
 import type { TradeOffer } from "../lib/api";
 import { createRequestId } from "../lib/requestId";
-import { DEFAULT_RULES, TERRAIN_INFO, type BoardRules, type GameSetup, type Player, type PlayerAccess, type Tile, type PlacementSelection } from "../lib/types";
+import { DEFAULT_RULES, TERRAIN_INFO, type AiModel, type BoardRules, type GameSetup, type Player, type PlayerAccess, type Tile, type PlacementSelection } from "../lib/types";
 
 type Session = { id: string; token?: string };
 const RULE_OPTIONS: { key: keyof BoardRules; label: string; description: string }[] = [
@@ -40,6 +40,20 @@ function accessLink(id: string, token?: string) {
   if (token) query.set("token", token);
   return `/#${query.toString()}`;
 }
+function initialSetupLabel(model: AiModel) {
+  if (model.initial_setup_policy === "gnn") return " · 初期配置GNN";
+  if (model.heuristic_initial_placement) return " · 初期配置はルールAI";
+  return "";
+}
+function initialSetupParenthetical(model: AiModel) {
+  const label = initialSetupLabel(model).replace(" · ", "");
+  return label ? `（${label}）` : "";
+}
+function policyArchitectureLabel(model: AiModel) {
+  if (model.policy_architecture === "gnn_hierarchical_candidate") return "盤面GNN PPO";
+  if (model.policy_architecture === "hierarchical_candidate") return "階層PPO";
+  return "PPO";
+}
 
 export default function Home() {
   const [session, setSession] = useState<Session | null>(null);
@@ -47,6 +61,9 @@ export default function Home() {
   const [access, setAccess] = useState<PlayerAccess[]>([]);
   const [rules, setRules] = useState<BoardRules>(DEFAULT_RULES);
   const [aiPlayerIds, setAiPlayerIds] = useState<number[]>([]);
+  const [aiAgentNames, setAiAgentNames] = useState<Record<number, string>>({});
+  const [aiModels, setAiModels] = useState<AiModel[]>([]);
+  const [ppoRuntimeMessage, setPpoRuntimeMessage] = useState<string | null>(null);
   const [watchAi, setWatchAi] = useState(true);
   const [aiPlaying, setAiPlaying] = useState(false);
   const [aiSpeed, setAiSpeed] = useState(750);
@@ -99,6 +116,18 @@ export default function Home() {
     readLocation();
     window.addEventListener("hashchange", readLocation);
     return () => window.removeEventListener("hashchange", readLocation);
+  }, []);
+
+  useEffect(() => {
+    let disposed = false;
+    void getAiModels().then(result => {
+      if (disposed) return;
+      setAiModels(result.ppo_runtime_available ? result.models : []);
+      setPpoRuntimeMessage(result.ppo_runtime_message);
+    }).catch(() => {
+      if (!disposed) setPpoRuntimeMessage("学習済みモデルの一覧を取得できません。Python側の起動状態を確認してください。");
+    });
+    return () => { disposed = true; };
   }, []);
 
   useEffect(() => {
@@ -156,7 +185,7 @@ export default function Home() {
     setBusy(true);
     setError("");
     try {
-      const created = await createGame(rules, aiPlayerIds, watchAi && aiPlayerIds.length > 0);
+      const created = await createGame(rules, aiPlayerIds, watchAi && aiPlayerIds.length > 0, aiAgentNames);
       setGame(created.game);
       const createdViewer = created.game.players.find(player => player.id === created.game.viewer_id);
       aiPausedByUser.current = false;
@@ -289,14 +318,14 @@ export default function Home() {
     catch (failure) { setError(errorMessage(failure)); } finally { pending.current = false; setBusy(false); }
   }
 
-  async function changeController(playerId: number, isAi: boolean, token?: string) {
+  async function changeController(playerId: number, isAi: boolean, token?: string, agentName?: string) {
     const playerToken = token ?? (viewerId === playerId ? session?.token : undefined);
     if (!session || !game || !playerToken || pending.current) return;
     // 観戦再生中なら、次のAI操作との競合を避けるため先に一時停止する。
     setAiPlaying(false);
     pending.current = true; setBusy(true); setError("");
     try {
-      const changed = await setPlayerController(session.id, playerToken, playerId, game.revision, createRequestId(), isAi);
+      const changed = await setPlayerController(session.id, playerToken, playerId, game.revision, createRequestId(), isAi, agentName);
       const next = session.token ? changed : await getGame(session.id);
       setGame(previous => !previous || previous.revision <= next.revision ? next : previous);
       const nextViewer = next.players.find(player => player.id === next.viewer_id);
@@ -377,9 +406,27 @@ export default function Home() {
             </label>)}
           </fieldset>
           <fieldset className="rule-options ai-options" disabled={busy}><legend>プレイヤーの操作担当</legend>
-            {[1, 2, 3, 4].map(id => <label key={id}><input type="checkbox" checked={aiPlayerIds.includes(id)} onChange={event => setAiPlayerIds(previous => event.target.checked ? [...previous, id].sort() : previous.filter(value => value !== id))} /><span>プレイヤー {id} をコンピューターにする<small>手番・初期配置・交渉を自動で進めます。</small></span></label>)}
-            <div className="ai-presets"><button type="button" onClick={() => setAiPlayerIds([2, 3, 4])}>P1だけ人間</button><button type="button" onClick={() => setAiPlayerIds([1, 2, 3, 4])}>4人全員AI</button><button type="button" onClick={() => setAiPlayerIds([])}>4人全員人間</button></div>
+            {[1, 2, 3, 4].map(id => <div className="ai-player-option" key={id}>
+              <label><input type="checkbox" checked={aiPlayerIds.includes(id)} onChange={event => {
+                setAiPlayerIds(previous => event.target.checked ? [...previous, id].sort() : previous.filter(value => value !== id));
+                setAiAgentNames(previous => {
+                  if (event.target.checked) return { ...previous, [id]: previous[id] ?? "heuristic" };
+                  const next = { ...previous }; delete next[id]; return next;
+                });
+              }} /><span>プレイヤー {id} をコンピューターにする<small>手番・初期配置・交渉を自動で進めます。</small></span></label>
+              {aiPlayerIds.includes(id) && <select className="agent-picker" value={aiAgentNames[id] ?? "heuristic"} aria-label={`プレイヤー ${id} のAI種類`}
+                onChange={event => setAiAgentNames(previous => ({ ...previous, [id]: event.target.value }))}>
+                <option value="heuristic">ルールベースAI</option><option value="random">ランダムAI</option>
+                {aiModels.flatMap(model => [
+                  <option key={`ppo:${model.model_id}`} value={`ppo:${model.model_id}`}>{policyArchitectureLabel(model)} · {model.model_id} · {model.training_steps.toLocaleString()} step · 勝率 {Math.round((model.evaluation.summary?.win_rate ?? 0) * 100)}%{initialSetupLabel(model)}</option>,
+                  ...(model.settlement_planning ? [<option key={`ppo-plan:${model.model_id}`} value={`ppo-plan:${model.model_id}`}>開拓・勝利計画AI · {model.model_id} · 初期資源＋{model.settlement_planning.target_sites}拠点＋終盤1点計画 · 検証勝率 {Math.round((model.settlement_planning.win_rate ?? 0) * 100)}%</option>] : []),
+                ])}
+              </select>}
+            </div>)}
+            <div className="ai-presets"><button type="button" onClick={() => { setAiPlayerIds([2, 3, 4]); setAiAgentNames(previous => ({ 2: previous[2] ?? "heuristic", 3: previous[3] ?? "heuristic", 4: previous[4] ?? "heuristic" })); }}>P1だけ人間</button><button type="button" onClick={() => { setAiPlayerIds([1, 2, 3, 4]); setAiAgentNames(previous => ({ 1: previous[1] ?? "heuristic", 2: previous[2] ?? "heuristic", 3: previous[3] ?? "heuristic", 4: previous[4] ?? "heuristic" })); }}>4人全員AI</button><button type="button" onClick={() => { setAiPlayerIds([]); setAiAgentNames({}); }}>4人全員人間</button></div>
             <label className="spectator-toggle"><input type="checkbox" checked={watchAi} disabled={aiPlayerIds.length === 0} onChange={event => setWatchAi(event.target.checked)} /><span>AIの動きを観戦する<small>自動操作を一手ずつ画面に反映し、再生速度も変更できます。</small></span></label>
+            {ppoRuntimeMessage && <p className="model-runtime-note">{ppoRuntimeMessage}</p>}
+            {aiModels.length > 0 && <details className="model-catalog"><summary>利用可能な学習済みモデル（{aiModels.length}）</summary><ul>{aiModels.map(model => <li key={model.model_id}><strong>{model.model_id}</strong>／{policyArchitectureLabel(model)}／{model.training_steps.toLocaleString()} step／評価勝率 {Math.round((model.evaluation.summary?.win_rate ?? 0) * 100)}%{initialSetupLabel(model).replace(" · ", "／")}</li>)}</ul></details>}
           </fieldset>
           <p className="muted">港の位置・種類は固定です。</p>
           <button className="start-button" disabled={busy} onClick={startGame}>{busy ? "盤面を生成中…" : "ゲームスタート"}</button>
@@ -413,7 +460,13 @@ export default function Home() {
               className={`player-${EMPTY_PLAYERS[item.player_id - 1].color}`} href={accessLink(session.id, item.token)}
               target="_blank" rel="noopener noreferrer" referrerPolicy="no-referrer">
               <i />プレイヤー {item.player_id}<small>{player.is_ai ? "AIデバッグ" : "人が操作"}</small><span>↗</span>
-            </a><button type="button" disabled={busy} onClick={() => void changeController(item.player_id, !player.is_ai, item.token)}>{player.is_ai ? "人に切替" : "AIに切替"}</button></div>;
+            </a><button type="button" disabled={busy} onClick={() => void changeController(item.player_id, !player.is_ai, item.token)}>{player.is_ai ? "人に切替" : "AIに切替"}</button>{player.is_ai && <select className="agent-picker compact" value={player.agent_name ?? "heuristic"} disabled={busy}
+              aria-label={`プレイヤー ${item.player_id} のAI種類`} onChange={event => void changeController(item.player_id, true, item.token, event.target.value)}>
+              <option value="heuristic">ルールAI</option><option value="random">ランダム</option>{aiModels.flatMap(model => [
+                <option key={`ppo:${model.model_id}`} value={`ppo:${model.model_id}`}>{policyArchitectureLabel(model)}: {model.model_id}{initialSetupParenthetical(model)}</option>,
+                ...(model.settlement_planning ? [<option key={`ppo-plan:${model.model_id}`} value={`ppo-plan:${model.model_id}`}>開拓・勝利計画AI: {model.model_id}</option>] : []),
+              ])}
+            </select>}</div>;
           })}</div>
           <small>個別リンクには手札を見る権限があります。本人またはデバッグ担当だけが使用してください。</small>
         </section>}

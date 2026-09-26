@@ -31,6 +31,10 @@ class PlayerActivityTests(unittest.TestCase):
         roll_turn_dice(self.game, 2, self.game.revision, "seven", (3, 4))
         self.assertEqual(set(pending_player_actions(self.game)), {1, 3})
         discard_for_seven(self.game, 1, {"wood": 4}, self.game.revision, "discard-1")
+        event = self.game.resource_events[-1]
+        self.assertEqual(event["deltas"]["1"], {"wood": -4})
+        self.assertNotIn("unknown_loss", event)
+        self.assertIn("木材4枚", self.game.activity_log[-1]["text"])
         self.assertEqual(set(pending_player_actions(self.game)), {3})
         discard_for_seven(self.game, 3, {"wood": 4}, self.game.revision, "discard-3")
         self.assertEqual(pending_player_actions(self.game), {2: "盗賊を移動"})

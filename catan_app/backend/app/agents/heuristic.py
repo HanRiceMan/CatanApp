@@ -20,7 +20,8 @@ def _rng(game: GameState) -> Random:
     return Random((game.seed << 20) ^ game.ai_action_number ^ (game.revision << 5))
 
 
-def _vertex_value(game: GameState, vertex_id: int, player_id: int) -> int:
+def initial_vertex_value(game: GameState, vertex_id: int, player_id: int) -> int:
+    """初期開拓地候補の決定的な基礎評価値。学習用教師にも利用する。"""
     pips = 0
     terrains = set()
     for tile_id in game.board.vertices[vertex_id].hex_ids:
@@ -36,20 +37,23 @@ def _vertex_value(game: GameState, vertex_id: int, player_id: int) -> int:
 
 def _best_vertex(game: GameState, candidates: list[int], player_id: int) -> int:
     rng = _rng(game)
-    return max(candidates, key=lambda vertex: (_vertex_value(game, vertex, player_id), rng.random()))
+    return max(candidates, key=lambda vertex: (initial_vertex_value(game, vertex, player_id), rng.random()))
+
+
+def initial_road_value(game: GameState, edge_id: int, settlement_id: int, player_id: int) -> int:
+    """初期道路の先から次に到達できる開拓地候補の最大基礎評価値。"""
+    a, b = game.board.edges[edge_id].vertex_ids
+    far = b if a == settlement_id else a
+    onward = [other for other in game.board.vertices[far].edge_ids if other != edge_id]
+    reachable = [vertex for other in onward for vertex in game.board.edges[other].vertex_ids
+                 if vertex != far]
+    return max((initial_vertex_value(game, vertex, player_id) for vertex in reachable), default=0)
 
 
 def _best_initial_road(game: GameState, candidates: list[int], settlement_id: int, player_id: int) -> int:
     rng = _rng(game)
-
-    def value(edge_id: int) -> tuple[int, float]:
-        a, b = game.board.edges[edge_id].vertex_ids
-        far = b if a == settlement_id else a
-        onward = [other for other in game.board.vertices[far].edge_ids if other != edge_id]
-        reachable = [vertex for other in onward for vertex in game.board.edges[other].vertex_ids if vertex != far]
-        return max((_vertex_value(game, vertex, player_id) for vertex in reachable), default=0), rng.random()
-
-    return max(candidates, key=value)
+    return max(candidates, key=lambda edge: (
+        initial_road_value(game, edge, settlement_id, player_id), rng.random()))
 
 
 def _missing_cost(player, cost: dict[str, int]) -> list[str]:

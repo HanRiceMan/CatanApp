@@ -617,6 +617,14 @@ summary { cursor: pointer; }
 .winner-card { background: #fff5c9; border-color: #d7b251; text-align: center; }
 .built-city > path { stroke-width: 2.5; }
 .ai-options { margin-top: 8px; }
+.ai-player-option { display: grid; grid-template-columns: minmax(0, 1fr) auto; gap: 6px; align-items: center; }
+.ai-player-option > label { min-width: 0; }
+.agent-picker { max-width: 100%; border: 1px solid #b9b5a7; border-radius: 5px; background: #fffdf7; color: var(--ink); font: inherit; font-size: 11px; padding: 5px 6px; }
+.agent-picker.compact { width: 100%; grid-column: 1 / -1; }
+.model-runtime-note { margin: 8px 0 0; color: #80584b; font-size: 11px; line-height: 1.45; }
+.model-catalog { margin-top: 8px; color: var(--muted); font-size: 11px; }
+.model-catalog summary { cursor: pointer; }
+.model-catalog ul { margin: 6px 0 0; padding-left: 16px; }
 .ai-presets { display: grid; grid-template-columns: 1fr 1fr; gap: 6px; padding-top: 10px; }
 .ai-presets button { border: 1px solid #b9b5a7; border-radius: 5px; padding: 7px 4px; background: #f7f3e8; color: var(--ink); font-size: 10px; }
 .ai-presets button:last-child { grid-column: 1 / -1; }

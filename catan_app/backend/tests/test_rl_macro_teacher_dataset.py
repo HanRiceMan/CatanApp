@@ -107,6 +107,33 @@ class MacroTeacherDatasetTests(unittest.TestCase):
         self.assertEqual(stats["count"], 3)
         self.assertAlmostEqual(stats["mean"], 11 / 6)
 
+    def test_taxonomy_counts_source_trade_objectives(self):
+        classified = record("CITY", "TRADE_PLAYER", action_type="ProposeTradeAction")
+        classified.update({
+            "source_level_objective_available": True,
+            "trade_objective": "CITY",
+            "trade_reason_codes": ["TRADE_FOR_CITY"],
+        })
+        ambiguous = record(None, "TRADE_PLAYER", action_type="ProposeTradeAction")
+        ambiguous.update({
+            "source_level_objective_available": False,
+            "trade_objective": None,
+            "trade_reason_codes": ["TRADE_OBJECTIVE_AMBIGUOUS"],
+        })
+
+        analysis = summarize_taxonomy(
+            [classified, ambiguous]
+        )["source_trade_analysis"]
+
+        self.assertEqual(
+            analysis["by_execution_mode"]["TRADE_PLAYER"]
+                    ["source_objective_available"], 1
+        )
+        self.assertEqual(analysis["objective_distribution"]["CITY"], 1)
+        self.assertEqual(
+            analysis["reason_codes"]["TRADE_OBJECTIVE_AMBIGUOUS"], 1
+        )
+
     def test_dataset_files_link_observations_and_game_results(self):
         observation = np.zeros((2, OBSERVATION_VECTOR_SIZES["v2"]),
                                dtype=np.float32)

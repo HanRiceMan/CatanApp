@@ -24,7 +24,7 @@ from app.domain.actions import (Action, BankTradeAction, BuildCityAction,
                                 RollTurnDiceAction, StartGameAction,
                                 StealResourceAction, UseDevelopmentAction)
 from app.domain.game import (BUILD_COSTS, RESOURCES, GameState,
-                             _longest_road_length, player_for)
+                             _longest_road_length, _port_ratio, player_for)
 
 from .action_space import action_to_id
 from .development_strategy import assess_development_purchase
@@ -33,9 +33,10 @@ from .reward import actual_score
 
 if TYPE_CHECKING:
     from .settlement_planning_agent import SettlementPlanningAgent
+    from .trade_strategy import TradeDecisionDiagnostic
 
 
-PLANNER_DIAGNOSTIC_VERSION = "macro_goal_diagnostics_v1"
+PLANNER_DIAGNOSTIC_VERSION = "macro_goal_diagnostics_v2"
 
 
 class ObjectiveGoal(str, Enum):
@@ -94,6 +95,12 @@ class PlannerReasonCode(str, Enum):
     KNIGHT_TITLE_DEFENSE = "KNIGHT_TITLE_DEFENSE"
     BANK_TRADE_REACHABLE = "BANK_TRADE_REACHABLE"
     PLAYER_TRADE_REACHABLE = "PLAYER_TRADE_REACHABLE"
+    TRADE_FOR_SETTLEMENT = "TRADE_FOR_SETTLEMENT"
+    TRADE_FOR_CITY = "TRADE_FOR_CITY"
+    TRADE_HAND_OVERFLOW = "TRADE_HAND_OVERFLOW"
+    TRADE_RESOURCE_REBALANCE = "TRADE_RESOURCE_REBALANCE"
+    TRADE_FUTURE_VALUE = "TRADE_FUTURE_VALUE"
+    TRADE_OBJECTIVE_AMBIGUOUS = "TRADE_OBJECTIVE_AMBIGUOUS"
     END_TURN_RESOURCE_WAIT = "END_TURN_RESOURCE_WAIT"
     NO_REACHABLE_GOAL = "NO_REACHABLE_GOAL"
     GOAL_ACTION_AMBIGUOUS = "GOAL_ACTION_AMBIGUOUS"
@@ -125,6 +132,20 @@ class PlannerDecisionReport:
     selected_action: dict[str, Any]
     selected_action_id: int | None
     available_goal_mask: dict[str, bool]
+    trade_objective: ObjectiveGoal | None = None
+    trade_reason_codes: tuple[PlannerReasonCode, ...] = ()
+    trade_target_player: int | None = None
+    wanted_resource: str | None = None
+    offered_resource: str | None = None
+    offered_resources: tuple[str, ...] = ()
+    offer_ratio: int | None = None
+    source_level_objective_available: bool = False
+    target_goal: ObjectiveGoal | None = None
+    immediate_goal_reachable: bool | None = None
+    goal_after_trade: ObjectiveGoal | None = None
+    shortage_before_trade: int | None = None
+    shortage_after_trade: int | None = None
+    shortage_basis: str | None = None
     planner_version: str = PLANNER_DIAGNOSTIC_VERSION
 
     def to_dict(self) -> dict[str, Any]:
@@ -139,6 +160,18 @@ class PlannerDecisionReport:
             self.second_goal.value if self.second_goal is not None else None
         )
         result["reason_codes"] = [reason.value for reason in self.reason_codes]
+        result["trade_objective"] = (
+            self.trade_objective.value if self.trade_objective is not None else None
+        )
+        result["trade_reason_codes"] = [
+            reason.value for reason in self.trade_reason_codes
+        ]
+        result["target_goal"] = (
+            self.target_goal.value if self.target_goal is not None else None
+        )
+        result["goal_after_trade"] = (
+            self.goal_after_trade.value if self.goal_after_trade is not None else None
+        )
         return result
 
 
@@ -227,6 +260,104 @@ def _reasons_for_development(assessment: dict[str, Any]) -> list[PlannerReasonCo
     return reasons
 
 
+def _trade_objective(value: str | None) -> ObjectiveGoal | None:
+    return {
+        "settlement": ObjectiveGoal.SETTLEMENT,
+        "city": ObjectiveGoal.CITY,
+        "development": ObjectiveGoal.DEVELOPMENT,
+        "knight_title": ObjectiveGoal.KNIGHT_TITLE,
+    }.get(value)
+
+
+def _source_trade_reasons(
+    diagnostic: "TradeDecisionDiagnostic",
+) -> list[PlannerReasonCode]:
+    objective = _trade_objective(diagnostic.source_objective)
+    reasons = []
+    if objective == ObjectiveGoal.SETTLEMENT:
+        reasons.append(PlannerReasonCode.TRADE_FOR_SETTLEMENT)
+    elif objective == ObjectiveGoal.CITY:
+        reasons.append(PlannerReasonCode.TRADE_FOR_CITY)
+    purpose_map = {
+        "HAND_OVERFLOW": PlannerReasonCode.TRADE_HAND_OVERFLOW,
+        "RESOURCE_REBALANCE": PlannerReasonCode.TRADE_RESOURCE_REBALANCE,
+        "FUTURE_VALUE": PlannerReasonCode.TRADE_FUTURE_VALUE,
+        "OBJECTIVE_AMBIGUOUS": PlannerReasonCode.TRADE_OBJECTIVE_AMBIGUOUS,
+    }
+    reasons.extend(
+        purpose_map[reason.value]
+        for reason in diagnostic.reasons if reason.value in purpose_map
+    )
+    return list(dict.fromkeys(reasons))
+
+
+def _trade_report_fields(
+    game: GameState,
+    player_id: int,
+    action: Action,
+    diagnostic: "TradeDecisionDiagnostic | None",
+) -> dict[str, Any]:
+    fields: dict[str, Any] = {
+        "trade_objective": None,
+        "trade_reason_codes": (),
+        "trade_target_player": None,
+        "wanted_resource": None,
+        "offered_resource": None,
+        "offered_resources": (),
+        "offer_ratio": None,
+        "source_level_objective_available": False,
+        "target_goal": None,
+        "immediate_goal_reachable": None,
+        "goal_after_trade": None,
+        "shortage_before_trade": None,
+        "shortage_after_trade": None,
+        "shortage_basis": None,
+    }
+    if isinstance(action, BankTradeAction):
+        fields.update(
+            wanted_resource=action.receive_resource,
+            offered_resource=action.give_resource,
+            offered_resources=(action.give_resource,),
+            offer_ratio=_port_ratio(game, player_id, action.give_resource),
+        )
+    elif isinstance(action, ProposeTradeAction):
+        offered = tuple(dict.fromkeys(
+            resource for offer in action.offers for resource in offer.give
+        ))
+        wanted = tuple(dict.fromkeys(
+            resource for offer in action.offers for resource in offer.want
+        ))
+        fields.update(
+            trade_target_player=action.target_id,
+            wanted_resource=wanted[0] if len(wanted) == 1 else None,
+            offered_resource=offered[0] if offered else None,
+            offered_resources=offered,
+        )
+    if diagnostic is None:
+        return fields
+    objective = _trade_objective(diagnostic.source_objective)
+    fields.update(
+        trade_objective=objective,
+        trade_reason_codes=tuple(_source_trade_reasons(diagnostic)),
+        trade_target_player=diagnostic.target_player,
+        wanted_resource=diagnostic.wanted_resource,
+        offered_resource=(
+            diagnostic.offered_resources[0]
+            if diagnostic.offered_resources else None
+        ),
+        offered_resources=diagnostic.offered_resources,
+        offer_ratio=diagnostic.offer_ratio,
+        source_level_objective_available=objective is not None,
+        target_goal=_trade_objective(diagnostic.target_goal),
+        immediate_goal_reachable=diagnostic.immediate_goal_reachable,
+        goal_after_trade=_trade_objective(diagnostic.goal_after_trade),
+        shortage_before_trade=diagnostic.shortage_before_trade,
+        shortage_after_trade=diagnostic.shortage_after_trade,
+        shortage_basis=diagnostic.shortage_basis,
+    )
+    return fields
+
+
 def _goal_for_action(
     agent: "SettlementPlanningAgent",
     game: GameState,
@@ -235,6 +366,7 @@ def _goal_for_action(
     *,
     plan,
     development: dict[str, Any],
+    trade_diagnostic: "TradeDecisionDiagnostic | None",
 ) -> tuple[ObjectiveGoal | None, list[PlannerReasonCode]]:
     player = player_for(game, player_id)
     target = plan.selected_target
@@ -284,6 +416,17 @@ def _goal_for_action(
         reason = (PlannerReasonCode.BANK_TRADE_REACHABLE
                   if isinstance(action, BankTradeAction)
                   else PlannerReasonCode.PLAYER_TRADE_REACHABLE)
+        if isinstance(action, ProposeTradeAction) and trade_diagnostic is not None:
+            source_objective = _trade_objective(
+                trade_diagnostic.source_objective
+            )
+            source_reasons = _source_trade_reasons(trade_diagnostic)
+            if source_objective is not None:
+                return source_objective, [reason, *source_reasons]
+            return None, [
+                reason, *source_reasons,
+                PlannerReasonCode.GOAL_ACTION_AMBIGUOUS,
+            ]
         if construction is not None:
             objective, required = construction
             wanted = (action.receive_resource if isinstance(action, BankTradeAction)
@@ -318,6 +461,7 @@ def _goal_for_action(
 
 def _report_from_copy(
     agent: "SettlementPlanningAgent", game: GameState, player_id: int, action: Action,
+    trade_diagnostic: "TradeDecisionDiagnostic | None" = None,
 ) -> PlannerDecisionReport:
     mode = _execution_mode(action)
     state_id = f"{game.id}:{game.revision}:{player_id}"
@@ -432,6 +576,10 @@ def _report_from_copy(
     }
     objective, reasons = _goal_for_action(
         agent, game, player_id, action, plan=plan, development=development,
+        trade_diagnostic=trade_diagnostic,
+    )
+    trade_fields = _trade_report_fields(
+        game, player_id, action, trade_diagnostic,
     )
     target_vertex = getattr(action, "vertex_id", None)
     if target_vertex is None and objective == ObjectiveGoal.SETTLEMENT and target is not None:
@@ -457,15 +605,20 @@ def _report_from_copy(
         selected_action=_serialize_action(action),
         selected_action_id=_safe_action_id(action),
         available_goal_mask=available,
+        **trade_fields,
     )
 
 
 def build_planner_decision_report(
     agent: "SettlementPlanningAgent", game: GameState, player_id: int, action: Action,
+    *, trade_diagnostic: "TradeDecisionDiagnostic | None" = None,
 ) -> PlannerDecisionReport:
     """選択済みActionから副作用なしで診断レポートを作る。
 
     診断器内の一時的な探索や将来の変更がChampionのGameStateへ影響しないよう、
     常にGameStateのdeep copy上で解析する。
     """
-    return _report_from_copy(agent, deepcopy(game), player_id, action)
+    return _report_from_copy(
+        agent, deepcopy(game), player_id, action,
+        trade_diagnostic=trade_diagnostic,
+    )

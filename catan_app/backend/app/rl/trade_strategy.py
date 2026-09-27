@@ -2,6 +2,9 @@
 
 from __future__ import annotations
 
+from dataclasses import dataclass
+from enum import Enum
+
 from app.domain.actions import (ProposeCounterTradeAction, ProposeTradeAction,
                                 RespondToTradeAction, TradeOffer)
 from app.domain.game import (BUILD_COSTS, RESOURCES, GameState, _can_afford,
@@ -12,6 +15,51 @@ from .expansion_planner import (analyze_expansion_plan, estimated_build_wait,
 from .hand_belief import BayesianHandEstimator
 from .reward import actual_score
 from .victory_race import public_score
+
+
+class TradeDiagnosticReason(str, Enum):
+    """交渉選択時に確定していた、診断専用の構造化理由。"""
+
+    GOAL_COMPLETION = "GOAL_COMPLETION"
+    ACTIVE_GOAL_PROGRESS = "ACTIVE_GOAL_PROGRESS"
+    HAND_OVERFLOW = "HAND_OVERFLOW"
+    RESOURCE_REBALANCE = "RESOURCE_REBALANCE"
+    FUTURE_VALUE = "FUTURE_VALUE"
+    OBJECTIVE_AMBIGUOUS = "OBJECTIVE_AMBIGUOUS"
+
+
+@dataclass(frozen=True)
+class TradeDecisionDiagnostic:
+    """選択済みPlayerTradeと同じ計算経路から得た、非介入診断。"""
+
+    source_objective: str | None
+    target_goal: str | None
+    reasons: tuple[TradeDiagnosticReason, ...]
+    target_player: int
+    wanted_resource: str
+    offered_resources: tuple[str, ...]
+    offer_ratio: int
+    immediate_goal_reachable: bool | None
+    goal_after_trade: str | None
+    shortage_before_trade: int
+    shortage_after_trade: int
+    shortage_basis: str
+
+
+@dataclass(frozen=True)
+class ProactiveTradeSelection:
+    """既存Actionと、そのActionを選んだ同一経路の診断情報。"""
+
+    action: ProposeTradeAction
+    diagnostic: TradeDecisionDiagnostic
+
+
+@dataclass(frozen=True)
+class _StrategicTradeBudget:
+    reserve: dict[str, int]
+    wanted: str
+    active_goal: str | None
+    active_required: dict[str, int] | None
 
 
 def construction_trade_goal(game: GameState, player_id: int, *, target_sites: int,
@@ -94,7 +142,7 @@ def _strategic_trade_budget(game: GameState, player_id: int, *, target_sites: in
                             max_plan_roads: int, max_wait_rounds: float,
                             max_city_wait_rounds: float,
                             stall_wait_rounds: float,
-                            burst_warning_cards: int) -> tuple[dict[str, int], str] | None:
+                            burst_warning_cards: int) -> _StrategicTradeBudget | None:
     """停滞時に、直近建設と将来の都市の両方を見た予約量・希少資源を返す。"""
     player = player_for(game, player_id)
     hand_size = sum(player.resources.values())
@@ -120,8 +168,10 @@ def _strategic_trade_budget(game: GameState, player_id: int, *, target_sites: in
         max_city_wait_rounds=max_city_wait_rounds,
     )
     reserve = dict.fromkeys(RESOURCES, 0)
+    active_goal = None
+    active_required = None
     if active is not None:
-        _, active_required = active
+        active_goal, active_required = active
         reserve.update(active_required)
     # 開拓地を目指している最中でも、入手困難な鉱石・小麦を将来の都市用に
     # 先回りして集められるよう、同じ資源は直近目標との大きい方を予約する。
@@ -145,21 +195,30 @@ def _strategic_trade_budget(game: GameState, player_id: int, *, target_sites: in
         resource == "ore",
         -RESOURCES.index(resource),
     ))
-    return reserve, wanted
+    return _StrategicTradeBudget(
+        reserve=reserve, wanted=wanted, active_goal=active_goal,
+        active_required=active_required,
+    )
 
 
-def choose_proactive_trade(game: GameState, player_id: int, *, target_sites: int,
-                           max_plan_roads: int, max_wait_rounds: float,
-                           max_city_wait_rounds: float,
-                           max_proposals: int = 3,
-                           max_scarcity_deficit: int = 1,
-                           minimum_has_probability: float = 0.45,
-                           opponent_score_limit: int = 8,
-                           allow_leader_at_score: int = 9,
-                           strategic_surplus_trade: bool = False,
-                           surplus_trade_stall_wait_rounds: float = 4.0,
-                           burst_warning_cards: int = 7,
-                           burst_danger_cards: int = 8) -> ProposeTradeAction | None:
+def _choose_proactive_trade(
+    game: GameState,
+    player_id: int,
+    *,
+    target_sites: int,
+    max_plan_roads: int,
+    max_wait_rounds: float,
+    max_city_wait_rounds: float,
+    max_proposals: int = 3,
+    max_scarcity_deficit: int = 1,
+    minimum_has_probability: float = 0.45,
+    opponent_score_limit: int = 8,
+    allow_leader_at_score: int = 9,
+    strategic_surplus_trade: bool = False,
+    surplus_trade_stall_wait_rounds: float = 4.0,
+    burst_warning_cards: int = 7,
+    burst_danger_cards: int = 8,
+) -> ProactiveTradeSelection | None:
     """建設不足または停滞中の余剰を、相手の保有推定に沿って希少資源へ替える。"""
     if game.phase != "action" or game.current_player_id != player_id:
         return None
@@ -188,6 +247,10 @@ def choose_proactive_trade(game: GameState, player_id: int, *, target_sites: int
     if standard_trade:
         wanted = missing_resources[0]
         strategic = False
+        target_goal = goal_name
+        source_objective = goal_name
+        shortage_required = required
+        diagnostic_reasons = [TradeDiagnosticReason.GOAL_COMPLETION]
     elif strategic_surplus_trade:
         budget = _strategic_trade_budget(
             game, player_id, target_sites=target_sites,
@@ -198,8 +261,27 @@ def choose_proactive_trade(game: GameState, player_id: int, *, target_sites: int
         )
         if budget is None:
             return None
-        required, wanted = budget
+        required, wanted = budget.reserve, budget.wanted
         strategic = True
+        target_goal = budget.active_goal
+        advances_active_goal = bool(
+            budget.active_required is not None
+            and player.resources[wanted] < budget.active_required.get(wanted, 0)
+        )
+        source_objective = budget.active_goal if advances_active_goal else None
+        shortage_required = (
+            budget.active_required if source_objective is not None else budget.reserve
+        )
+        diagnostic_reasons = [TradeDiagnosticReason.RESOURCE_REBALANCE]
+        if source_objective is not None:
+            diagnostic_reasons.append(TradeDiagnosticReason.ACTIVE_GOAL_PROGRESS)
+        else:
+            diagnostic_reasons.extend((
+                TradeDiagnosticReason.FUTURE_VALUE,
+                TradeDiagnosticReason.OBJECTIVE_AMBIGUOUS,
+            ))
+        if hand_size >= burst_danger_cards:
+            diagnostic_reasons.append(TradeDiagnosticReason.HAND_OVERFLOW)
     else:
         return None
 
@@ -265,7 +347,96 @@ def choose_proactive_trade(game: GameState, player_id: int, *, target_sites: int
                    if player.resources[resource] - required.get(resource, 0) >= ratio)[:3]
     if not offers:
         return None
-    return ProposeTradeAction(target_id, offers)
+    action = ProposeTradeAction(target_id, offers)
+    shortage_before = sum(_deficits(player.resources, shortage_required).values())
+    primary_offer = offers[0]
+    after_resources = {
+        resource: (
+            player.resources[resource]
+            + primary_offer.want.get(resource, 0)
+            - primary_offer.give.get(resource, 0)
+        )
+        for resource in RESOURCES
+    }
+    shortage_after = sum(_deficits(after_resources, shortage_required).values())
+    return ProactiveTradeSelection(
+        action=action,
+        diagnostic=TradeDecisionDiagnostic(
+            source_objective=source_objective,
+            target_goal=target_goal,
+            reasons=tuple(diagnostic_reasons),
+            target_player=target_id,
+            wanted_resource=wanted,
+            offered_resources=tuple(
+                next(iter(offer.give)) for offer in offers if offer.give
+            ),
+            offer_ratio=ratio,
+            immediate_goal_reachable=(
+                shortage_after == 0 if source_objective is not None else None
+            ),
+            goal_after_trade=source_objective,
+            shortage_before_trade=shortage_before,
+            shortage_after_trade=shortage_after,
+            shortage_basis=(
+                "target_goal" if source_objective is not None else "strategic_reserve"
+            ),
+        ),
+    )
+
+
+def choose_proactive_trade(game: GameState, player_id: int, *, target_sites: int,
+                           max_plan_roads: int, max_wait_rounds: float,
+                           max_city_wait_rounds: float,
+                           max_proposals: int = 3,
+                           max_scarcity_deficit: int = 1,
+                           minimum_has_probability: float = 0.45,
+                           opponent_score_limit: int = 8,
+                           allow_leader_at_score: int = 9,
+                           strategic_surplus_trade: bool = False,
+                           surplus_trade_stall_wait_rounds: float = 4.0,
+                           burst_warning_cards: int = 7,
+                           burst_danger_cards: int = 8) -> ProposeTradeAction | None:
+    """互換API。既存と同じActionだけを返し、診断は行動へ影響させない。"""
+    selection = _choose_proactive_trade(
+        game, player_id, target_sites=target_sites,
+        max_plan_roads=max_plan_roads, max_wait_rounds=max_wait_rounds,
+        max_city_wait_rounds=max_city_wait_rounds, max_proposals=max_proposals,
+        max_scarcity_deficit=max_scarcity_deficit,
+        minimum_has_probability=minimum_has_probability,
+        opponent_score_limit=opponent_score_limit,
+        allow_leader_at_score=allow_leader_at_score,
+        strategic_surplus_trade=strategic_surplus_trade,
+        surplus_trade_stall_wait_rounds=surplus_trade_stall_wait_rounds,
+        burst_warning_cards=burst_warning_cards,
+        burst_danger_cards=burst_danger_cards,
+    )
+    return selection.action if selection is not None else None
+
+
+def choose_proactive_trade_with_diagnostic(
+    game: GameState, player_id: int, *, target_sites: int,
+    max_plan_roads: int, max_wait_rounds: float,
+    max_city_wait_rounds: float, max_proposals: int = 3,
+    max_scarcity_deficit: int = 1, minimum_has_probability: float = 0.45,
+    opponent_score_limit: int = 8, allow_leader_at_score: int = 9,
+    strategic_surplus_trade: bool = False,
+    surplus_trade_stall_wait_rounds: float = 4.0,
+    burst_warning_cards: int = 7, burst_danger_cards: int = 8,
+) -> ProactiveTradeSelection | None:
+    """既存と同じ一回の選択からActionとsource-level診断を返す。"""
+    return _choose_proactive_trade(
+        game, player_id, target_sites=target_sites,
+        max_plan_roads=max_plan_roads, max_wait_rounds=max_wait_rounds,
+        max_city_wait_rounds=max_city_wait_rounds, max_proposals=max_proposals,
+        max_scarcity_deficit=max_scarcity_deficit,
+        minimum_has_probability=minimum_has_probability,
+        opponent_score_limit=opponent_score_limit,
+        allow_leader_at_score=allow_leader_at_score,
+        strategic_surplus_trade=strategic_surplus_trade,
+        surplus_trade_stall_wait_rounds=surplus_trade_stall_wait_rounds,
+        burst_warning_cards=burst_warning_cards,
+        burst_danger_cards=burst_danger_cards,
+    )
 
 
 def choose_trade_response(game: GameState, player_id: int, *, target_sites: int,

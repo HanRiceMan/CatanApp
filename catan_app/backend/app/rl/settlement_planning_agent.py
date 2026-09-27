@@ -29,6 +29,7 @@ from .victory_race import (best_belief_robber_tile, best_belief_robber_victim,
 
 if TYPE_CHECKING:
     from .macro_goal import PlannerDecisionReport
+    from .trade_strategy import TradeDecisionDiagnostic
 
 
 class SettlementPlanningAgent:
@@ -939,15 +940,19 @@ class SettlementPlanningAgent:
         end_turn = next((action for action in legal if isinstance(action, EndTurnAction)), None)
         return end_turn or base_action
 
-    def select_action(self, game: GameState, player_id: int) -> Action:
+    def _select_action_with_trade_diagnostic(
+        self, game: GameState, player_id: int,
+    ) -> tuple[Action, TradeDecisionDiagnostic | None]:
+        """既存Action選択を一度だけ実行し、PlayerTrade診断も同時に得る。"""
         planned = self._select_planned_action(game, player_id)
         planned = self._guard_paid_road_purpose(game, player_id, planned)
         planned = self._guard_near_city_resources(game, player_id, planned)
         if not (self.proactive_player_trade or self.strategic_trade_response
                 or self.adaptive_development_purchase
                 or self.endgame_development_fallback):
-            return planned
-        from .trade_strategy import (choose_counter_trade, choose_proactive_trade,
+            return planned, None
+        from .trade_strategy import (choose_counter_trade,
+                                     choose_proactive_trade_with_diagnostic,
                                      choose_trade_response)
         options = {
             "target_sites": self.target_sites,
@@ -960,13 +965,13 @@ class SettlementPlanningAgent:
                 game, player_id,
                 opponent_score_limit=self.strategic_trade_opponent_score_limit,
                 **options,
-            )
+            ), None
         if self.strategic_trade_response and game.phase == "trade_counter_offer":
-            return choose_counter_trade(game, player_id, **options) or planned
+            return choose_counter_trade(game, player_id, **options) or planned, None
         if (self.proactive_player_trade and game.phase == "action"
                 and (isinstance(planned, EndTurnAction)
                      or self.proactive_trade_max_scarcity_deficit > 1)):
-            trade = choose_proactive_trade(
+            trade = choose_proactive_trade_with_diagnostic(
                 game, player_id,
                 max_scarcity_deficit=self.proactive_trade_max_scarcity_deficit,
                 strategic_surplus_trade=self.strategic_surplus_trade,
@@ -974,7 +979,7 @@ class SettlementPlanningAgent:
                 **options,
             )
             if trade is not None:
-                return trade
+                return trade.action, trade.diagnostic
         if (self.adaptive_development_purchase and game.phase == "action"
                 and isinstance(planned, EndTurnAction)):
             from .development_strategy import assess_development_purchase
@@ -989,7 +994,7 @@ class SettlementPlanningAgent:
             if assessment["eligible"]:
                 return self._guard_near_city_resources(
                     game, player_id, BuyDevelopmentAction()
-                )
+                ), None
         if (self.endgame_development_fallback and game.phase == "action"
                 and isinstance(planned, EndTurnAction)
                 and actual_score(game, player_id) == 9):
@@ -1005,13 +1010,21 @@ class SettlementPlanningAgent:
             if assessment["eligible"]:
                 return self._guard_near_city_resources(
                     game, player_id, BuyDevelopmentAction()
-                )
-        return planned
+                ), None
+        return planned, None
+
+    def select_action(self, game: GameState, player_id: int) -> Action:
+        action, _ = self._select_action_with_trade_diagnostic(game, player_id)
+        return action
 
     def select_action_with_report(
         self, game: GameState, player_id: int,
     ) -> tuple[Action, PlannerDecisionReport]:
         """既存選択を一度だけ実行し、行動を変えずにMacro診断を返す。"""
-        action = self.select_action(game, player_id)
+        action, trade_diagnostic = self._select_action_with_trade_diagnostic(
+            game, player_id,
+        )
         from .macro_goal import build_planner_decision_report
-        return action, build_planner_decision_report(self, game, player_id, action)
+        return action, build_planner_decision_report(
+            self, game, player_id, action, trade_diagnostic=trade_diagnostic,
+        )

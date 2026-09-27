@@ -4,7 +4,10 @@ from unittest.mock import patch
 
 from app.domain.actions import ProposeTradeAction
 from app.domain.game import RESOURCES, create_game, player_for
-from app.rl.trade_strategy import (choose_proactive_trade, construction_trade_goal,
+from app.rl.trade_strategy import (TradeDiagnosticReason,
+                                   choose_proactive_trade,
+                                   choose_proactive_trade_with_diagnostic,
+                                   construction_trade_goal,
                                    choose_trade_response)
 
 
@@ -30,6 +33,64 @@ def options():
 
 
 class ProactiveTradeTests(unittest.TestCase):
+    def test_source_diagnostic_uses_same_action_and_does_not_consume_rng(self):
+        game = trade_game()
+        game.resource_events = [{"deltas": {"2": {"wheat": 1}}}]
+        counter = game.random_source.counter
+
+        selection = choose_proactive_trade_with_diagnostic(
+            game, 1, **options(),
+        )
+        action = choose_proactive_trade(game, 1, **options())
+
+        self.assertIsNotNone(selection)
+        self.assertEqual(selection.action, action)
+        self.assertEqual(game.random_source.counter, counter)
+        diagnostic = selection.diagnostic
+        self.assertEqual(diagnostic.source_objective, "city")
+        self.assertEqual(diagnostic.target_goal, "city")
+        self.assertIn(TradeDiagnosticReason.GOAL_COMPLETION,
+                      diagnostic.reasons)
+        self.assertEqual(diagnostic.wanted_resource, "wheat")
+        self.assertEqual(diagnostic.offered_resources[0], "wood")
+        self.assertEqual(diagnostic.offer_ratio, 1)
+        self.assertTrue(diagnostic.immediate_goal_reachable)
+        self.assertEqual(
+            (diagnostic.shortage_before_trade, diagnostic.shortage_after_trade),
+            (1, 0),
+        )
+
+    def test_future_only_strategic_trade_keeps_source_objective_ambiguous(self):
+        game = trade_game()
+        player = player_for(game, 1)
+        player.settlements = 2
+        player.cities = 0
+        player.resources = dict.fromkeys(RESOURCES, 0)
+        player.resources.update(sheep=1, wheat=4)
+        game.resource_events = [{"deltas": {"2": {"ore": 1}}}]
+        required = {**dict.fromkeys(RESOURCES, 0), "wood": 1, "brick": 1,
+                    "sheep": 1, "wheat": 1}
+        stalled = SimpleNamespace(build_wait_rounds=8.0)
+
+        with (patch("app.rl.trade_strategy.construction_trade_goal",
+                    return_value=("settlement", required)),
+              patch("app.rl.trade_strategy.analyze_expansion_plan",
+                    return_value=stalled),
+              patch("app.rl.trade_strategy.player_production",
+                    return_value=dict.fromkeys(RESOURCES, 0))):
+            selection = choose_proactive_trade_with_diagnostic(
+                game, 1, strategic_surplus_trade=True, **options(),
+            )
+
+        self.assertIsNotNone(selection)
+        diagnostic = selection.diagnostic
+        self.assertIsNone(diagnostic.source_objective)
+        self.assertEqual(diagnostic.target_goal, "settlement")
+        self.assertEqual(diagnostic.wanted_resource, "ore")
+        self.assertIn(TradeDiagnosticReason.FUTURE_VALUE, diagnostic.reasons)
+        self.assertIn(TradeDiagnosticReason.OBJECTIVE_AMBIGUOUS,
+                      diagnostic.reasons)
+
     def test_stalled_surplus_wheat_is_offered_for_scarce_ore(self):
         game = trade_game()
         player = player_for(game, 1)

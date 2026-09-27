@@ -24,7 +24,7 @@ from .reward import actual_score
 from .settlement_planning_agent import SettlementPlanningAgent
 
 
-DATASET_SCHEMA_VERSION = "macro_teacher_v2"
+DATASET_SCHEMA_VERSION = "macro_teacher_v3"
 NONE_LABEL = "None"
 OPPONENT_PROFILES = ("rule", "champion", "mixed")
 PROFILE_ROLES = {
@@ -330,6 +330,9 @@ def summarize_taxonomy(records: Iterable[dict[str, Any]]) -> dict[str, Any]:
     outcome: dict[str, Counter[str]] = defaultdict(Counter)
     seat_distribution: dict[str, Counter[str]] = defaultdict(Counter)
     semantic_values: dict[str, list[float]] = defaultdict(list)
+    source_trade_by_execution: dict[str, Counter[str]] = defaultdict(Counter)
+    source_trade_objectives = Counter()
+    source_trade_reasons = Counter()
     build_road_total = 0
     build_road_none = 0
 
@@ -346,6 +349,15 @@ def summarize_taxonomy(records: Iterable[dict[str, Any]]) -> dict[str, Any]:
             goal_reason[goal][str(reason)] += 1
         if execution == "BUILD_ROAD":
             build_road_total += 1
+        if execution in {"TRADE_PLAYER", "TRADE_BANK"}:
+            available = bool(row.get("source_level_objective_available", False))
+            source_trade_by_execution[execution][
+                "available" if available else "unavailable"
+            ] += 1
+            if available:
+                source_trade_objectives[_goal_label(row.get("trade_objective"))] += 1
+            for trade_reason in row.get("trade_reason_codes", []):
+                source_trade_reasons[str(trade_reason)] += 1
         if goal == NONE_LABEL:
             action_family = str(row["selected_action"].get("type", "Unknown"))
             none_action[action_family] += 1
@@ -406,6 +418,21 @@ def summarize_taxonomy(records: Iterable[dict[str, Any]]) -> dict[str, Any]:
         "objective_goal_by_seat": {
             seat: _count_summary(counter, sum(counter.values()))
             for seat, counter in sorted(seat_distribution.items())
+        },
+        "source_trade_analysis": {
+            "by_execution_mode": {
+                execution: {
+                    "total": sum(counter.values()),
+                    "source_objective_available": counter["available"],
+                    "source_objective_rate": (
+                        counter["available"] / sum(counter.values())
+                        if sum(counter.values()) else 0.0
+                    ),
+                }
+                for execution, counter in sorted(source_trade_by_execution.items())
+            },
+            "objective_distribution": dict(sorted(source_trade_objectives.items())),
+            "reason_codes": dict(sorted(source_trade_reasons.items())),
         },
         "goal_score_semantics": score_summary,
         "turn_band_definition": {

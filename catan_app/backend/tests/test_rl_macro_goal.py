@@ -7,7 +7,8 @@ import numpy as np
 
 from app.domain.actions import (BankTradeAction, BuildCityAction,
                                 BuildRoadAction, BuildSettlementAction,
-                                EndTurnAction, RollTurnDiceAction)
+                                EndTurnAction, ProposeTradeAction,
+                                RollTurnDiceAction, TradeOffer)
 from app.domain.game import RESOURCES, create_game, player_for
 from app.rl.action_space import ACTION_SPACE_SIZE
 from app.rl.expansion_planner import ExpansionPlan, SettlementTarget
@@ -15,6 +16,8 @@ from app.rl.macro_goal import (ExecutionMode, ObjectiveGoal,
                                PlannerReasonCode,
                                build_planner_decision_report)
 from app.rl.settlement_planning_agent import SettlementPlanningAgent
+from app.rl.trade_strategy import (TradeDecisionDiagnostic,
+                                   TradeDiagnosticReason)
 
 
 class StubPolicy:
@@ -63,6 +66,64 @@ def plan(selected=None):
 
 
 class MacroGoalDiagnosticsTests(unittest.TestCase):
+    def test_source_trade_diagnostic_assigns_city_without_posthoc_guess(self):
+        game = scenario()
+        agent = UniformPlanningAgent(StubPolicy(EndTurnAction()))
+        action = ProposeTradeAction(
+            2, (TradeOffer({"wood": 1}, {"ore": 1}),)
+        )
+        diagnostic = TradeDecisionDiagnostic(
+            source_objective="city", target_goal="city",
+            reasons=(TradeDiagnosticReason.ACTIVE_GOAL_PROGRESS,),
+            target_player=2, wanted_resource="ore",
+            offered_resources=("wood",), offer_ratio=1,
+            immediate_goal_reachable=False, goal_after_trade="city",
+            shortage_before_trade=3, shortage_after_trade=2,
+            shortage_basis="target_goal",
+        )
+
+        report = build_planner_decision_report(
+            agent, game, 1, action, trade_diagnostic=diagnostic,
+        )
+
+        self.assertEqual(report.objective_goal, ObjectiveGoal.CITY)
+        self.assertEqual(report.trade_objective, ObjectiveGoal.CITY)
+        self.assertTrue(report.source_level_objective_available)
+        self.assertIn(PlannerReasonCode.TRADE_FOR_CITY, report.reason_codes)
+        self.assertEqual(report.shortage_before_trade, 3)
+        self.assertEqual(report.shortage_after_trade, 2)
+
+    def test_ambiguous_source_trade_is_not_reclassified_posthoc(self):
+        game = scenario()
+        agent = UniformPlanningAgent(StubPolicy(EndTurnAction()))
+        action = ProposeTradeAction(
+            2, (TradeOffer({"wood": 1}, {"ore": 1}),)
+        )
+        diagnostic = TradeDecisionDiagnostic(
+            source_objective=None, target_goal="settlement",
+            reasons=(TradeDiagnosticReason.FUTURE_VALUE,
+                     TradeDiagnosticReason.OBJECTIVE_AMBIGUOUS),
+            target_player=2, wanted_resource="ore",
+            offered_resources=("wood",), offer_ratio=1,
+            immediate_goal_reachable=None, goal_after_trade=None,
+            shortage_before_trade=4, shortage_after_trade=3,
+            shortage_basis="strategic_reserve",
+        )
+
+        with patch("app.rl.trade_strategy.construction_trade_goal",
+                   return_value=("city", {**dict.fromkeys(RESOURCES, 0),
+                                          "ore": 3})):
+            report = build_planner_decision_report(
+                agent, game, 1, action, trade_diagnostic=diagnostic,
+            )
+
+        self.assertIsNone(report.objective_goal)
+        self.assertFalse(report.source_level_objective_available)
+        self.assertIn(PlannerReasonCode.TRADE_FUTURE_VALUE,
+                      report.reason_codes)
+        self.assertIn(PlannerReasonCode.TRADE_OBJECTIVE_AMBIGUOUS,
+                      report.reason_codes)
+
     def test_direct_builds_separate_objective_from_execution(self):
         game = scenario()
         agent = UniformPlanningAgent(StubPolicy(EndTurnAction()))

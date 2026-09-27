@@ -1,0 +1,34 @@
+{
+  "model_id": "ppo_robber_value_73k_s01_exp_v001",
+  "algorithm": "MaskablePPO",
+  "artifact_filename": "model.zip",
+  "observation_version": "v5",
+  "observation_size": 1722,
+  "action_space_version": "v1",
+  "action_space_size": 377,
+  "training_steps": 73552,
+  "training_seed": 20260927,
+  "created_at": "2026-09-27T03:21:51.443103+00:00",
+  "evaluation": {
+    "summary": {
+      "episodes": 40,
+      "win_rate": 0.85,
+      "average_score": 9.75,
+      "average_rank": 1.175,
+      "opponents": "heuristic_x3"
+    },
+    "strongest_opponents": {
+      "episodes": 40,
+      "win_rate": 0.275,
+      "average_score": 7.425,
+      "average_rank": 2.3
+    }
+  },
+  "registry_version": "v1",
+  "initial_setup": {
+    "architecture": "two_layer_vertex_message_passing",
+    "artifact_filename": "gnn_setup_policy.pt",
+    "type": "gnn"
+  },
+  "is_runtime_compatible": true
+}

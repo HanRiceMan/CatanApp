@@ -45,6 +45,19 @@ class RlPhaseFiveTests(unittest.TestCase):
         self.assertTrue(planned["settlement_planning"]["expansion_aware_setup"])
         self.assertEqual(planned["settlement_planning"]["endgame_point_reserve_score"], 8)
         self.assertTrue(planned["settlement_planning"]["prioritize_immediate_titles"])
+        robber_candidate = next(
+            model for model in catalog.json()["models"]
+            if model["model_id"] == "ppo_robber_value_73k_s01_exp_v001"
+        )
+        self.assertEqual(robber_candidate["display_name"], "盗賊PPO移行AI（実験版）")
+        self.assertTrue(robber_candidate["ui_planned_only"])
+        self.assertEqual(
+            robber_candidate["policy_architecture"],
+            "robber_belief_gnn_family_hierarchical_candidate",
+        )
+        self.assertFalse(
+            robber_candidate["settlement_planning"]["belief_aware_robber"]
+        )
 
         created = self.client.post("/api/games", json={"seed": 52, "ai_agents": {"2": "random"}})
         self.assertEqual(created.status_code, 201)

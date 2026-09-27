@@ -166,6 +166,8 @@ def list_ai_models() -> dict:
         except (FileNotFoundError, json.JSONDecodeError, OSError):
             config = {}
         entry.update({
+            "display_name": config.get("display_name"),
+            "ui_planned_only": config.get("ui_planned_only", False) is True,
             "policy_architecture": config.get("policy_architecture", "mlp"),
             "heuristic_initial_placement": config.get("heuristic_initial_placement", False) is True,
             "initial_setup_policy": (

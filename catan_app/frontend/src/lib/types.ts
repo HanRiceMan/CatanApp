@@ -35,6 +35,8 @@ export type Player = {
 };
 export type AiModel = {
   model_id: string;
+  display_name?: string | null;
+  ui_planned_only?: boolean;
   algorithm: string;
   observation_version: string;
   observation_size: number;
@@ -44,7 +46,7 @@ export type AiModel = {
   training_seed: number;
   created_at: string;
   evaluation: { summary?: { episodes?: number; win_rate?: number; average_score?: number; average_turns?: number; illegal_action_count?: number } };
-  policy_architecture: "mlp" | "candidate" | "hierarchical_candidate" | "gnn_hierarchical_candidate";
+  policy_architecture: "mlp" | "candidate" | "hierarchical_candidate" | "gnn_hierarchical_candidate" | "robber_belief_gnn_family_hierarchical_candidate";
   heuristic_initial_placement: boolean;
   initial_setup_policy: "ppo" | "heuristic" | "gnn";
   settlement_planning?: {

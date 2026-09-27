@@ -1,0 +1,172 @@
+{
+  "batch_size": 64,
+  "board_rules": {
+    "desert_center": false,
+    "red_numbers_distinct_terrains": false,
+    "red_numbers_not_adjacent": true,
+    "terrain_clusters_max_two": false
+  },
+  "checkpoint_interval_steps": 25000,
+  "device": "cpu",
+  "ent_coef": 0.01,
+  "evaluation_seeds": [
+    61001,
+    61002,
+    61003,
+    61004
+  ],
+  "gae_lambda": 0.95,
+  "gamma": 0.99,
+  "heuristic_initial_placement": false,
+  "heuristic_opponents": null,
+  "initial_setup_policy": {
+    "artifact_filename": "gnn_setup_policy.pt",
+    "type": "gnn"
+  },
+  "learning_player_id": 1,
+  "learning_rate": 3e-05,
+  "model_id": "ppo_robber_value_73k_s01_exp_v001",
+  "display_name": "盗賊PPO移行AI（実験版）",
+  "ui_planned_only": true,
+  "models_root": "C:\\Users\\okome\\Documents\\CATAN\\catan_app\\backend\\experiments\\hierarchical_learning_curve_50k_20260923\\models",
+  "n_epochs": 4,
+  "n_steps": 1024,
+  "observation_version": "v5",
+  "opponent_controller": "heuristic",
+  "policy_architecture": "robber_belief_gnn_family_hierarchical_candidate",
+  "policy_net_arch": [
+    256,
+    128
+  ],
+  "pretrain_initial_settlement": false,
+  "promoted_checkpoint_steps": 50000,
+  "promoted_from": "C:\\Users\\okome\\Documents\\CATAN\\catan_app\\backend\\experiments\\normal_turn_gnn_10k_s20261403_20260923\\checkpoint_10240_steps.zip",
+  "resume_checkpoint_steps": 25000,
+  "resume_from_model_id": "hierarchical_25000_s20260928",
+  "reward": {
+    "loss": -1.0,
+    "victory_point_delta": 0.05,
+    "win": 1.0
+  },
+  "settlement_planning": {
+    "target_sites": 5,
+    "max_wait_rounds": 6.0,
+    "max_city_wait_rounds": 9.0,
+    "prioritize_affordable_city": true,
+    "early_affordable_city_min_sites": 3,
+    "prioritize_immediate_win": true,
+    "endgame_point_reserve_score": 8,
+    "prioritize_immediate_titles": true,
+    "title_horizon": 2,
+    "first_city_max_deficit": 2,
+    "second_city_max_deficit": 2,
+    "second_city_min_score": 6,
+    "post_target_connected_reserve_max_wait": 2,
+    "post_target_connected_reserve_min_score": 6,
+    "post_target_connected_reserve_max_score": 7,
+    "expansion_aware_setup": true,
+    "expansion_setup_min_pips": 3,
+    "setup_min_wheat_pips": 1,
+    "setup_best_coverage_fallback": true,
+    "collision_aware_initial_roads": true,
+    "adaptive_development_purchase": true,
+    "development_stall_wait_rounds": 4.0,
+    "development_max_build_delay": 1.0,
+    "development_tactical_score": 8,
+    "belief_aware_robber": false,
+    "proactive_player_trade": true,
+    "proactive_trade_max_scarcity_deficit": 3,
+    "strategic_surplus_trade": true,
+    "purposeful_paid_roads": true,
+    "strategic_trade_response": true,
+    "buy_for_largest_army": false,
+    "evaluation_games": 100,
+    "evaluation_seed_start": 2240001,
+    "evaluation_report": "experiments/purposeful_paid_roads_holdout_s01_20261002/evaluation_purposeful_roads.json",
+    "evaluation_note": "独立ホールドアウト100局の同一盤面対比較。開拓候補への最初の道路、または実際に最長道路長を伸ばす道路だけを有料建設候補にし、無目的な木・レンガ獲得用の港交換も止める。勝率85%→88%、得点9.68→9.71、順位1.175→1.145、開拓地2.84→2.90、都市2.57→2.53、無目的有料道路0.12→0.00本/局。事前検証100局でも勝率93%→94%、無目的有料道路0.13→0.00本/局を確認。余剰交渉、ベイズ手札推定、建設停滞時の発展購入方針は維持する。",
+    "win_rate": 0.88,
+    "average_score": 9.71,
+    "average_rank": 1.145,
+    "average_settlements": 2.9,
+    "average_cities": 2.53,
+    "opponent_aware_robber": false
+  },
+  "seed": 20260928,
+  "total_timesteps": 65360,
+  "training_seed": 20261403,
+  "observation_size": 1722,
+  "league_training": {
+    "source_model_id": "ppo_gnn_board_65k_s03_exp_v003",
+    "source_steps": 65360,
+    "additional_rl_steps": 8192,
+    "player_trades_enabled": true,
+    "goal_context_enabled": false,
+    "belief_context_enabled": true,
+    "robber_migration_enabled": true,
+    "planner_overrides_only": false,
+    "include_strategic_actions": false,
+    "goal_gate_enabled": false,
+    "learner_trade_controller": "ppo_gnn_board_65k_s03_exp_v003",
+    "opponent_mix": "75%: strongest_x2+heuristic_x1; 25%: heuristic_x3",
+    "distillation": {
+      "train_games": 60,
+      "validation_games": 15,
+      "learning_rate": 0.0005,
+      "epochs": 100
+    },
+    "ppo_learning_rate": 3e-05,
+    "robber_teacher_reward": 0.02,
+    "robber_tile_value_reward": 0.02,
+    "robber_stolen_resource_reward": 0.015,
+    "robber_soft_target_temperature": 1.5,
+    "robber_teacher_curriculum": [
+      {
+        "teacher_reward": 0.02,
+        "requested_steps": 2048,
+        "actual_steps": 2048
+      },
+      {
+        "teacher_reward": 0.01,
+        "requested_steps": 2048,
+        "actual_steps": 2048
+      },
+      {
+        "teacher_reward": 0.0,
+        "requested_steps": 4096,
+        "actual_steps": 4096
+      }
+    ],
+    "post_ppo_imitation": {
+      "train": {
+        "examples": 393,
+        "agreement": 0.48600509762763977,
+        "family_agreement": 1.0,
+        "family_negative_log_likelihood": -0.0,
+        "negative_log_likelihood": 1.4738709926605225,
+        "soft_target_temperature": 1.5,
+        "soft_target_cross_entropy": 1.4955055713653564,
+        "soft_target_entropy": 0.37999042868614197,
+        "soft_target_kl_divergence": 1.115515112876892,
+        "robber_move_examples": 240,
+        "robber_move_agreement": 0.4000000059604645,
+        "robber_victim_examples": 153,
+        "robber_victim_agreement": 0.6209150552749634
+      },
+      "validation": {
+        "examples": 93,
+        "agreement": 0.6236559152603149,
+        "family_agreement": 1.0,
+        "family_negative_log_likelihood": -0.0,
+        "negative_log_likelihood": 1.196277379989624,
+        "soft_target_temperature": 1.5,
+        "soft_target_cross_entropy": 1.2298575639724731,
+        "soft_target_entropy": 0.2816973924636841,
+        "soft_target_kl_divergence": 0.9481601715087891,
+        "robber_move_examples": 53,
+        "robber_move_agreement": 0.6415094137191772,
+        "robber_victim_examples": 40,
+        "robber_victim_agreement": 0.6000000238418579
+      }
+    }
+  }
+}

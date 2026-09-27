@@ -50,9 +50,13 @@ function initialSetupParenthetical(model: AiModel) {
   return label ? `（${label}）` : "";
 }
 function policyArchitectureLabel(model: AiModel) {
+  if (model.policy_architecture === "robber_belief_gnn_family_hierarchical_candidate") return "盗賊判断GNN PPO";
   if (model.policy_architecture === "gnn_hierarchical_candidate") return "盤面GNN PPO";
   if (model.policy_architecture === "hierarchical_candidate") return "階層PPO";
   return "PPO";
+}
+function modelDisplayName(model: AiModel) {
+  return model.display_name || model.model_id;
 }
 
 export default function Home() {
@@ -418,15 +422,15 @@ export default function Home() {
                 onChange={event => setAiAgentNames(previous => ({ ...previous, [id]: event.target.value }))}>
                 <option value="heuristic">ルールベースAI</option><option value="random">ランダムAI</option>
                 {aiModels.flatMap(model => [
-                  <option key={`ppo:${model.model_id}`} value={`ppo:${model.model_id}`}>{policyArchitectureLabel(model)} · {model.model_id} · {model.training_steps.toLocaleString()} step · 勝率 {Math.round((model.evaluation.summary?.win_rate ?? 0) * 100)}%{initialSetupLabel(model)}</option>,
-                  ...(model.settlement_planning ? [<option key={`ppo-plan:${model.model_id}`} value={`ppo-plan:${model.model_id}`}>開拓・勝利計画AI · {model.model_id} · 初期資源＋{model.settlement_planning.target_sites}拠点＋終盤1点計画 · 検証勝率 {Math.round((model.settlement_planning.win_rate ?? 0) * 100)}%</option>] : []),
+                  ...(!model.ui_planned_only ? [<option key={`ppo:${model.model_id}`} value={`ppo:${model.model_id}`}>{policyArchitectureLabel(model)} · {modelDisplayName(model)} · {model.training_steps.toLocaleString()} step · 勝率 {Math.round((model.evaluation.summary?.win_rate ?? 0) * 100)}%{initialSetupLabel(model)}</option>] : []),
+                  ...(model.settlement_planning ? [<option key={`ppo-plan:${model.model_id}`} value={`ppo-plan:${model.model_id}`}>{model.display_name ? model.display_name : `開拓・勝利計画AI · ${model.model_id}`} · {model.training_steps.toLocaleString()} step · 検証勝率 {Math.round((model.evaluation.summary?.win_rate ?? model.settlement_planning.win_rate ?? 0) * 100)}%</option>] : []),
                 ])}
               </select>}
             </div>)}
             <div className="ai-presets"><button type="button" onClick={() => { setAiPlayerIds([2, 3, 4]); setAiAgentNames(previous => ({ 2: previous[2] ?? "heuristic", 3: previous[3] ?? "heuristic", 4: previous[4] ?? "heuristic" })); }}>P1だけ人間</button><button type="button" onClick={() => { setAiPlayerIds([1, 2, 3, 4]); setAiAgentNames(previous => ({ 1: previous[1] ?? "heuristic", 2: previous[2] ?? "heuristic", 3: previous[3] ?? "heuristic", 4: previous[4] ?? "heuristic" })); }}>4人全員AI</button><button type="button" onClick={() => { setAiPlayerIds([]); setAiAgentNames({}); }}>4人全員人間</button></div>
             <label className="spectator-toggle"><input type="checkbox" checked={watchAi} disabled={aiPlayerIds.length === 0} onChange={event => setWatchAi(event.target.checked)} /><span>AIの動きを観戦する<small>自動操作を一手ずつ画面に反映し、再生速度も変更できます。</small></span></label>
             {ppoRuntimeMessage && <p className="model-runtime-note">{ppoRuntimeMessage}</p>}
-            {aiModels.length > 0 && <details className="model-catalog"><summary>利用可能な学習済みモデル（{aiModels.length}）</summary><ul>{aiModels.map(model => <li key={model.model_id}><strong>{model.model_id}</strong>／{policyArchitectureLabel(model)}／{model.training_steps.toLocaleString()} step／評価勝率 {Math.round((model.evaluation.summary?.win_rate ?? 0) * 100)}%{initialSetupLabel(model).replace(" · ", "／")}</li>)}</ul></details>}
+            {aiModels.length > 0 && <details className="model-catalog"><summary>利用可能な学習済みモデル（{aiModels.length}）</summary><ul>{aiModels.map(model => <li key={model.model_id}><strong>{modelDisplayName(model)}</strong>／{policyArchitectureLabel(model)}／{model.training_steps.toLocaleString()} step／評価勝率 {Math.round((model.evaluation.summary?.win_rate ?? 0) * 100)}%{initialSetupLabel(model).replace(" · ", "／")}</li>)}</ul></details>}
           </fieldset>
           <p className="muted">港の位置・種類は固定です。</p>
           <button className="start-button" disabled={busy} onClick={startGame}>{busy ? "盤面を生成中…" : "ゲームスタート"}</button>
@@ -463,8 +467,8 @@ export default function Home() {
             </a><button type="button" disabled={busy} onClick={() => void changeController(item.player_id, !player.is_ai, item.token)}>{player.is_ai ? "人に切替" : "AIに切替"}</button>{player.is_ai && <select className="agent-picker compact" value={player.agent_name ?? "heuristic"} disabled={busy}
               aria-label={`プレイヤー ${item.player_id} のAI種類`} onChange={event => void changeController(item.player_id, true, item.token, event.target.value)}>
               <option value="heuristic">ルールAI</option><option value="random">ランダム</option>{aiModels.flatMap(model => [
-                <option key={`ppo:${model.model_id}`} value={`ppo:${model.model_id}`}>{policyArchitectureLabel(model)}: {model.model_id}{initialSetupParenthetical(model)}</option>,
-                ...(model.settlement_planning ? [<option key={`ppo-plan:${model.model_id}`} value={`ppo-plan:${model.model_id}`}>開拓・勝利計画AI: {model.model_id}</option>] : []),
+                ...(!model.ui_planned_only ? [<option key={`ppo:${model.model_id}`} value={`ppo:${model.model_id}`}>{policyArchitectureLabel(model)}: {modelDisplayName(model)}{initialSetupParenthetical(model)}</option>] : []),
+                ...(model.settlement_planning ? [<option key={`ppo-plan:${model.model_id}`} value={`ppo-plan:${model.model_id}`}>{model.display_name || `開拓・勝利計画AI: ${model.model_id}`}</option>] : []),
               ])}
             </select>}</div>;
           })}</div>

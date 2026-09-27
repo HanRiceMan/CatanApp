@@ -3,6 +3,7 @@ import unittest
 import numpy as np
 
 from app.domain.actions import (BuildRoadAction, BuildSettlementAction, BuyDevelopmentAction,
+                                MoveRobberAction,
                                 PlaceInitialRoadAction,
                                 PlaceInitialSettlementAction, RollOrderAction)
 from app.agents.heuristic import HeuristicAgent
@@ -10,10 +11,45 @@ from app.domain.game import create_game, legal_settlement_ids, player_for
 from app.rl.action_space import ACTION_CATALOG, action_to_id, get_action_mask
 from app.rl.env import (CatanEnv, CatanEnvConfig, ExternalActionRequired,
                         IllegalPolicyAction, expansion_strategy_penalty,
-                        expansion_target_weights)
+                        expansion_target_weights, robber_tile_quality_reward,
+                        stolen_resource_utility_reward)
 
 
 class RlPhaseTwoTests(unittest.TestCase):
+    def test_robber_tile_quality_reward_spans_configured_range(self):
+        game = create_game(20260929)
+        game.phase = "robber_move"
+        game.current_player_id = 1
+        opponent_vertex = next(
+            vertex for vertex in game.board.vertices if vertex.hex_ids
+        )
+        game.settlements[opponent_vertex.id] = 2
+        player_for(game, 2).settlements = 1
+        player_for(game, 2).resources["ore"] = 2
+        mask = get_action_mask(game, 1)
+        rewards = [
+            robber_tile_quality_reward(game, 1, mask, item.action, 0.02)
+            for item in ACTION_CATALOG
+            if mask[item.id] and isinstance(item.action, MoveRobberAction)
+        ]
+
+        self.assertAlmostEqual(max(rewards), 0.02)
+        self.assertAlmostEqual(min(rewards), -0.02)
+
+    def test_stolen_resource_reward_uses_pre_steal_strategic_weights(self):
+        weights = {"wood": 1.0, "brick": 2.0, "sheep": 1.0,
+                   "wheat": 3.0, "ore": 2.0}
+
+        self.assertAlmostEqual(
+            stolen_resource_utility_reward(weights, "wheat", 0.015), 0.015
+        )
+        self.assertAlmostEqual(
+            stolen_resource_utility_reward(weights, "wood", 0.015), 0.005
+        )
+        self.assertEqual(
+            stolen_resource_utility_reward(weights, None, 0.015), 0.0
+        )
+
     def test_fixed_opponent_override_is_used(self):
         class CountingAgent:
             def __init__(self):

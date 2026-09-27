@@ -797,6 +797,10 @@ def main() -> None:
                         help="盗賊移管学習中の教師一致補助報酬。実戦評価には使わない。")
     parser.add_argument("--robber-teacher-curriculum", action="store_true",
                         help="教師報酬を指定値→半分→0へ下げながらPPO学習する。")
+    parser.add_argument("--robber-tile-value-reward", type=float, default=0.0,
+                        help="盗賊タイルの正規化妨害価値に与える最大即時報酬。")
+    parser.add_argument("--robber-stolen-resource-reward", type=float, default=0.0,
+                        help="実際に奪った資源の戦略価値に与える最大即時報酬。")
     parser.add_argument("--robber-soft-target-temperature", type=float, default=4.0,
                         help="盗賊候補の教師評価値を確率化する温度。低いほど1位を強調。")
     parser.add_argument("--device", default="cpu")
@@ -840,6 +844,12 @@ def main() -> None:
         parser.error("robber-teacher-curriculumには4 step以上必要です。")
     if args.robber_soft_target_temperature <= 0:
         parser.error("robber-soft-target-temperatureは正数で指定します。")
+    if min(args.robber_tile_value_reward,
+           args.robber_stolen_resource_reward) < 0:
+        parser.error("盗賊の価値報酬は0以上で指定します。")
+    if (args.robber_tile_value_reward > 0
+            or args.robber_stolen_resource_reward > 0) and not args.robber_migration:
+        parser.error("盗賊の価値報酬はrobber-migration時だけ指定できます。")
 
     root = Path(__file__).resolve().parents[2]
     output = root / "experiments" / args.experiment_id
@@ -927,6 +937,10 @@ def main() -> None:
                 allow_player_trades=True,
                 observation_version=observation_version,
                 robber_teacher_reward=robber_teacher_reward,
+                robber_tile_value_reward=args.robber_tile_value_reward,
+                robber_stolen_resource_reward=(
+                    args.robber_stolen_resource_reward
+                ),
             ),
             initial_placement_agent=frozen_teacher,
             opponent_agents={2: league, 3: league, 4: league},
@@ -1093,6 +1107,8 @@ def main() -> None:
             },
             "ppo_learning_rate": args.ppo_learning_rate,
             "robber_teacher_reward": args.robber_teacher_reward,
+            "robber_tile_value_reward": args.robber_tile_value_reward,
+            "robber_stolen_resource_reward": args.robber_stolen_resource_reward,
             "robber_soft_target_temperature": args.robber_soft_target_temperature,
             "robber_teacher_curriculum": ppo_curriculum,
             "post_ppo_imitation": post_ppo_imitation,

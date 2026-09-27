@@ -70,6 +70,8 @@ class CatanEnvConfig:
     unproductive_road_penalty: float = 0.0
     # 盗賊計画をPPOへ移管するカリキュラム専用。実戦・通常学習は0。
     robber_teacher_reward: float = 0.0
+    robber_tile_value_reward: float = 0.0
+    robber_stolen_resource_reward: float = 0.0
 
 
 def robber_teacher_action(game: GameState, player_id: int) -> Action | None:
@@ -89,6 +91,55 @@ def robber_teacher_action(game: GameState, player_id: int) -> Action | None:
     return StealResourceAction(best_belief_robber_victim(
         game, player_id, game.robber_victim_ids, beliefs,
     ))
+
+
+def robber_tile_quality_reward(game: GameState, player_id: int,
+                               action_mask: np.ndarray,
+                               action: Action, scale: float) -> float:
+    """選択タイルの妨害・略奪評価を合法候補内[-scale, scale]へ正規化する。"""
+    if scale <= 0 or not isinstance(action, MoveRobberAction):
+        return 0.0
+    from .hand_belief import BayesianHandEstimator
+    from .victory_race import belief_robber_tile_value
+    beliefs = BayesianHandEstimator().estimate(game, player_id)
+    values = {
+        definition.action.tile_id: belief_robber_tile_value(
+            game, player_id, definition.action.tile_id, beliefs
+        )
+        for definition in ACTION_CATALOG
+        if action_mask[definition.id]
+        and isinstance(definition.action, MoveRobberAction)
+    }
+    if action.tile_id not in values or len(values) < 2:
+        return 0.0
+    low, high = min(values.values()), max(values.values())
+    if high - low <= 1e-9:
+        return 0.0
+    quality = (values[action.tile_id] - low) / (high - low)
+    return float(scale * (2.0 * quality - 1.0))
+
+
+def stolen_resource_utility_reward(weights: Mapping[str, float],
+                                   resource: str | None,
+                                   scale: float) -> float:
+    """実際に奪った資源が現在の建設不足を埋める度合いを[0, scale]で返す。"""
+    if scale <= 0 or resource is None:
+        return 0.0
+    if resource not in weights:
+        return 0.0
+    maximum = max(weights.values())
+    return float(scale * weights[resource] / maximum) if maximum > 0 else 0.0
+
+
+def _stolen_resource_since(game: GameState, event_index: int,
+                           player_id: int) -> str | None:
+    for event in game.resource_events[event_index:]:
+        transfer = event.get("hidden_transfer")
+        if (event.get("kind") == "robber_steal" and transfer
+                and transfer.get("to_player_id") == player_id
+                and player_id in transfer.get("known_to", ())):
+            return transfer.get("private_resource")
+    return None
 
 
 def expansion_curriculum_mask(game: GameState, player_id: int,
@@ -203,7 +254,9 @@ class CatanEnv(gym.Env[np.ndarray, int]):
             raise ValueError(f"未対応のObservation版です: {self.config.observation_version}")
         if min(self.config.early_development_penalty,
                self.config.unproductive_road_penalty,
-               self.config.robber_teacher_reward) < 0:
+               self.config.robber_teacher_reward,
+               self.config.robber_tile_value_reward,
+               self.config.robber_stolen_resource_reward) < 0:
             raise ValueError("学習用penalty/rewardは0以上にしてください。")
         self._action_observer = action_observer
         self._initial_placement_agent = initial_placement_agent
@@ -398,6 +451,8 @@ class CatanEnv(gym.Env[np.ndarray, int]):
             "early_development_penalty": self.config.early_development_penalty,
             "unproductive_road_penalty": self.config.unproductive_road_penalty,
             "robber_teacher_reward": self.config.robber_teacher_reward,
+            "robber_tile_value_reward": self.config.robber_tile_value_reward,
+            "robber_stolen_resource_reward": self.config.robber_stolen_resource_reward,
             "player_trades_enabled": self.config.allow_player_trades,
             "learner_auxiliary_actions": self._learner_auxiliary_actions,
             "fixed_opponent_ids": sorted(self._opponent_agents),
@@ -462,6 +517,19 @@ class CatanEnv(gym.Env[np.ndarray, int]):
             * (1.0 if action == teacher_action else -1.0)
             if teacher_action is not None else 0.0
         )
+        robber_tile_reward = robber_tile_quality_reward(
+            game, self.learning_player_id, mask, action,
+            self.config.robber_tile_value_reward,
+        )
+        if (isinstance(action, StealResourceAction)
+                and self.config.robber_stolen_resource_reward > 0):
+            from .victory_race import desired_resource_weights
+            stolen_resource_weights = desired_resource_weights(
+                game, self.learning_player_id
+            )
+        else:
+            stolen_resource_weights = {}
+        resource_event_index = len(game.resource_events)
         strategy_penalty = expansion_strategy_penalty(
             game, self.learning_player_id, mask, action,
             early_development=self.config.early_development_penalty,
@@ -469,6 +537,15 @@ class CatanEnv(gym.Env[np.ndarray, int]):
         )
         score_before = self._learning_score
         self._apply(self.learning_player_id, action, "learner")
+        stolen_resource = (
+            _stolen_resource_since(
+                game, resource_event_index, self.learning_player_id
+            ) if isinstance(action, StealResourceAction) else None
+        )
+        robber_resource_reward = stolen_resource_utility_reward(
+            stolen_resource_weights, stolen_resource,
+            self.config.robber_stolen_resource_reward,
+        )
         self.policy_steps += 1
         self._advance_until_boundary()
         breakdown = reward_after_transition(game, self.learning_player_id, score_before, self.config.reward)
@@ -479,11 +556,15 @@ class CatanEnv(gym.Env[np.ndarray, int]):
         reward_components = breakdown.to_dict()
         reward_components["expansion_strategy_penalty"] = strategy_penalty
         reward_components["robber_teacher_reward"] = robber_teacher_reward
+        reward_components["robber_tile_value_reward"] = robber_tile_reward
+        reward_components["robber_stolen_resource_reward"] = robber_resource_reward
         reward_components["total"] = (
             breakdown.total + strategy_penalty + robber_teacher_reward
+            + robber_tile_reward + robber_resource_reward
         )
         return (self._observation(),
-                breakdown.total + strategy_penalty + robber_teacher_reward, terminated,
+                breakdown.total + strategy_penalty + robber_teacher_reward
+                + robber_tile_reward + robber_resource_reward, terminated,
                 truncated, self._info(reward_components=reward_components))
 
     def step_external(self, player_id: int, action: int | Action) -> tuple[np.ndarray, dict[str, Any]]:

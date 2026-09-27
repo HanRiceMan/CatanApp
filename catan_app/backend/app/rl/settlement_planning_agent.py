@@ -2,6 +2,8 @@
 
 from __future__ import annotations
 
+from typing import TYPE_CHECKING
+
 import numpy as np
 import torch
 
@@ -24,6 +26,9 @@ from .reward import actual_score
 from .setup_planner import expansion_coverage_mask
 from .victory_race import (best_belief_robber_tile, best_belief_robber_victim,
                            best_robber_tile, best_robber_victim, public_score)
+
+if TYPE_CHECKING:
+    from .macro_goal import PlannerDecisionReport
 
 
 class SettlementPlanningAgent:
@@ -1002,3 +1007,11 @@ class SettlementPlanningAgent:
                     game, player_id, BuyDevelopmentAction()
                 )
         return planned
+
+    def select_action_with_report(
+        self, game: GameState, player_id: int,
+    ) -> tuple[Action, PlannerDecisionReport]:
+        """既存選択を一度だけ実行し、行動を変えずにMacro診断を返す。"""
+        action = self.select_action(game, player_id)
+        from .macro_goal import build_planner_decision_report
+        return action, build_planner_decision_report(self, game, player_id, action)

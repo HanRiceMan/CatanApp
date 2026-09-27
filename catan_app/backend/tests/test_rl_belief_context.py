@@ -15,6 +15,11 @@ from app.rl.candidate_policy import (
 )
 from app.rl.observation import encode_observation, get_observation
 from app.rl.action_space import ACTION_SPACE_SIZE
+from app.rl.development_migration_policy import (
+    DEVELOPMENT_FAMILY_LOGIT,
+    RobberDevelopmentMigrationMaskablePolicy,
+    initialize_development_migration_policy,
+)
 from app.rl.train_strongest_league import robber_soft_targets
 
 
@@ -74,6 +79,16 @@ class BeliefContextTests(unittest.TestCase):
         np.testing.assert_array_equal(
             encoded[-4:], np.asarray((0, 0, 1, 0), dtype=np.float32)
         )
+
+    def test_v6_appends_public_development_decision_context(self):
+        encoded = encode_observation(
+            get_observation(_stolen_game("wood"), 3, version="v6")
+        )
+
+        self.assertEqual(encoded.shape, (1747,))
+        self.assertTrue(np.isfinite(encoded).all())
+        self.assertGreaterEqual(float(encoded[-25:].min()), 0.0)
+        self.assertLessEqual(float(encoded[-25:].max()), 1.0)
 
     def test_third_party_context_does_not_leak_private_resource(self):
         wood = encode_belief_context(_stolen_game("wood"), 3)
@@ -156,6 +171,33 @@ class BeliefContextTests(unittest.TestCase):
             difference[allowed], torch.ones_like(difference[allowed]),
             rtol=0, atol=1e-6,
         )
+        torch.testing.assert_close(
+            difference[~allowed], torch.zeros_like(difference[~allowed]),
+            rtol=0, atol=1e-7,
+        )
+
+    def test_development_migration_starts_identical_and_changes_only_dev_family(self):
+        action_space = spaces.Discrete(377)
+        source = RobberBeliefGraphFamilyHierarchicalCandidateMaskablePolicy(
+            spaces.Box(0, 1, shape=(1722,), dtype=np.float32), action_space,
+            lambda _: 1e-4, net_arch=[], ortho_init=False,
+        )
+        target = RobberDevelopmentMigrationMaskablePolicy(
+            spaces.Box(0, 1, shape=(1747,), dtype=np.float32), action_space,
+            lambda _: 1e-4, net_arch=[], ortho_init=False,
+        )
+        initialize_development_migration_policy(target, source)
+        observations = torch.rand((2, 1747))
+        with torch.no_grad():
+            source_logits = source.mlp_extractor.forward_actor(observations[:, :1722])
+            initial_logits = target.mlp_extractor.forward_actor(observations)
+            target.mlp_extractor.development_head[-1].bias.fill_(1.0)
+            changed_logits = target.mlp_extractor.forward_actor(observations)
+        torch.testing.assert_close(source_logits, initial_logits, rtol=0, atol=1e-7)
+        difference = changed_logits - initial_logits
+        allowed = torch.zeros_like(difference, dtype=torch.bool)
+        allowed[:, DEVELOPMENT_FAMILY_LOGIT] = True
+        self.assertTrue(torch.all(difference[allowed] > 0))
         torch.testing.assert_close(
             difference[~allowed], torch.zeros_like(difference[~allowed]),
             rtol=0, atol=1e-7,

@@ -62,8 +62,10 @@ class CandidateActorCritic(nn.Module):
         if observation_size not in {
             OBSERVATION_VECTOR_SIZES["v2"], OBSERVATION_VECTOR_SIZES["v3"],
             OBSERVATION_VECTOR_SIZES["v4"], OBSERVATION_VECTOR_SIZES["v5"],
+            OBSERVATION_VECTOR_SIZES["v6"],
         }:
-            raise ValueError("候補方式はObservation v2/v3/v4/v5専用です。")
+            raise ValueError("候補方式はObservation v2〜v6専用です。")
+        self.observation_size = observation_size
         topology = create_topology()
         self.register_buffer("edge_vertices", torch.tensor([edge.vertex_ids for edge in topology.edges],
                                                            dtype=torch.long))
@@ -103,7 +105,7 @@ class CandidateActorCritic(nn.Module):
             observations[:, :TILE_START],
             observations[:, PROGRESS_START:BASE_OBSERVATION_SIZE],
             own_production,
-            observations[:, BASE_OBSERVATION_SIZE:],
+            observations[:, BASE_OBSERVATION_SIZE:self.observation_size],
         ), dim=1)
         context = self.context(global_values)
 
@@ -131,7 +133,7 @@ class CandidateActorCritic(nn.Module):
         return logits
 
     def forward_critic(self, observations: torch.Tensor) -> torch.Tensor:
-        return self.critic(observations)
+        return self.critic(observations[:, :self.observation_size])
 
     def forward(self, observations: torch.Tensor) -> tuple[torch.Tensor, torch.Tensor]:
         return self.forward_actor(observations), self.forward_critic(observations)
@@ -164,7 +166,10 @@ class HierarchicalCandidateActorCritic(CandidateActorCritic):
 
     def forward_actor(self, observations: torch.Tensor) -> torch.Tensor:
         candidates = super().forward_actor(observations)
-        return torch.cat((candidates, self.family_head(observations)), dim=1)
+        return torch.cat((
+            candidates,
+            self.family_head(observations[:, :self.observation_size]),
+        ), dim=1)
 
 
 class HierarchicalCandidateMaskablePolicy(CandidateMaskablePolicy):
@@ -259,7 +264,7 @@ class GraphHierarchicalCandidateActorCritic(HierarchicalCandidateActorCritic):
             observations[:, :TILE_START],
             observations[:, PROGRESS_START:BASE_OBSERVATION_SIZE],
             own_production,
-            observations[:, BASE_OBSERVATION_SIZE:],
+            observations[:, BASE_OBSERVATION_SIZE:self.observation_size],
         ), dim=1)
         context = self.context(global_values)
         vertex_state = self.vertex_encoder(torch.cat(
@@ -478,7 +483,9 @@ class RobberBeliefGraphFamilyHierarchicalCandidateActorCritic(
 
     def forward_actor(self, observations: torch.Tensor) -> torch.Tensor:
         logits = super().forward_actor(observations)
-        context = observations[:, BASE_OBSERVATION_SIZE:]
+        context = observations[
+            :, BASE_OBSERVATION_SIZE:BASE_OBSERVATION_SIZE + self.ROBBER_CONTEXT_SIZE
+        ]
         _, _, tile_state = self._encoded_spatial_states(observations)
         base_candidates = logits[:, :ACTION_SPACE_SIZE].detach()
         tile_base = base_candidates[

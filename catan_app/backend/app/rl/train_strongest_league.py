@@ -4,7 +4,6 @@ from __future__ import annotations
 
 import argparse
 from collections import Counter
-from copy import deepcopy
 from dataclasses import dataclass
 from datetime import datetime, timezone
 import json
@@ -37,6 +36,10 @@ from .candidate_policy import (GraphHierarchicalCandidateMaskablePolicy,
                                initialize_goal_policy_from_graph,
                                initialize_graph_policy_from_hierarchical)
 from .env import CatanEnv, CatanEnvConfig
+from .development_migration_policy import (
+    RobberDevelopmentMigrationMaskablePolicy,
+    initialize_development_migration_policy,
+)
 from .hand_belief import BayesianHandEstimator
 from .hierarchical_distribution import ACTION_FAMILY_IDS, FAMILY_COUNT
 from .model_registry import ModelManifest
@@ -200,7 +203,8 @@ def collect_teacher_examples(teacher, seeds: Iterable[int], *,
                              planner_overrides_only: bool = False,
                              include_strategic_actions: bool = False,
                              collect_override_gate: bool = False,
-                             robber_only: bool = False) -> TeacherExamples:
+                             robber_only: bool = False,
+                             development_only: bool = False) -> TeacherExamples:
     league = SeededMixedLeagueAgent(teacher, learning_player_id=learning_player_id)
     opponents = {pid: league for pid in range(1, 5) if pid != learning_player_id}
     environment = CatanEnv(
@@ -262,8 +266,13 @@ def collect_teacher_examples(teacher, seeds: Iterable[int], *,
                 selected_for_robber = robber_only and game.phase in {
                     "robber_move", "robber_steal",
                 }
+                selected_for_development = bool(
+                    development_only and game.phase == "action"
+                    and mask[action_to_id(BuyDevelopmentAction())]
+                )
                 selected = (
                     selected_for_robber if robber_only else
+                    selected_for_development if development_only else
                     selected_for_gate
                     or not planner_overrides_only
                     or is_planner_override
@@ -312,6 +321,7 @@ def collect_teacher_examples(teacher, seeds: Iterable[int], *,
             "strategic_addition_counts": dict(strategic_additions),
             "collect_override_gate": collect_override_gate,
             "robber_only": robber_only,
+            "development_only": development_only,
             "gate_positive_examples": int(sum(override_labels)),
             "gate_negative_examples": int(len(override_labels) - sum(override_labels)),
             "label_counts": dict(families),
@@ -404,6 +414,23 @@ def _imitation_metrics(policy, examples: TeacherExamples, *,
                 (predictions[victim] == labels[victim]).float().mean()
             ) if victim.any() else 0.0,
         })
+    if isinstance(policy, RobberDevelopmentMigrationMaskablePolicy):
+        development_id = action_to_id(BuyDevelopmentAction())
+        teacher_development = labels == development_id
+        predicted_development = predictions == development_id
+        result.update({
+            "teacher_development_rate": float(teacher_development.float().mean()),
+            "predicted_development_rate": float(
+                predicted_development.float().mean()
+            ),
+            "development_binary_agreement": float(
+                (predicted_development == teacher_development).float().mean()
+            ),
+            "development_recall": float(
+                (predicted_development & teacher_development).sum()
+                / teacher_development.sum().clamp_min(1)
+            ),
+        })
     if (isinstance(policy, GatedGoalGraphFamilyHierarchicalCandidateMaskablePolicy)
             and examples.override_labels is not None):
         with torch.no_grad():
@@ -442,6 +469,8 @@ def configure_league_family_finetune(
         )
         if isinstance(policy, GatedGoalGraphFamilyHierarchicalCandidateMaskablePolicy):
             modules += (policy.mlp_extractor.goal_override_gate,)
+    elif isinstance(policy, RobberDevelopmentMigrationMaskablePolicy):
+        modules += (policy.mlp_extractor.development_head,)
     elif isinstance(policy, (
         BeliefGraphFamilyHierarchicalCandidateMaskablePolicy,
         ContextualBeliefGraphFamilyHierarchicalCandidateMaskablePolicy,
@@ -527,9 +556,6 @@ def distill_strongest_policy(
             robber_soft_target_temperature) <= 0 or anchor_weight < 0):
         raise ValueError("模倣学習設定が不正です。")
     device = next(policy.parameters()).device
-    anchor = deepcopy(policy).to(device).eval()
-    for parameter in anchor.parameters():
-        parameter.requires_grad = False
     selection = configure_league_family_finetune(policy)
     parameters = [parameter for parameter in policy.parameters() if parameter.requires_grad]
     optimizer = torch.optim.Adam(parameters, lr=learning_rate)
@@ -568,6 +594,17 @@ def distill_strongest_policy(
             train.action_scores, robber_soft_target_temperature
         )) if train.action_scores is not None else None
     )
+    # PPO実行後のPolicyには計算途中の非leaf Tensorが残る場合があり、Moduleの
+    # deepcopyはPyTorch側で失敗する。アンカーとして必要なのは更新前の分布だけ
+    # なので、教師データ上の確率をTensorとして固定する。
+    policy.eval()
+    with torch.no_grad():
+        anchor_family_probabilities = _family_probabilities(
+            policy, train_obs.to(device), train_masks.to(device)
+        ).cpu()
+        anchor_action_probabilities = _probabilities(
+            policy, train_obs.to(device), train_masks.to(device)
+        ).cpu()
     effective_batch_size = (
         min(batch_size, 64)
         if isinstance(policy, RobberBeliefGraphFamilyHierarchicalCandidateMaskablePolicy)
@@ -598,8 +635,7 @@ def distill_strongest_policy(
                 1, family_labels[:, None]
             ).log().squeeze(1)
             teacher_loss = (per_example * weights).sum() / weights.sum()
-            with torch.no_grad():
-                anchor_probabilities = _family_probabilities(anchor, observations, masks)
+            anchor_probabilities = anchor_family_probabilities[indices].to(device)
             anchor_loss = F.kl_div(
                 family_probabilities.log(), anchor_probabilities,
                 reduction="batchmean"
@@ -617,8 +653,7 @@ def distill_strongest_policy(
                 action_teacher_loss = (
                     action_per_example * weights
                 ).sum() / weights.sum()
-                with torch.no_grad():
-                    anchor_actions = _probabilities(anchor, observations, masks)
+                anchor_actions = anchor_action_probabilities[indices].to(device)
                 action_anchor_loss = F.kl_div(
                     action_probabilities.log(), anchor_actions,
                     reduction="batchmean",
@@ -792,6 +827,8 @@ def main() -> None:
     parser.add_argument("--training-seed", type=int, default=20260927)
     parser.add_argument("--distill-epochs", type=int, default=8)
     parser.add_argument("--distill-learning-rate", type=float, default=1e-5)
+    parser.add_argument("--distill-anchor-weight", type=float, default=1.0,
+                        help="教師学習中に移行元のAction分布を保つKL係数。")
     parser.add_argument("--ppo-learning-rate", type=float, default=1e-5)
     parser.add_argument("--robber-teacher-reward", type=float, default=0.0,
                         help="盗賊移管学習中の教師一致補助報酬。実戦評価には使わない。")
@@ -803,6 +840,12 @@ def main() -> None:
                         help="実際に奪った資源の戦略価値に与える最大即時報酬。")
     parser.add_argument("--robber-soft-target-temperature", type=float, default=4.0,
                         help="盗賊候補の教師評価値を確率化する温度。低いほど1位を強調。")
+    parser.add_argument("--robber-ppo-anchor-epochs", type=int, default=0,
+                        help="各PPO段階後に盗賊soft targetへ戻すアンカー更新epoch数。")
+    parser.add_argument("--robber-ppo-anchor-learning-rate", type=float, default=1e-5,
+                        help="PPO段階間の盗賊アンカー更新の学習率。")
+    parser.add_argument("--robber-ppo-anchor-weight", type=float, default=0.25,
+                        help="アンカー更新中に、更新直前の方策を保つKL係数。")
     parser.add_argument("--device", default="cpu")
     parser.add_argument("--dataset-artifact", type=Path, default=None,
                         help="既存のteacher_examples.npzを再利用する。")
@@ -814,6 +857,10 @@ def main() -> None:
                         help="v4の共同ベイズ相手手札推定をPPOへ入力する。")
     parser.add_argument("--robber-migration", action="store_true",
                         help="盗賊移動・被害者だけを収集し、候補では計画層の盗賊補正を外す。")
+    parser.add_argument("--development-migration", action="store_true",
+                        help="発展購入可能局面だけを収集し、候補では発展購入計画層を外す。")
+    parser.add_argument("--development-strength", type=float, default=6.0,
+                        help="発展購入Family logitの専用Headによる最大補正幅。")
     parser.add_argument("--focus-planner-overrides", action="store_true",
                         help="現行PPOを計画層が変更したaction局面だけを教師にする。")
     parser.add_argument("--include-strategic-actions", action="store_true",
@@ -826,12 +873,20 @@ def main() -> None:
             or min(args.train_games, args.validation_games, args.rl_steps,
                    args.eval_games, args.distill_epochs) <= 0):
         parser.error("実験名と学習量は正の安全な値で指定してください。")
+    if args.distill_anchor_weight < 0:
+        parser.error("distill-anchor-weightは0以上です。")
     if args.goal_gate and not args.goal_context:
         parser.error("goal-gateにはgoal-contextが必要です。")
     if args.goal_context and args.belief_context:
         parser.error("goal-contextとbelief-contextは同時指定できません。")
     if args.robber_migration and not args.belief_context:
         parser.error("robber-migrationにはbelief-contextが必要です。")
+    if args.development_migration and args.robber_migration:
+        parser.error("development-migrationとrobber-migrationは同時指定しません。")
+    if args.development_migration and (args.goal_context or not args.belief_context):
+        parser.error("development-migrationにはv5土台用のbelief-contextが必要です。")
+    if not 0 < args.development_strength <= 12:
+        parser.error("development-strengthは0より大きく12以下です。")
     if args.robber_teacher_reward < 0 or (
         args.robber_teacher_reward > 0 and not args.robber_migration
     ):
@@ -844,6 +899,12 @@ def main() -> None:
         parser.error("robber-teacher-curriculumには4 step以上必要です。")
     if args.robber_soft_target_temperature <= 0:
         parser.error("robber-soft-target-temperatureは正数で指定します。")
+    if args.robber_ppo_anchor_epochs < 0:
+        parser.error("robber-ppo-anchor-epochsは0以上で指定します。")
+    if args.robber_ppo_anchor_learning_rate <= 0 or args.robber_ppo_anchor_weight < 0:
+        parser.error("盗賊アンカー更新の設定が不正です。")
+    if args.robber_ppo_anchor_epochs and not args.robber_migration:
+        parser.error("盗賊アンカー更新はrobber-migration時だけ指定できます。")
     if min(args.robber_tile_value_reward,
            args.robber_stolen_resource_reward) < 0:
         parser.error("盗賊の価値報酬は0以上で指定します。")
@@ -864,7 +925,13 @@ def main() -> None:
     )
     if not isinstance(source.model.policy, GraphHierarchicalCandidateMaskablePolicy):
         raise TypeError("移行元がGNN階層候補PPOではありません。")
+    if args.development_migration and not isinstance(
+        source.model.policy,
+        RobberBeliefGraphFamilyHierarchicalCandidateMaskablePolicy,
+    ):
+        raise TypeError("発展移管の土台には盗賊PPOが必要です。")
     observation_version = (
+        "v6" if args.development_migration else
         "v5" if args.robber_migration else
         "v4" if args.belief_context else "v3" if args.goal_context else "v2"
     )
@@ -879,6 +946,7 @@ def main() -> None:
             include_strategic_actions=args.include_strategic_actions,
             collect_override_gate=args.goal_gate,
             robber_only=args.robber_migration,
+            development_only=args.development_migration,
         )
         validation = collect_teacher_examples(
             learner_teacher, range(train_end, validation_end),
@@ -887,6 +955,7 @@ def main() -> None:
             include_strategic_actions=args.include_strategic_actions,
             collect_override_gate=args.goal_gate,
             robber_only=args.robber_migration,
+            development_only=args.development_migration,
         )
         dataset_values = dict(
             train_observations=train.observations, train_masks=train.masks,
@@ -954,6 +1023,8 @@ def main() -> None:
         if args.goal_gate else
         GoalGraphFamilyHierarchicalCandidateMaskablePolicy
         if args.goal_context else
+        RobberDevelopmentMigrationMaskablePolicy
+        if args.development_migration else
         RobberBeliefGraphFamilyHierarchicalCandidateMaskablePolicy
         if args.robber_migration else
         ContextualBeliefGraphFamilyHierarchicalCandidateMaskablePolicy
@@ -978,7 +1049,14 @@ def main() -> None:
         device=args.device,
         verbose=0,
     )
-    if args.belief_context:
+    if args.development_migration:
+        initialize_development_migration_policy(
+            model.policy, source.model.policy
+        )
+        model.policy.mlp_extractor.development_strength.fill_(
+            args.development_strength
+        )
+    elif args.belief_context:
         initialize_belief_policy_from_graph(model.policy, source.model.policy)
     elif args.goal_context:
         initialize_goal_policy_from_graph(model.policy, source.model.policy)
@@ -989,6 +1067,7 @@ def main() -> None:
         model.policy, train, validation,
         learning_rate=args.distill_learning_rate,
         max_epochs=args.distill_epochs,
+        anchor_weight=args.distill_anchor_weight,
         robber_soft_target_temperature=args.robber_soft_target_temperature,
         seed=args.training_seed,
     )
@@ -1001,6 +1080,7 @@ def main() -> None:
     source_steps = int(model.num_timesteps)
     model.save(str(output / "distilled_model.zip"))
     ppo_curriculum: list[dict[str, float | int]] = []
+    ppo_anchor_updates: list[dict[str, object]] = []
     if not args.skip_ppo:
         model.set_random_seed(args.training_seed)
         model.learning_rate = args.ppo_learning_rate
@@ -1031,6 +1111,26 @@ def main() -> None:
                 "requested_steps": stage_steps,
                 "actual_steps": int(model.num_timesteps) - before_steps,
             })
+            if args.robber_ppo_anchor_epochs:
+                # 勝敗PPOで特に崩れやすい被害者Headを、各段階の境界で
+                # 全候補soft targetへ弱く戻す。直前方策へのKLも残し、
+                # 勝敗学習で得た変化を丸ごと消さない。
+                anchor_result = distill_strongest_policy(
+                    model.policy, train, validation,
+                    learning_rate=args.robber_ppo_anchor_learning_rate,
+                    max_epochs=args.robber_ppo_anchor_epochs,
+                    patience=args.robber_ppo_anchor_epochs,
+                    anchor_weight=args.robber_ppo_anchor_weight,
+                    robber_soft_target_temperature=(
+                        args.robber_soft_target_temperature
+                    ),
+                    seed=args.training_seed + index + 1,
+                )
+                ppo_anchor_updates.append({
+                    "stage": index + 1,
+                    "teacher_reward": teacher_reward,
+                    "result": anchor_result,
+                })
     post_ppo_imitation = {
         "train": _imitation_metrics(
             model.policy, train,
@@ -1080,6 +1180,8 @@ def main() -> None:
             if args.goal_gate else
             "goal_gnn_family_hierarchical_candidate"
             if args.goal_context else
+            "robber_development_gnn_family_hierarchical_candidate"
+            if args.development_migration else
             "robber_belief_gnn_family_hierarchical_candidate"
             if args.robber_migration else
             "contextual_belief_gnn_family_hierarchical_candidate"
@@ -1094,6 +1196,8 @@ def main() -> None:
             "goal_context_enabled": args.goal_context,
             "belief_context_enabled": args.belief_context,
             "robber_migration_enabled": args.robber_migration,
+            "development_migration_enabled": args.development_migration,
+            "development_strength": args.development_strength,
             "planner_overrides_only": args.focus_planner_overrides,
             "include_strategic_actions": args.include_strategic_actions,
             "goal_gate_enabled": args.goal_gate,
@@ -1104,6 +1208,7 @@ def main() -> None:
                 "validation_games": args.validation_games,
                 "learning_rate": args.distill_learning_rate,
                 "epochs": args.distill_epochs,
+                "anchor_weight": args.distill_anchor_weight,
             },
             "ppo_learning_rate": args.ppo_learning_rate,
             "robber_teacher_reward": args.robber_teacher_reward,
@@ -1111,6 +1216,12 @@ def main() -> None:
             "robber_stolen_resource_reward": args.robber_stolen_resource_reward,
             "robber_soft_target_temperature": args.robber_soft_target_temperature,
             "robber_teacher_curriculum": ppo_curriculum,
+            "robber_ppo_anchor_epochs": args.robber_ppo_anchor_epochs,
+            "robber_ppo_anchor_learning_rate": (
+                args.robber_ppo_anchor_learning_rate
+            ),
+            "robber_ppo_anchor_weight": args.robber_ppo_anchor_weight,
+            "robber_ppo_anchor_updates": ppo_anchor_updates,
             "post_ppo_imitation": post_ppo_imitation,
         },
     })
@@ -1120,6 +1231,12 @@ def main() -> None:
             raise ValueError("盗賊移管にはsettlement_planning設定が必要です。")
         planning["belief_aware_robber"] = False
         planning["opponent_aware_robber"] = False
+    if args.development_migration:
+        planning = source_config.get("settlement_planning")
+        if not isinstance(planning, dict):
+            raise ValueError("発展移管にはsettlement_planning設定が必要です。")
+        planning["adaptive_development_purchase"] = False
+        planning["endgame_development_fallback"] = False
     _write(model_directory / "config.json", source_config)
 
     candidate_base = PPOAgent(candidate_id, models_root=models_root, device=args.device)

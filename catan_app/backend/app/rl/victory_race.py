@@ -133,9 +133,15 @@ def best_belief_robber_victim(game: GameState, player_id: int, victim_ids,
     candidates = list(victim_ids)
     if not candidates:
         raise ValueError("盗める相手がいません。")
-    weights = desired_resource_weights(game, player_id)
     return max(candidates, key=lambda victim_id: (
-        threat_value(game, victim_id)
-        + belief_steal_value(beliefs[victim_id], weights) * 3.0,
+        belief_robber_victim_value(game, player_id, victim_id, beliefs),
         -victim_id,
     ))
+
+
+def belief_robber_victim_value(game: GameState, player_id: int, victim_id: int,
+                               beliefs: dict) -> float:
+    """被害者候補の公開脅威と、欲しい資源を盗める期待値を返す。"""
+    weights = desired_resource_weights(game, player_id)
+    return (threat_value(game, victim_id)
+            + belief_steal_value(beliefs[victim_id], weights) * 3.0)

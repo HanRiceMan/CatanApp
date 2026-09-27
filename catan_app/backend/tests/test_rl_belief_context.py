@@ -14,6 +14,8 @@ from app.rl.candidate_policy import (
     initialize_belief_policy_from_graph,
 )
 from app.rl.observation import encode_observation, get_observation
+from app.rl.action_space import ACTION_SPACE_SIZE
+from app.rl.train_strongest_league import robber_soft_targets
 
 
 def _stolen_game(private_resource: str):
@@ -29,6 +31,29 @@ def _stolen_game(private_resource: str):
 
 
 class BeliefContextTests(unittest.TestCase):
+    def test_robber_soft_targets_preserve_scores_and_mask_illegal_actions(self):
+        scores = np.full((2, ACTION_SPACE_SIZE), -np.inf, dtype=np.float32)
+        scores[0, 10:13] = (0.0, 4.0, 8.0)
+        scores[1, 20:22] = (3.0, 3.0)
+
+        targets = robber_soft_targets(scores, temperature=4.0)
+
+        np.testing.assert_allclose(targets.sum(axis=1), 1.0, atol=1e-7)
+        self.assertEqual(float(targets[0, 0]), 0.0)
+        self.assertGreater(targets[0, 12], targets[0, 11])
+        self.assertGreater(targets[0, 11], targets[0, 10])
+        self.assertAlmostEqual(float(targets[1, 20]), 0.5)
+        self.assertAlmostEqual(float(targets[1, 21]), 0.5)
+
+    def test_lower_soft_target_temperature_emphasizes_best_candidate(self):
+        scores = np.full((1, ACTION_SPACE_SIZE), -np.inf, dtype=np.float32)
+        scores[0, 10:13] = (0.0, 4.0, 8.0)
+
+        warm = robber_soft_targets(scores, temperature=4.0)
+        cold = robber_soft_targets(scores, temperature=1.0)
+
+        self.assertGreater(cold[0, 12], warm[0, 12])
+
     def test_v4_appends_normalized_bayesian_context(self):
         encoded = encode_observation(
             get_observation(_stolen_game("wood"), 3, version="v4")

@@ -20,11 +20,12 @@ from app.agents.heuristic import HeuristicAgent
 from app.agents.ppo import PPOAgent
 from app.domain.actions import (BuildCityAction, BuildSettlementAction,
                                 BuyDevelopmentAction, EndTurnAction,
+                                MoveRobberAction,
                                 ProposeCounterTradeAction, ProposeTradeAction,
-                                RespondToTradeAction)
+                                RespondToTradeAction, StealResourceAction)
 from app.domain.game import apply_action, create_game, pending_ai_player_id
 
-from .action_space import ACTION_SPACE_SIZE, action_to_id
+from .action_space import ACTION_CATALOG, ACTION_SPACE_SIZE, action_to_id
 from .candidate_policy import (GraphHierarchicalCandidateMaskablePolicy,
                                GraphFamilyHierarchicalCandidateMaskablePolicy,
                                BeliefGraphFamilyHierarchicalCandidateMaskablePolicy,
@@ -36,6 +37,7 @@ from .candidate_policy import (GraphHierarchicalCandidateMaskablePolicy,
                                initialize_goal_policy_from_graph,
                                initialize_graph_policy_from_hierarchical)
 from .env import CatanEnv, CatanEnvConfig
+from .hand_belief import BayesianHandEstimator
 from .hierarchical_distribution import ACTION_FAMILY_IDS, FAMILY_COUNT
 from .model_registry import ModelManifest
 from .observation import OBSERVATION_VECTOR_SIZES
@@ -43,6 +45,8 @@ from .reward import actual_score
 from .settlement_planning_agent import SettlementPlanningAgent
 from .trade_strategy import (choose_counter_trade, choose_proactive_trade,
                              choose_trade_response)
+from .victory_race import (belief_robber_tile_value,
+                           belief_robber_victim_value)
 
 
 TRADE_ACTIONS = (ProposeTradeAction, RespondToTradeAction, ProposeCounterTradeAction)
@@ -131,9 +135,56 @@ class TeacherExamples:
     labels: np.ndarray
     summary: dict[str, object]
     override_labels: np.ndarray | None = None
+    action_scores: np.ndarray | None = None
 
     def __len__(self) -> int:
         return int(self.labels.shape[0])
+
+
+def robber_teacher_action_scores(game, player_id: int,
+                                 mask: np.ndarray) -> np.ndarray:
+    """全合法盗賊候補を、現行ベイズ教師と同じ尺度で採点する。"""
+    if game.phase not in {"robber_move", "robber_steal"}:
+        raise ValueError(f"盗賊局面ではありません: {game.phase}")
+    beliefs = BayesianHandEstimator().estimate(game, player_id)
+    scores = np.full(ACTION_SPACE_SIZE, -np.inf, dtype=np.float32)
+    for definition in ACTION_CATALOG:
+        if not mask[definition.id]:
+            continue
+        action = definition.action
+        if isinstance(action, MoveRobberAction):
+            value = belief_robber_tile_value(
+                game, player_id, action.tile_id, beliefs
+            )
+        elif isinstance(action, StealResourceAction):
+            value = belief_robber_victim_value(
+                game, player_id, action.victim_id, beliefs
+            )
+        else:
+            continue
+        scores[definition.id] = value
+    if np.isfinite(scores).sum() < 2:
+        raise AssertionError("複数の盗賊候補を採点できませんでした。")
+    return scores
+
+
+def robber_soft_targets(action_scores: np.ndarray,
+                        temperature: float = 4.0) -> np.ndarray:
+    """教師評価値の差を保ったまま、合法候補上の確率分布へ変換する。"""
+    if temperature <= 0:
+        raise ValueError("soft targetのtemperatureは正数が必要です。")
+    scores = np.asarray(action_scores, dtype=np.float64)
+    if scores.ndim != 2 or scores.shape[1] != ACTION_SPACE_SIZE:
+        raise ValueError(f"教師評価値のshapeが不正です: {scores.shape}")
+    finite = np.isfinite(scores)
+    if np.any(finite.sum(axis=1) < 2):
+        raise ValueError("各教師例には複数の有限評価値が必要です。")
+    maxima = np.max(np.where(finite, scores, -np.inf), axis=1, keepdims=True)
+    exponentials = np.where(
+        finite, np.exp(np.clip((scores - maxima) / temperature, -60.0, 0.0)), 0.0
+    )
+    probabilities = exponentials / exponentials.sum(axis=1, keepdims=True)
+    return probabilities.astype(np.float32)
 
 
 def _strongest(model_id: str, models_root: Path, device: str):
@@ -165,6 +216,7 @@ def collect_teacher_examples(teacher, seeds: Iterable[int], *,
     observations: list[np.ndarray] = []
     masks: list[np.ndarray] = []
     labels: list[int] = []
+    action_scores: list[np.ndarray] = []
     override_labels: list[bool] = []
     families: Counter[str] = Counter()
     auxiliary_actions = 0
@@ -221,6 +273,19 @@ def collect_teacher_examples(teacher, seeds: Iterable[int], *,
                     observations.append(np.asarray(observation, dtype=np.float32).copy())
                     masks.append(mask.copy())
                     labels.append(action_id)
+                    if robber_only:
+                        scores = robber_teacher_action_scores(
+                            game, learning_player_id, mask
+                        )
+                        finite_scores = np.where(np.isfinite(scores), scores, -np.inf)
+                        best_score = float(np.max(finite_scores))
+                        if float(scores[action_id]) < best_score - 1e-5:
+                            raise AssertionError(
+                                "教師が全候補評価値の最大候補を選んでいません: "
+                                f"phase={game.phase}, action_id={action_id}, "
+                                f"selected={scores[action_id]}, best={best_score}"
+                            )
+                        action_scores.append(scores)
                     override_labels.append(is_planner_override)
                     families[type(action).__name__] += 1
                 observation, _, terminated, truncated, info = environment.step(action_id)
@@ -252,6 +317,7 @@ def collect_teacher_examples(teacher, seeds: Iterable[int], *,
             "label_counts": dict(families),
         },
         override_labels=np.asarray(override_labels, dtype=np.bool_),
+        action_scores=(np.stack(action_scores) if robber_only else None),
     )
 
 
@@ -273,7 +339,8 @@ def _family_probabilities(policy, observations: torch.Tensor,
     return torch.softmax(logits.masked_fill(~family_masks, -1e8), dim=1).clamp_min(1e-12)
 
 
-def _imitation_metrics(policy, examples: TeacherExamples) -> dict[str, float | int]:
+def _imitation_metrics(policy, examples: TeacherExamples, *,
+                       soft_target_temperature: float = 4.0) -> dict[str, float | int]:
     device = next(policy.parameters()).device
     policy.eval()
     with torch.no_grad():
@@ -305,6 +372,22 @@ def _imitation_metrics(policy, examples: TeacherExamples) -> dict[str, float | i
         "family_negative_log_likelihood": float(-selected_families.log().mean()),
         "negative_log_likelihood": float(-selected.log().mean()),
     }
+    if examples.action_scores is not None:
+        targets = torch.as_tensor(
+            robber_soft_targets(
+                examples.action_scores, soft_target_temperature
+            ), device=device,
+        )
+        soft_cross_entropy = -(targets * probabilities.log()).sum(dim=1).mean()
+        target_entropy = -(targets * targets.clamp_min(1e-12).log()).sum(dim=1).mean()
+        result.update({
+            "soft_target_temperature": soft_target_temperature,
+            "soft_target_cross_entropy": float(soft_cross_entropy),
+            "soft_target_entropy": float(target_entropy),
+            "soft_target_kl_divergence": float(
+                soft_cross_entropy - target_entropy
+            ),
+        })
     if isinstance(policy, RobberBeliefGraphFamilyHierarchicalCandidateMaskablePolicy):
         extractor = policy.mlp_extractor
         move = ((labels >= extractor.ROBBER_START)
@@ -434,12 +517,14 @@ def distill_strongest_policy(
     max_epochs: int = 8,
     patience: int = 2,
     anchor_weight: float = 1.0,
+    robber_soft_target_temperature: float = 4.0,
     seed: int = 20260926,
 ) -> dict[str, object]:
     """既存Actorを固定し、GNN残差を最強ハイブリッドAIへ近づける。"""
     if not isinstance(policy, GraphFamilyHierarchicalCandidateMaskablePolicy):
         raise TypeError("GraphFamilyHierarchicalCandidateMaskablePolicyが必要です。")
-    if min(learning_rate, batch_size, max_epochs, patience) <= 0 or anchor_weight < 0:
+    if (min(learning_rate, batch_size, max_epochs, patience,
+            robber_soft_target_temperature) <= 0 or anchor_weight < 0):
         raise ValueError("模倣学習設定が不正です。")
     device = next(policy.parameters()).device
     anchor = deepcopy(policy).to(device).eval()
@@ -450,8 +535,13 @@ def distill_strongest_policy(
     optimizer = torch.optim.Adam(parameters, lr=learning_rate)
     generator = torch.Generator(device="cpu").manual_seed(seed)
     before = {
-        "train": _imitation_metrics(policy, train),
-        "validation": _imitation_metrics(policy, validation),
+        "train": _imitation_metrics(
+            policy, train, soft_target_temperature=robber_soft_target_temperature
+        ),
+        "validation": _imitation_metrics(
+            policy, validation,
+            soft_target_temperature=robber_soft_target_temperature,
+        ),
     }
     best_state = {key: value.detach().cpu().clone()
                   for key, value in policy.state_dict().items()}
@@ -473,6 +563,11 @@ def distill_strongest_policy(
     train_family_labels = torch.as_tensor(train_families, dtype=torch.long)
     train_override_labels = (torch.as_tensor(train.override_labels, dtype=torch.float32)
                              if train.override_labels is not None else None)
+    train_soft_targets = (
+        torch.as_tensor(robber_soft_targets(
+            train.action_scores, robber_soft_target_temperature
+        )) if train.action_scores is not None else None
+    )
     effective_batch_size = (
         min(batch_size, 64)
         if isinstance(policy, RobberBeliefGraphFamilyHierarchicalCandidateMaskablePolicy)
@@ -532,7 +627,16 @@ def distill_strongest_policy(
                     policy, RobberBeliefGraphFamilyHierarchicalCandidateMaskablePolicy
                 ):
                     # 対象Actionが23個に限定されるため、汎用Family模倣より
-                    # ベイズ教師の候補選択を主損失にする。
+                    # 全候補のベイズ教師評価分布を主損失にする。旧データは
+                    # 単一正解ラベルへ自動的にフォールバックする。
+                    if train_soft_targets is not None:
+                        soft_targets = train_soft_targets[indices].to(device)
+                        action_teacher_loss = -(
+                            soft_targets * action_probabilities.log()
+                        ).sum(dim=1)
+                        action_teacher_loss = (
+                            action_teacher_loss * weights
+                        ).sum() / weights.sum()
                     teacher_loss = teacher_loss + action_teacher_loss
                     anchor_loss = anchor_loss + 0.25 * action_anchor_loss
                 else:
@@ -551,7 +655,10 @@ def distill_strongest_policy(
             torch.nn.utils.clip_grad_norm_(parameters, 1.0)
             optimizer.step()
             losses.append(float(loss.detach()))
-        validation_metrics = _imitation_metrics(policy, validation)
+        validation_metrics = _imitation_metrics(
+            policy, validation,
+            soft_target_temperature=robber_soft_target_temperature,
+        )
         validation_loss = float(validation_metrics["family_negative_log_likelihood"])
         if isinstance(policy, (
             GoalGraphFamilyHierarchicalCandidateMaskablePolicy,
@@ -564,8 +671,13 @@ def distill_strongest_policy(
                     policy, RobberBeliefGraphFamilyHierarchicalCandidateMaskablePolicy
                 ) else 0.25
             )
+            action_metric = (
+                "soft_target_cross_entropy"
+                if validation.action_scores is not None
+                else "negative_log_likelihood"
+            )
             validation_loss += action_weight * float(
-                validation_metrics["negative_log_likelihood"]
+                validation_metrics[action_metric]
             )
         if isinstance(policy, GatedGoalGraphFamilyHierarchicalCandidateMaskablePolicy):
             policy.eval()
@@ -605,13 +717,20 @@ def distill_strongest_policy(
         "parameter_selection": selection,
         "before": before,
         "after": {
-            "train": _imitation_metrics(policy, train),
-            "validation": _imitation_metrics(policy, validation),
+            "train": _imitation_metrics(
+                policy, train,
+                soft_target_temperature=robber_soft_target_temperature,
+            ),
+            "validation": _imitation_metrics(
+                policy, validation,
+                soft_target_temperature=robber_soft_target_temperature,
+            ),
         },
         "best_epoch": best_epoch,
         "best_validation_loss": best_loss,
         "history": history,
         "anchor_weight": anchor_weight,
+        "robber_soft_target_temperature": robber_soft_target_temperature,
         "batch_size": effective_batch_size,
         "gate_calibration": gate_calibration,
     }
@@ -676,6 +795,10 @@ def main() -> None:
     parser.add_argument("--ppo-learning-rate", type=float, default=1e-5)
     parser.add_argument("--robber-teacher-reward", type=float, default=0.0,
                         help="盗賊移管学習中の教師一致補助報酬。実戦評価には使わない。")
+    parser.add_argument("--robber-teacher-curriculum", action="store_true",
+                        help="教師報酬を指定値→半分→0へ下げながらPPO学習する。")
+    parser.add_argument("--robber-soft-target-temperature", type=float, default=4.0,
+                        help="盗賊候補の教師評価値を確率化する温度。低いほど1位を強調。")
     parser.add_argument("--device", default="cpu")
     parser.add_argument("--dataset-artifact", type=Path, default=None,
                         help="既存のteacher_examples.npzを再利用する。")
@@ -709,6 +832,14 @@ def main() -> None:
         args.robber_teacher_reward > 0 and not args.robber_migration
     ):
         parser.error("robber-teacher-rewardはrobber-migration時だけ0以上で指定します。")
+    if args.robber_teacher_curriculum and (
+        not args.robber_migration or args.robber_teacher_reward <= 0
+    ):
+        parser.error("robber-teacher-curriculumには正の教師報酬とrobber-migrationが必要です。")
+    if args.robber_teacher_curriculum and args.rl_steps < 4:
+        parser.error("robber-teacher-curriculumには4 step以上必要です。")
+    if args.robber_soft_target_temperature <= 0:
+        parser.error("robber-soft-target-temperatureは正数で指定します。")
 
     root = Path(__file__).resolve().parents[2]
     output = root / "experiments" / args.experiment_id
@@ -747,8 +878,7 @@ def main() -> None:
             collect_override_gate=args.goal_gate,
             robber_only=args.robber_migration,
         )
-        np.savez_compressed(
-            output / "teacher_examples.npz",
+        dataset_values = dict(
             train_observations=train.observations, train_masks=train.masks,
             train_labels=train.labels,
             train_override_labels=train.override_labels,
@@ -757,6 +887,12 @@ def main() -> None:
             validation_labels=validation.labels,
             validation_override_labels=validation.override_labels,
         )
+        if train.action_scores is not None and validation.action_scores is not None:
+            dataset_values.update(
+                train_action_scores=train.action_scores,
+                validation_action_scores=validation.action_scores,
+            )
+        np.savez_compressed(output / "teacher_examples.npz", **dataset_values)
     else:
         artifact = args.dataset_artifact.resolve()
         if not artifact.is_file():
@@ -769,6 +905,7 @@ def main() -> None:
                  "examples": int(values["train_labels"].shape[0]),
                  "dataset_artifact": str(artifact)},
                 values["train_override_labels"] if "train_override_labels" in values else None,
+                values["train_action_scores"] if "train_action_scores" in values else None,
             )
             validation = TeacherExamples(
                 values["validation_observations"], values["validation_masks"],
@@ -778,20 +915,25 @@ def main() -> None:
                  "dataset_artifact": str(artifact)},
                 (values["validation_override_labels"]
                  if "validation_override_labels" in values else None),
+                (values["validation_action_scores"]
+                 if "validation_action_scores" in values else None),
             )
 
     league = SeededMixedLeagueAgent(frozen_teacher)
-    environment = CatanEnv(
-        CatanEnvConfig(
-            learning_player_id=1,
-            allow_player_trades=True,
-            observation_version=observation_version,
-            robber_teacher_reward=args.robber_teacher_reward,
-        ),
-        initial_placement_agent=frozen_teacher,
-        opponent_agents={2: league, 3: league, 4: league},
-        learner_auxiliary_agent=StrategicTradeAuxiliaryAgent(frozen_teacher),
-    )
+    def create_training_environment(robber_teacher_reward: float) -> CatanEnv:
+        return CatanEnv(
+            CatanEnvConfig(
+                learning_player_id=1,
+                allow_player_trades=True,
+                observation_version=observation_version,
+                robber_teacher_reward=robber_teacher_reward,
+            ),
+            initial_placement_agent=frozen_teacher,
+            opponent_agents={2: league, 3: league, 4: league},
+            learner_auxiliary_agent=StrategicTradeAuxiliaryAgent(frozen_teacher),
+        )
+
+    environment = create_training_environment(args.robber_teacher_reward)
     from sb3_contrib import MaskablePPO
     policy_class = (
         GatedGoalGraphFamilyHierarchicalCandidateMaskablePolicy
@@ -833,6 +975,7 @@ def main() -> None:
         model.policy, train, validation,
         learning_rate=args.distill_learning_rate,
         max_epochs=args.distill_epochs,
+        robber_soft_target_temperature=args.robber_soft_target_temperature,
         seed=args.training_seed,
     )
     _write(output / "distillation.json", {
@@ -843,14 +986,48 @@ def main() -> None:
 
     source_steps = int(model.num_timesteps)
     model.save(str(output / "distilled_model.zip"))
+    ppo_curriculum: list[dict[str, float | int]] = []
     if not args.skip_ppo:
         model.set_random_seed(args.training_seed)
         model.learning_rate = args.ppo_learning_rate
         model.lr_schedule = lambda _: args.ppo_learning_rate
         for group in model.policy.optimizer.param_groups:
             group["lr"] = args.ppo_learning_rate
-        model.learn(total_timesteps=args.rl_steps, reset_num_timesteps=False,
-                    progress_bar=False)
+        if args.robber_teacher_curriculum:
+            first = args.rl_steps // 4
+            second = args.rl_steps // 4
+            stages = (
+                (args.robber_teacher_reward, first),
+                (args.robber_teacher_reward / 2.0, second),
+                (0.0, args.rl_steps - first - second),
+            )
+        else:
+            stages = ((args.robber_teacher_reward, args.rl_steps),)
+        for index, (teacher_reward, stage_steps) in enumerate(stages):
+            if index:
+                previous_environment = environment
+                environment = create_training_environment(teacher_reward)
+                model.set_env(environment)
+                previous_environment.close()
+            before_steps = int(model.num_timesteps)
+            model.learn(total_timesteps=stage_steps, reset_num_timesteps=False,
+                        progress_bar=False)
+            ppo_curriculum.append({
+                "teacher_reward": teacher_reward,
+                "requested_steps": stage_steps,
+                "actual_steps": int(model.num_timesteps) - before_steps,
+            })
+    post_ppo_imitation = {
+        "train": _imitation_metrics(
+            model.policy, train,
+            soft_target_temperature=args.robber_soft_target_temperature,
+        ),
+        "validation": _imitation_metrics(
+            model.policy, validation,
+            soft_target_temperature=args.robber_soft_target_temperature,
+        ),
+    }
+    _write(output / "post_ppo_imitation.json", post_ppo_imitation)
     environment.close()
 
     candidate_id = f"{args.experiment_id}_candidate"
@@ -916,6 +1093,9 @@ def main() -> None:
             },
             "ppo_learning_rate": args.ppo_learning_rate,
             "robber_teacher_reward": args.robber_teacher_reward,
+            "robber_soft_target_temperature": args.robber_soft_target_temperature,
+            "robber_teacher_curriculum": ppo_curriculum,
+            "post_ppo_imitation": post_ppo_imitation,
         },
     })
     if args.robber_migration:

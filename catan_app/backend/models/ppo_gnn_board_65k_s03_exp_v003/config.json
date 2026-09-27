@@ -26,6 +26,8 @@
   "learning_player_id": 1,
   "learning_rate": 3e-05,
   "model_id": "ppo_gnn_board_65k_s03_exp_v003",
+  "display_name": "現行最強AI",
+  "ui_planned_only": true,
   "models_root": "C:\\Users\\okome\\Documents\\CATAN\\catan_app\\backend\\experiments\\hierarchical_learning_curve_50k_20260923\\models",
   "n_epochs": 4,
   "n_steps": 1024,

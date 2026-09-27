@@ -38,6 +38,8 @@ class RlPhaseFiveTests(unittest.TestCase):
         self.assertIn("ppo_runtime_available", catalog.json())
         planned = next(model for model in catalog.json()["models"]
                        if model["model_id"] == "ppo_gnn_board_65k_s03_exp_v003")
+        self.assertEqual(planned["display_name"], "現行最強AI")
+        self.assertTrue(planned["ui_planned_only"])
         self.assertEqual(planned["settlement_planning"]["target_sites"], 5)
         self.assertEqual(planned["settlement_planning"]["title_horizon"], 2)
         self.assertEqual(planned["settlement_planning"]["first_city_max_deficit"], 2)

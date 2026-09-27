@@ -14,6 +14,7 @@ from app.rl.macro_teacher_dataset import (TeacherDataset,
                                           collect_teacher_dataset,
                                           observe_teacher_decision,
                                           save_teacher_dataset,
+                                          summarize_profile_stability,
                                           summarize_taxonomy,
                                           verify_action_parity)
 from app.rl.observation import OBSERVATION_VECTOR_SIZES
@@ -146,6 +147,58 @@ class MacroTeacherDatasetTests(unittest.TestCase):
             self.assertEqual(row["winner"], game["winner"])
             self.assertEqual(row["final_vp"], game["final_vp"])
             self.assertEqual(row["final_rank"], game["final_rank"])
+            self.assertEqual(row["opponent_profile"], "rule")
+        self.assertEqual(game["seat"], 1)
+        self.assertEqual(
+            [item["agent_type"] for item in game["seat_agents"]].count("rule"), 3
+        )
+
+    def test_mixed_profile_records_seat_agents_and_rotates_real_seat(self):
+        agent = UniformPlanningAgent(StubPolicy())
+        factories = {
+            "champion": HeuristicAgent,
+            "robber_ppo": HeuristicAgent,
+        }
+        dataset = collect_teacher_dataset(
+            agent, [20261007, 20261008],
+            opponent_profile="mixed", opponent_factories=factories,
+        )
+
+        self.assertEqual([game["seat"] for game in dataset.games], [1, 2])
+        for game in dataset.games:
+            types = [item["agent_type"] for item in game["seat_agents"]]
+            self.assertCountEqual(
+                types, ["teacher_champion", "champion", "robber_ppo", "rule"]
+            )
+            self.assertTrue(next(
+                item for item in game["seat_agents"]
+                if item["agent_type"] == "robber_ppo"
+            )["uses_planner"])
+        self.assertTrue(all(
+            row["opponent_profile"] == "mixed" for row in dataset.records
+        ))
+
+    def test_profile_stability_reports_goal_differences_and_seats(self):
+        rule = record("SETTLEMENT", "BUILD_ROAD")
+        rule.update(opponent_profile="rule", seat=1)
+        champion = record("CITY", "BUILD_CITY")
+        champion.update(opponent_profile="champion", seat=2)
+        mixed = record("SETTLEMENT", "END_TURN")
+        mixed.update(opponent_profile="mixed", seat=3)
+
+        comparison = summarize_profile_stability([rule, champion, mixed])
+
+        settlement = comparison["goal_distribution_difference"]["SETTLEMENT"]
+        self.assertEqual(settlement["counts"]["rule"], 1)
+        self.assertEqual(settlement["counts"]["champion"], 0)
+        self.assertEqual(settlement["max_rate_difference"], 1.0)
+        self.assertEqual(
+            comparison["profiles"]["mixed"]["objective_goal_by_seat"]["3"]
+                      ["SETTLEMENT"]["count"], 1
+        )
+        self.assertIn(
+            "champion_vs_rule", comparison["pairwise_distribution_distance"]
+        )
 
     def test_fixed_seed_parity_uses_full_action_trace_and_final_state(self):
         plain = UniformPlanningAgent(StubPolicy())

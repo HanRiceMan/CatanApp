@@ -7,12 +7,14 @@ from typing import Final
 import numpy as np
 
 from app.domain.game import DEVELOPMENT_DECK, RESOURCES, GameState, _road_count, _port_ratio, player_for
+from .runtime_context import RUNTIME_CONTEXT_SIZE
 
 OBSERVATION_VERSION: Final[str] = "v1"
 OBSERVATION_VECTOR_SIZE: Final[int] = 1343
 OBSERVATION_VECTOR_SIZES: Final[dict[str, int]] = {
     "v1": 1343, "v2": 1667, "v3": 1822, "v4": 1718, "v5": 1722,
     "v6": 1747,
+    "v7": 1667 + RUNTIME_CONTEXT_SIZE,
 }
 NUMBER_PIPS: Final[dict[int, int]] = {2: 1, 3: 2, 4: 3, 5: 4, 6: 5,
                                       8: 5, 9: 4, 10: 3, 11: 2, 12: 1}
@@ -132,6 +134,7 @@ class Observation:
     strategic_goal: tuple[float, ...] | None = None
     opponent_hand_beliefs: tuple[float, ...] | None = None
     development_context: tuple[float, ...] | None = None
+    runtime_context: tuple[float, ...] | None = None
 
 
 def _public_score(game: GameState, player_id: int) -> int:
@@ -219,6 +222,10 @@ def get_observation(game: GameState, player_id: int, *, version: str = OBSERVATI
     if version == "v6":
         from .development_context import encode_development_context
         development_context = tuple(encode_development_context(game, player_id))
+    runtime_context = None
+    if version == "v7":
+        from .runtime_context import encode_runtime_context
+        runtime_context = tuple(encode_runtime_context(game, player_id))
     return Observation(
         version=version,
         player_id=player_id,
@@ -226,13 +233,13 @@ def get_observation(game: GameState, player_id: int, *, version: str = OBSERVATI
         tiles=tuple(TileObservation(tile.id, tile.terrain, tile.number, tile.id == game.robber_tile_id)
                     for tile in game.board.tiles),
         vertices=tuple(VertexObservation(vertex.id, game.settlements.get(vertex.id), "settlement",
-                                         _vertex_production_pips(game, vertex.id) if version in {"v2", "v3", "v4", "v5", "v6"} else None)
+                                         _vertex_production_pips(game, vertex.id) if version in {"v2", "v3", "v4", "v5", "v6", "v7"} else None)
                        if vertex.id in game.settlements
                        else VertexObservation(vertex.id, game.cities.get(vertex.id), "city",
-                                              _vertex_production_pips(game, vertex.id) if version in {"v2", "v3", "v4", "v5", "v6"} else None)
+                                              _vertex_production_pips(game, vertex.id) if version in {"v2", "v3", "v4", "v5", "v6", "v7"} else None)
                        if vertex.id in game.cities
                        else VertexObservation(vertex.id, None, "empty",
-                                              _vertex_production_pips(game, vertex.id) if version in {"v2", "v3", "v4", "v5", "v6"} else None)
+                                              _vertex_production_pips(game, vertex.id) if version in {"v2", "v3", "v4", "v5", "v6", "v7"} else None)
                        for vertex in game.board.vertices),
         edges=tuple(EdgeObservation(edge.id, game.roads.get(edge.id)) for edge in game.board.edges),
         ports=tuple(PortObservation(port.id, port.edge_id, port.resource, port.ratio,
@@ -259,6 +266,7 @@ def get_observation(game: GameState, player_id: int, *, version: str = OBSERVATI
         strategic_goal=strategic_goal,
         opponent_hand_beliefs=opponent_hand_beliefs,
         development_context=development_context,
+        runtime_context=runtime_context,
     )
 
 
@@ -330,7 +338,7 @@ def encode_observation(observation: Observation) -> np.ndarray:
     for vertex in observation.vertices:
         vector.extend(_one_hot(5, _relative_player_index(observation, vertex.owner_id)))
         vector.extend(_one_hot(3, ("empty", "settlement", "city").index(vertex.building)))
-        if observation.version in {"v2", "v3", "v4", "v5", "v6"}:
+        if observation.version in {"v2", "v3", "v4", "v5", "v6", "v7"}:
             if vertex.production_pips is None or len(vertex.production_pips) != len(RESOURCE_ORDER):
                 raise ValueError("Observation v2の交差点生産情報が不足しています。")
             vector.append(_normalized(sum(vertex.production_pips), MAX_VERTEX_PIPS))
@@ -392,6 +400,13 @@ def encode_observation(observation: Observation) -> np.ndarray:
                     or len(observation.development_context) != DEVELOPMENT_CONTEXT_SIZE):
                 raise ValueError("Observation v6の発展購入情報が不足しています。")
             vector.extend(observation.development_context)
+    if observation.version == "v7":
+        if len(vector) != OBSERVATION_VECTOR_SIZES["v2"]:
+            raise AssertionError("v7はObservation v2の末尾へContextを追加します。")
+        if (observation.runtime_context is None
+                or len(observation.runtime_context) != RUNTIME_CONTEXT_SIZE):
+            raise ValueError("Observation v7のRuntime Contextが不足しています。")
+        vector.extend(observation.runtime_context)
 
     encoded = np.asarray(vector, dtype=np.float32)
     if encoded.shape != (OBSERVATION_VECTOR_SIZES[observation.version],):

@@ -116,7 +116,8 @@ class StructuredContextReport:
         }
 
 
-def _build(game: GameState, player_id: int, max_plan_roads: int) -> StructuredContextReport:
+def _build(game: GameState, player_id: int, max_plan_roads: int,
+           plan_out: list | None = None) -> StructuredContextReport:
     player = player_for(game, player_id)
     stock = player.resources
     actions = _legal_actions(game, player_id)
@@ -131,6 +132,8 @@ def _build(game: GameState, player_id: int, max_plan_roads: int) -> StructuredCo
 
     plan = analyze_expansion_plan(game, player_id,
                                   max_additional_roads=max_plan_roads)
+    if plan_out is not None:
+        plan_out.append(plan)
     target = plan.selected_target if player.settlements < 5 else None
     settlement_cost = (dict(zip(RESOURCES, target.required_resources, strict=True))
                        if target is not None else BUILD_COSTS["settlement"])
@@ -400,3 +403,12 @@ def build_structured_context_report(
 ) -> StructuredContextReport:
     """Action前のGameStateのみを読み、全仮設計算をcopy上で行う。"""
     return _build(deepcopy(game), player_id, max_plan_roads)
+
+
+def build_structured_context_report_with_plan(
+    game: GameState, player_id: int, *, max_plan_roads: int = 3,
+):
+    """同じread-only copy上の解析結果をContext encoderへ再利用する。"""
+    plan_out: list = []
+    report = _build(deepcopy(game), player_id, max_plan_roads, plan_out)
+    return report, plan_out[0]

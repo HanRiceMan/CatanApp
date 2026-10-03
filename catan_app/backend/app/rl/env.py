@@ -508,6 +508,40 @@ class CatanEnv(gym.Env[np.ndarray, int]):
         if not isinstance(action_id, Integral) or action_id < 0 or action_id >= ACTION_SPACE_SIZE or not mask[action_id]:
             raise IllegalPolicyAction(f"Action ID {action_id} は現在合法ではありません。")
         action = id_to_action(int(action_id))
+        return self._step_resolved_action(action, mask)
+
+    def step_action(self, action: Action) -> tuple[np.ndarray, float, bool, bool, dict[str, Any]]:
+        """階層Gate用。377外の対人提案も同じ報酬/時間境界で1 step進める。"""
+        game = self._require_game()
+        if game.phase == "game_over" or self._is_truncated:
+            raise RuntimeError("終了したEpisodeです。reset()を呼んでください。")
+        if self._pending_external_player_id is not None:
+            raise ExternalActionRequired("外部プレイヤーの操作が先に必要です。")
+        if self._required_player_id(game) != self.learning_player_id:
+            raise RuntimeError("現在は学習者の操作タイミングではありません。")
+        mask = self.action_masks()
+        if isinstance(action, ProposeTradeAction):
+            if not self.config.allow_player_trades:
+                raise IllegalPolicyAction("このEnvironmentでは対人交渉を許可していません。")
+            # 377外Actionの合法性を元GameStateに触れずルール側で確認する。
+            from copy import deepcopy
+            probe = deepcopy(game)
+            apply_action(probe, self.learning_player_id, action,
+                         probe.revision, "gate-action-probe")
+        else:
+            from .action_space import action_to_id
+            try:
+                action_id = action_to_id(action)
+            except ValueError as error:
+                raise IllegalPolicyAction("377 catalog外のActionです。") from error
+            if not mask[action_id]:
+                raise IllegalPolicyAction(f"Action ID {action_id} は現在合法ではありません。")
+        return self._step_resolved_action(action, mask)
+
+    def _step_resolved_action(
+        self, action: Action, mask: np.ndarray,
+    ) -> tuple[np.ndarray, float, bool, bool, dict[str, Any]]:
+        game = self._require_game()
         teacher_action = (
             robber_teacher_action(game, self.learning_player_id)
             if self.config.robber_teacher_reward > 0 else None

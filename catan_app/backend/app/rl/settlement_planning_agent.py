@@ -209,6 +209,10 @@ class SettlementPlanningAgent:
             distribution = self.policy.model.policy.get_distribution(tensor, action_masks=mask)
         return distribution.distribution.probs.cpu().numpy().reshape(-1)
 
+    def _construction_choice_mask(self, game: GameState, player_id: int) -> np.ndarray:
+        """通常は既存mask。診断用counterfactualでのみ上書きする。"""
+        return get_action_mask(game, player_id)
+
     @staticmethod
     def _best(actions: list[Action], probabilities: np.ndarray) -> Action:
         return max(actions, key=lambda action: probabilities[action_to_id(action)])
@@ -937,7 +941,7 @@ class SettlementPlanningAgent:
         if target is None or target.wait_rounds > self.max_wait_rounds:
             return selected(base_action)
 
-        mask = get_action_mask(game, player_id)
+        mask = self._construction_choice_mask(game, player_id)
         legal = [item.action for item in ACTION_CATALOG if mask[item.id]]
         probabilities = self._probabilities(game, player_id, mask)
 

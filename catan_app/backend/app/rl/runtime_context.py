@@ -2,7 +2,6 @@
 
 from __future__ import annotations
 
-from copy import deepcopy
 from dataclasses import asdict, dataclass
 from math import isfinite
 from typing import Any
@@ -11,8 +10,7 @@ import numpy as np
 
 from app.domain.game import RESOURCES, GameState, player_for
 
-from .expansion_planner import analyze_expansion_plan
-from .structured_context import build_structured_context_report
+from .structured_context import build_structured_context_report_with_plan
 
 
 RUNTIME_CONTEXT_VERSION = "runtime_context_v1"
@@ -152,8 +150,8 @@ def runtime_context_definition() -> dict[str, Any]:
 
 
 def _source_values(game: GameState, player_id: int, max_plan_roads: int) -> tuple[dict[str, Any], dict[str, bool]]:
-    report = build_structured_context_report(game, player_id,
-                                              max_plan_roads=max_plan_roads)
+    report, plan = build_structured_context_report_with_plan(
+        game, player_id, max_plan_roads=max_plan_roads)
     sections = report.sections
     values: dict[str, Any] = {}
     valid: dict[str, bool] = {}
@@ -204,8 +202,6 @@ def _source_values(game: GameState, player_id: int, max_plan_roads: int) -> tupl
 
     # 最短距離・同距離では最短ETAで決める。site/plan_valueを読まない。
     player = player_for(game, player_id)
-    plan = analyze_expansion_plan(deepcopy(game), player_id,
-                                  max_additional_roads=max_plan_roads)
     canonical = (min(plan.targets, key=lambda target: (
         target.additional_roads, target.wait_rounds, target.vertex_id,
     )) if plan.targets and player.settlements < 5 else None)

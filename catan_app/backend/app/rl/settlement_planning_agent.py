@@ -696,7 +696,19 @@ class SettlementPlanningAgent:
             action,
         )
 
-    def _select_planned_action(self, game: GameState, player_id: int) -> Action:
+    def _select_planned_action(self, game: GameState, player_id: int,
+                               selection_trace: dict | None = None) -> Action:
+        def selected(action: Action, source: str = "BASE_PPO",
+                     intents: tuple[str, ...] = (),
+                     reasons: tuple[str, ...] = ()) -> Action:
+            if selection_trace is not None:
+                selection_trace.update(
+                    execution_source=source,
+                    contributed_intents=intents,
+                    contributed_reasons=reasons,
+                )
+            return action
+
         if (self.expansion_aware_setup and game.phase == "setup_ready"
                 and game.pending_settlement_id is None
                 and player_for(game, player_id).settlements == 1
@@ -711,10 +723,17 @@ class SettlementPlanningAgent:
                 min_ore_pips=self.setup_min_ore_pips,
                 fallback_to_best_coverage=self.setup_best_coverage_fallback,
             )
-            return id_to_action(
+            return selected(id_to_action(
                 self.policy.initial_setup_policy.select_action_id(observation, mask)
-            )
+            ), "SETUP_PLANNER")
         base_action = self.policy.select_action(game, player_id)
+
+        def city_selected() -> Action:
+            action = self._city_action(game, player_id, base_action)
+            if action == base_action:
+                return selected(base_action)
+            return selected(action, "CITY_PLANNER", ("CITY",))
+
         if (self.collision_aware_initial_roads and game.phase == "setup_ready"
                 and game.pending_settlement_id is not None
                 and isinstance(base_action, PlaceInitialRoadAction)):
@@ -722,33 +741,33 @@ class SettlementPlanningAgent:
             edge_id, _ = choose_initial_road(
                 game, player_id, base_action.edge_id,
             )
-            return PlaceInitialRoadAction(edge_id)
+            return selected(PlaceInitialRoadAction(edge_id), "SETUP_PLANNER")
         if self.belief_aware_robber and game.phase == "robber_move":
             from .hand_belief import BayesianHandEstimator
             beliefs = BayesianHandEstimator().estimate(game, player_id)
             legal = [item.action for item in ACTION_CATALOG
                      if get_action_mask(game, player_id)[item.id]
                      and isinstance(item.action, MoveRobberAction)]
-            return MoveRobberAction(best_belief_robber_tile(
+            return selected(MoveRobberAction(best_belief_robber_tile(
                 game, player_id, [action.tile_id for action in legal], beliefs
-            ))
+            )), "ROBBER_PLANNER")
         if self.belief_aware_robber and game.phase == "robber_steal":
             from .hand_belief import BayesianHandEstimator
             beliefs = BayesianHandEstimator().estimate(game, player_id)
-            return StealResourceAction(best_belief_robber_victim(
+            return selected(StealResourceAction(best_belief_robber_victim(
                 game, player_id, game.robber_victim_ids, beliefs
-            ))
+            )), "ROBBER_PLANNER")
         if self.opponent_aware_robber and game.phase == "robber_move":
             legal = [item.action for item in ACTION_CATALOG
                      if get_action_mask(game, player_id)[item.id]
                      and isinstance(item.action, MoveRobberAction)]
-            return MoveRobberAction(best_robber_tile(
+            return selected(MoveRobberAction(best_robber_tile(
                 game, player_id, [action.tile_id for action in legal]
-            ))
+            )), "ROBBER_PLANNER")
         if self.opponent_aware_robber and game.phase == "robber_steal":
-            return StealResourceAction(best_robber_victim(
+            return selected(StealResourceAction(best_robber_victim(
                 game, player_id, game.robber_victim_ids
-            ))
+            )), "ROBBER_PLANNER")
         score = actual_score(game, player_id)
         opponent_near_win = max(public_score(game, other.id) for other in game.players
                                 if other.id != player_id) >= 8
@@ -757,17 +776,22 @@ class SettlementPlanningAgent:
                 and game.phase in {"turn_pre_roll", "action"}):
             knight = self._largest_army_progress(game, player_id)
             if knight is not None:
-                return knight
+                return selected(
+                    knight, "TITLE_PLANNER", ("KNIGHT_TITLE",),
+                    ("LARGEST_ARMY_RACE",),
+                )
         if game.phase != "action":
-            return base_action
+            return selected(base_action)
         player = player_for(game, player_id)
         if score >= 10:
-            return base_action
+            return selected(base_action)
         if self.prioritize_immediate_win and score >= 9:
             scoring_build = (self._best_city(game, player_id)
                              or self._best_settlement(game, player_id))
             if scoring_build is not None:
-                return scoring_build
+                intent = ("CITY",) if isinstance(scoring_build, BuildCityAction) else ("SETTLEMENT",)
+                source = "CITY_PLANNER" if intent == ("CITY",) else "SETTLEMENT_PLANNER"
+                return selected(scoring_build, source, intent)
         site_count = player.settlements + player.cities
         fastest_win_plan = None
         if (self.prioritize_immediate_win and score >= 9
@@ -784,7 +808,7 @@ class SettlementPlanningAgent:
                 fastest_win_plan = candidate_plan
             elif city_wait <= self.max_city_wait_rounds:
                 # 同じ1点なら、同着時は生産増加と開拓地コマ回収のある都市。
-                return self._city_action(game, player_id, base_action)
+                return city_selected()
         three_site_plan = None
         if (fastest_win_plan is None
                 and self.three_site_city_value_ratio and site_count == 3):
@@ -794,7 +818,7 @@ class SettlementPlanningAgent:
             target = three_site_plan.selected_target
             if (target is not None
                     and self._prefer_city_over_connected_settlement(game, player_id, target)):
-                return self._city_action(game, player_id, base_action)
+                return city_selected()
         if (fastest_win_plan is None
                 and self.early_affordable_city_min_sites
                 and site_count >= self.early_affordable_city_min_sites
@@ -802,13 +826,13 @@ class SettlementPlanningAgent:
                 and self._best_settlement(game, player_id) is None):
             early_city = self._best_city(game, player_id)
             if early_city is not None:
-                return early_city
+                return selected(early_city, "CITY_PLANNER", ("CITY",))
         endgame_plan = fastest_win_plan
         deferred_title_for_build = False
         if site_count >= self.target_sites and fastest_win_plan is None:
             city = self._best_city(game, player_id) if self.prioritize_affordable_city else None
             if city is not None and actual_score(game, player_id) >= 9:
-                return city
+                return selected(city, "CITY_PLANNER", ("CITY",))
             connected_reserve_plan = None
             # 5拠点到達後でも、都市化によって開拓地コマが手元へ戻っており、
             # 道路不要の候補を短く待てる場合だけ追加開拓地を検討する。
@@ -851,40 +875,46 @@ class SettlementPlanningAgent:
                              if player.settlements > 0 and player.cities < 4 else 99.0)
                 if min(settlement_wait, city_wait) <= self.title_road_build_wait_threshold:
                     if city_wait <= settlement_wait:
-                        return self._city_action(game, player_id, base_action)
+                        return city_selected()
                     road = None
                     endgame_plan = construction_plan
                     deferred_title_for_build = True
             if self.construction_before_titles:
                 # 今勝てる道路は例外。それ以外は購入可能な建設を先に実行する。
                 if road is not None and self._road_wins_now(game, player_id, road):
-                    return road
+                    return selected(
+                        road, "TITLE_PLANNER", ("ROAD_TITLE",),
+                        ("ROAD_TITLE_IMMEDIATE_WIN",),
+                    )
                 settlement = self._best_settlement(game, player_id)
                 if settlement is not None:
-                    return settlement
+                    return selected(settlement, "SETTLEMENT_PLANNER", ("SETTLEMENT",))
                 if city is not None:
-                    return city
+                    return selected(city, "CITY_PLANNER", ("CITY",))
             if road is not None:
-                return road
+                return selected(
+                    road, "TITLE_PLANNER", ("ROAD_TITLE",),
+                    ("ROAD_TITLE_OPPORTUNITY",),
+                )
             if city is not None:
-                return city
+                return selected(city, "CITY_PLANNER", ("CITY",))
             city_deficit = sum(
                 max(0, amount - player.resources[resource])
                 for resource, amount in BUILD_COSTS["city"].items()
             )
             if (self.first_city_max_deficit and player.cities == 0
                     and city_deficit <= self.first_city_max_deficit):
-                return self._city_action(game, player_id, base_action)
+                return city_selected()
             if (self.second_city_max_deficit and player.cities == 1
                     and score >= self.second_city_min_score
                     and city_deficit <= self.second_city_max_deficit):
-                return self._city_action(game, player_id, base_action)
+                return city_selected()
             if (self.third_city_max_deficit and player.cities == 2
                     and score >= self.third_city_min_score
                     and city_deficit <= self.third_city_max_deficit):
-                return self._city_action(game, player_id, base_action)
+                return city_selected()
             if self.target_cities and player.cities < self.target_cities:
-                return self._city_action(game, player_id, base_action)
+                return city_selected()
             if self.endgame_point_reserve_score and score >= self.endgame_point_reserve_score:
                 endgame_plan = endgame_plan or analyze_expansion_plan(
                     game, player_id, max_additional_roads=self.max_plan_roads,
@@ -894,18 +924,18 @@ class SettlementPlanningAgent:
                 city_wait = (estimated_build_wait(game, player_id, BUILD_COSTS["city"])
                              if player.settlements > 0 and player.cities < 4 else 99.0)
                 if city_wait <= settlement_wait and city_wait <= self.max_city_wait_rounds:
-                    return self._city_action(game, player_id, base_action)
+                    return city_selected()
                 if (endgame_plan.selected_target is None
                         or settlement_wait > self.max_wait_rounds):
-                    return base_action
+                    return selected(base_action)
             elif not deferred_title_for_build:
-                return base_action
+                return selected(base_action)
         plan = endgame_plan or three_site_plan or analyze_expansion_plan(
             game, player_id, max_additional_roads=self.max_plan_roads,
         )
         target = plan.selected_target
         if target is None or target.wait_rounds > self.max_wait_rounds:
-            return base_action
+            return selected(base_action)
 
         mask = get_action_mask(game, player_id)
         legal = [item.action for item in ACTION_CATALOG if mask[item.id]]
@@ -913,44 +943,84 @@ class SettlementPlanningAgent:
 
         # 現行PPOが既存カードを使おうとする判断は壊さない。
         if isinstance(base_action, UseDevelopmentAction):
-            return base_action
+            return selected(base_action)
 
         settlements = [action for action in legal if isinstance(action, BuildSettlementAction)]
         if settlements:
             exact = [action for action in settlements if action.vertex_id == target.vertex_id]
-            return self._best(exact or settlements, probabilities)
+            return selected(self._best(exact or settlements, probabilities),
+                            "SETTLEMENT_PLANNER", ("SETTLEMENT",))
 
         plenty = self._helpful_year_of_plenty(game, player_id, target, legal, probabilities)
         if plenty is not None:
-            return plenty
+            return selected(
+                plenty, "SETTLEMENT_PLANNER", ("SETTLEMENT",),
+                ("EXPECTED_RESOURCE_GAIN",),
+            )
         trade = self._helpful_trade(game, player_id, target, legal, probabilities)
         if trade is not None:
-            return trade
+            return selected(
+                trade, "SETTLEMENT_PLANNER", ("SETTLEMENT",),
+                ("TRADE_COMPLETES_GOAL",),
+            )
 
         recommended = [action for action in legal if isinstance(action, BuildRoadAction)
                        and action.edge_id in target.first_road_ids]
         if recommended:
-            return self._best(recommended, probabilities)
+            return selected(self._best(recommended, probabilities),
+                            "SETTLEMENT_PLANNER", ("SETTLEMENT",))
 
         # 予約分を使わない都市・発展購入なら、学習済み判断をそのまま許す。
         if (not isinstance(base_action, (BuildRoadAction, BankTradeAction))
                 and not self._spends_reserved_resources(game, player_id, target, base_action)):
-            return base_action
+            return selected(base_action)
 
         end_turn = next((action for action in legal if isinstance(action, EndTurnAction)), None)
-        return end_turn or base_action
+        return selected(end_turn or base_action, "SETTLEMENT_PLANNER", ("SETTLEMENT",))
 
-    def _select_action_with_trade_diagnostic(
+    def _select_action_with_diagnostics(
         self, game: GameState, player_id: int,
-    ) -> tuple[Action, TradeDecisionDiagnostic | None]:
-        """既存Action選択を一度だけ実行し、PlayerTrade診断も同時に得る。"""
-        planned = self._select_planned_action(game, player_id)
+    ) -> tuple[Action, TradeDecisionDiagnostic | None, object]:
+        """既存Action選択を一度だけ実行し、選択経路も非介入で記録する。"""
+        from .strategic_intent import (ActionSelectionTrace, ExecutionSource,
+                                       StrategicIntent, StrategicReasonCode)
+
+        trace_data: dict = {}
+        planned = self._select_planned_action(game, player_id, trace_data)
+        before_guard = planned
         planned = self._guard_paid_road_purpose(game, player_id, planned)
         planned = self._guard_near_city_resources(game, player_id, planned)
+        if planned != before_guard:
+            trace_data.update(
+                execution_source="PLANNER_GUARD",
+                contributed_intents=(), contributed_reasons=(),
+            )
+
+        def trace(*, development_eligible: bool | None = None,
+                  new_cards_blocked: bool | None = None) -> ActionSelectionTrace:
+            source_name = trace_data.get("execution_source", "UNKNOWN")
+            source = (ExecutionSource(source_name)
+                      if source_name in ExecutionSource._value2member_map_
+                      else ExecutionSource.UNKNOWN)
+            intents = tuple(
+                StrategicIntent(item) for item in trace_data.get("contributed_intents", ())
+                if item in StrategicIntent._value2member_map_
+            )
+            reasons = tuple(
+                StrategicReasonCode(item)
+                for item in trace_data.get("contributed_reasons", ())
+                if item in StrategicReasonCode._value2member_map_
+            )
+            return ActionSelectionTrace(
+                source, intents, reasons,
+                development_eligible=development_eligible,
+                new_development_cards_blocked=new_cards_blocked,
+            )
+
         if not (self.proactive_player_trade or self.strategic_trade_response
                 or self.adaptive_development_purchase
                 or self.endgame_development_fallback):
-            return planned, None
+            return planned, None, trace()
         from .trade_strategy import (choose_counter_trade,
                                      choose_proactive_trade_with_diagnostic,
                                      choose_trade_response)
@@ -961,13 +1031,19 @@ class SettlementPlanningAgent:
             "max_city_wait_rounds": self.max_city_wait_rounds,
         }
         if self.strategic_trade_response and game.phase == "trade_response":
-            return choose_trade_response(
+            action = choose_trade_response(
                 game, player_id,
                 opponent_score_limit=self.strategic_trade_opponent_score_limit,
                 **options,
-            ), None
+            )
+            trace_data.update(execution_source="TRADE_PLANNER")
+            return action, None, trace()
         if self.strategic_trade_response and game.phase == "trade_counter_offer":
-            return choose_counter_trade(game, player_id, **options) or planned, None
+            action = choose_counter_trade(game, player_id, **options)
+            if action is not None:
+                trace_data.update(execution_source="TRADE_PLANNER")
+                return action, None, trace()
+            return planned, None, trace()
         if (self.proactive_player_trade and game.phase == "action"
                 and (isinstance(planned, EndTurnAction)
                      or self.proactive_trade_max_scarcity_deficit > 1)):
@@ -979,7 +1055,14 @@ class SettlementPlanningAgent:
                 **options,
             )
             if trade is not None:
-                return trade.action, trade.diagnostic
+                intents = ({"settlement": ("SETTLEMENT",), "city": ("CITY",)}
+                           .get(trade.diagnostic.source_objective, ()))
+                trace_data.update(
+                    execution_source="TRADE_PLANNER",
+                    contributed_intents=intents,
+                    contributed_reasons=("TRADE_COMPLETES_GOAL",) if intents else (),
+                )
+                return trade.action, trade.diagnostic, trace()
         if (self.adaptive_development_purchase and game.phase == "action"
                 and isinstance(planned, EndTurnAction)):
             from .development_strategy import assess_development_purchase
@@ -992,9 +1075,33 @@ class SettlementPlanningAgent:
                 title_horizon=self.title_horizon,
             )
             if assessment["eligible"]:
-                return self._guard_near_city_resources(
+                intents = []
+                reasons = []
+                if "largest_army_race" in assessment["reasons"]:
+                    intents.append("KNIGHT_TITLE")
+                    reasons.extend(("LARGEST_ARMY_RACE", "EXPECTED_KNIGHT_VALUE"))
+                if "robber_relief" in assessment["reasons"]:
+                    intents.append("ROBBER_RELIEF")
+                    reasons.extend(("ROBBER_BLOCKING_IMPORTANT_TILE",
+                                    "EXPECTED_KNIGHT_VALUE"))
+                if "construction_stall" in assessment["reasons"]:
+                    reasons.append("STALL_BREAK")
+                action = self._guard_near_city_resources(
                     game, player_id, BuyDevelopmentAction()
-                ), None
+                )
+                trace_data.update(
+                    execution_source=("PLANNER_ADAPTIVE_DEVELOPMENT"
+                                      if isinstance(action, BuyDevelopmentAction)
+                                      else "PLANNER_GUARD"),
+                    contributed_intents=tuple(intents) if isinstance(
+                        action, BuyDevelopmentAction) else (),
+                    contributed_reasons=tuple(dict.fromkeys(reasons)) if isinstance(
+                        action, BuyDevelopmentAction) else (),
+                )
+                return action, None, trace(
+                    development_eligible=True,
+                    new_cards_blocked=bool(assessment["already_bought_this_turn"]),
+                )
         if (self.endgame_development_fallback and game.phase == "action"
                 and isinstance(planned, EndTurnAction)
                 and actual_score(game, player_id) == 9):
@@ -1008,10 +1115,42 @@ class SettlementPlanningAgent:
                 title_horizon=self.title_horizon,
             )
             if assessment["eligible"]:
-                return self._guard_near_city_resources(
+                intents = []
+                reasons = []
+                if "largest_army_race" in assessment["reasons"]:
+                    intents.append("KNIGHT_TITLE")
+                    reasons.extend(("LARGEST_ARMY_RACE", "EXPECTED_KNIGHT_VALUE"))
+                if "robber_relief" in assessment["reasons"]:
+                    intents.append("ROBBER_RELIEF")
+                    reasons.extend(("ROBBER_BLOCKING_IMPORTANT_TILE",
+                                    "EXPECTED_KNIGHT_VALUE"))
+                if "construction_stall" in assessment["reasons"]:
+                    reasons.append("STALL_BREAK")
+                action = self._guard_near_city_resources(
                     game, player_id, BuyDevelopmentAction()
-                ), None
-        return planned, None
+                )
+                trace_data.update(
+                    execution_source=("PLANNER_ADAPTIVE_DEVELOPMENT"
+                                      if isinstance(action, BuyDevelopmentAction)
+                                      else "PLANNER_GUARD"),
+                    contributed_intents=tuple(intents) if isinstance(
+                        action, BuyDevelopmentAction) else (),
+                    contributed_reasons=tuple(dict.fromkeys(reasons)) if isinstance(
+                        action, BuyDevelopmentAction) else (),
+                )
+                return action, None, trace(
+                    development_eligible=True,
+                    new_cards_blocked=bool(assessment["already_bought_this_turn"]),
+                )
+        return planned, None, trace()
+
+    def _select_action_with_trade_diagnostic(
+        self, game: GameState, player_id: int,
+    ) -> tuple[Action, TradeDecisionDiagnostic | None]:
+        action, trade_diagnostic, _ = self._select_action_with_diagnostics(
+            game, player_id,
+        )
+        return action, trade_diagnostic
 
     def select_action(self, game: GameState, player_id: int) -> Action:
         action, _ = self._select_action_with_trade_diagnostic(game, player_id)
@@ -1021,10 +1160,28 @@ class SettlementPlanningAgent:
         self, game: GameState, player_id: int,
     ) -> tuple[Action, PlannerDecisionReport]:
         """既存選択を一度だけ実行し、行動を変えずにMacro診断を返す。"""
-        action, trade_diagnostic = self._select_action_with_trade_diagnostic(
+        action, trade_diagnostic, _ = self._select_action_with_diagnostics(
             game, player_id,
         )
         from .macro_goal import build_planner_decision_report
         return action, build_planner_decision_report(
             self, game, player_id, action, trade_diagnostic=trade_diagnostic,
+        )
+
+    def select_action_with_intent_report(self, game: GameState, player_id: int):
+        """旧診断との互換性を保ち、新Strategic Intent診断も同じActionへ付ける。"""
+        action, trade_diagnostic, trace = self._select_action_with_diagnostics(
+            game, player_id,
+        )
+        from .macro_goal import build_planner_decision_report
+        from .strategic_intent import build_strategic_intent_report
+        return (
+            action,
+            build_planner_decision_report(
+                self, game, player_id, action,
+                trade_diagnostic=trade_diagnostic,
+            ),
+            build_strategic_intent_report(
+                self, game, player_id, action, trace,
+            ),
         )

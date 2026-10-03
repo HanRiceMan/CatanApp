@@ -3,10 +3,11 @@
 from __future__ import annotations
 
 from collections import Counter, defaultdict
+from copy import deepcopy
 from dataclasses import dataclass
 import json
 from pathlib import Path
-from statistics import fmean, pstdev
+from statistics import fmean, median, pstdev
 from typing import Any, Callable, Iterable, Mapping
 
 import numpy as np
@@ -24,7 +25,7 @@ from .reward import actual_score
 from .settlement_planning_agent import SettlementPlanningAgent
 
 
-DATASET_SCHEMA_VERSION = "macro_teacher_v3"
+DATASET_SCHEMA_VERSION = "macro_teacher_v4_strategic_intent"
 NONE_LABEL = "None"
 OPPONENT_PROFILES = ("rule", "champion", "mixed")
 PROFILE_ROLES = {
@@ -42,6 +43,7 @@ class TeacherEpisode:
     game: dict[str, Any]
     action_trace: tuple[tuple[int, Action], ...]
     final_views: tuple[dict[str, Any], ...]
+    final_state: GameState
 
 
 @dataclass(frozen=True)
@@ -133,6 +135,14 @@ def _normalized_final_views(game: GameState) -> tuple[dict[str, Any], ...]:
     return tuple(views)
 
 
+def _normalized_final_state(game: GameState) -> GameState:
+    """対局ごとにランダム発行される識別子だけを除いた全GameState。"""
+    state = deepcopy(game)
+    state.id = ""
+    state.player_tokens = {}
+    return state
+
+
 def observe_teacher_decision(
     agent: SettlementPlanningAgent, game: GameState, player_id: int,
 ) -> tuple[Action, PlannerDecisionReport, np.ndarray]:
@@ -142,6 +152,19 @@ def observe_teacher_decision(
     ))
     action, report = agent.select_action_with_report(game, player_id)
     return action, report, observation
+
+
+def observe_teacher_decision_with_intent(
+    agent: SettlementPlanningAgent, game: GameState, player_id: int,
+):
+    """旧Planner診断と新Strategic Intent診断を、同じAction直前状態で得る。"""
+    observation = encode_observation(get_observation(
+        game, player_id, version=agent.policy.manifest.observation_version,
+    ))
+    action, report, intent_report = agent.select_action_with_intent_report(
+        game, player_id,
+    )
+    return action, report, intent_report, observation
 
 
 def play_teacher_episode(
@@ -182,13 +205,14 @@ def play_teacher_episode(
                 robber_model_id=robber_model_id,
             )
         if actor == champion_id and collect_reports:
-            action, report, observation = observe_teacher_decision(
+            action, report, intent_report, observation = observe_teacher_decision_with_intent(
                 agent, game, actor,
             )
             # 非Macroフェーズは学習対象から分離する。通常道路等のGoal=Noneは
             # is_macro_decision=Trueなので、そのまま重要な診断例として残る。
             if report.is_macro_decision:
                 record = report.to_dict()
+                record.update(intent_report.to_dict())
                 record.update({
                     "dataset_schema_version": DATASET_SCHEMA_VERSION,
                     "game_seed": seed,
@@ -242,10 +266,12 @@ def play_teacher_episode(
         "turn": game.turn_number,
         "all_action_count": len(action_trace),
         "macro_decision_count": len(raw_records),
+        "rng_counter": game.random_source.counter,
     }
     return TeacherEpisode(
         records=tuple(raw_records), observations=encoded, game=game_record,
         action_trace=tuple(action_trace), final_views=_normalized_final_views(game),
+        final_state=_normalized_final_state(game),
     )
 
 
@@ -505,6 +531,216 @@ def summarize_profile_stability(
     }
 
 
+def _intent_run_lengths(rows: list[dict[str, Any]], intent: str) -> list[int]:
+    ordered = sorted(rows, key=lambda row: (
+        str(row.get("game_id")), int(row.get("player_id", 0)),
+        int(row.get("observation_index", 0)),
+    ))
+    lengths: list[int] = []
+    current_key: tuple[str, int] | None = None
+    run = 0
+    for row in ordered:
+        key = (str(row.get("game_id")), int(row.get("player_id", 0)))
+        if key != current_key:
+            if run:
+                lengths.append(run)
+            current_key = key
+            run = 0
+        state = row.get("strategic_intent_states", {}).get(intent, "unknown")
+        if state == "active":
+            run += 1
+        elif run:
+            lengths.append(run)
+            run = 0
+    if run:
+        lengths.append(run)
+    return lengths
+
+
+def _persistence_summary(lengths: list[int]) -> dict[str, float | int]:
+    if not lengths:
+        return {
+            "run_count": 0, "mean": 0.0, "median": 0.0, "max": 0,
+            "one_decision_rate": 0.0, "two_plus_rate": 0.0,
+            "five_plus_rate": 0.0,
+        }
+    return {
+        "run_count": len(lengths), "mean": fmean(lengths),
+        "median": median(lengths), "max": max(lengths),
+        "one_decision_rate": sum(item == 1 for item in lengths) / len(lengths),
+        "two_plus_rate": sum(item >= 2 for item in lengths) / len(lengths),
+        "five_plus_rate": sum(item >= 5 for item in lengths) / len(lengths),
+    }
+
+
+def summarize_strategic_intents(records: Iterable[dict[str, Any]]) -> dict[str, Any]:
+    """新5 Intentのcoverage・共起・持続性・Action attributionを集計する。"""
+    from .strategic_intent import STRATEGIC_INTENTS
+
+    rows = list(records)
+    names = [item.value for item in STRATEGIC_INTENTS]
+    total = len(rows)
+    states = {name: Counter() for name in names}
+    profile_states: dict[str, dict[str, Counter[str]]] = defaultdict(
+        lambda: {name: Counter() for name in names}
+    )
+    cooccurrence = {name: Counter({other: 0 for other in names}) for name in names}
+    active_count = Counter()
+    sources = Counter()
+    execution_sources: dict[str, Counter[str]] = defaultdict(Counter)
+    intent_attribution: dict[str, Counter[str]] = defaultdict(Counter)
+    source_explanation: dict[str, Counter[str]] = defaultdict(Counter)
+    buy_development = Counter()
+    build_road = Counter()
+    active_not_contributed = Counter()
+    contributed_without_active = Counter()
+    new_cards_dependency = 0
+    new_cards_purchase_dependency = 0
+    new_knight_use_dependency = 0
+
+    for row in rows:
+        intent_states = row.get("strategic_intent_states", {})
+        contribution = row.get("reason_contributed_to_selection", {})
+        profile = str(row.get("opponent_profile", "unknown"))
+        for name in names:
+            state = str(intent_states.get(name, "unknown"))
+            states[name][state] += 1
+            profile_states[profile][name][state] += 1
+            if state == "active" and contribution.get(name) is not True:
+                active_not_contributed[name] += 1
+            if contribution.get(name) is True and state != "active":
+                contributed_without_active[name] += 1
+        active = [name for name in names if intent_states.get(name) == "active"]
+        active_count[str(min(len(active), 3)) + ("+" if len(active) >= 3 else "")] += 1
+        for left in active:
+            for right in active:
+                cooccurrence[left][right] += 1
+
+        execution = str(row.get("selected_execution", "OTHER"))
+        source = str(row.get("execution_source", "UNKNOWN"))
+        sources[source] += 1
+        execution_sources[execution][source] += 1
+        any_contribution = any(value is True for value in contribution.values())
+        intent_attribution[execution][
+            "attributed" if any_contribution else "unattributed"
+        ] += 1
+        source_explanation[execution][
+            "planner_source" if source not in {"BASE_PPO", "UNKNOWN"}
+            else "base_ppo_or_unknown"
+        ] += 1
+        if execution == "BUY_DEVELOPMENT":
+            knight = contribution.get("KNIGHT_TITLE") is True
+            robber = contribution.get("ROBBER_RELIEF") is True
+            if knight and robber:
+                buy_development["KNIGHT_TITLE+ROBBER_RELIEF"] += 1
+            elif knight:
+                buy_development["KNIGHT_TITLE"] += 1
+            elif robber:
+                buy_development["ROBBER_RELIEF"] += 1
+            elif source == "BASE_PPO":
+                buy_development["BASE_PPO"] += 1
+            else:
+                buy_development["INTENT_UNKNOWN_OR_OTHER"] += 1
+        if execution == "BUILD_ROAD":
+            settlement = contribution.get("SETTLEMENT") is True
+            road_title = contribution.get("ROAD_TITLE") is True
+            if settlement and road_title:
+                build_road["SETTLEMENT+ROAD_TITLE"] += 1
+            elif settlement:
+                build_road["SETTLEMENT"] += 1
+            elif road_title:
+                build_road["ROAD_TITLE"] += 1
+            else:
+                build_road["OTHER"] += 1
+        if row.get("new_development_cards_blocked") is True:
+            new_cards_dependency += 1
+        if row.get("new_development_cards_blocked_purchase") is True:
+            new_cards_purchase_dependency += 1
+        if row.get("new_knight_blocked_use") is True:
+            new_knight_use_dependency += 1
+
+    coverage = {}
+    for name in names:
+        active = states[name]["active"]
+        inactive = states[name]["inactive"]
+        unknown = states[name]["unknown"]
+        known = active + inactive
+        coverage[name] = {
+            "active": active, "inactive": inactive, "unknown": unknown,
+            "known_rate": known / total if total else 0.0,
+            "positive_rate_within_known": active / known if known else 0.0,
+            "negative_rate_within_known": inactive / known if known else 0.0,
+        }
+
+    profile_coverage = {}
+    for profile, intent_counters in sorted(profile_states.items()):
+        profile_total = sum(intent_counters[names[0]].values()) if names else 0
+        profile_coverage[profile] = {}
+        for name in names:
+            active = intent_counters[name]["active"]
+            inactive = intent_counters[name]["inactive"]
+            unknown = intent_counters[name]["unknown"]
+            known = active + inactive
+            profile_coverage[profile][name] = {
+                "active": active, "inactive": inactive, "unknown": unknown,
+                "known_rate": known / profile_total if profile_total else 0.0,
+                "positive_rate_within_known": active / known if known else 0.0,
+                "negative_rate_within_known": inactive / known if known else 0.0,
+            }
+    return {
+        "dataset_schema_version": DATASET_SCHEMA_VERSION,
+        "decision_count": total,
+        "intent_coverage": coverage,
+        "intent_coverage_by_profile": profile_coverage,
+        "active_cooccurrence_counts": {
+            name: dict(counter) for name, counter in cooccurrence.items()
+        },
+        "active_goal_count_distribution": {
+            key: {"count": active_count[key],
+                  "rate": active_count[key] / total if total else 0.0}
+            for key in ("0", "1", "2", "3+")
+        },
+        "persistence": {
+            name: _persistence_summary(_intent_run_lengths(rows, name))
+            for name in names
+        },
+        "execution_source_distribution": dict(sources),
+        "execution_source_by_execution": {
+            execution: dict(counter)
+            for execution, counter in sorted(execution_sources.items())
+        },
+        "intent_attribution_coverage": {
+            execution: {
+                **dict(counter),
+                "attributed_rate": (
+                    counter["attributed"] / sum(counter.values())
+                    if sum(counter.values()) else 0.0
+                ),
+            }
+            for execution, counter in sorted(intent_attribution.items())
+        },
+        "source_level_explanation_coverage": {
+            execution: {
+                **dict(counter),
+                "planner_source_rate": (
+                    counter["planner_source"] / sum(counter.values())
+                    if sum(counter.values()) else 0.0
+                ),
+            }
+            for execution, counter in sorted(source_explanation.items())
+        },
+        "buy_development_attribution": dict(buy_development),
+        "build_road_attribution": dict(build_road),
+        "active_but_not_contributed": dict(active_not_contributed),
+        "contributed_without_active": dict(contributed_without_active),
+        "new_development_cards_dependency_count": new_cards_dependency,
+        "new_development_cards_blocked_purchase_count": (
+            new_cards_purchase_dependency
+        ),
+        "new_knight_blocked_use_count": new_knight_use_dependency,
+    }
+
+
 def save_teacher_dataset(
     output_dir: Path,
     dataset: TeacherDataset,
@@ -515,12 +751,14 @@ def save_teacher_dataset(
     output_dir.mkdir(parents=True, exist_ok=False)
     summary = summarize_taxonomy(dataset.records)
     stability = summarize_profile_stability(dataset.records)
+    strategic_summary = summarize_strategic_intents(dataset.records)
     files = {
         "records": "decisions.jsonl",
         "observations": "observations.npz",
         "games": "games.jsonl",
         "summary": "taxonomy_summary.json",
         "profile_stability": "profile_stability.json",
+        "strategic_intents": "strategic_intent_summary.json",
         "definition": "definition.json",
     }
     with (output_dir / files["records"]).open("w", encoding="utf-8") as handle:
@@ -537,6 +775,9 @@ def save_teacher_dataset(
     (output_dir / files["profile_stability"]).write_text(
         json.dumps(stability, ensure_ascii=False, indent=2), encoding="utf-8",
     )
+    (output_dir / files["strategic_intents"]).write_text(
+        json.dumps(strategic_summary, ensure_ascii=False, indent=2), encoding="utf-8",
+    )
     manifest = {
         "dataset_schema_version": DATASET_SCHEMA_VERSION,
         "game_count": len(dataset.games),
@@ -548,7 +789,11 @@ def save_teacher_dataset(
     (output_dir / files["definition"]).write_text(
         json.dumps(manifest, ensure_ascii=False, indent=2), encoding="utf-8",
     )
-    return {"manifest": manifest, "summary": summary, "profile_stability": stability}
+    return {
+        "manifest": manifest, "summary": summary,
+        "profile_stability": stability,
+        "strategic_intents": strategic_summary,
+    }
 
 
 def verify_action_parity(
@@ -561,7 +806,7 @@ def verify_action_parity(
     champion_model_id: str = "ppo_gnn_board_65k_s03_exp_v003",
     robber_model_id: str = "ppo_robber_value_73k_s01_exp_v001",
 ) -> dict[str, Any]:
-    """診断なし/ありで全Action列・結果・最終表示が一致するか確認する。"""
+    """診断なし/ありで全Action列・結果・最終GameStateが一致するか確認する。"""
     checked = 0
     all_actions = 0
     for index, seed in enumerate(seeds):
@@ -589,6 +834,10 @@ def verify_action_parity(
             raise AssertionError(f"seed {seed}: 最終結果が一致しません。")
         if plain.final_views != diagnostic.final_views:
             raise AssertionError(f"seed {seed}: 最終GameState表示が一致しません。")
+        if plain.final_state != diagnostic.final_state:
+            raise AssertionError(f"seed {seed}: 全GameStateが一致しません。")
+        if plain.game["rng_counter"] != diagnostic.game["rng_counter"]:
+            raise AssertionError(f"seed {seed}: RNG counterが一致しません。")
         checked += 1
         all_actions += len(plain.action_trace)
     return {
@@ -596,5 +845,5 @@ def verify_action_parity(
         "games": checked, "all_actions": all_actions,
         "action_trace_equal": True, "winner_equal": True,
         "final_score_equal": True, "final_rank_equal": True,
-        "final_game_state_equal": True,
+        "final_game_state_equal": True, "rng_counter_equal": True,
     }

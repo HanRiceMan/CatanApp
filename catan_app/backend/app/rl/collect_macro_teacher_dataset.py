@@ -139,6 +139,9 @@ def main() -> None:
     print(json.dumps({"stage": "profile_stability",
                       **result["profile_stability"]},
                      ensure_ascii=False), flush=True)
+    print(json.dumps({"stage": "strategic_intents",
+                      **result["strategic_intents"]},
+                     ensure_ascii=False), flush=True)
 
     if args.parity_games:
         parity_profiles = {}
@@ -167,6 +170,7 @@ def main() -> None:
                 and item["final_score_equal"]
                 and item["final_rank_equal"]
                 and item["final_game_state_equal"]
+                and item["rng_counter_equal"]
                 for item in parity_profiles.values()
             ),
             "seed_ranges": {

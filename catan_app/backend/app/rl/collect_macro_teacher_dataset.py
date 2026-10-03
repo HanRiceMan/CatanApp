@@ -142,6 +142,15 @@ def main() -> None:
     print(json.dumps({"stage": "strategic_intents",
                       **result["strategic_intents"]},
                      ensure_ascii=False), flush=True)
+    context = result["structured_context"]
+    print(json.dumps({
+        "stage": "structured_context",
+        "decision_count": context["decision_count"],
+        "phase_distribution": context["phase_distribution"],
+        "execution_distribution": context["execution_distribution"],
+        "observability_gap_decisions": context["observability_gap_decisions"],
+        "sentinel_or_invalid_value_count": context["sentinel_or_invalid_value_count"],
+    }, ensure_ascii=False), flush=True)
 
     if args.parity_games:
         parity_profiles = {}
@@ -171,6 +180,8 @@ def main() -> None:
                 and item["final_rank_equal"]
                 and item["final_game_state_equal"]
                 and item["rng_counter_equal"]
+                and item["ppo_weight_equal"] is not False
+                and item["actor_logits_equal"] is not False
                 for item in parity_profiles.values()
             ),
             "seed_ranges": {

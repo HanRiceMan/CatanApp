@@ -10,7 +10,11 @@ from typing import TYPE_CHECKING, Any
 from app.domain.actions import (Action, BankTradeAction, BuildCityAction,
                                 BuildRoadAction, BuildSettlementAction,
                                 BuyDevelopmentAction, EndTurnAction,
-                                ProposeTradeAction, UseDevelopmentAction)
+                                ProposeTradeAction, UseDevelopmentAction,
+                                MoveRobberAction, StealResourceAction,
+                                RollTurnDiceAction, RespondToTradeAction,
+                                ProposeCounterTradeAction, DiscardHalfAction,
+                                DiscardResourcesAction)
 from app.domain.game import BUILD_COSTS, GameState, _longest_road_length, player_for
 
 from .development_strategy import (_blocked_production_pips,
@@ -70,6 +74,12 @@ class DiagnosticExecution(str, Enum):
     TRADE_PLAYER = "TRADE_PLAYER"
     TRADE_BANK = "TRADE_BANK"
     END_TURN = "END_TURN"
+    ROLL_TURN = "ROLL_TURN"
+    MOVE_ROBBER = "MOVE_ROBBER"
+    STEAL_RESOURCE = "STEAL_RESOURCE"
+    DISCARD = "DISCARD"
+    RESPOND_TRADE = "RESPOND_TRADE"
+    COUNTER_TRADE = "COUNTER_TRADE"
     OTHER = "OTHER"
 
 
@@ -201,6 +211,18 @@ def diagnostic_execution(action: Action) -> DiagnosticExecution:
         return DiagnosticExecution.TRADE_BANK
     if isinstance(action, EndTurnAction):
         return DiagnosticExecution.END_TURN
+    if isinstance(action, RollTurnDiceAction):
+        return DiagnosticExecution.ROLL_TURN
+    if isinstance(action, MoveRobberAction):
+        return DiagnosticExecution.MOVE_ROBBER
+    if isinstance(action, StealResourceAction):
+        return DiagnosticExecution.STEAL_RESOURCE
+    if isinstance(action, (DiscardHalfAction, DiscardResourcesAction)):
+        return DiagnosticExecution.DISCARD
+    if isinstance(action, RespondToTradeAction):
+        return DiagnosticExecution.RESPOND_TRADE
+    if isinstance(action, ProposeCounterTradeAction):
+        return DiagnosticExecution.COUNTER_TRADE
     return DiagnosticExecution.OTHER
 
 

@@ -5,6 +5,7 @@ from __future__ import annotations
 from collections import Counter, defaultdict
 from copy import deepcopy
 from dataclasses import dataclass
+import hashlib
 import json
 from pathlib import Path
 from statistics import fmean, median, pstdev
@@ -23,9 +24,14 @@ from .macro_goal import ObjectiveGoal, PlannerDecisionReport
 from .observation import encode_observation, get_observation
 from .reward import actual_score
 from .settlement_planning_agent import SettlementPlanningAgent
+from .structured_context import build_structured_context_report
 
 
-DATASET_SCHEMA_VERSION = "macro_teacher_v4_strategic_intent"
+DATASET_SCHEMA_VERSION = "macro_teacher_v5_structured_context"
+DIAGNOSTIC_PHASES = frozenset({
+    "action", "turn_pre_roll", "discarding", "robber_move", "robber_steal",
+    "trade_response", "trade_counter_offer",
+})
 NONE_LABEL = "None"
 OPPONENT_PROFILES = ("rule", "champion", "mixed")
 PROFILE_ROLES = {
@@ -167,6 +173,43 @@ def observe_teacher_decision_with_intent(
     return action, report, intent_report, observation
 
 
+def _attribution_fields(record: dict[str, Any]) -> dict[str, Any]:
+    """状態の事実と、Action選択で確認できた理由を混同しない。"""
+    source = record["execution_source"]
+    contributions = record["reason_contributed_to_selection"]
+    reasons = list(record["selection_reason_codes"])
+    if source == "TRADE_PLANNER":
+        reasons.extend(record.get("trade_reason_codes", ()))
+    reasons = list(dict.fromkeys(reasons))
+    if source == "BASE_PPO":
+        status = "UNOBSERVED_BASE_PPO"
+        reasons = []
+    elif source == "UNKNOWN":
+        status = "UNKNOWN"
+        reasons = []
+    elif reasons or any(value is True for value in contributions.values()):
+        status = "SOURCE_CONFIRMED"
+    elif any(value is False for value in contributions.values()):
+        # 明示的にfalseと診断できたIntentについてだけ除外。Action全理由の不在ではない。
+        status = "SOURCE_EXCLUDES"
+    else:
+        status = "UNKNOWN"
+    return {
+        "intent_contributions": contributions,
+        "source_confirmed_reasons": reasons,
+        "attribution_status": status,
+        "trade_context": {
+            key: record.get(key) for key in (
+                "trade_objective", "trade_reason_codes", "trade_target_player",
+                "wanted_resource", "offered_resource", "offered_resources",
+                "offer_ratio", "source_level_objective_available",
+                "target_goal", "immediate_goal_reachable", "goal_after_trade",
+                "shortage_before_trade", "shortage_after_trade", "shortage_basis",
+            )
+        },
+    }
+
+
 def play_teacher_episode(
     agent: SettlementPlanningAgent,
     seed: int,
@@ -204,15 +247,24 @@ def play_teacher_episode(
                 champion_model_id=champion_model_id,
                 robber_model_id=robber_model_id,
             )
-        if actor == champion_id and collect_reports:
+        if game.phase == "rolling_order" and champion_seat is not None:
+            # seat指定では事前probeと同じ順番決めを全員に適用する。
+            # PPOに1人だけ振らせるとprobeとは異なる乱数経路になり、
+            # 実際のseatがローテーション指定からずれてしまう。
+            action = HeuristicAgent().select_action(game, actor)
+        elif actor == champion_id and collect_reports:
+            context = (build_structured_context_report(
+                game, actor, max_plan_roads=agent.max_plan_roads,
+            ) if game.phase in DIAGNOSTIC_PHASES else None)
             action, report, intent_report, observation = observe_teacher_decision_with_intent(
                 agent, game, actor,
             )
-            # 非Macroフェーズは学習対象から分離する。通常道路等のGoal=Noneは
-            # is_macro_decision=Trueなので、そのまま重要な診断例として残る。
-            if report.is_macro_decision:
+            # v5は戦術phaseも収集するが、旧Macro taxonomy統計にはactionだけを使う。
+            if context is not None:
                 record = report.to_dict()
                 record.update(intent_report.to_dict())
+                record.update(context.to_dict())
+                record.update(_attribution_fields(record))
                 record.update({
                     "dataset_schema_version": DATASET_SCHEMA_VERSION,
                     "game_seed": seed,
@@ -220,8 +272,11 @@ def play_teacher_episode(
                     "opponent_profile": opponent_profile,
                     "seat": game.seat_order.index(actor) + 1,
                     "observation_index": len(observations),
+                    "observation_reference": len(observations),
                     "observation_version": agent.policy.manifest.observation_version,
                     "turn_band": _turn_band(game.turn_number),
+                    "decision_scope": "macro" if report.is_macro_decision else "tactical_phase",
+                    "strategic_state": record["strategic_intent_states"],
                 })
                 raw_records.append(record)
                 observations.append(observation.copy())
@@ -265,7 +320,8 @@ def play_teacher_episode(
         "final_scores": {str(key): value for key, value in scores.items()},
         "turn": game.turn_number,
         "all_action_count": len(action_trace),
-        "macro_decision_count": len(raw_records),
+        "macro_decision_count": sum(record["is_macro_decision"] for record in raw_records),
+        "diagnostic_decision_count": len(raw_records),
         "rng_counter": game.random_source.counter,
     }
     return TeacherEpisode(
@@ -301,6 +357,7 @@ def collect_teacher_dataset(
         for record in episode.records:
             copied = dict(record)
             copied["observation_index"] = offset + int(record["observation_index"])
+            copied["observation_reference"] = copied["observation_index"]
             records.append(copied)
         observations.extend(episode.observations)
         games.append(episode.game)
@@ -324,6 +381,7 @@ def merge_teacher_datasets(
         for record in dataset.records:
             copied = dict(record)
             copied["observation_index"] = offset + int(record["observation_index"])
+            copied["observation_reference"] = copied["observation_index"]
             records.append(copied)
         observations.extend(dataset.observations)
         games.extend(dataset.games)
@@ -741,6 +799,101 @@ def summarize_strategic_intents(records: Iterable[dict[str, Any]]) -> dict[str, 
     }
 
 
+def summarize_structured_context(records: Iterable[dict[str, Any]]) -> dict[str, Any]:
+    """v5 Contextの欠測・値域・phase・帰属をprofile横断で確認する。"""
+    def numeric_leaves(prefix: str, value: Any):
+        if isinstance(value, dict):
+            for key, child in value.items():
+                yield from numeric_leaves(f"{prefix}.{key}", child)
+        elif isinstance(value, (int, float, bool)):
+            yield prefix, float(value)
+
+    rows = list(records)
+    signals: dict[str, list[float]] = defaultdict(list)
+    coverage: dict[str, Counter[str]] = defaultdict(Counter)
+    profile_coverage: dict[str, dict[str, Counter[str]]] = defaultdict(
+        lambda: defaultdict(Counter))
+    phases = Counter()
+    executions = Counter()
+    execution_phase: dict[str, Counter[str]] = defaultdict(Counter)
+    attribution: dict[str, Counter[str]] = defaultdict(Counter)
+    unattributed: dict[str, Counter[str]] = defaultdict(Counter)
+    observability = Counter()
+    tactical = Counter()
+    sentinel = Counter()
+    new_cards_gates = Counter()
+    for row in rows:
+        profile = str(row.get("opponent_profile", "unknown"))
+        phase = str(row.get("phase", "unknown"))
+        execution = str(row.get("selected_execution", "OTHER"))
+        phases[phase] += 1
+        executions[execution] += 1
+        execution_phase[execution][phase] += 1
+        attribution[execution][str(row.get("attribution_status", "UNKNOWN"))] += 1
+        if not any(value is True for value in row.get("intent_contributions", {}).values()):
+            for reason in row.get("source_confirmed_reasons", []):
+                unattributed[execution]["reason:" + str(reason)] += 1
+            for fact, value in row.get("tactical_facts", {}).items():
+                if value is True:
+                    unattributed[execution]["fact:" + fact] += 1
+            unattributed[execution]["count"] += 1
+        for gap, value in row.get("observability_gaps", {}).items():
+            if value:
+                observability[gap] += 1
+        if row.get("new_development_cards_blocked_purchase") is True:
+            new_cards_gates["purchase_branch_blocked"] += 1
+        if row.get("new_knight_blocked_use") is True:
+            new_cards_gates["knight_use_branch_blocked"] += 1
+        for fact, value in row.get("tactical_facts", {}).items():
+            tactical[f"{fact}:{value}"] += 1
+        sections = dict(row.get("strategic_context", {}))
+        masks = dict(row.get("strategic_context_valid_mask", {}))
+        sections["resource_risk"] = row.get("resource_risk_context", {})
+        masks["resource_risk"] = row.get("resource_risk_valid_mask", {})
+        for section, fields in sections.items():
+            for name, value in fields.items():
+                key = f"{section}.{name}"
+                valid = bool(masks.get(section, {}).get(name, False))
+                label = "valid" if valid else "invalid"
+                coverage[key][label] += 1
+                profile_coverage[profile][key][label] += 1
+                if not valid:
+                    if value is not None:
+                        sentinel[key] += 1
+                    continue
+                for leaf_key, number in numeric_leaves(key, value):
+                    if number == 99 and ("wait" in leaf_key or "eta" in leaf_key):
+                        sentinel[leaf_key] += 1
+                    signals[leaf_key].append(number)
+    numeric = {
+        name: {"count": len(values), "min": min(values), "max": max(values),
+               "mean": fmean(values), "median": median(values)}
+        for name, values in sorted(signals.items()) if values
+    }
+    return {
+        "dataset_schema_version": DATASET_SCHEMA_VERSION,
+        "decision_count": len(rows),
+        "phase_distribution": dict(sorted(phases.items())),
+        "signal_coverage": {key: dict(value) for key, value in sorted(coverage.items())},
+        "signal_coverage_by_profile": {
+            profile: {key: dict(value) for key, value in sorted(fields.items())}
+            for profile, fields in sorted(profile_coverage.items())
+        },
+        "numeric_distribution": numeric,
+        "sentinel_or_invalid_value_count": dict(sorted(sentinel.items())),
+        "execution_distribution": dict(sorted(executions.items())),
+        "execution_by_phase": {key: dict(value) for key, value in sorted(execution_phase.items())},
+        "attribution_by_execution": {
+            key: dict(value) for key, value in sorted(attribution.items())},
+        "no_intent_attribution": {
+            key: dict(value) for key, value in sorted(unattributed.items())},
+        "observability_gap_decisions": dict(sorted(observability.items())),
+        "source_diagnosed_new_card_gates": dict(sorted(new_cards_gates.items())),
+        "belief_or_trade_history_causal_effect_count": None,
+        "tactical_fact_distribution": dict(sorted(tactical.items())),
+    }
+
+
 def save_teacher_dataset(
     output_dir: Path,
     dataset: TeacherDataset,
@@ -749,9 +902,11 @@ def save_teacher_dataset(
 ) -> dict[str, Any]:
     """JSONL・圧縮NPZ・診断JSONを新規ディレクトリへ保存する。"""
     output_dir.mkdir(parents=True, exist_ok=False)
-    summary = summarize_taxonomy(dataset.records)
-    stability = summarize_profile_stability(dataset.records)
-    strategic_summary = summarize_strategic_intents(dataset.records)
+    macro_rows = [record for record in dataset.records if record.get("is_macro_decision", True)]
+    summary = summarize_taxonomy(macro_rows)
+    stability = summarize_profile_stability(macro_rows)
+    strategic_summary = summarize_strategic_intents(macro_rows)
+    context_summary = summarize_structured_context(dataset.records)
     files = {
         "records": "decisions.jsonl",
         "observations": "observations.npz",
@@ -759,6 +914,7 @@ def save_teacher_dataset(
         "summary": "taxonomy_summary.json",
         "profile_stability": "profile_stability.json",
         "strategic_intents": "strategic_intent_summary.json",
+        "structured_context": "structured_context_summary.json",
         "definition": "definition.json",
     }
     with (output_dir / files["records"]).open("w", encoding="utf-8") as handle:
@@ -778,12 +934,31 @@ def save_teacher_dataset(
     (output_dir / files["strategic_intents"]).write_text(
         json.dumps(strategic_summary, ensure_ascii=False, indent=2), encoding="utf-8",
     )
+    (output_dir / files["structured_context"]).write_text(
+        json.dumps(context_summary, ensure_ascii=False, indent=2), encoding="utf-8",
+    )
+    context_definitions: dict[str, Any] = {}
+    if dataset.games and dataset.records and "strategic_context" in dataset.records[0]:
+        from .structured_context import build_structured_context_report
+        sample_game = create_game(int(dataset.games[0]["game_seed"]),
+                                  ai_player_ids=(1, 2, 3, 4))
+        context_definitions = build_structured_context_report(
+            sample_game, int(dataset.games[0]["champion_id"]),
+        ).definitions()
     manifest = {
         "dataset_schema_version": DATASET_SCHEMA_VERSION,
+        "context_schema_version": "structured_context_v1",
         "game_count": len(dataset.games),
         "decision_count": len(dataset.records),
         "observation_shape": list(dataset.observations.shape),
         "files": files,
+        "context_signal_definitions": context_definitions,
+        "context_observability_notes": {
+            "new_development_cards": "MISSING_FROM_V2; usable knight and same-turn card gates",
+            "resource_events_bayesian_belief": "REQUIRES_BELIEF; opponent-hand-dependent trade and robber choice",
+            "current_turn_trade_history": "REQUIRES_HISTORY; repeated-offer avoidance",
+            "action_attribution": "teacher-only; never a Student input",
+        },
         **definition,
     }
     (output_dir / files["definition"]).write_text(
@@ -793,6 +968,7 @@ def save_teacher_dataset(
         "manifest": manifest, "summary": summary,
         "profile_stability": stability,
         "strategic_intents": strategic_summary,
+        "structured_context": context_summary,
     }
 
 
@@ -807,6 +983,31 @@ def verify_action_parity(
     robber_model_id: str = "ppo_robber_value_73k_s01_exp_v001",
 ) -> dict[str, Any]:
     """診断なし/ありで全Action列・結果・最終GameStateが一致するか確認する。"""
+    def model_fingerprint(agent: SettlementPlanningAgent):
+        model = getattr(getattr(agent, "policy", None), "model", None)
+        if model is None:
+            return None
+        import torch
+        policy = model.policy
+        digest = hashlib.sha256()
+        for key, tensor in sorted(policy.state_dict().items()):
+            digest.update(key.encode("utf-8"))
+            digest.update(tensor.detach().cpu().contiguous().numpy().tobytes())
+        observation = np.zeros(agent.policy.manifest.observation_size, dtype=np.float32)
+        tensor, _ = policy.obs_to_tensor(observation)
+        with torch.no_grad():
+            logits = policy.get_distribution(
+                tensor, action_masks=np.ones(len(ACTION_CATALOG), dtype=np.bool_),
+            ).distribution.logits.detach().cpu().numpy().copy()
+        return digest.hexdigest(), logits
+
+    from .action_space import ACTION_CATALOG
+    before_plain = model_fingerprint(plain_agent)
+    before_diagnostic = model_fingerprint(diagnostic_agent)
+    if before_plain is not None and before_diagnostic is not None:
+        if (before_plain[0] != before_diagnostic[0]
+                or not np.array_equal(before_plain[1], before_diagnostic[1])):
+            raise AssertionError("parity開始前のChampion weight/logitsが異なります。")
     checked = 0
     all_actions = 0
     for index, seed in enumerate(seeds):
@@ -840,10 +1041,22 @@ def verify_action_parity(
             raise AssertionError(f"seed {seed}: RNG counterが一致しません。")
         checked += 1
         all_actions += len(plain.action_trace)
+    after_plain = model_fingerprint(plain_agent)
+    after_diagnostic = model_fingerprint(diagnostic_agent)
+    if before_plain is not None:
+        if (after_plain is None or after_diagnostic is None
+                or before_plain[0] != after_plain[0]
+                or before_plain[0] != after_diagnostic[0]):
+            raise AssertionError("Champion PPO weightが変化しました。")
+        if (not np.array_equal(before_plain[1], after_plain[1])
+                or not np.array_equal(before_plain[1], after_diagnostic[1])):
+            raise AssertionError("Champion Actor logitsが変化しました。")
     return {
         "opponent_profile": opponent_profile,
         "games": checked, "all_actions": all_actions,
         "action_trace_equal": True, "winner_equal": True,
         "final_score_equal": True, "final_rank_equal": True,
         "final_game_state_equal": True, "rng_counter_equal": True,
+        "ppo_weight_equal": True if before_plain is not None else None,
+        "actor_logits_equal": True if before_plain is not None else None,
     }

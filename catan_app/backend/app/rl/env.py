@@ -16,7 +16,8 @@ from app.agents.heuristic import HeuristicAgent
 from app.domain.actions import (Action, BuildRoadAction, BuyDevelopmentAction,
                                 EndTurnAction, MoveRobberAction,
                                 ProposeCounterTradeAction, ProposeTradeAction,
-                                RespondToTradeAction, StealResourceAction)
+                                RespondToTradeAction, RollOrderAction,
+                                RollTurnDiceAction, StealResourceAction)
 from app.domain.board import BoardRules
 from app.domain.game import (GameState, apply_action, create_game, player_for,
                              setup_player_id)
@@ -520,8 +521,13 @@ class CatanEnv(gym.Env[np.ndarray, int]):
         if self._required_player_id(game) != self.learning_player_id:
             raise RuntimeError("現在は学習者の操作タイミングではありません。")
         mask = self.action_masks()
-        if isinstance(action, ProposeTradeAction):
-            if not self.config.allow_player_trades:
+        external_fixed_action = (
+            isinstance(action, ProposeTradeAction)
+            or (isinstance(action, (RollOrderAction, RollTurnDiceAction))
+                and action.dice is not None)
+        )
+        if external_fixed_action:
+            if isinstance(action, ProposeTradeAction) and not self.config.allow_player_trades:
                 raise IllegalPolicyAction("このEnvironmentでは対人交渉を許可していません。")
             # 377外Actionの合法性を元GameStateに触れずルール側で確認する。
             from copy import deepcopy

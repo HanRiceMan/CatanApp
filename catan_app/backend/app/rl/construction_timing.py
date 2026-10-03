@@ -234,6 +234,11 @@ class SurfaceTransition:
     next_surface_observation: np.ndarray | None = None
     next_runtime_context: np.ndarray | None = None
     next_surface_type: str | None = None
+    truncated: bool = False
+    player_trades_crossed: int = 0
+    vp_delta_contribution: float = 0.0
+    terminal_contribution: float = 0.0
+    nondelegated_surfaces_crossed: int = 0
 
 
 class SurfaceRolloutBuffer:
@@ -273,6 +278,7 @@ class DelegationChoice:
     gate_log_prob: float | None
     surface_value: float | None
     candidates: TimingCandidates
+    runtime_context: np.ndarray | None = None
 
 
 class ConstructionTimingDelegator:
@@ -302,14 +308,19 @@ class ConstructionTimingDelegator:
         with torch.no_grad():
             distribution = torch.distributions.Categorical(
                 logits=self.gate(latent, context, subtype))
-            choice = (distribution.sample() if stochastic
-                      else distribution.probs.argmax(dim=-1))
+            if stochastic:
+                threshold = float(distribution.probs[0, BUILD_NOW].item())
+                selected = BUILD_NOW if random_uniform() < threshold else DEFER
+                choice = torch.tensor([selected], device=latent.device)
+            else:
+                choice = distribution.probs.argmax(dim=-1)
             log_prob = distribution.log_prob(choice)
             value = self.critic(base_value, latent, context, subtype)
         selected = int(choice.item())
         action = candidates.build_action if selected == BUILD_NOW else candidates.defer_action
         return DelegationChoice(action, True, selected, float(log_prob.item()),
-                                float(value.item()), candidates)
+                                float(value.item()), candidates,
+                                context[0].detach().cpu().numpy().copy())
 
 
 class SurfaceTransitionBuilder:
@@ -324,6 +335,10 @@ class SurfaceTransitionBuilder:
         self.gamma = SurfaceRolloutBuffer(gamma).gamma
         self.pending: dict | None = None
         self.rewards: list[float] = []
+        self.vp_rewards: list[float] = []
+        self.terminal_rewards: list[float] = []
+        self.player_trades_crossed = 0
+        self.nondelegated_surfaces_crossed = 0
 
     def start(self, *, surface_observation: np.ndarray,
               runtime_context: np.ndarray, surface_type: str,
@@ -337,17 +352,32 @@ class SurfaceTransitionBuilder:
                             surface_type=surface_type, gate_action=gate_action,
                             gate_log_prob=gate_log_prob, value=value)
         self.rewards = []
+        self.vp_rewards = []
+        self.terminal_rewards = []
+        self.player_trades_crossed = 0
+        self.nondelegated_surfaces_crossed = 0
 
-    def add_step(self, reward: float) -> None:
+    def record_nondelegated_surface(self) -> None:
+        if self.pending is not None:
+            self.nondelegated_surfaces_crossed += 1
+
+    def add_step(self, reward: float, *, vp_delta: float = 0.0,
+                 terminal: float = 0.0, player_trade: bool = False) -> None:
         if self.pending is not None:
             self.rewards.append(float(reward))
+            self.vp_rewards.append(float(vp_delta))
+            self.terminal_rewards.append(float(terminal))
+            self.player_trades_crossed += int(player_trade)
 
     def finish(self, *, next_surface_or_terminal: str, done: bool,
+               truncated: bool = False,
                next_surface_observation: np.ndarray | None = None,
                next_runtime_context: np.ndarray | None = None,
                next_surface_type: str | None = None) -> SurfaceTransition:
         if self.pending is None or not self.rewards:
             raise ValueError("No delegated base step to finish")
+        if done and truncated:
+            raise ValueError("Terminal and truncation must remain distinct")
         transition = SurfaceTransition(
             **self.pending,
             reward_accumulated=sum(self.gamma ** i * reward
@@ -358,9 +388,20 @@ class SurfaceTransitionBuilder:
                                       if next_surface_observation is not None else None),
             next_runtime_context=(next_runtime_context.copy()
                                   if next_runtime_context is not None else None),
-            next_surface_type=next_surface_type)
+            next_surface_type=next_surface_type,
+            truncated=truncated,
+            player_trades_crossed=self.player_trades_crossed,
+            vp_delta_contribution=sum(self.gamma ** i * reward
+                                      for i, reward in enumerate(self.vp_rewards)),
+            terminal_contribution=sum(self.gamma ** i * reward
+                                      for i, reward in enumerate(self.terminal_rewards)),
+            nondelegated_surfaces_crossed=self.nondelegated_surfaces_crossed)
         self.pending = None
         self.rewards = []
+        self.vp_rewards = []
+        self.terminal_rewards = []
+        self.player_trades_crossed = 0
+        self.nondelegated_surfaces_crossed = 0
         return transition
 
 

@@ -2,7 +2,10 @@
 
 from __future__ import annotations
 
-from dataclasses import dataclass
+from dataclasses import asdict, dataclass, field
+import hashlib
+import json
+from pathlib import Path
 
 import numpy as np
 import torch
@@ -20,7 +23,17 @@ from .candidate_policy import (BASE_OBSERVATION_SIZE,
 from .env import CatanEnv, CatanEnvConfig
 from .hierarchical_distribution import FAMILY_COUNT
 from .observation import OBSERVATION_VECTOR_SIZES, encode_observation, get_observation
-from .runtime_context import RUNTIME_CONTEXT_SIZE
+from .runtime_context import (RUNTIME_CONTEXT_SIZE, RUNTIME_CONTEXT_VERSION,
+                              runtime_context_definition)
+
+
+CONTEXT_ARTIFACT_VERSION = "context_aware_ppo_v1"
+
+
+def _context_schema_hash() -> str:
+    canonical = json.dumps(runtime_context_definition(), ensure_ascii=False,
+                           sort_keys=True, separators=(",", ":"))
+    return hashlib.sha256(canonical.encode("utf-8")).hexdigest()
 
 
 class ContextAwareGraphActorCritic(GraphHierarchicalCandidateActorCritic):
@@ -91,9 +104,18 @@ def initialize_context_policy_from_champion(
 @dataclass(frozen=True)
 class ContextExperimentManifest:
     source_model_id: str
+    artifact_version: str = CONTEXT_ARTIFACT_VERSION
     observation_version: str = "v7"
     observation_size: int = OBSERVATION_VECTOR_SIZES["v7"]
     action_space_size: int = ACTION_SPACE_SIZE
+    runtime_context_version: str = RUNTIME_CONTEXT_VERSION
+    runtime_context_dimension: int = RUNTIME_CONTEXT_SIZE
+    runtime_context_schema_sha256: str = field(default_factory=_context_schema_hash)
+
+    def to_dict(self) -> dict:
+        result = asdict(self)
+        result["policy_class"] = ContextAwareGraphMaskablePolicy.__name__
+        return result
 
 
 class ContextAwarePPOAgent:
@@ -144,5 +166,38 @@ def create_context_aware_experiment_agent(champion: PPOAgent) -> ContextAwarePPO
         seed=champion.manifest.training_seed, device="cpu", verbose=0,
     )
     initialize_context_policy_from_champion(model.policy, source.policy)
+    model.policy.eval()
+    return ContextAwarePPOAgent(champion, model)
+
+
+def save_context_aware_artifact(agent: ContextAwarePPOAgent, directory: Path) -> None:
+    """新規ディレクトリだけへ実験artifactを保存。Championには書き込まない。"""
+    directory = Path(directory)
+    directory.mkdir(parents=True, exist_ok=False)
+    agent.model.save(str(directory / "model"))
+    (directory / "manifest.json").write_text(
+        json.dumps(agent.manifest.to_dict(), ensure_ascii=False, indent=2),
+        encoding="utf-8",
+    )
+
+
+def load_context_aware_artifact(directory: Path, champion: PPOAgent) -> ContextAwarePPOAgent:
+    """parentとschema一致を確認し、v7モデルだけを別artifactから読む。"""
+    from sb3_contrib import MaskablePPO
+
+    directory = Path(directory)
+    manifest = json.loads((directory / "manifest.json").read_text(encoding="utf-8"))
+    expected = ContextExperimentManifest(champion.manifest.model_id).to_dict()
+    if manifest != expected:
+        raise ValueError("Context artifactの親モデルまたはschemaが一致しません。")
+    model = MaskablePPO.load(
+        str(directory / "model.zip"),
+        env=CatanEnv(CatanEnvConfig(observation_version="v7")),
+        device="cpu",
+    )
+    if (type(model.policy) is not ContextAwareGraphMaskablePolicy
+            or model.observation_space.shape != (OBSERVATION_VECTOR_SIZES["v7"],)
+            or model.action_space.n != ACTION_SPACE_SIZE):
+        raise ValueError("保存モデルのPolicyまたはAction/Observation次元が不正です。")
     model.policy.eval()
     return ContextAwarePPOAgent(champion, model)

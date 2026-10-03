@@ -9,6 +9,7 @@ import hashlib
 import json
 from pathlib import Path
 from statistics import fmean, median, pstdev
+from time import perf_counter
 from typing import Any, Callable, Iterable, Mapping
 
 import numpy as np
@@ -221,6 +222,7 @@ def play_teacher_episode(
     champion_model_id: str = "ppo_gnn_board_65k_s03_exp_v003",
     robber_model_id: str = "ppo_robber_value_73k_s01_exp_v001",
     collect_reports: bool = True,
+    step_duration_sink: Callable[[float], None] | None = None,
 ) -> TeacherEpisode:
     """指定profileの相手3人と最後まで実行し、1席だけTeacher収集する。"""
     if (champion_id is None) == (champion_seat is None):
@@ -287,7 +289,12 @@ def play_teacher_episode(
             action = (opponents[actor] if opponents is not None
                       else HeuristicAgent()).select_action(game, actor)
         action_trace.append((actor, action))
-        apply_action(game, actor, action, game.revision, f"macro-teacher-{step:06d}")
+        if step_duration_sink is None:
+            apply_action(game, actor, action, game.revision, f"macro-teacher-{step:06d}")
+        else:
+            step_start = perf_counter()
+            apply_action(game, actor, action, game.revision, f"macro-teacher-{step:06d}")
+            step_duration_sink(perf_counter() - step_start)
     else:
         raise RuntimeError(f"seed {seed}: 100000操作で終了しませんでした。")
 

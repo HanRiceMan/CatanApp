@@ -7,7 +7,7 @@ from __future__ import annotations
 
 from copy import deepcopy
 from dataclasses import dataclass
-from math import log
+from math import isfinite, log
 from typing import Any
 
 import numpy as np
@@ -137,13 +137,18 @@ class StrategicActionGate(nn.Module):
 
     def forward(self, frozen_latent: torch.Tensor, context: torch.Tensor,
                 candidate_mask: torch.Tensor,
-                frozen_family_logits: torch.Tensor) -> torch.Tensor:
+                frozen_family_logits: torch.Tensor,
+                temperature: float = 1.0) -> torch.Tensor:
+        if not isfinite(temperature) or temperature <= 0:
+            raise ValueError("Strategic prior temperature must be finite and positive")
         mask = candidate_mask.bool()
         if not mask.any(dim=-1).all():
             raise ValueError("Strategic Gate requires a nonempty family mask")
         features = torch.cat((frozen_latent.detach(), context, mask.to(context.dtype)),
                              dim=-1)
-        logits = frozen_family_logits.detach() + self.residual(self.encoder(features))
+        prior = (frozen_family_logits.detach() if temperature == 1.0
+                 else frozen_family_logits.detach() / temperature)
+        logits = prior + self.residual(self.encoder(features))
         return logits.masked_fill(~mask, -1e8)
 
 

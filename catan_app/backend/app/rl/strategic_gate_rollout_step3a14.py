@@ -31,6 +31,7 @@ from .strategic_gate_step3a13 import (
     FrozenStrategicExecutors, StrategicActionGate, StrategicSurfaceCritic,
     StrategicTransition, family_priors, frozen_snapshot, resolve_immediate_win,
 )
+from .strategic_prior_calibration_step3a15 import masked_temperature_probabilities
 from .trade_strategy import choose_proactive_trade_with_diagnostic
 
 
@@ -155,6 +156,7 @@ class StrategicEpisode:
     transitions: tuple[dict[str, Any], ...]
     learner_action_families: dict[str, int]
     forced_applied: bool = False
+    prior_temperature: float = 1.0
 
 
 def _seat_probe(seed: int) -> GameState:
@@ -221,12 +223,15 @@ def run_strategic_episode(
     delegation_seed: int = 0, gate_sampling_seed: int = 0,
     stochastic_gate: bool = False, max_policy_steps: int = 5000,
     force_family: str | None = None, resolver_enabled: bool | None = None,
+    prior_temperature: float = 1.0,
 ) -> StrategicEpisode:
     """Run one episode; only actual Gate decisions create semi-MDP samples."""
     if profile not in PROFILE_ROLES or mode not in {"legacy", "safety", "strategic"}:
         raise ValueError("Unknown profile or mode")
     if not 0 <= delegation_probability <= 1:
         raise ValueError("Delegation probability must be in [0, 1]")
+    if not isfinite(prior_temperature) or prior_temperature <= 0:
+        raise ValueError("Prior temperature must be finite and positive")
     if force_family is not None and force_family not in FAMILIES:
         raise ValueError("Unknown forced family")
     if force_family is not None and mode != "strategic":
@@ -345,14 +350,16 @@ def run_strategic_episode(
                                     [prior["raw_scores"]["native_family_logits"]],
                                     dtype=latent.dtype, device=latent.device)
                                 with torch.no_grad():
-                                    logits = gate(latent, context, family_mask, scores)
+                                    logits = gate(latent, context, family_mask,
+                                                  scores, temperature=prior_temperature)
                                     probabilities = torch.softmax(logits, dim=-1)[0].cpu().numpy()
                                     value = critic(snapshot.critic_value, latent,
                                                    context, family_mask)
-                                native = np.asarray(
-                                    prior["probabilities"]["native_family_logits"])
-                                if not np.allclose(probabilities, native, rtol=0, atol=1e-6):
-                                    raise AssertionError("Zero residual / native prior mismatch")
+                                expected = masked_temperature_probabilities(
+                                    prior["raw_scores"]["native_family_logits"],
+                                    surface.family_mask, prior_temperature)
+                                if not np.allclose(probabilities, expected, rtol=0, atol=1e-6):
+                                    raise AssertionError("Zero residual / calibrated prior mismatch")
                                 family_index = (FAMILIES.index(force_family) if force
                                                 else _sample_family(probabilities, gate_rng,
                                                                     stochastic_gate))
@@ -382,6 +389,9 @@ def run_strategic_episode(
                                     "masked_probability": probabilities.tolist(),
                                     "selected_family": family,
                                     "selected_probability": float(probabilities[family_index]),
+                                    "selected_is_native_top": family_index == int(
+                                        np.argmax(prior["probabilities"]["native_family_logits"])),
+                                    "prior_temperature": prior_temperature,
                                     "gate_log_prob": selected_log_prob,
                                     "concrete_action": repr(action),
                                     "concrete_action_family": family_of(action),
@@ -456,7 +466,7 @@ def run_strategic_episode(
             env.game.random_source.counter, surface_count, lottery_count,
             protected_available, protected_selected, tuple(decisions),
             tuple(resolver_events), tuple(transitions), dict(action_families),
-            forced_applied,
+            forced_applied, prior_temperature,
         )
     finally:
         env.close()

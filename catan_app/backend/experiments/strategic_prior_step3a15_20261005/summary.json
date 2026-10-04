@@ -1,0 +1,948 @@
+{
+  "schema_version": "strategic_prior_calibration_step3a15_v1",
+  "temperature_variants_smoked": [
+    2.0,
+    3.0
+  ],
+  "seed_start": 2970000,
+  "games_per_profile": 12,
+  "champion_model_id": "ppo_gnn_board_65k_s03_exp_v003",
+  "robber_model_id": "ppo_robber_value_73k_s01_exp_v001",
+  "champion_weight_digest_before": "4225902d41a83540eb1f1552826ec623706e778b99ad4ae8ec015f976644392a",
+  "champion_weight_digest_after": "4225902d41a83540eb1f1552826ec623706e778b99ad4ae8ec015f976644392a",
+  "gamma": 0.99,
+  "variants": {
+    "T=2": {
+      "outcome": {
+        "games": 36,
+        "wins": 17,
+        "win_rate": 0.4722222222222222,
+        "final_vp": {
+          "n": 36,
+          "mean": 7.916666666666667,
+          "median": 8.5,
+          "p95": 11,
+          "min": 3,
+          "max": 11
+        },
+        "rank": {
+          "n": 36,
+          "mean": 1.9305555555555556,
+          "median": 2.0,
+          "p95": 4.0,
+          "min": 1.0,
+          "max": 4.0
+        },
+        "policy_steps": {
+          "n": 36,
+          "mean": 72.97222222222223,
+          "median": 72.0,
+          "p95": 103,
+          "min": 31,
+          "max": 120
+        },
+        "action_phase_family_counts": {
+          "BUILD_ROAD": 221,
+          "END_TURN": 588,
+          "PROTECTED_PLAYER_TRADE": 406,
+          "BUILD_SETTLEMENT": 106,
+          "BUY_DEVELOPMENT": 73,
+          "BANK_TRADE": 135,
+          "BUILD_CITY": 62
+        },
+        "terminal": 36,
+        "truncated": 0,
+        "resolver_fires": 17
+      },
+      "gate": {
+        "gate_surface_total": 1127,
+        "protected_trade_available": 385,
+        "protected_preemption": 385,
+        "delegation_lottery_target": 742,
+        "actual_delegated": 66,
+        "family_selected": {
+          "BUILD_ROAD": 14,
+          "END_TURN": 6,
+          "BUY_DEVELOPMENT": 20,
+          "BUILD_SETTLEMENT": 8,
+          "BANK_TRADE": 14,
+          "BUILD_CITY": 4
+        },
+        "selected_probability": {
+          "BUILD_SETTLEMENT": {
+            "n": 8,
+            "mean": 0.9798232614994049,
+            "median": 0.9945152699947357,
+            "p95": 0.9948050379753113,
+            "min": 0.9491371512413025,
+            "max": 0.9971803426742554
+          },
+          "BUILD_CITY": {
+            "n": 4,
+            "mean": 0.9696718454360962,
+            "median": 0.9871766865253448,
+            "p95": 0.9970434308052063,
+            "min": 0.9053805470466614,
+            "max": 0.9989534616470337
+          },
+          "BUILD_ROAD": {
+            "n": 14,
+            "mean": 0.6748957421098437,
+            "median": 0.7434864640235901,
+            "p95": 0.825272262096405,
+            "min": 0.39600080251693726,
+            "max": 0.8260178565979004
+          },
+          "BUY_DEVELOPMENT": {
+            "n": 20,
+            "mean": 0.8336320301517844,
+            "median": 0.9119837284088135,
+            "p95": 0.9723103046417236,
+            "min": 0.046729397028684616,
+            "max": 0.9804389476776123
+          },
+          "BANK_TRADE": {
+            "n": 14,
+            "mean": 0.5126028891120639,
+            "median": 0.6290216445922852,
+            "p95": 0.7292960286140442,
+            "min": 0.05292084813117981,
+            "max": 0.7456024885177612
+          },
+          "END_TURN": {
+            "n": 6,
+            "mean": 0.2746553619702657,
+            "median": 0.2818428874015808,
+            "p95": 0.314004123210907,
+            "min": 0.20226362347602844,
+            "max": 0.314148873090744
+          }
+        },
+        "available_probability": {
+          "BUILD_SETTLEMENT": {
+            "n": 9,
+            "mean": 0.9763460357983907,
+            "median": 0.9944954514503479,
+            "p95": 0.9948050379753113,
+            "min": 0.9485282301902771,
+            "max": 0.9971803426742554
+          },
+          "BUILD_CITY": {
+            "n": 5,
+            "mean": 0.9622645020484925,
+            "median": 0.9773099422454834,
+            "p95": 0.9970434308052063,
+            "min": 0.9053805470466614,
+            "max": 0.9989534616470337
+          },
+          "BUILD_ROAD": {
+            "n": 38,
+            "mean": 0.37139146991907374,
+            "median": 0.43939054012298584,
+            "p95": 0.8023328185081482,
+            "min": 0.002224959200248122,
+            "max": 0.8260178565979004
+          },
+          "BUY_DEVELOPMENT": {
+            "n": 26,
+            "mean": 0.7201220059337524,
+            "median": 0.9077758193016052,
+            "p95": 0.9695497155189514,
+            "min": 0.038538821041584015,
+            "max": 0.9804389476776123
+          },
+          "BANK_TRADE": {
+            "n": 34,
+            "mean": 0.33094362105818137,
+            "median": 0.36089156568050385,
+            "p95": 0.7270908355712891,
+            "min": 0.0020265134517103434,
+            "max": 0.7456024885177612
+          },
+          "END_TURN": {
+            "n": 66,
+            "mean": 0.12596109848219025,
+            "median": 0.04726010747253895,
+            "p95": 0.314004123210907,
+            "min": 0.0005947179743088782,
+            "max": 0.3722987174987793
+          }
+        },
+        "selected_top1_rate": {
+          "BUILD_SETTLEMENT": 1.0,
+          "BUILD_CITY": 1.0,
+          "BUILD_ROAD": 1.0,
+          "BUY_DEVELOPMENT": 0.9,
+          "BANK_TRADE": 0.5714285714285714,
+          "END_TURN": 0.0
+        },
+        "entropy_by_candidate_count": {
+          "2": {
+            "n": 31,
+            "mean": 0.467444266553127,
+            "median": 0.5665035843849182,
+            "p95": 0.6304322481155396,
+            "min": 0.008227239362895489,
+            "max": 0.6601677536964417
+          },
+          "3": {
+            "n": 25,
+            "mean": 0.522032445371151,
+            "median": 0.35411760210990906,
+            "p95": 1.0448896884918213,
+            "min": 0.020822986960411072,
+            "max": 1.0763946771621704
+          },
+          "4+": {
+            "n": 10,
+            "mean": 0.25606726184487344,
+            "median": 0.2099137157201767,
+            "p95": 0.5160831809043884,
+            "min": 0.038114432245492935,
+            "max": 0.5170320868492126
+          }
+        },
+        "macro_duration": {
+          "n": 66,
+          "mean": 23.257575757575758,
+          "median": 17.0,
+          "p95": 64,
+          "min": 1,
+          "max": 92
+        },
+        "macro_reward": {
+          "n": 66,
+          "mean": 0.09314703156697847,
+          "median": 0.04683863743269975,
+          "p95": 1.0277340153019359,
+          "min": -0.96059601,
+          "max": 1.072136747186572
+        },
+        "next_delegated": 37,
+        "terminal_transitions": 29,
+        "protected_trades_crossed": 244,
+        "nondelegated_surfaces_crossed": 415,
+        "family_agreement": 0.5151515151515151,
+        "concrete_action_agreement": 0.3939393939393939,
+        "executor_failure": 0,
+        "illegal_action": 0,
+        "family_outside": 0
+      },
+      "exploration": {
+        "actual_delegated": 66,
+        "selected": {
+          "BUILD_ROAD": 14,
+          "END_TURN": 6,
+          "BUY_DEVELOPMENT": 20,
+          "BUILD_SETTLEMENT": 8,
+          "BANK_TRADE": 14,
+          "BUILD_CITY": 4
+        },
+        "non_top_selected": 14,
+        "non_top_by_family": {
+          "END_TURN": 6,
+          "BANK_TRADE": 6,
+          "BUY_DEVELOPMENT": 2
+        },
+        "non_top_fraction": 0.21212121212121213
+      },
+      "returns": {
+        "macro_reward_mean": 0.09314703156697847,
+        "macro_reward_sample_variance": 0.30774136318380324,
+        "duration_reward_pearson": 0.18490594018997628,
+        "terminal": {
+          "n": 29,
+          "mean": 0.14595025749453233,
+          "variance": 0.7039031313713555
+        },
+        "nonterminal": {
+          "n": 37,
+          "mean": 0.0517607193534903,
+          "variance": 0.0041574748927091275
+        },
+        "by_family": {
+          "BUILD_ROAD": {
+            "n": 14,
+            "mean": -0.01174091998933491,
+            "variance": 0.1716472596532898
+          },
+          "END_TURN": {
+            "n": 6,
+            "mean": 0.17297848210002714,
+            "variance": 0.12390604798984453
+          },
+          "BUY_DEVELOPMENT": {
+            "n": 20,
+            "mean": 0.12309914863764544,
+            "variance": 0.4820037493376505
+          },
+          "BUILD_SETTLEMENT": {
+            "n": 8,
+            "mean": 0.15882087020525115,
+            "variance": 0.2398728837305938
+          },
+          "BANK_TRADE": {
+            "n": 14,
+            "mean": 0.017218654722761843,
+            "variance": 0.27646299662271395
+          },
+          "BUILD_CITY": {
+            "n": 4,
+            "mean": 0.32514874253938014,
+            "variance": 0.7267755504200698
+          }
+        }
+      },
+      "profile_games": {
+        "rule": 12,
+        "champion": 12,
+        "mixed": 12
+      },
+      "seat_games": {
+        "1": 9,
+        "2": 9,
+        "3": 9,
+        "4": 9
+      },
+      "sample_estimate": {
+        "20": {
+          "projected_transitions_per_game": 3.6666666666666665,
+          "games_for_256": 70
+        },
+        "25": {
+          "projected_transitions_per_game": 4.583333333333333,
+          "games_for_256": 56
+        }
+      },
+      "failure_counts": {
+        "illegal": 0,
+        "executor": 0,
+        "family_outside": 0,
+        "deadlock": 0,
+        "truncation": 0,
+        "nonfinite_reward": 0
+      }
+    },
+    "T=3": {
+      "outcome": {
+        "games": 36,
+        "wins": 18,
+        "win_rate": 0.5,
+        "final_vp": {
+          "n": 36,
+          "mean": 7.944444444444445,
+          "median": 9.5,
+          "p95": 11,
+          "min": 3,
+          "max": 11
+        },
+        "rank": {
+          "n": 36,
+          "mean": 1.9027777777777777,
+          "median": 1.5,
+          "p95": 4.0,
+          "min": 1.0,
+          "max": 4.0
+        },
+        "policy_steps": {
+          "n": 36,
+          "mean": 70.38888888888889,
+          "median": 69.0,
+          "p95": 100,
+          "min": 31,
+          "max": 106
+        },
+        "action_phase_family_counts": {
+          "BUILD_ROAD": 227,
+          "END_TURN": 566,
+          "PROTECTED_PLAYER_TRADE": 399,
+          "BUILD_SETTLEMENT": 107,
+          "BUY_DEVELOPMENT": 67,
+          "BANK_TRADE": 125,
+          "BUILD_CITY": 61
+        },
+        "terminal": 36,
+        "truncated": 0,
+        "resolver_fires": 18
+      },
+      "gate": {
+        "gate_surface_total": 1102,
+        "protected_trade_available": 379,
+        "protected_preemption": 379,
+        "delegation_lottery_target": 723,
+        "actual_delegated": 64,
+        "family_selected": {
+          "BUILD_ROAD": 16,
+          "END_TURN": 10,
+          "BUY_DEVELOPMENT": 16,
+          "BUILD_SETTLEMENT": 7,
+          "BANK_TRADE": 11,
+          "BUILD_CITY": 4
+        },
+        "selected_probability": {
+          "BUILD_SETTLEMENT": {
+            "n": 7,
+            "mean": 0.9214616928781781,
+            "median": 0.9582699537277222,
+            "p95": 0.9648169875144958,
+            "min": 0.8451536297798157,
+            "max": 0.9764094352722168
+          },
+          "BUILD_CITY": {
+            "n": 4,
+            "mean": 0.9183216989040375,
+            "median": 0.937389999628067,
+            "p95": 0.979776918888092,
+            "min": 0.8087161779403687,
+            "max": 0.9897906184196472
+          },
+          "BUILD_ROAD": {
+            "n": 16,
+            "mean": 0.585789080709219,
+            "median": 0.6612071096897125,
+            "p95": 0.737882137298584,
+            "min": 0.37579360604286194,
+            "max": 0.7385493516921997
+          },
+          "BUY_DEVELOPMENT": {
+            "n": 16,
+            "mean": 0.7515660389326513,
+            "median": 0.7928206324577332,
+            "p95": 0.9094680547714233,
+            "min": 0.11483516544103622,
+            "max": 0.931479275226593
+          },
+          "BANK_TRADE": {
+            "n": 11,
+            "mean": 0.5358111614530737,
+            "median": 0.5880208015441895,
+            "p95": 0.6577481031417847,
+            "min": 0.35707688331604004,
+            "max": 0.6719157695770264
+          },
+          "END_TURN": {
+            "n": 10,
+            "mean": 0.25490511963143947,
+            "median": 0.33411291241645813,
+            "p95": 0.37262383103370667,
+            "min": 0.013422009535133839,
+            "max": 0.37272852659225464
+          }
+        },
+        "available_probability": {
+          "BUILD_SETTLEMENT": {
+            "n": 8,
+            "mean": 0.9130921736359596,
+            "median": 0.916501373052597,
+            "p95": 0.9648169875144958,
+            "min": 0.8451536297798157,
+            "max": 0.9764094352722168
+          },
+          "BUILD_CITY": {
+            "n": 5,
+            "mean": 0.90327308177948,
+            "median": 0.895003080368042,
+            "p95": 0.979776918888092,
+            "min": 0.8087161779403687,
+            "max": 0.9897906184196472
+          },
+          "BUILD_ROAD": {
+            "n": 39,
+            "mean": 0.365757880684657,
+            "median": 0.4068491458892822,
+            "p95": 0.7178778052330017,
+            "min": 0.016210177913308144,
+            "max": 0.7385493516921997
+          },
+          "BUY_DEVELOPMENT": {
+            "n": 23,
+            "mean": 0.6203515568505162,
+            "median": 0.7808440327644348,
+            "p95": 0.8257689476013184,
+            "min": 0.1026667132973671,
+            "max": 0.931479275226593
+          },
+          "BANK_TRADE": {
+            "n": 35,
+            "mean": 0.3442377861057009,
+            "median": 0.35707688331604004,
+            "p95": 0.6577481031417847,
+            "min": 0.015401894226670265,
+            "max": 0.6719157695770264
+          },
+          "END_TURN": {
+            "n": 64,
+            "mean": 0.18121767683624057,
+            "median": 0.1821998432278633,
+            "p95": 0.37262383103370667,
+            "min": 0.006390344351530075,
+            "max": 0.41380801796913147
+          }
+        },
+        "selected_top1_rate": {
+          "BUILD_SETTLEMENT": 1.0,
+          "BUILD_CITY": 1.0,
+          "BUILD_ROAD": 1.0,
+          "BUY_DEVELOPMENT": 0.9375,
+          "BANK_TRADE": 0.6363636363636364,
+          "END_TURN": 0.0
+        },
+        "entropy_by_candidate_count": {
+          "2": {
+            "n": 28,
+            "mean": 0.5701595991849899,
+            "median": 0.6354987621307373,
+            "p95": 0.6642566919326782,
+            "min": 0.05696140229701996,
+            "max": 0.6782145500183105
+          },
+          "3": {
+            "n": 27,
+            "mean": 0.7333717147509257,
+            "median": 0.6572884321212769,
+            "p95": 1.0728538036346436,
+            "min": 0.12597504258155823,
+            "max": 1.0882974863052368
+          },
+          "4+": {
+            "n": 9,
+            "mean": 0.5923830916484197,
+            "median": 0.5093121528625488,
+            "p95": 0.8917827606201172,
+            "min": 0.2164890021085739,
+            "max": 0.8969181776046753
+          }
+        },
+        "macro_duration": {
+          "n": 64,
+          "mean": 22.53125,
+          "median": 17.0,
+          "p95": 48,
+          "min": 1,
+          "max": 92
+        },
+        "macro_reward": {
+          "n": 64,
+          "mean": 0.12704328688216232,
+          "median": 0.04683863743269975,
+          "p95": 1.0277340153019359,
+          "min": -0.920299,
+          "max": 1.0781100000000001
+        },
+        "next_delegated": 35,
+        "terminal_transitions": 29,
+        "protected_trades_crossed": 238,
+        "nondelegated_surfaces_crossed": 398,
+        "family_agreement": 0.53125,
+        "concrete_action_agreement": 0.390625,
+        "executor_failure": 0,
+        "illegal_action": 0,
+        "family_outside": 0
+      },
+      "exploration": {
+        "actual_delegated": 64,
+        "selected": {
+          "BUILD_ROAD": 16,
+          "END_TURN": 10,
+          "BUY_DEVELOPMENT": 16,
+          "BUILD_SETTLEMENT": 7,
+          "BANK_TRADE": 11,
+          "BUILD_CITY": 4
+        },
+        "non_top_selected": 15,
+        "non_top_by_family": {
+          "END_TURN": 10,
+          "BANK_TRADE": 4,
+          "BUY_DEVELOPMENT": 1
+        },
+        "non_top_fraction": 0.234375
+      },
+      "returns": {
+        "macro_reward_mean": 0.12704328688216232,
+        "macro_reward_sample_variance": 0.3193144202156987,
+        "duration_reward_pearson": 0.13998152064757727,
+        "terminal": {
+          "n": 29,
+          "mean": 0.2150523119932002,
+          "variance": 0.6973661322781304
+        },
+        "nonterminal": {
+          "n": 35,
+          "mean": 0.05412152321873092,
+          "variance": 0.005288802256471188
+        },
+        "by_family": {
+          "BUILD_ROAD": {
+            "n": 16,
+            "mean": -0.003692261083395599,
+            "variance": 0.27370811772117826
+          },
+          "END_TURN": {
+            "n": 10,
+            "mean": 0.3324834443587364,
+            "variance": 0.20452308104647346
+          },
+          "BUY_DEVELOPMENT": {
+            "n": 16,
+            "mean": 0.19668807331581858,
+            "variance": 0.41254634314920086
+          },
+          "BUILD_SETTLEMENT": {
+            "n": 7,
+            "mean": 0.056459277978596005,
+            "variance": 0.18205800576271647
+          },
+          "BANK_TRADE": {
+            "n": 11,
+            "mean": 0.0020175459222331214,
+            "variance": 0.35726740884073815
+          },
+          "BUILD_CITY": {
+            "n": 4,
+            "mean": 0.32514874253938014,
+            "variance": 0.7267755504200698
+          }
+        }
+      },
+      "profile_games": {
+        "rule": 12,
+        "champion": 12,
+        "mixed": 12
+      },
+      "seat_games": {
+        "1": 9,
+        "2": 9,
+        "3": 9,
+        "4": 9
+      },
+      "sample_estimate": {
+        "20": {
+          "projected_transitions_per_game": 3.5555555555555554,
+          "games_for_256": 72
+        },
+        "25": {
+          "projected_transitions_per_game": 4.444444444444445,
+          "games_for_256": 58
+        }
+      },
+      "failure_counts": {
+        "illegal": 0,
+        "executor": 0,
+        "family_outside": 0,
+        "deadlock": 0,
+        "truncation": 0,
+        "nonfinite_reward": 0
+      }
+    },
+    "T=1": {
+      "outcome": {
+        "games": 36,
+        "wins": 17,
+        "win_rate": 0.4722222222222222,
+        "final_vp": {
+          "n": 36,
+          "mean": 7.861111111111111,
+          "median": 8.5,
+          "p95": 10,
+          "min": 3,
+          "max": 11
+        },
+        "rank": {
+          "n": 36,
+          "mean": 1.9444444444444444,
+          "median": 2.0,
+          "p95": 4.0,
+          "min": 1.0,
+          "max": 4.0
+        },
+        "policy_steps": {
+          "n": 36,
+          "mean": 72.72222222222223,
+          "median": 72.0,
+          "p95": 100,
+          "min": 31,
+          "max": 120
+        },
+        "action_phase_family_counts": {
+          "BUILD_ROAD": 227,
+          "END_TURN": 586,
+          "PROTECTED_PLAYER_TRADE": 402,
+          "BUILD_SETTLEMENT": 104,
+          "BANK_TRADE": 134,
+          "BUILD_CITY": 64,
+          "BUY_DEVELOPMENT": 73
+        },
+        "terminal": 36,
+        "truncated": 0,
+        "resolver_fires": 16
+      },
+      "gate": {
+        "gate_surface_total": 1126,
+        "protected_trade_available": 380,
+        "protected_preemption": 380,
+        "delegation_lottery_target": 746,
+        "actual_delegated": 66,
+        "family_selected": {
+          "BUILD_ROAD": 21,
+          "BUY_DEVELOPMENT": 18,
+          "BUILD_SETTLEMENT": 9,
+          "END_TURN": 3,
+          "BANK_TRADE": 10,
+          "BUILD_CITY": 5
+        },
+        "selected_probability": {
+          "BUILD_SETTLEMENT": {
+            "n": 9,
+            "mean": 0.9991043143802218,
+            "median": 0.9999779462814331,
+            "p95": 0.9999876022338867,
+            "min": 0.9975636005401611,
+            "max": 0.9999946355819702
+          },
+          "BUILD_CITY": {
+            "n": 5,
+            "mean": 0.9974472165107727,
+            "median": 0.9998195767402649,
+            "p95": 0.9999911785125732,
+            "min": 0.9923372864723206,
+            "max": 0.999998927116394
+          },
+          "BUILD_ROAD": {
+            "n": 21,
+            "mean": 0.7983486113094148,
+            "median": 0.8771296143531799,
+            "p95": 0.9570972323417664,
+            "min": 0.45141375064849854,
+            "max": 0.957520604133606
+          },
+          "BUY_DEVELOPMENT": {
+            "n": 18,
+            "mean": 0.9948517713281844,
+            "median": 0.9946094751358032,
+            "p95": 0.9990146160125732,
+            "min": 0.9901256561279297,
+            "max": 0.9996021389961243
+          },
+          "BANK_TRADE": {
+            "n": 10,
+            "mean": 0.6951204925775528,
+            "median": 0.7973355650901794,
+            "p95": 0.8789056539535522,
+            "min": 0.3286939561367035,
+            "max": 0.8957237601280212
+          },
+          "END_TURN": {
+            "n": 3,
+            "mean": 0.1571993182102839,
+            "median": 0.1732265055179596,
+            "p95": 0.1732265055179596,
+            "min": 0.12495242059230804,
+            "max": 0.1734190285205841
+          }
+        },
+        "available_probability": {
+          "BUILD_SETTLEMENT": {
+            "n": 9,
+            "mean": 0.9991043143802218,
+            "median": 0.9999779462814331,
+            "p95": 0.9999876022338867,
+            "min": 0.9975636005401611,
+            "max": 0.9999946355819702
+          },
+          "BUILD_CITY": {
+            "n": 5,
+            "mean": 0.9974472165107727,
+            "median": 0.9998195767402649,
+            "p95": 0.9999911785125732,
+            "min": 0.9923372864723206,
+            "max": 0.999998927116394
+          },
+          "BUILD_ROAD": {
+            "n": 39,
+            "mean": 0.47524979430315795,
+            "median": 0.5661177635192871,
+            "p95": 0.9427772164344788,
+            "min": 4.978451670467621e-06,
+            "max": 0.957520604133606
+          },
+          "BUY_DEVELOPMENT": {
+            "n": 24,
+            "mean": 0.7469923896424007,
+            "median": 0.9935964047908783,
+            "p95": 0.9987382292747498,
+            "min": 0.0016142027452588081,
+            "max": 0.9996021389961243
+          },
+          "BANK_TRADE": {
+            "n": 35,
+            "mean": 0.3335240942080548,
+            "median": 0.3326711356639862,
+            "p95": 0.8765140175819397,
+            "min": 4.151962002651999e-06,
+            "max": 0.8957237601280212
+          },
+          "END_TURN": {
+            "n": 66,
+            "mean": 0.05886246439145885,
+            "median": 0.04086397588253021,
+            "p95": 0.1631951779127121,
+            "min": 3.556905596724391e-07,
+            "max": 0.2602372467517853
+          }
+        },
+        "selected_top1_rate": {
+          "BUILD_SETTLEMENT": 1.0,
+          "BUILD_CITY": 1.0,
+          "BUILD_ROAD": 1.0,
+          "BUY_DEVELOPMENT": 1.0,
+          "BANK_TRADE": 0.7,
+          "END_TURN": 0.0
+        },
+        "entropy_by_candidate_count": {
+          "2": {
+            "n": 30,
+            "mean": 0.3026034780212891,
+            "median": 0.344981387257576,
+            "p95": 0.46126633882522583,
+            "min": 1.613205677131191e-05,
+            "max": 0.5733048915863037
+          },
+          "3": {
+            "n": 27,
+            "mean": 0.31760996529353885,
+            "median": 0.042063549160957336,
+            "p95": 0.9619472026824951,
+            "min": 7.143497350625694e-05,
+            "max": 1.0223519802093506
+          },
+          "4+": {
+            "n": 9,
+            "mean": 0.018252685253780026,
+            "median": 0.013393210247159004,
+            "p95": 0.048607610166072845,
+            "min": 0.00016164036060217768,
+            "max": 0.055430345237255096
+          }
+        },
+        "macro_duration": {
+          "n": 66,
+          "mean": 23.12121212121212,
+          "median": 17.0,
+          "p95": 64,
+          "min": 1,
+          "max": 85
+        },
+        "macro_reward": {
+          "n": 66,
+          "mean": 0.09453291270238978,
+          "median": 0.04683863743269975,
+          "p95": 0.9440306596496194,
+          "min": -0.9227446944279201,
+          "max": 1.05
+        },
+        "next_delegated": 37,
+        "terminal_transitions": 29,
+        "protected_trades_crossed": 239,
+        "nondelegated_surfaces_crossed": 419,
+        "family_agreement": 0.6060606060606061,
+        "concrete_action_agreement": 0.42424242424242425,
+        "executor_failure": 0,
+        "illegal_action": 0,
+        "family_outside": 0
+      },
+      "exploration": {
+        "actual_delegated": 66,
+        "selected": {
+          "BUILD_ROAD": 21,
+          "BUY_DEVELOPMENT": 18,
+          "BUILD_SETTLEMENT": 9,
+          "END_TURN": 3,
+          "BANK_TRADE": 10,
+          "BUILD_CITY": 5
+        },
+        "non_top_selected": 6,
+        "non_top_by_family": {
+          "END_TURN": 3,
+          "BANK_TRADE": 3
+        },
+        "non_top_fraction": 0.09090909090909091
+      },
+      "returns": {
+        "macro_reward_mean": 0.09453291270238978,
+        "macro_reward_sample_variance": 0.3016401637257072,
+        "duration_reward_pearson": 0.19621935991363693,
+        "terminal": {
+          "n": 29,
+          "mean": 0.14367363108957204,
+          "variance": 0.6897194879049542
+        },
+        "nonterminal": {
+          "n": 37,
+          "mean": 0.05601721450703072,
+          "variance": 0.004709652823638781
+        },
+        "by_family": {
+          "BUILD_ROAD": {
+            "n": 21,
+            "mean": 0.0200919202289832,
+            "variance": 0.26903962781299534
+          },
+          "BUY_DEVELOPMENT": {
+            "n": 18,
+            "mean": 0.15355477968820153,
+            "variance": 0.4451606830172346
+          },
+          "BUILD_SETTLEMENT": {
+            "n": 9,
+            "mean": 0.13525168352385605,
+            "variance": 0.18647649089269328
+          },
+          "END_TURN": {
+            "n": 3,
+            "mean": 0.29327246844497884,
+            "variance": 0.25802622224343336
+          },
+          "BANK_TRADE": {
+            "n": 10,
+            "mean": -0.02699847252892009,
+            "variance": 0.224559267643263
+          },
+          "BUILD_CITY": {
+            "n": 5,
+            "mean": 0.24523160948020217,
+            "variance": 0.5138624729515656
+          }
+        }
+      },
+      "profile_games": {
+        "rule": 12,
+        "champion": 12,
+        "mixed": 12
+      },
+      "seat_games": {
+        "1": 9,
+        "2": 9,
+        "3": 9,
+        "4": 9
+      },
+      "sample_estimate": {
+        "20": {
+          "projected_transitions_per_game": 3.6666666666666665,
+          "games_for_256": 70
+        },
+        "25": {
+          "projected_transitions_per_game": 4.583333333333333,
+          "games_for_256": 56
+        }
+      },
+      "failure_counts": {
+        "illegal": 0,
+        "executor": 0,
+        "family_outside": 0,
+        "deadlock": 0,
+        "truncation": 0,
+        "nonfinite_reward": 0
+      }
+    }
+  }
+}

@@ -1,0 +1,768 @@
+{
+  "schema_version": "strategic_gate_integration_step3a14_v1",
+  "champion_model_id": "ppo_gnn_board_65k_s03_exp_v003",
+  "robber_model_id": "ppo_robber_value_73k_s01_exp_v001",
+  "champion_weight_digest_before": "4225902d41a83540eb1f1552826ec623706e778b99ad4ae8ec015f976644392a",
+  "champion_weight_digest_after": "4225902d41a83540eb1f1552826ec623706e778b99ad4ae8ec015f976644392a",
+  "legacy_zero_percent_parity": 12,
+  "stochastic_paired_legacy_zero_percent_parity": 36,
+  "safety_change_in_parity_set": 2,
+  "safety_change_in_stochastic_set": 7,
+  "known_missed_win": {
+    "changed": true,
+    "first_difference_index": 365,
+    "resolver_changed_events": 1,
+    "champion_counterfactual": "ProposeTradeAction(target_id=4, offers=(TradeOffer(give={'wood': 1}, want={'ore': 1}), TradeOffer(give={'sheep': 1}, want={'ore': 1}), TradeOffer(give={'wheat': 1}, want={'ore': 1})))",
+    "resolver_action": "BuildSettlementAction(vertex_id=0)",
+    "winner": 3
+  },
+  "forced_families": {
+    "BUILD_SETTLEMENT": {
+      "terminal": true,
+      "truncated": false,
+      "concrete_action": "BuildSettlementAction(vertex_id=13)",
+      "application_probe": {
+        "resource_before": {
+          "wood": 3,
+          "brick": 2,
+          "sheep": 3,
+          "wheat": 1,
+          "ore": 0
+        },
+        "resource_after": {
+          "wood": 2,
+          "brick": 1,
+          "sheep": 2,
+          "wheat": 0,
+          "ore": 0
+        },
+        "bank_before": null,
+        "bank_after": null,
+        "bank_ratio": null,
+        "road_owner_after": null,
+        "road_length_before": 2,
+        "road_length_after": 2,
+        "legal_road_count_before": 7,
+        "legal_road_count_after": 7,
+        "legal_settlement_count_before": 1,
+        "legal_settlement_count_after": 0,
+        "road_endpoint_opponent_building": null,
+        "game_rng_before": 15,
+        "probe_rng_after": 15
+      }
+    },
+    "BUILD_CITY": {
+      "terminal": true,
+      "truncated": false,
+      "concrete_action": "BuildCityAction(vertex_id=41)",
+      "application_probe": {
+        "resource_before": {
+          "wood": 0,
+          "brick": 0,
+          "sheep": 1,
+          "wheat": 2,
+          "ore": 3
+        },
+        "resource_after": {
+          "wood": 0,
+          "brick": 0,
+          "sheep": 1,
+          "wheat": 0,
+          "ore": 0
+        },
+        "bank_before": null,
+        "bank_after": null,
+        "bank_ratio": null,
+        "road_owner_after": null,
+        "road_length_before": 4,
+        "road_length_after": 4,
+        "legal_road_count_before": 7,
+        "legal_road_count_after": 7,
+        "legal_settlement_count_before": 0,
+        "legal_settlement_count_after": 0,
+        "road_endpoint_opponent_building": null,
+        "game_rng_before": 52,
+        "probe_rng_after": 52
+      }
+    },
+    "BUILD_ROAD": {
+      "terminal": true,
+      "truncated": false,
+      "concrete_action": "BuildRoadAction(edge_id=14)",
+      "application_probe": {
+        "resource_before": {
+          "wood": 3,
+          "brick": 1,
+          "sheep": 2,
+          "wheat": 0,
+          "ore": 0
+        },
+        "resource_after": {
+          "wood": 2,
+          "brick": 0,
+          "sheep": 2,
+          "wheat": 0,
+          "ore": 0
+        },
+        "bank_before": null,
+        "bank_after": null,
+        "bank_ratio": null,
+        "road_owner_after": 4,
+        "road_length_before": 1,
+        "road_length_after": 2,
+        "legal_road_count_before": 7,
+        "legal_road_count_after": 8,
+        "legal_settlement_count_before": 0,
+        "legal_settlement_count_after": 1,
+        "road_endpoint_opponent_building": false,
+        "game_rng_before": 7,
+        "probe_rng_after": 7
+      }
+    },
+    "BUY_DEVELOPMENT": {
+      "terminal": true,
+      "truncated": false,
+      "concrete_action": "BuyDevelopmentAction()",
+      "application_probe": {
+        "resource_before": {
+          "wood": 3,
+          "brick": 1,
+          "sheep": 1,
+          "wheat": 1,
+          "ore": 2
+        },
+        "resource_after": {
+          "wood": 3,
+          "brick": 1,
+          "sheep": 0,
+          "wheat": 0,
+          "ore": 1
+        },
+        "bank_before": null,
+        "bank_after": null,
+        "bank_ratio": null,
+        "road_owner_after": null,
+        "road_length_before": 2,
+        "road_length_after": 2,
+        "legal_road_count_before": 8,
+        "legal_road_count_after": 8,
+        "legal_settlement_count_before": 0,
+        "legal_settlement_count_after": 0,
+        "road_endpoint_opponent_building": null,
+        "game_rng_before": 20,
+        "probe_rng_after": 20
+      }
+    },
+    "BANK_TRADE": {
+      "terminal": true,
+      "truncated": false,
+      "concrete_action": "BankTradeAction(give_resource='wood', receive_resource='sheep')",
+      "application_probe": {
+        "resource_before": {
+          "wood": 4,
+          "brick": 0,
+          "sheep": 2,
+          "wheat": 0,
+          "ore": 0
+        },
+        "resource_after": {
+          "wood": 0,
+          "brick": 0,
+          "sheep": 3,
+          "wheat": 0,
+          "ore": 0
+        },
+        "bank_before": {
+          "wood": 7,
+          "brick": 19,
+          "sheep": 17,
+          "wheat": 19,
+          "ore": 17
+        },
+        "bank_after": {
+          "wood": 11,
+          "brick": 19,
+          "sheep": 16,
+          "wheat": 19,
+          "ore": 17
+        },
+        "bank_ratio": 4,
+        "road_owner_after": null,
+        "road_length_before": 2,
+        "road_length_after": 2,
+        "legal_road_count_before": 8,
+        "legal_road_count_after": 8,
+        "legal_settlement_count_before": 1,
+        "legal_settlement_count_after": 1,
+        "road_endpoint_opponent_building": null,
+        "game_rng_before": 12,
+        "probe_rng_after": 12
+      }
+    },
+    "END_TURN": {
+      "terminal": true,
+      "truncated": false,
+      "concrete_action": "EndTurnAction()",
+      "application_probe": {
+        "resource_before": {
+          "wood": 3,
+          "brick": 1,
+          "sheep": 2,
+          "wheat": 0,
+          "ore": 0
+        },
+        "resource_after": {
+          "wood": 3,
+          "brick": 1,
+          "sheep": 2,
+          "wheat": 0,
+          "ore": 0
+        },
+        "bank_before": null,
+        "bank_after": null,
+        "bank_ratio": null,
+        "road_owner_after": null,
+        "road_length_before": 1,
+        "road_length_after": 1,
+        "legal_road_count_before": 7,
+        "legal_road_count_after": 0,
+        "legal_settlement_count_before": 0,
+        "legal_settlement_count_after": 0,
+        "road_endpoint_opponent_building": null,
+        "game_rng_before": 7,
+        "probe_rng_after": 7
+      }
+    }
+  },
+  "deterministic": {
+    "outcome": {
+      "games": 12,
+      "wins": 6,
+      "win_rate": 0.5,
+      "final_vp": {
+        "n": 12,
+        "mean": 8.5,
+        "median": 9.5,
+        "p95": 10,
+        "min": 5,
+        "max": 11
+      },
+      "rank": {
+        "n": 12,
+        "mean": 1.5833333333333333,
+        "median": 1.5,
+        "p95": 2.5,
+        "min": 1.0,
+        "max": 2.5
+      },
+      "policy_steps": {
+        "n": 12,
+        "mean": 68.83333333333333,
+        "median": 70.0,
+        "p95": 89,
+        "min": 40,
+        "max": 92
+      },
+      "action_phase_family_counts": {
+        "BUILD_ROAD": 80,
+        "END_TURN": 176,
+        "BANK_TRADE": 38,
+        "BUILD_SETTLEMENT": 38,
+        "PROTECTED_PLAYER_TRADE": 134,
+        "BUILD_CITY": 18,
+        "BUY_DEVELOPMENT": 21
+      },
+      "terminal": 12,
+      "truncated": 0,
+      "resolver_fires": 6
+    },
+    "gate": {
+      "gate_surface_total": 371,
+      "protected_trade_available": 128,
+      "protected_preemption": 128,
+      "delegation_lottery_target": 243,
+      "actual_delegated": 13,
+      "family_selected": {
+        "BUILD_ROAD": 3,
+        "BUY_DEVELOPMENT": 4,
+        "BANK_TRADE": 3,
+        "BUILD_SETTLEMENT": 1,
+        "BUILD_CITY": 2
+      },
+      "selected_probability": {
+        "BUILD_SETTLEMENT": {
+          "n": 1,
+          "mean": 0.9999909400939941,
+          "median": 0.9999909400939941,
+          "p95": 0.9999909400939941,
+          "min": 0.9999909400939941,
+          "max": 0.9999909400939941
+        },
+        "BUILD_CITY": {
+          "n": 2,
+          "mean": 0.9968911111354828,
+          "median": 0.9968911111354828,
+          "p95": 0.9939418435096741,
+          "min": 0.9939418435096741,
+          "max": 0.9998403787612915
+        },
+        "BUILD_ROAD": {
+          "n": 3,
+          "mean": 0.8593692978223165,
+          "median": 0.88163822889328,
+          "p95": 0.88163822889328,
+          "min": 0.7623648047447205,
+          "max": 0.934104859828949
+        },
+        "BUY_DEVELOPMENT": {
+          "n": 4,
+          "mean": 0.9967235177755356,
+          "median": 0.9971331655979156,
+          "p95": 0.9993725419044495,
+          "min": 0.9931984543800354,
+          "max": 0.9994292855262756
+        },
+        "BANK_TRADE": {
+          "n": 3,
+          "mean": 0.8314456542332967,
+          "median": 0.851625382900238,
+          "p95": 0.851625382900238,
+          "min": 0.7745579481124878,
+          "max": 0.8681536316871643
+        },
+        "END_TURN": {
+          "n": 0,
+          "mean": null,
+          "median": null,
+          "p95": null,
+          "min": null,
+          "max": null
+        }
+      },
+      "available_probability": {
+        "BUILD_SETTLEMENT": {
+          "n": 1,
+          "mean": 0.9999909400939941,
+          "median": 0.9999909400939941,
+          "p95": 0.9999909400939941,
+          "min": 0.9999909400939941,
+          "max": 0.9999909400939941
+        },
+        "BUILD_CITY": {
+          "n": 2,
+          "mean": 0.9968911111354828,
+          "median": 0.9968911111354828,
+          "p95": 0.9939418435096741,
+          "min": 0.9939418435096741,
+          "max": 0.9998403787612915
+        },
+        "BUILD_ROAD": {
+          "n": 7,
+          "mean": 0.36990587006545994,
+          "median": 0.006459904368966818,
+          "p95": 0.88163822889328,
+          "min": 8.27672647574218e-06,
+          "max": 0.934104859828949
+        },
+        "BUY_DEVELOPMENT": {
+          "n": 5,
+          "mean": 0.7985898881219328,
+          "median": 0.9948937892913818,
+          "p95": 0.9993725419044495,
+          "min": 0.006055369507521391,
+          "max": 0.9994292855262756
+        },
+        "BANK_TRADE": {
+          "n": 4,
+          "mean": 0.6235999466935027,
+          "median": 0.8130916655063629,
+          "p95": 0.851625382900238,
+          "min": 6.282407412072644e-05,
+          "max": 0.8681536316871643
+        },
+        "END_TURN": {
+          "n": 13,
+          "mean": 0.07150280624335892,
+          "median": 0.0006274933693930507,
+          "p95": 0.2254420518875122,
+          "min": 8.070177841545956e-07,
+          "max": 0.23763513565063477
+        }
+      },
+      "selected_top1_rate": {
+        "BUILD_SETTLEMENT": 1.0,
+        "BUILD_CITY": 1.0,
+        "BUILD_ROAD": 1.0,
+        "BUY_DEVELOPMENT": 1.0,
+        "BANK_TRADE": 1.0,
+        "END_TURN": null
+      },
+      "entropy_by_candidate_count": {
+        "2": {
+          "n": 8,
+          "mean": 0.31355429347604513,
+          "median": 0.3767648935317993,
+          "p95": 0.5337100028991699,
+          "min": 0.004833150655031204,
+          "max": 0.5483387112617493
+        },
+        "3": {
+          "n": 4,
+          "mean": 0.028167249238322256,
+          "median": 0.035237716510891914,
+          "p95": 0.036998581141233444,
+          "min": 0.000117237024824135,
+          "max": 0.04207632690668106
+        },
+        "4+": {
+          "n": 1,
+          "mean": 0.0017167535843327641,
+          "median": 0.0017167535843327641,
+          "p95": 0.0017167535843327641,
+          "min": 0.0017167535843327641,
+          "max": 0.0017167535843327641
+        }
+      },
+      "macro_duration": {
+        "n": 13,
+        "mean": 27.46153846153846,
+        "median": 26,
+        "p95": 56,
+        "min": 3,
+        "max": 63
+      },
+      "macro_reward": {
+        "n": 13,
+        "mean": -0.07204766043647476,
+        "median": 0.05,
+        "p95": 0.9496011787592447,
+        "min": -1.006655611,
+        "max": 1.1010113106528674
+      },
+      "next_delegated": 4,
+      "terminal_transitions": 9,
+      "protected_trades_crossed": 54,
+      "nondelegated_surfaces_crossed": 97,
+      "family_agreement": 0.38461538461538464,
+      "concrete_action_agreement": 0.15384615384615385,
+      "executor_failure": 0,
+      "illegal_action": 0,
+      "family_outside": 0
+    }
+  },
+  "stochastic": {
+    "legacy": {
+      "games": 36,
+      "wins": 17,
+      "win_rate": 0.4722222222222222,
+      "final_vp": {
+        "n": 36,
+        "mean": 8.027777777777779,
+        "median": 9.0,
+        "p95": 10,
+        "min": 3,
+        "max": 10
+      },
+      "rank": {
+        "n": 36,
+        "mean": 1.9166666666666667,
+        "median": 2.0,
+        "p95": 3.5,
+        "min": 1.0,
+        "max": 4.0
+      },
+      "policy_steps": {
+        "n": 36,
+        "mean": 72.52777777777777,
+        "median": 72.0,
+        "p95": 106,
+        "min": 31,
+        "max": 117
+      },
+      "action_phase_family_counts": {
+        "BUILD_ROAD": 226,
+        "END_TURN": 584,
+        "BUILD_SETTLEMENT": 111,
+        "PROTECTED_PLAYER_TRADE": 401,
+        "BANK_TRADE": 155,
+        "BUILD_CITY": 71,
+        "BUY_DEVELOPMENT": 62
+      },
+      "terminal": 36,
+      "truncated": 0,
+      "resolver_fires": 0
+    },
+    "safety": {
+      "games": 36,
+      "wins": 18,
+      "win_rate": 0.5,
+      "final_vp": {
+        "n": 36,
+        "mean": 8.055555555555555,
+        "median": 9.5,
+        "p95": 10,
+        "min": 3,
+        "max": 10
+      },
+      "rank": {
+        "n": 36,
+        "mean": 1.8888888888888888,
+        "median": 1.5,
+        "p95": 3.5,
+        "min": 1.0,
+        "max": 4.0
+      },
+      "policy_steps": {
+        "n": 36,
+        "mean": 72.11111111111111,
+        "median": 71.0,
+        "p95": 106,
+        "min": 31,
+        "max": 117
+      },
+      "action_phase_family_counts": {
+        "BUILD_ROAD": 228,
+        "END_TURN": 580,
+        "BUILD_SETTLEMENT": 109,
+        "PROTECTED_PLAYER_TRADE": 396,
+        "BANK_TRADE": 154,
+        "BUILD_CITY": 70,
+        "BUY_DEVELOPMENT": 62
+      },
+      "terminal": 36,
+      "truncated": 0,
+      "resolver_fires": 18
+    },
+    "strategic": {
+      "games": 36,
+      "wins": 17,
+      "win_rate": 0.4722222222222222,
+      "final_vp": {
+        "n": 36,
+        "mean": 7.861111111111111,
+        "median": 8.5,
+        "p95": 10,
+        "min": 3,
+        "max": 11
+      },
+      "rank": {
+        "n": 36,
+        "mean": 1.9444444444444444,
+        "median": 2.0,
+        "p95": 4.0,
+        "min": 1.0,
+        "max": 4.0
+      },
+      "policy_steps": {
+        "n": 36,
+        "mean": 72.72222222222223,
+        "median": 72.0,
+        "p95": 100,
+        "min": 31,
+        "max": 120
+      },
+      "action_phase_family_counts": {
+        "BUILD_ROAD": 227,
+        "END_TURN": 586,
+        "PROTECTED_PLAYER_TRADE": 402,
+        "BUILD_SETTLEMENT": 104,
+        "BANK_TRADE": 134,
+        "BUILD_CITY": 64,
+        "BUY_DEVELOPMENT": 73
+      },
+      "terminal": 36,
+      "truncated": 0,
+      "resolver_fires": 16
+    },
+    "gate": {
+      "gate_surface_total": 1126,
+      "protected_trade_available": 380,
+      "protected_preemption": 380,
+      "delegation_lottery_target": 746,
+      "actual_delegated": 66,
+      "family_selected": {
+        "BUILD_ROAD": 21,
+        "BUY_DEVELOPMENT": 18,
+        "BUILD_SETTLEMENT": 9,
+        "END_TURN": 3,
+        "BANK_TRADE": 10,
+        "BUILD_CITY": 5
+      },
+      "selected_probability": {
+        "BUILD_SETTLEMENT": {
+          "n": 9,
+          "mean": 0.9991043143802218,
+          "median": 0.9999779462814331,
+          "p95": 0.9999876022338867,
+          "min": 0.9975636005401611,
+          "max": 0.9999946355819702
+        },
+        "BUILD_CITY": {
+          "n": 5,
+          "mean": 0.9974472165107727,
+          "median": 0.9998195767402649,
+          "p95": 0.9999911785125732,
+          "min": 0.9923372864723206,
+          "max": 0.999998927116394
+        },
+        "BUILD_ROAD": {
+          "n": 21,
+          "mean": 0.7983486113094148,
+          "median": 0.8771296143531799,
+          "p95": 0.9570972323417664,
+          "min": 0.45141375064849854,
+          "max": 0.957520604133606
+        },
+        "BUY_DEVELOPMENT": {
+          "n": 18,
+          "mean": 0.9948517713281844,
+          "median": 0.9946094751358032,
+          "p95": 0.9990146160125732,
+          "min": 0.9901256561279297,
+          "max": 0.9996021389961243
+        },
+        "BANK_TRADE": {
+          "n": 10,
+          "mean": 0.6951204925775528,
+          "median": 0.7973355650901794,
+          "p95": 0.8789056539535522,
+          "min": 0.3286939561367035,
+          "max": 0.8957237601280212
+        },
+        "END_TURN": {
+          "n": 3,
+          "mean": 0.1571993182102839,
+          "median": 0.1732265055179596,
+          "p95": 0.1732265055179596,
+          "min": 0.12495242059230804,
+          "max": 0.1734190285205841
+        }
+      },
+      "available_probability": {
+        "BUILD_SETTLEMENT": {
+          "n": 9,
+          "mean": 0.9991043143802218,
+          "median": 0.9999779462814331,
+          "p95": 0.9999876022338867,
+          "min": 0.9975636005401611,
+          "max": 0.9999946355819702
+        },
+        "BUILD_CITY": {
+          "n": 5,
+          "mean": 0.9974472165107727,
+          "median": 0.9998195767402649,
+          "p95": 0.9999911785125732,
+          "min": 0.9923372864723206,
+          "max": 0.999998927116394
+        },
+        "BUILD_ROAD": {
+          "n": 39,
+          "mean": 0.47524979430315795,
+          "median": 0.5661177635192871,
+          "p95": 0.9427772164344788,
+          "min": 4.978451670467621e-06,
+          "max": 0.957520604133606
+        },
+        "BUY_DEVELOPMENT": {
+          "n": 24,
+          "mean": 0.7469923896424007,
+          "median": 0.9935964047908783,
+          "p95": 0.9987382292747498,
+          "min": 0.0016142027452588081,
+          "max": 0.9996021389961243
+        },
+        "BANK_TRADE": {
+          "n": 35,
+          "mean": 0.3335240942080548,
+          "median": 0.3326711356639862,
+          "p95": 0.8765140175819397,
+          "min": 4.151962002651999e-06,
+          "max": 0.8957237601280212
+        },
+        "END_TURN": {
+          "n": 66,
+          "mean": 0.05886246439145885,
+          "median": 0.04086397588253021,
+          "p95": 0.1631951779127121,
+          "min": 3.556905596724391e-07,
+          "max": 0.2602372467517853
+        }
+      },
+      "selected_top1_rate": {
+        "BUILD_SETTLEMENT": 1.0,
+        "BUILD_CITY": 1.0,
+        "BUILD_ROAD": 1.0,
+        "BUY_DEVELOPMENT": 1.0,
+        "BANK_TRADE": 0.7,
+        "END_TURN": 0.0
+      },
+      "entropy_by_candidate_count": {
+        "2": {
+          "n": 30,
+          "mean": 0.3026034780212891,
+          "median": 0.344981387257576,
+          "p95": 0.46126633882522583,
+          "min": 1.613205677131191e-05,
+          "max": 0.5733048915863037
+        },
+        "3": {
+          "n": 27,
+          "mean": 0.31760996529353885,
+          "median": 0.042063549160957336,
+          "p95": 0.9619472026824951,
+          "min": 7.143497350625694e-05,
+          "max": 1.0223519802093506
+        },
+        "4+": {
+          "n": 9,
+          "mean": 0.018252685253780026,
+          "median": 0.013393210247159004,
+          "p95": 0.048607610166072845,
+          "min": 0.00016164036060217768,
+          "max": 0.055430345237255096
+        }
+      },
+      "macro_duration": {
+        "n": 66,
+        "mean": 23.12121212121212,
+        "median": 17.0,
+        "p95": 64,
+        "min": 1,
+        "max": 85
+      },
+      "macro_reward": {
+        "n": 66,
+        "mean": 0.09453291270238978,
+        "median": 0.04683863743269975,
+        "p95": 0.9440306596496194,
+        "min": -0.9227446944279201,
+        "max": 1.05
+      },
+      "next_delegated": 37,
+      "terminal_transitions": 29,
+      "protected_trades_crossed": 239,
+      "nondelegated_surfaces_crossed": 419,
+      "family_agreement": 0.6060606060606061,
+      "concrete_action_agreement": 0.42424242424242425,
+      "executor_failure": 0,
+      "illegal_action": 0,
+      "family_outside": 0
+    },
+    "profile_games": {
+      "rule": 12,
+      "champion": 12,
+      "mixed": 12
+    },
+    "seat_games": {
+      "1": 9,
+      "2": 9,
+      "3": 9,
+      "4": 9
+    }
+  },
+  "seed_ranges": {
+    "parity": 2950000,
+    "deterministic": 2960000,
+    "stochastic": 2970000
+  }
+}

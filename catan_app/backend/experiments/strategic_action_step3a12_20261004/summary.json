@@ -1,0 +1,123 @@
+{
+  "schema_version": "strategic_action_surface_step3a12_v1",
+  "game_count": 36,
+  "action_phase_decisions": 1529,
+  "gate_eligible_decisions": 1081,
+  "profile_eligible": {
+    "rule": 337,
+    "champion": 393,
+    "mixed": 351
+  },
+  "seat_eligible": {
+    "1": 279,
+    "2": 246,
+    "3": 283,
+    "4": 273
+  },
+  "candidate_count_all": {
+    "1": 428,
+    "2": 564,
+    "3": 375,
+    "4": 141,
+    "5": 19,
+    "6": 2
+  },
+  "candidate_count_eligible": {
+    "2": 563,
+    "3": 365,
+    "4": 132,
+    "5": 19,
+    "6": 2
+  },
+  "single_candidate_count": 428,
+  "two_candidate_count": 564,
+  "three_or_more_candidate_count": 537,
+  "family_availability_eligible": {
+    "BUILD_ROAD": 494,
+    "END_TURN": 1081,
+    "BANK_TRADE": 650,
+    "BUILD_CITY": 61,
+    "BUILD_SETTLEMENT": 92,
+    "BUY_DEVELOPMENT": 478
+  },
+  "family_cooccurrence_eligible": {
+    "BUILD_ROAD+END_TURN": 494,
+    "BUILD_ROAD+BANK_TRADE": 221,
+    "BANK_TRADE+END_TURN": 650,
+    "BUILD_CITY+END_TURN": 61,
+    "BUILD_SETTLEMENT+BUILD_ROAD": 92,
+    "BUILD_SETTLEMENT+BUY_DEVELOPMENT": 46,
+    "BUILD_SETTLEMENT+END_TURN": 92,
+    "BUILD_ROAD+BUY_DEVELOPMENT": 171,
+    "BUY_DEVELOPMENT+END_TURN": 478,
+    "BUILD_CITY+BUILD_ROAD": 15,
+    "BUILD_CITY+BANK_TRADE": 45,
+    "BUY_DEVELOPMENT+BANK_TRADE": 232,
+    "BUILD_SETTLEMENT+BANK_TRADE": 31,
+    "BUILD_CITY+BUY_DEVELOPMENT": 40,
+    "BUILD_SETTLEMENT+BUILD_CITY": 2
+  },
+  "champion_family_eligible": {
+    "BUILD_ROAD": 177,
+    "END_TURN": 175,
+    "BUILD_CITY": 45,
+    "PROTECTED_PLAYER_TRADE": 379,
+    "BUILD_SETTLEMENT": 92,
+    "BANK_TRADE": 131,
+    "BUY_DEVELOPMENT": 82
+  },
+  "champion_execution_source_eligible": {
+    "SETTLEMENT_PLANNER": 463,
+    "BASE_PPO": 71,
+    "TRADE_PLANNER": 379,
+    "CITY_PLANNER": 102,
+    "PLANNER_ADAPTIVE_DEVELOPMENT": 44,
+    "TITLE_PLANNER": 14,
+    "PLANNER_GUARD": 8
+  },
+  "champion_family_represented_eligible": 702,
+  "champion_family_unrepresented_eligible": {
+    "PROTECTED_PLAYER_TRADE": 379
+  },
+  "hard_exclusions": {
+    "FORCED_SINGLE_ACTION": 414,
+    "IMMEDIATE_CONSTRUCTION_WIN": 14,
+    "FREE_ROAD": 14,
+    "IMMEDIATE_ROAD_TITLE_WIN": 6
+  },
+  "road_diagnostic": {
+    "road_candidate_states": 494,
+    "states_with_expansion_edges": 487,
+    "legal_expansion_edges": 2464,
+    "states_with_longest_progress_edges": 490,
+    "legal_longest_progress_edges": 2147,
+    "states_with_both_edges": 481,
+    "legal_both_edges": 1475,
+    "states_with_other_edges": 423,
+    "legal_other_edges": 1211,
+    "champion_road_actions": 177,
+    "champion_in_expansion_edges": 169,
+    "champion_in_longest_progress_edges": 126,
+    "champion_in_both_edges": 118,
+    "champion_in_other_edges": 0
+  },
+  "parity_games": 36,
+  "seed_start": 2920000,
+  "games_per_profile": 12,
+  "champion_model_id": "ppo_gnn_board_65k_s03_exp_v003",
+  "robber_model_id": "ppo_robber_value_73k_s01_exp_v001",
+  "profile_seat_games": {
+    "rule:1": 3,
+    "rule:2": 3,
+    "rule:3": 3,
+    "rule:4": 3,
+    "champion:1": 3,
+    "champion:2": 3,
+    "champion:3": 3,
+    "champion:4": 3,
+    "mixed:1": 3,
+    "mixed:2": 3,
+    "mixed:3": 3,
+    "mixed:4": 3
+  }
+}

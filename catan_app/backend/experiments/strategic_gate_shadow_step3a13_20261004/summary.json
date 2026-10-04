@@ -1,0 +1,1834 @@
+{
+  "schema_version": "strategic_gate_shadow_step3a13_v1",
+  "game_count": 36,
+  "profile": {
+    "rule": 393,
+    "champion": 383,
+    "mixed": 347
+  },
+  "seat": {
+    "1": 295,
+    "2": 262,
+    "3": 327,
+    "4": 239
+  },
+  "profile_seat_games": {
+    "rule:1": 3,
+    "rule:2": 3,
+    "rule:3": 3,
+    "rule:4": 3,
+    "champion:1": 3,
+    "champion:2": 3,
+    "champion:3": 3,
+    "champion:4": 3,
+    "mixed:1": 3,
+    "mixed:2": 3,
+    "mixed:3": 3,
+    "mixed:4": 3
+  },
+  "shadow_decisions": 1123,
+  "groups": {
+    "all": {
+      "decisions": 1123,
+      "candidate_count": {
+        "2": 570,
+        "3": 399,
+        "4": 132,
+        "5": 20,
+        "6": 2
+      },
+      "protected_player_trade_available": 388,
+      "protected_player_trade_selected": 388,
+      "all_candidates_executor_success": 1123,
+      "executor_available": {
+        "BUILD_ROAD": 616,
+        "END_TURN": 1123,
+        "BANK_TRADE": 666,
+        "BUILD_SETTLEMENT": 97,
+        "BUY_DEVELOPMENT": 403,
+        "BUILD_CITY": 72
+      },
+      "executor_success": {
+        "BUILD_ROAD": 616,
+        "END_TURN": 1123,
+        "BANK_TRADE": 666,
+        "BUILD_SETTLEMENT": 97,
+        "BUY_DEVELOPMENT": 403,
+        "BUILD_CITY": 72
+      },
+      "executor_failure": {},
+      "executor_method": {
+        "BUILD_ROAD:A_PLANNER_EXTRACTION": {
+          "available": 616,
+          "success": 616,
+          "champion_same_family": 212,
+          "champion_exact_match": 194,
+          "failures": {},
+          "road_quality": {
+            "expansion_edges": 551,
+            "longest_progress_edges": 494,
+            "both_edges": 429,
+            "other_edges": 0
+          }
+        },
+        "BUILD_ROAD:B_FROZEN_PPO": {
+          "available": 616,
+          "success": 616,
+          "champion_same_family": 212,
+          "champion_exact_match": 87,
+          "failures": {},
+          "road_quality": {
+            "expansion_edges": 422,
+            "longest_progress_edges": 336,
+            "both_edges": 254,
+            "other_edges": 112
+          }
+        },
+        "END_TURN:B_FROZEN_PPO": {
+          "available": 1123,
+          "success": 1123,
+          "champion_same_family": 202,
+          "champion_exact_match": 202,
+          "failures": {},
+          "road_quality": {}
+        },
+        "BANK_TRADE:A_PLANNER_EXTRACTION": {
+          "available": 666,
+          "success": 0,
+          "champion_same_family": 111,
+          "champion_exact_match": 0,
+          "failures": {
+            "UNSAFE_GOAL_BUDGET_DEPENDENCY": 666
+          },
+          "road_quality": {}
+        },
+        "BANK_TRADE:B_FROZEN_PPO": {
+          "available": 666,
+          "success": 666,
+          "champion_same_family": 111,
+          "champion_exact_match": 57,
+          "failures": {},
+          "road_quality": {}
+        },
+        "BUILD_SETTLEMENT:B_FROZEN_PPO": {
+          "available": 97,
+          "success": 97,
+          "champion_same_family": 94,
+          "champion_exact_match": 94,
+          "failures": {},
+          "road_quality": {}
+        },
+        "BUY_DEVELOPMENT:B_FROZEN_PPO": {
+          "available": 403,
+          "success": 403,
+          "champion_same_family": 59,
+          "champion_exact_match": 59,
+          "failures": {},
+          "road_quality": {}
+        },
+        "BUILD_CITY:B_FROZEN_PPO": {
+          "available": 72,
+          "success": 72,
+          "champion_same_family": 57,
+          "champion_exact_match": 57,
+          "failures": {},
+          "road_quality": {}
+        }
+      },
+      "priors": {
+        "uniform": {
+          "mean_entropy": 0.9369575502695532,
+          "top_family": {
+            "BUILD_ROAD": 494,
+            "BANK_TRADE": 257,
+            "BUILD_SETTLEMENT": 97,
+            "BUY_DEVELOPMENT": 206,
+            "BUILD_CITY": 69
+          },
+          "champion_family_agreement": 0.6571428571428571,
+          "agreement_denominator": 735
+        },
+        "max_legal_logit": {
+          "mean_entropy": 0.5412477138685718,
+          "top_family": {
+            "BUILD_ROAD": 284,
+            "BANK_TRADE": 666,
+            "END_TURN": 173
+          },
+          "champion_family_agreement": 0.39183673469387753,
+          "agreement_denominator": 735
+        },
+        "log_mean_exp": {
+          "mean_entropy": 0.6610830182462091,
+          "top_family": {
+            "END_TURN": 451,
+            "BANK_TRADE": 666,
+            "BUILD_ROAD": 6
+          },
+          "champion_family_agreement": 0.2707482993197279,
+          "agreement_denominator": 735
+        },
+        "native_family_logits": {
+          "mean_entropy": 0.32818432897962296,
+          "top_family": {
+            "BUILD_ROAD": 332,
+            "BANK_TRADE": 290,
+            "BUILD_SETTLEMENT": 97,
+            "BUY_DEVELOPMENT": 332,
+            "BUILD_CITY": 69,
+            "END_TURN": 3
+          },
+          "champion_family_agreement": 0.5836734693877551,
+          "agreement_denominator": 735
+        }
+      },
+      "cardinality": {
+        "BUILD_ROAD": {
+          "n": 616,
+          "min_legal_actions": 4,
+          "max_legal_actions": 13,
+          "count_vs_probability_pearson": {
+            "uniform": -0.05501391276596894,
+            "max_legal_logit": -0.04887303611483452,
+            "log_mean_exp": -0.10317795367133831,
+            "native_family_logits": -0.009830854755019191
+          }
+        },
+        "BANK_TRADE": {
+          "n": 666,
+          "min_legal_actions": 3,
+          "max_legal_actions": 16,
+          "count_vs_probability_pearson": {
+            "uniform": -0.18605497575107835,
+            "max_legal_logit": 0.1599013714085018,
+            "log_mean_exp": -0.025951967115638217,
+            "native_family_logits": -0.15903737645158394
+          }
+        }
+      }
+    },
+    "no_protected_overlap": {
+      "decisions": 735,
+      "candidate_count": {
+        "2": 394,
+        "3": 225,
+        "4": 94,
+        "5": 20,
+        "6": 2
+      },
+      "protected_player_trade_available": 0,
+      "protected_player_trade_selected": 0,
+      "all_candidates_executor_success": 735,
+      "executor_available": {
+        "BUILD_ROAD": 399,
+        "END_TURN": 735,
+        "BANK_TRADE": 380,
+        "BUILD_SETTLEMENT": 95,
+        "BUY_DEVELOPMENT": 272,
+        "BUILD_CITY": 70
+      },
+      "executor_success": {
+        "BUILD_ROAD": 399,
+        "END_TURN": 735,
+        "BANK_TRADE": 380,
+        "BUILD_SETTLEMENT": 95,
+        "BUY_DEVELOPMENT": 272,
+        "BUILD_CITY": 70
+      },
+      "executor_failure": {},
+      "executor_method": {
+        "BUILD_ROAD:A_PLANNER_EXTRACTION": {
+          "available": 399,
+          "success": 399,
+          "champion_same_family": 212,
+          "champion_exact_match": 194,
+          "failures": {},
+          "road_quality": {
+            "expansion_edges": 353,
+            "longest_progress_edges": 328,
+            "both_edges": 282,
+            "other_edges": 0
+          }
+        },
+        "BUILD_ROAD:B_FROZEN_PPO": {
+          "available": 399,
+          "success": 399,
+          "champion_same_family": 212,
+          "champion_exact_match": 87,
+          "failures": {},
+          "road_quality": {
+            "expansion_edges": 277,
+            "longest_progress_edges": 221,
+            "both_edges": 171,
+            "other_edges": 72
+          }
+        },
+        "END_TURN:B_FROZEN_PPO": {
+          "available": 735,
+          "success": 735,
+          "champion_same_family": 202,
+          "champion_exact_match": 202,
+          "failures": {},
+          "road_quality": {}
+        },
+        "BANK_TRADE:A_PLANNER_EXTRACTION": {
+          "available": 380,
+          "success": 0,
+          "champion_same_family": 111,
+          "champion_exact_match": 0,
+          "failures": {
+            "UNSAFE_GOAL_BUDGET_DEPENDENCY": 380
+          },
+          "road_quality": {}
+        },
+        "BANK_TRADE:B_FROZEN_PPO": {
+          "available": 380,
+          "success": 380,
+          "champion_same_family": 111,
+          "champion_exact_match": 57,
+          "failures": {},
+          "road_quality": {}
+        },
+        "BUILD_SETTLEMENT:B_FROZEN_PPO": {
+          "available": 95,
+          "success": 95,
+          "champion_same_family": 94,
+          "champion_exact_match": 94,
+          "failures": {},
+          "road_quality": {}
+        },
+        "BUY_DEVELOPMENT:B_FROZEN_PPO": {
+          "available": 272,
+          "success": 272,
+          "champion_same_family": 59,
+          "champion_exact_match": 59,
+          "failures": {},
+          "road_quality": {}
+        },
+        "BUILD_CITY:B_FROZEN_PPO": {
+          "available": 70,
+          "success": 70,
+          "champion_same_family": 57,
+          "champion_exact_match": 57,
+          "failures": {},
+          "road_quality": {}
+        }
+      },
+      "priors": {
+        "uniform": {
+          "mean_entropy": 0.9338390492834706,
+          "top_family": {
+            "BUILD_ROAD": 280,
+            "BANK_TRADE": 156,
+            "BUILD_SETTLEMENT": 95,
+            "BUY_DEVELOPMENT": 137,
+            "BUILD_CITY": 67
+          },
+          "champion_family_agreement": 0.6571428571428571,
+          "agreement_denominator": 735
+        },
+        "max_legal_logit": {
+          "mean_entropy": 0.5804827591407793,
+          "top_family": {
+            "BUILD_ROAD": 221,
+            "BANK_TRADE": 380,
+            "END_TURN": 134
+          },
+          "champion_family_agreement": 0.39183673469387753,
+          "agreement_denominator": 735
+        },
+        "log_mean_exp": {
+          "mean_entropy": 0.686684958562032,
+          "top_family": {
+            "END_TURN": 350,
+            "BANK_TRADE": 380,
+            "BUILD_ROAD": 5
+          },
+          "champion_family_agreement": 0.2707482993197279,
+          "agreement_denominator": 735
+        },
+        "native_family_logits": {
+          "mean_entropy": 0.2760109743237936,
+          "top_family": {
+            "BUILD_ROAD": 199,
+            "BANK_TRADE": 169,
+            "BUILD_SETTLEMENT": 95,
+            "BUY_DEVELOPMENT": 203,
+            "BUILD_CITY": 67,
+            "END_TURN": 2
+          },
+          "champion_family_agreement": 0.5836734693877551,
+          "agreement_denominator": 735
+        }
+      },
+      "cardinality": {
+        "BUILD_ROAD": {
+          "n": 399,
+          "min_legal_actions": 4,
+          "max_legal_actions": 13,
+          "count_vs_probability_pearson": {
+            "uniform": -0.06382891303766106,
+            "max_legal_logit": -0.0672686998573856,
+            "log_mean_exp": -0.11918665826528654,
+            "native_family_logits": -0.023713355524996593
+          }
+        },
+        "BANK_TRADE": {
+          "n": 380,
+          "min_legal_actions": 3,
+          "max_legal_actions": 16,
+          "count_vs_probability_pearson": {
+            "uniform": -0.25688510028127237,
+            "max_legal_logit": 0.1595378286329581,
+            "log_mean_exp": -0.05413635903280079,
+            "native_family_logits": -0.2132216343726253
+          }
+        }
+      }
+    },
+    "protected_player_trade_overlap": {
+      "decisions": 388,
+      "candidate_count": {
+        "3": 174,
+        "4": 38,
+        "2": 176
+      },
+      "protected_player_trade_available": 388,
+      "protected_player_trade_selected": 388,
+      "all_candidates_executor_success": 388,
+      "executor_available": {
+        "BUILD_ROAD": 217,
+        "BANK_TRADE": 286,
+        "END_TURN": 388,
+        "BUY_DEVELOPMENT": 131,
+        "BUILD_CITY": 2,
+        "BUILD_SETTLEMENT": 2
+      },
+      "executor_success": {
+        "BUILD_ROAD": 217,
+        "BANK_TRADE": 286,
+        "END_TURN": 388,
+        "BUY_DEVELOPMENT": 131,
+        "BUILD_CITY": 2,
+        "BUILD_SETTLEMENT": 2
+      },
+      "executor_failure": {},
+      "executor_method": {
+        "BUILD_ROAD:A_PLANNER_EXTRACTION": {
+          "available": 217,
+          "success": 217,
+          "champion_same_family": 0,
+          "champion_exact_match": 0,
+          "failures": {},
+          "road_quality": {
+            "expansion_edges": 198,
+            "longest_progress_edges": 166,
+            "both_edges": 147,
+            "other_edges": 0
+          }
+        },
+        "BUILD_ROAD:B_FROZEN_PPO": {
+          "available": 217,
+          "success": 217,
+          "champion_same_family": 0,
+          "champion_exact_match": 0,
+          "failures": {},
+          "road_quality": {
+            "expansion_edges": 145,
+            "longest_progress_edges": 115,
+            "both_edges": 83,
+            "other_edges": 40
+          }
+        },
+        "BANK_TRADE:A_PLANNER_EXTRACTION": {
+          "available": 286,
+          "success": 0,
+          "champion_same_family": 0,
+          "champion_exact_match": 0,
+          "failures": {
+            "UNSAFE_GOAL_BUDGET_DEPENDENCY": 286
+          },
+          "road_quality": {}
+        },
+        "BANK_TRADE:B_FROZEN_PPO": {
+          "available": 286,
+          "success": 286,
+          "champion_same_family": 0,
+          "champion_exact_match": 0,
+          "failures": {},
+          "road_quality": {}
+        },
+        "END_TURN:B_FROZEN_PPO": {
+          "available": 388,
+          "success": 388,
+          "champion_same_family": 0,
+          "champion_exact_match": 0,
+          "failures": {},
+          "road_quality": {}
+        },
+        "BUY_DEVELOPMENT:B_FROZEN_PPO": {
+          "available": 131,
+          "success": 131,
+          "champion_same_family": 0,
+          "champion_exact_match": 0,
+          "failures": {},
+          "road_quality": {}
+        },
+        "BUILD_CITY:B_FROZEN_PPO": {
+          "available": 2,
+          "success": 2,
+          "champion_same_family": 0,
+          "champion_exact_match": 0,
+          "failures": {},
+          "road_quality": {}
+        },
+        "BUILD_SETTLEMENT:B_FROZEN_PPO": {
+          "available": 2,
+          "success": 2,
+          "champion_same_family": 0,
+          "champion_exact_match": 0,
+          "failures": {},
+          "road_quality": {}
+        }
+      },
+      "priors": {
+        "uniform": {
+          "mean_entropy": 0.9428650199210239,
+          "top_family": {
+            "BUILD_ROAD": 214,
+            "BUY_DEVELOPMENT": 69,
+            "BANK_TRADE": 101,
+            "BUILD_CITY": 2,
+            "BUILD_SETTLEMENT": 2
+          },
+          "champion_family_agreement": null,
+          "agreement_denominator": 0
+        },
+        "max_legal_logit": {
+          "mean_entropy": 0.46692359460292115,
+          "top_family": {
+            "BANK_TRADE": 286,
+            "BUILD_ROAD": 63,
+            "END_TURN": 39
+          },
+          "champion_family_agreement": null,
+          "agreement_denominator": 0
+        },
+        "log_mean_exp": {
+          "mean_entropy": 0.6125844972871115,
+          "top_family": {
+            "BANK_TRADE": 286,
+            "END_TURN": 101,
+            "BUILD_ROAD": 1
+          },
+          "champion_family_agreement": null,
+          "agreement_denominator": 0
+        },
+        "native_family_logits": {
+          "mean_entropy": 0.4270178745261038,
+          "top_family": {
+            "BUILD_ROAD": 133,
+            "BUY_DEVELOPMENT": 129,
+            "BANK_TRADE": 121,
+            "BUILD_CITY": 2,
+            "BUILD_SETTLEMENT": 2,
+            "END_TURN": 1
+          },
+          "champion_family_agreement": null,
+          "agreement_denominator": 0
+        }
+      },
+      "cardinality": {
+        "BUILD_ROAD": {
+          "n": 217,
+          "min_legal_actions": 4,
+          "max_legal_actions": 12,
+          "count_vs_probability_pearson": {
+            "uniform": -0.030932217610728913,
+            "max_legal_logit": -0.008486286587334862,
+            "log_mean_exp": -0.0721224461594901,
+            "native_family_logits": 0.023695992357181308
+          }
+        },
+        "BANK_TRADE": {
+          "n": 286,
+          "min_legal_actions": 4,
+          "max_legal_actions": 12,
+          "count_vs_probability_pearson": {
+            "uniform": -0.09152205091044693,
+            "max_legal_logit": 0.15289190799166616,
+            "log_mean_exp": -0.009729534222004331,
+            "native_family_logits": -0.09399256048163866
+          }
+        }
+      }
+    }
+  },
+  "by_profile": {
+    "rule": {
+      "decisions": 393,
+      "candidate_count": {
+        "2": 186,
+        "3": 146,
+        "4": 54,
+        "5": 6,
+        "6": 1
+      },
+      "protected_player_trade_available": 126,
+      "protected_player_trade_selected": 126,
+      "all_candidates_executor_success": 393,
+      "executor_available": {
+        "BUILD_ROAD": 230,
+        "END_TURN": 393,
+        "BANK_TRADE": 214,
+        "BUILD_SETTLEMENT": 39,
+        "BUY_DEVELOPMENT": 159,
+        "BUILD_CITY": 27
+      },
+      "executor_success": {
+        "BUILD_ROAD": 230,
+        "END_TURN": 393,
+        "BANK_TRADE": 214,
+        "BUILD_SETTLEMENT": 39,
+        "BUY_DEVELOPMENT": 159,
+        "BUILD_CITY": 27
+      },
+      "executor_failure": {},
+      "executor_method": {
+        "BUILD_ROAD:A_PLANNER_EXTRACTION": {
+          "available": 230,
+          "success": 230,
+          "champion_same_family": 86,
+          "champion_exact_match": 80,
+          "failures": {},
+          "road_quality": {
+            "expansion_edges": 200,
+            "longest_progress_edges": 198,
+            "both_edges": 168,
+            "other_edges": 0
+          }
+        },
+        "BUILD_ROAD:B_FROZEN_PPO": {
+          "available": 230,
+          "success": 230,
+          "champion_same_family": 86,
+          "champion_exact_match": 40,
+          "failures": {},
+          "road_quality": {
+            "expansion_edges": 172,
+            "longest_progress_edges": 126,
+            "both_edges": 113,
+            "other_edges": 45
+          }
+        },
+        "END_TURN:B_FROZEN_PPO": {
+          "available": 393,
+          "success": 393,
+          "champion_same_family": 72,
+          "champion_exact_match": 72,
+          "failures": {},
+          "road_quality": {}
+        },
+        "BANK_TRADE:A_PLANNER_EXTRACTION": {
+          "available": 214,
+          "success": 0,
+          "champion_same_family": 27,
+          "champion_exact_match": 0,
+          "failures": {
+            "UNSAFE_GOAL_BUDGET_DEPENDENCY": 214
+          },
+          "road_quality": {}
+        },
+        "BANK_TRADE:B_FROZEN_PPO": {
+          "available": 214,
+          "success": 214,
+          "champion_same_family": 27,
+          "champion_exact_match": 16,
+          "failures": {},
+          "road_quality": {}
+        },
+        "BUILD_SETTLEMENT:B_FROZEN_PPO": {
+          "available": 39,
+          "success": 39,
+          "champion_same_family": 37,
+          "champion_exact_match": 37,
+          "failures": {},
+          "road_quality": {}
+        },
+        "BUY_DEVELOPMENT:B_FROZEN_PPO": {
+          "available": 159,
+          "success": 159,
+          "champion_same_family": 21,
+          "champion_exact_match": 21,
+          "failures": {},
+          "road_quality": {}
+        },
+        "BUILD_CITY:B_FROZEN_PPO": {
+          "available": 27,
+          "success": 27,
+          "champion_same_family": 24,
+          "champion_exact_match": 24,
+          "failures": {},
+          "road_quality": {}
+        }
+      },
+      "priors": {
+        "uniform": {
+          "mean_entropy": 0.9558042040050905,
+          "top_family": {
+            "BUILD_ROAD": 176,
+            "BANK_TRADE": 71,
+            "BUILD_SETTLEMENT": 39,
+            "BUY_DEVELOPMENT": 81,
+            "BUILD_CITY": 26
+          },
+          "champion_family_agreement": 0.6816479400749064,
+          "agreement_denominator": 267
+        },
+        "max_legal_logit": {
+          "mean_entropy": 0.5766873923428775,
+          "top_family": {
+            "BUILD_ROAD": 98,
+            "BANK_TRADE": 214,
+            "END_TURN": 81
+          },
+          "champion_family_agreement": 0.3707865168539326,
+          "agreement_denominator": 267
+        },
+        "log_mean_exp": {
+          "mean_entropy": 0.6772664001676598,
+          "top_family": {
+            "END_TURN": 177,
+            "BANK_TRADE": 214,
+            "BUILD_ROAD": 2
+          },
+          "champion_family_agreement": 0.23220973782771537,
+          "agreement_denominator": 267
+        },
+        "native_family_logits": {
+          "mean_entropy": 0.2959171723728463,
+          "top_family": {
+            "BUILD_ROAD": 108,
+            "BANK_TRADE": 89,
+            "BUILD_SETTLEMENT": 39,
+            "BUY_DEVELOPMENT": 131,
+            "BUILD_CITY": 26
+          },
+          "champion_family_agreement": 0.5805243445692884,
+          "agreement_denominator": 267
+        }
+      },
+      "cardinality": {
+        "BUILD_ROAD": {
+          "n": 230,
+          "min_legal_actions": 4,
+          "max_legal_actions": 12,
+          "count_vs_probability_pearson": {
+            "uniform": -0.11442822683910088,
+            "max_legal_logit": 0.0010148541051116235,
+            "log_mean_exp": -0.0891345255264445,
+            "native_family_logits": -0.05224774999469628
+          }
+        },
+        "BANK_TRADE": {
+          "n": 214,
+          "min_legal_actions": 3,
+          "max_legal_actions": 16,
+          "count_vs_probability_pearson": {
+            "uniform": -0.1304385221736769,
+            "max_legal_logit": 0.1627741308422917,
+            "log_mean_exp": -0.008293870868691766,
+            "native_family_logits": -0.11756290014067099
+          }
+        }
+      }
+    },
+    "champion": {
+      "decisions": 383,
+      "candidate_count": {
+        "2": 224,
+        "3": 124,
+        "4": 31,
+        "5": 4
+      },
+      "protected_player_trade_available": 144,
+      "protected_player_trade_selected": 144,
+      "all_candidates_executor_success": 383,
+      "executor_available": {
+        "BUILD_CITY": 14,
+        "END_TURN": 383,
+        "BANK_TRADE": 248,
+        "BUY_DEVELOPMENT": 110,
+        "BUILD_ROAD": 185,
+        "BUILD_SETTLEMENT": 24
+      },
+      "executor_success": {
+        "BUILD_CITY": 14,
+        "END_TURN": 383,
+        "BANK_TRADE": 248,
+        "BUY_DEVELOPMENT": 110,
+        "BUILD_ROAD": 185,
+        "BUILD_SETTLEMENT": 24
+      },
+      "executor_failure": {},
+      "executor_method": {
+        "BUILD_CITY:B_FROZEN_PPO": {
+          "available": 14,
+          "success": 14,
+          "champion_same_family": 13,
+          "champion_exact_match": 13,
+          "failures": {},
+          "road_quality": {}
+        },
+        "END_TURN:B_FROZEN_PPO": {
+          "available": 383,
+          "success": 383,
+          "champion_same_family": 75,
+          "champion_exact_match": 75,
+          "failures": {},
+          "road_quality": {}
+        },
+        "BANK_TRADE:A_PLANNER_EXTRACTION": {
+          "available": 248,
+          "success": 0,
+          "champion_same_family": 48,
+          "champion_exact_match": 0,
+          "failures": {
+            "UNSAFE_GOAL_BUDGET_DEPENDENCY": 248
+          },
+          "road_quality": {}
+        },
+        "BANK_TRADE:B_FROZEN_PPO": {
+          "available": 248,
+          "success": 248,
+          "champion_same_family": 48,
+          "champion_exact_match": 19,
+          "failures": {},
+          "road_quality": {}
+        },
+        "BUY_DEVELOPMENT:B_FROZEN_PPO": {
+          "available": 110,
+          "success": 110,
+          "champion_same_family": 22,
+          "champion_exact_match": 22,
+          "failures": {},
+          "road_quality": {}
+        },
+        "BUILD_ROAD:A_PLANNER_EXTRACTION": {
+          "available": 185,
+          "success": 185,
+          "champion_same_family": 57,
+          "champion_exact_match": 55,
+          "failures": {},
+          "road_quality": {
+            "expansion_edges": 154,
+            "longest_progress_edges": 153,
+            "both_edges": 122,
+            "other_edges": 0
+          }
+        },
+        "BUILD_ROAD:B_FROZEN_PPO": {
+          "available": 185,
+          "success": 185,
+          "champion_same_family": 57,
+          "champion_exact_match": 18,
+          "failures": {},
+          "road_quality": {
+            "expansion_edges": 102,
+            "longest_progress_edges": 112,
+            "both_edges": 66,
+            "other_edges": 37
+          }
+        },
+        "BUILD_SETTLEMENT:B_FROZEN_PPO": {
+          "available": 24,
+          "success": 24,
+          "champion_same_family": 24,
+          "champion_exact_match": 24,
+          "failures": {},
+          "road_quality": {}
+        }
+      },
+      "priors": {
+        "uniform": {
+          "mean_entropy": 0.8900933918661262,
+          "top_family": {
+            "BUILD_CITY": 14,
+            "BANK_TRADE": 122,
+            "BUY_DEVELOPMENT": 64,
+            "BUILD_ROAD": 159,
+            "BUILD_SETTLEMENT": 24
+          },
+          "champion_family_agreement": 0.6150627615062761,
+          "agreement_denominator": 239
+        },
+        "max_legal_logit": {
+          "mean_entropy": 0.48676315081681687,
+          "top_family": {
+            "END_TURN": 42,
+            "BANK_TRADE": 248,
+            "BUILD_ROAD": 93
+          },
+          "champion_family_agreement": 0.401673640167364,
+          "agreement_denominator": 239
+        },
+        "log_mean_exp": {
+          "mean_entropy": 0.6304628136988484,
+          "top_family": {
+            "END_TURN": 132,
+            "BANK_TRADE": 248,
+            "BUILD_ROAD": 3
+          },
+          "champion_family_agreement": 0.3179916317991632,
+          "agreement_denominator": 239
+        },
+        "native_family_logits": {
+          "mean_entropy": 0.36531515140957566,
+          "top_family": {
+            "BUILD_CITY": 14,
+            "BANK_TRADE": 127,
+            "BUY_DEVELOPMENT": 98,
+            "BUILD_SETTLEMENT": 24,
+            "BUILD_ROAD": 120
+          },
+          "champion_family_agreement": 0.5481171548117155,
+          "agreement_denominator": 239
+        }
+      },
+      "cardinality": {
+        "BUILD_ROAD": {
+          "n": 185,
+          "min_legal_actions": 5,
+          "max_legal_actions": 13,
+          "count_vs_probability_pearson": {
+            "uniform": -0.06284637927807525,
+            "max_legal_logit": -0.10166733349638071,
+            "log_mean_exp": -0.13791391054892374,
+            "native_family_logits": -0.06959502979475603
+          }
+        },
+        "BANK_TRADE": {
+          "n": 248,
+          "min_legal_actions": 4,
+          "max_legal_actions": 12,
+          "count_vs_probability_pearson": {
+            "uniform": -0.29467115048473247,
+            "max_legal_logit": 0.10790312515150202,
+            "log_mean_exp": -0.1324489583165594,
+            "native_family_logits": -0.2631213913150533
+          }
+        }
+      }
+    },
+    "mixed": {
+      "decisions": 347,
+      "candidate_count": {
+        "2": 160,
+        "3": 129,
+        "4": 47,
+        "5": 10,
+        "6": 1
+      },
+      "protected_player_trade_available": 118,
+      "protected_player_trade_selected": 118,
+      "all_candidates_executor_success": 347,
+      "executor_available": {
+        "BUILD_ROAD": 201,
+        "END_TURN": 347,
+        "BUY_DEVELOPMENT": 134,
+        "BUILD_SETTLEMENT": 34,
+        "BUILD_CITY": 31,
+        "BANK_TRADE": 204
+      },
+      "executor_success": {
+        "BUILD_ROAD": 201,
+        "END_TURN": 347,
+        "BUY_DEVELOPMENT": 134,
+        "BUILD_SETTLEMENT": 34,
+        "BUILD_CITY": 31,
+        "BANK_TRADE": 204
+      },
+      "executor_failure": {},
+      "executor_method": {
+        "BUILD_ROAD:A_PLANNER_EXTRACTION": {
+          "available": 201,
+          "success": 201,
+          "champion_same_family": 69,
+          "champion_exact_match": 59,
+          "failures": {},
+          "road_quality": {
+            "expansion_edges": 197,
+            "longest_progress_edges": 143,
+            "both_edges": 139,
+            "other_edges": 0
+          }
+        },
+        "BUILD_ROAD:B_FROZEN_PPO": {
+          "available": 201,
+          "success": 201,
+          "champion_same_family": 69,
+          "champion_exact_match": 29,
+          "failures": {},
+          "road_quality": {
+            "expansion_edges": 148,
+            "longest_progress_edges": 98,
+            "both_edges": 75,
+            "other_edges": 30
+          }
+        },
+        "END_TURN:B_FROZEN_PPO": {
+          "available": 347,
+          "success": 347,
+          "champion_same_family": 55,
+          "champion_exact_match": 55,
+          "failures": {},
+          "road_quality": {}
+        },
+        "BUY_DEVELOPMENT:B_FROZEN_PPO": {
+          "available": 134,
+          "success": 134,
+          "champion_same_family": 16,
+          "champion_exact_match": 16,
+          "failures": {},
+          "road_quality": {}
+        },
+        "BUILD_SETTLEMENT:B_FROZEN_PPO": {
+          "available": 34,
+          "success": 34,
+          "champion_same_family": 33,
+          "champion_exact_match": 33,
+          "failures": {},
+          "road_quality": {}
+        },
+        "BUILD_CITY:B_FROZEN_PPO": {
+          "available": 31,
+          "success": 31,
+          "champion_same_family": 20,
+          "champion_exact_match": 20,
+          "failures": {},
+          "road_quality": {}
+        },
+        "BANK_TRADE:A_PLANNER_EXTRACTION": {
+          "available": 204,
+          "success": 0,
+          "champion_same_family": 36,
+          "champion_exact_match": 0,
+          "failures": {
+            "UNSAFE_GOAL_BUDGET_DEPENDENCY": 204
+          },
+          "road_quality": {}
+        },
+        "BANK_TRADE:B_FROZEN_PPO": {
+          "available": 204,
+          "success": 204,
+          "champion_same_family": 36,
+          "champion_exact_match": 22,
+          "failures": {},
+          "road_quality": {}
+        }
+      },
+      "priors": {
+        "uniform": {
+          "mean_entropy": 0.9673386388875541,
+          "top_family": {
+            "BUILD_ROAD": 159,
+            "BUILD_SETTLEMENT": 34,
+            "BUILD_CITY": 29,
+            "BUY_DEVELOPMENT": 61,
+            "BANK_TRADE": 64
+          },
+          "champion_family_agreement": 0.6724890829694323,
+          "agreement_denominator": 229
+        },
+        "max_legal_logit": {
+          "mean_entropy": 0.5612471202328947,
+          "top_family": {
+            "BUILD_ROAD": 93,
+            "BANK_TRADE": 204,
+            "END_TURN": 50
+          },
+          "champion_family_agreement": 0.40611353711790393,
+          "agreement_denominator": 229
+        },
+        "log_mean_exp": {
+          "mean_entropy": 0.6765512293312496,
+          "top_family": {
+            "END_TURN": 142,
+            "BUILD_ROAD": 1,
+            "BANK_TRADE": 204
+          },
+          "champion_family_agreement": 0.2663755458515284,
+          "agreement_denominator": 229
+        },
+        "native_family_logits": {
+          "mean_entropy": 0.3237459645870909,
+          "top_family": {
+            "BUILD_ROAD": 104,
+            "BUY_DEVELOPMENT": 103,
+            "BUILD_SETTLEMENT": 34,
+            "BUILD_CITY": 29,
+            "BANK_TRADE": 74,
+            "END_TURN": 3
+          },
+          "champion_family_agreement": 0.6244541484716157,
+          "agreement_denominator": 229
+        }
+      },
+      "cardinality": {
+        "BUILD_ROAD": {
+          "n": 201,
+          "min_legal_actions": 6,
+          "max_legal_actions": 12,
+          "count_vs_probability_pearson": {
+            "uniform": -0.015417203058185558,
+            "max_legal_logit": -0.1232948711844508,
+            "log_mean_exp": -0.1670844006355023,
+            "native_family_logits": 0.042696267757680595
+          }
+        },
+        "BANK_TRADE": {
+          "n": 204,
+          "min_legal_actions": 4,
+          "max_legal_actions": 12,
+          "count_vs_probability_pearson": {
+            "uniform": -0.14217367266158865,
+            "max_legal_logit": 0.22003577646506997,
+            "log_mean_exp": 0.06836808432314583,
+            "native_family_logits": -0.09816959207482318
+          }
+        }
+      }
+    }
+  },
+  "by_seat": {
+    "1": {
+      "decisions": 295,
+      "candidate_count": {
+        "2": 165,
+        "3": 93,
+        "4": 31,
+        "5": 5,
+        "6": 1
+      },
+      "protected_player_trade_available": 101,
+      "protected_player_trade_selected": 101,
+      "all_candidates_executor_success": 295,
+      "executor_available": {
+        "BUILD_ROAD": 126,
+        "END_TURN": 295,
+        "BANK_TRADE": 183,
+        "BUILD_SETTLEMENT": 25,
+        "BUY_DEVELOPMENT": 120,
+        "BUILD_CITY": 15
+      },
+      "executor_success": {
+        "BUILD_ROAD": 126,
+        "END_TURN": 295,
+        "BANK_TRADE": 183,
+        "BUILD_SETTLEMENT": 25,
+        "BUY_DEVELOPMENT": 120,
+        "BUILD_CITY": 15
+      },
+      "executor_failure": {},
+      "executor_method": {
+        "BUILD_ROAD:A_PLANNER_EXTRACTION": {
+          "available": 126,
+          "success": 126,
+          "champion_same_family": 51,
+          "champion_exact_match": 47,
+          "failures": {},
+          "road_quality": {
+            "expansion_edges": 118,
+            "longest_progress_edges": 98,
+            "both_edges": 90,
+            "other_edges": 0
+          }
+        },
+        "BUILD_ROAD:B_FROZEN_PPO": {
+          "available": 126,
+          "success": 126,
+          "champion_same_family": 51,
+          "champion_exact_match": 22,
+          "failures": {},
+          "road_quality": {
+            "expansion_edges": 88,
+            "longest_progress_edges": 82,
+            "both_edges": 68,
+            "other_edges": 24
+          }
+        },
+        "END_TURN:B_FROZEN_PPO": {
+          "available": 295,
+          "success": 295,
+          "champion_same_family": 60,
+          "champion_exact_match": 60,
+          "failures": {},
+          "road_quality": {}
+        },
+        "BANK_TRADE:A_PLANNER_EXTRACTION": {
+          "available": 183,
+          "success": 0,
+          "champion_same_family": 30,
+          "champion_exact_match": 0,
+          "failures": {
+            "UNSAFE_GOAL_BUDGET_DEPENDENCY": 183
+          },
+          "road_quality": {}
+        },
+        "BANK_TRADE:B_FROZEN_PPO": {
+          "available": 183,
+          "success": 183,
+          "champion_same_family": 30,
+          "champion_exact_match": 20,
+          "failures": {},
+          "road_quality": {}
+        },
+        "BUILD_SETTLEMENT:B_FROZEN_PPO": {
+          "available": 25,
+          "success": 25,
+          "champion_same_family": 24,
+          "champion_exact_match": 24,
+          "failures": {},
+          "road_quality": {}
+        },
+        "BUY_DEVELOPMENT:B_FROZEN_PPO": {
+          "available": 120,
+          "success": 120,
+          "champion_same_family": 16,
+          "champion_exact_match": 16,
+          "failures": {},
+          "road_quality": {}
+        },
+        "BUILD_CITY:B_FROZEN_PPO": {
+          "available": 15,
+          "success": 15,
+          "champion_same_family": 13,
+          "champion_exact_match": 13,
+          "failures": {},
+          "road_quality": {}
+        }
+      },
+      "priors": {
+        "uniform": {
+          "mean_entropy": 0.9130654300496283,
+          "top_family": {
+            "BUILD_ROAD": 97,
+            "BANK_TRADE": 92,
+            "BUILD_SETTLEMENT": 25,
+            "BUY_DEVELOPMENT": 67,
+            "BUILD_CITY": 14
+          },
+          "champion_family_agreement": 0.6288659793814433,
+          "agreement_denominator": 194
+        },
+        "max_legal_logit": {
+          "mean_entropy": 0.49391357302307015,
+          "top_family": {
+            "BUILD_ROAD": 62,
+            "BANK_TRADE": 183,
+            "END_TURN": 50
+          },
+          "champion_family_agreement": 0.3865979381443299,
+          "agreement_denominator": 194
+        },
+        "log_mean_exp": {
+          "mean_entropy": 0.6386821655510496,
+          "top_family": {
+            "END_TURN": 111,
+            "BANK_TRADE": 183,
+            "BUILD_ROAD": 1
+          },
+          "champion_family_agreement": 0.27319587628865977,
+          "agreement_denominator": 194
+        },
+        "native_family_logits": {
+          "mean_entropy": 0.2783680629917225,
+          "top_family": {
+            "BUILD_ROAD": 54,
+            "BANK_TRADE": 100,
+            "BUILD_SETTLEMENT": 25,
+            "BUY_DEVELOPMENT": 102,
+            "BUILD_CITY": 14
+          },
+          "champion_family_agreement": 0.5360824742268041,
+          "agreement_denominator": 194
+        }
+      },
+      "cardinality": {
+        "BUILD_ROAD": {
+          "n": 126,
+          "min_legal_actions": 5,
+          "max_legal_actions": 13,
+          "count_vs_probability_pearson": {
+            "uniform": -0.019339665134098988,
+            "max_legal_logit": -0.023678698778347086,
+            "log_mean_exp": -0.007453891776370875,
+            "native_family_logits": 0.03113302049550304
+          }
+        },
+        "BANK_TRADE": {
+          "n": 183,
+          "min_legal_actions": 4,
+          "max_legal_actions": 16,
+          "count_vs_probability_pearson": {
+            "uniform": -0.25360646991281205,
+            "max_legal_logit": 0.21783034774157847,
+            "log_mean_exp": -0.024436423204620288,
+            "native_family_logits": -0.19850393100139363
+          }
+        }
+      }
+    },
+    "2": {
+      "decisions": 262,
+      "candidate_count": {
+        "2": 153,
+        "3": 86,
+        "4": 21,
+        "5": 2
+      },
+      "protected_player_trade_available": 97,
+      "protected_player_trade_selected": 97,
+      "all_candidates_executor_success": 262,
+      "executor_available": {
+        "BUY_DEVELOPMENT": 61,
+        "END_TURN": 262,
+        "BUILD_ROAD": 149,
+        "BANK_TRADE": 148,
+        "BUILD_SETTLEMENT": 22,
+        "BUILD_CITY": 16
+      },
+      "executor_success": {
+        "BUY_DEVELOPMENT": 61,
+        "END_TURN": 262,
+        "BUILD_ROAD": 149,
+        "BANK_TRADE": 148,
+        "BUILD_SETTLEMENT": 22,
+        "BUILD_CITY": 16
+      },
+      "executor_failure": {},
+      "executor_method": {
+        "BUY_DEVELOPMENT:B_FROZEN_PPO": {
+          "available": 61,
+          "success": 61,
+          "champion_same_family": 15,
+          "champion_exact_match": 15,
+          "failures": {},
+          "road_quality": {}
+        },
+        "END_TURN:B_FROZEN_PPO": {
+          "available": 262,
+          "success": 262,
+          "champion_same_family": 50,
+          "champion_exact_match": 50,
+          "failures": {},
+          "road_quality": {}
+        },
+        "BUILD_ROAD:A_PLANNER_EXTRACTION": {
+          "available": 149,
+          "success": 149,
+          "champion_same_family": 47,
+          "champion_exact_match": 43,
+          "failures": {},
+          "road_quality": {
+            "expansion_edges": 145,
+            "longest_progress_edges": 118,
+            "both_edges": 114,
+            "other_edges": 0
+          }
+        },
+        "BUILD_ROAD:B_FROZEN_PPO": {
+          "available": 149,
+          "success": 149,
+          "champion_same_family": 47,
+          "champion_exact_match": 13,
+          "failures": {},
+          "road_quality": {
+            "expansion_edges": 109,
+            "longest_progress_edges": 92,
+            "both_edges": 75,
+            "other_edges": 23
+          }
+        },
+        "BANK_TRADE:A_PLANNER_EXTRACTION": {
+          "available": 148,
+          "success": 0,
+          "champion_same_family": 21,
+          "champion_exact_match": 0,
+          "failures": {
+            "UNSAFE_GOAL_BUDGET_DEPENDENCY": 148
+          },
+          "road_quality": {}
+        },
+        "BANK_TRADE:B_FROZEN_PPO": {
+          "available": 148,
+          "success": 148,
+          "champion_same_family": 21,
+          "champion_exact_match": 6,
+          "failures": {},
+          "road_quality": {}
+        },
+        "BUILD_SETTLEMENT:B_FROZEN_PPO": {
+          "available": 22,
+          "success": 22,
+          "champion_same_family": 21,
+          "champion_exact_match": 21,
+          "failures": {},
+          "road_quality": {}
+        },
+        "BUILD_CITY:B_FROZEN_PPO": {
+          "available": 16,
+          "success": 16,
+          "champion_same_family": 11,
+          "champion_exact_match": 11,
+          "failures": {},
+          "road_quality": {}
+        }
+      },
+      "priors": {
+        "uniform": {
+          "mean_entropy": 0.8887909651126525,
+          "top_family": {
+            "BUY_DEVELOPMENT": 36,
+            "BUILD_ROAD": 123,
+            "BANK_TRADE": 65,
+            "BUILD_SETTLEMENT": 22,
+            "BUILD_CITY": 16
+          },
+          "champion_family_agreement": 0.6181818181818182,
+          "agreement_denominator": 165
+        },
+        "max_legal_logit": {
+          "mean_entropy": 0.5482879108979146,
+          "top_family": {
+            "END_TURN": 31,
+            "BANK_TRADE": 148,
+            "BUILD_ROAD": 83
+          },
+          "champion_family_agreement": 0.3515151515151515,
+          "agreement_denominator": 165
+        },
+        "log_mean_exp": {
+          "mean_entropy": 0.6439844210735018,
+          "top_family": {
+            "END_TURN": 114,
+            "BANK_TRADE": 148
+          },
+          "champion_family_agreement": 0.2545454545454545,
+          "agreement_denominator": 165
+        },
+        "native_family_logits": {
+          "mean_entropy": 0.3790482536709412,
+          "top_family": {
+            "BUY_DEVELOPMENT": 49,
+            "BUILD_ROAD": 105,
+            "BANK_TRADE": 70,
+            "BUILD_SETTLEMENT": 22,
+            "BUILD_CITY": 16
+          },
+          "champion_family_agreement": 0.6,
+          "agreement_denominator": 165
+        }
+      },
+      "cardinality": {
+        "BUILD_ROAD": {
+          "n": 149,
+          "min_legal_actions": 5,
+          "max_legal_actions": 11,
+          "count_vs_probability_pearson": {
+            "uniform": 0.01860468011612046,
+            "max_legal_logit": 0.07386902904129466,
+            "log_mean_exp": 0.023996342742666106,
+            "native_family_logits": -0.0021417178491616846
+          }
+        },
+        "BANK_TRADE": {
+          "n": 148,
+          "min_legal_actions": 3,
+          "max_legal_actions": 12,
+          "count_vs_probability_pearson": {
+            "uniform": -0.2062038324367165,
+            "max_legal_logit": 0.17213245101425748,
+            "log_mean_exp": 0.01682794283536237,
+            "native_family_logits": -0.21424294290139492
+          }
+        }
+      }
+    },
+    "3": {
+      "decisions": 327,
+      "candidate_count": {
+        "2": 140,
+        "3": 127,
+        "4": 49,
+        "5": 10,
+        "6": 1
+      },
+      "protected_player_trade_available": 123,
+      "protected_player_trade_selected": 123,
+      "all_candidates_executor_success": 327,
+      "executor_available": {
+        "BUY_DEVELOPMENT": 114,
+        "END_TURN": 327,
+        "BUILD_ROAD": 211,
+        "BANK_TRADE": 205,
+        "BUILD_SETTLEMENT": 29,
+        "BUILD_CITY": 27
+      },
+      "executor_success": {
+        "BUY_DEVELOPMENT": 114,
+        "END_TURN": 327,
+        "BUILD_ROAD": 211,
+        "BANK_TRADE": 205,
+        "BUILD_SETTLEMENT": 29,
+        "BUILD_CITY": 27
+      },
+      "executor_failure": {},
+      "executor_method": {
+        "BUY_DEVELOPMENT:B_FROZEN_PPO": {
+          "available": 114,
+          "success": 114,
+          "champion_same_family": 14,
+          "champion_exact_match": 14,
+          "failures": {},
+          "road_quality": {}
+        },
+        "END_TURN:B_FROZEN_PPO": {
+          "available": 327,
+          "success": 327,
+          "champion_same_family": 43,
+          "champion_exact_match": 43,
+          "failures": {},
+          "road_quality": {}
+        },
+        "BUILD_ROAD:A_PLANNER_EXTRACTION": {
+          "available": 211,
+          "success": 211,
+          "champion_same_family": 61,
+          "champion_exact_match": 57,
+          "failures": {},
+          "road_quality": {
+            "expansion_edges": 171,
+            "longest_progress_edges": 168,
+            "both_edges": 128,
+            "other_edges": 0
+          }
+        },
+        "BUILD_ROAD:B_FROZEN_PPO": {
+          "available": 211,
+          "success": 211,
+          "champion_same_family": 61,
+          "champion_exact_match": 25,
+          "failures": {},
+          "road_quality": {
+            "expansion_edges": 134,
+            "longest_progress_edges": 96,
+            "both_edges": 59,
+            "other_edges": 40
+          }
+        },
+        "BANK_TRADE:A_PLANNER_EXTRACTION": {
+          "available": 205,
+          "success": 0,
+          "champion_same_family": 36,
+          "champion_exact_match": 0,
+          "failures": {
+            "UNSAFE_GOAL_BUDGET_DEPENDENCY": 205
+          },
+          "road_quality": {}
+        },
+        "BANK_TRADE:B_FROZEN_PPO": {
+          "available": 205,
+          "success": 205,
+          "champion_same_family": 36,
+          "champion_exact_match": 16,
+          "failures": {},
+          "road_quality": {}
+        },
+        "BUILD_SETTLEMENT:B_FROZEN_PPO": {
+          "available": 29,
+          "success": 29,
+          "champion_same_family": 28,
+          "champion_exact_match": 28,
+          "failures": {},
+          "road_quality": {}
+        },
+        "BUILD_CITY:B_FROZEN_PPO": {
+          "available": 27,
+          "success": 27,
+          "champion_same_family": 22,
+          "champion_exact_match": 22,
+          "failures": {},
+          "road_quality": {}
+        }
+      },
+      "priors": {
+        "uniform": {
+          "mean_entropy": 0.9858682820418531,
+          "top_family": {
+            "BUY_DEVELOPMENT": 48,
+            "BUILD_ROAD": 170,
+            "BUILD_SETTLEMENT": 29,
+            "BANK_TRADE": 55,
+            "BUILD_CITY": 25
+          },
+          "champion_family_agreement": 0.7107843137254902,
+          "agreement_denominator": 204
+        },
+        "max_legal_logit": {
+          "mean_entropy": 0.5701718981324168,
+          "top_family": {
+            "END_TURN": 47,
+            "BANK_TRADE": 205,
+            "BUILD_ROAD": 75
+          },
+          "champion_family_agreement": 0.4117647058823529,
+          "agreement_denominator": 204
+        },
+        "log_mean_exp": {
+          "mean_entropy": 0.690736206993354,
+          "top_family": {
+            "END_TURN": 117,
+            "BANK_TRADE": 205,
+            "BUILD_ROAD": 5
+          },
+          "champion_family_agreement": 0.28921568627450983,
+          "agreement_denominator": 204
+        },
+        "native_family_logits": {
+          "mean_entropy": 0.38686375019804164,
+          "top_family": {
+            "BUY_DEVELOPMENT": 91,
+            "BUILD_ROAD": 109,
+            "BUILD_SETTLEMENT": 29,
+            "BANK_TRADE": 70,
+            "BUILD_CITY": 25,
+            "END_TURN": 3
+          },
+          "champion_family_agreement": 0.6372549019607843,
+          "agreement_denominator": 204
+        }
+      },
+      "cardinality": {
+        "BUILD_ROAD": {
+          "n": 211,
+          "min_legal_actions": 5,
+          "max_legal_actions": 12,
+          "count_vs_probability_pearson": {
+            "uniform": -0.013035668580069484,
+            "max_legal_logit": -0.07619462676186492,
+            "log_mean_exp": -0.22588219182666258,
+            "native_family_logits": -0.07773042276278215
+          }
+        },
+        "BANK_TRADE": {
+          "n": 205,
+          "min_legal_actions": 4,
+          "max_legal_actions": 12,
+          "count_vs_probability_pearson": {
+            "uniform": -0.19531025528346033,
+            "max_legal_logit": 0.09924109289189183,
+            "log_mean_exp": -0.06343700675232682,
+            "native_family_logits": -0.15676261647951498
+          }
+        }
+      }
+    },
+    "4": {
+      "decisions": 239,
+      "candidate_count": {
+        "2": 112,
+        "3": 93,
+        "4": 31,
+        "5": 3
+      },
+      "protected_player_trade_available": 67,
+      "protected_player_trade_selected": 67,
+      "all_candidates_executor_success": 239,
+      "executor_available": {
+        "BUILD_ROAD": 130,
+        "END_TURN": 239,
+        "BUILD_SETTLEMENT": 21,
+        "BANK_TRADE": 130,
+        "BUY_DEVELOPMENT": 108,
+        "BUILD_CITY": 14
+      },
+      "executor_success": {
+        "BUILD_ROAD": 130,
+        "END_TURN": 239,
+        "BUILD_SETTLEMENT": 21,
+        "BANK_TRADE": 130,
+        "BUY_DEVELOPMENT": 108,
+        "BUILD_CITY": 14
+      },
+      "executor_failure": {},
+      "executor_method": {
+        "BUILD_ROAD:A_PLANNER_EXTRACTION": {
+          "available": 130,
+          "success": 130,
+          "champion_same_family": 53,
+          "champion_exact_match": 47,
+          "failures": {},
+          "road_quality": {
+            "expansion_edges": 117,
+            "longest_progress_edges": 110,
+            "both_edges": 97,
+            "other_edges": 0
+          }
+        },
+        "BUILD_ROAD:B_FROZEN_PPO": {
+          "available": 130,
+          "success": 130,
+          "champion_same_family": 53,
+          "champion_exact_match": 27,
+          "failures": {},
+          "road_quality": {
+            "expansion_edges": 91,
+            "longest_progress_edges": 66,
+            "both_edges": 52,
+            "other_edges": 25
+          }
+        },
+        "END_TURN:B_FROZEN_PPO": {
+          "available": 239,
+          "success": 239,
+          "champion_same_family": 49,
+          "champion_exact_match": 49,
+          "failures": {},
+          "road_quality": {}
+        },
+        "BUILD_SETTLEMENT:B_FROZEN_PPO": {
+          "available": 21,
+          "success": 21,
+          "champion_same_family": 21,
+          "champion_exact_match": 21,
+          "failures": {},
+          "road_quality": {}
+        },
+        "BANK_TRADE:A_PLANNER_EXTRACTION": {
+          "available": 130,
+          "success": 0,
+          "champion_same_family": 24,
+          "champion_exact_match": 0,
+          "failures": {
+            "UNSAFE_GOAL_BUDGET_DEPENDENCY": 130
+          },
+          "road_quality": {}
+        },
+        "BANK_TRADE:B_FROZEN_PPO": {
+          "available": 130,
+          "success": 130,
+          "champion_same_family": 24,
+          "champion_exact_match": 15,
+          "failures": {},
+          "road_quality": {}
+        },
+        "BUY_DEVELOPMENT:B_FROZEN_PPO": {
+          "available": 108,
+          "success": 108,
+          "champion_same_family": 14,
+          "champion_exact_match": 14,
+          "failures": {},
+          "road_quality": {}
+        },
+        "BUILD_CITY:B_FROZEN_PPO": {
+          "available": 14,
+          "success": 14,
+          "champion_same_family": 11,
+          "champion_exact_match": 11,
+          "failures": {},
+          "road_quality": {}
+        }
+      },
+      "priors": {
+        "uniform": {
+          "mean_entropy": 0.9523299832672258,
+          "top_family": {
+            "BUILD_ROAD": 104,
+            "BUILD_SETTLEMENT": 21,
+            "BANK_TRADE": 45,
+            "BUY_DEVELOPMENT": 55,
+            "BUILD_CITY": 14
+          },
+          "champion_family_agreement": 0.6627906976744186,
+          "agreement_denominator": 172
+        },
+        "max_legal_logit": {
+          "mean_entropy": 0.5523809007868057,
+          "top_family": {
+            "END_TURN": 45,
+            "BUILD_ROAD": 64,
+            "BANK_TRADE": 130
+          },
+          "champion_family_agreement": 0.4127906976744186,
+          "agreement_denominator": 172
+        },
+        "log_mean_exp": {
+          "mean_entropy": 0.6669051575098284,
+          "top_family": {
+            "END_TURN": 109,
+            "BANK_TRADE": 130
+          },
+          "champion_family_agreement": 0.2616279069767442,
+          "agreement_denominator": 172
+        },
+        "native_family_logits": {
+          "mean_entropy": 0.253629012908001,
+          "top_family": {
+            "BUILD_ROAD": 64,
+            "BUILD_SETTLEMENT": 21,
+            "BANK_TRADE": 50,
+            "BUY_DEVELOPMENT": 90,
+            "BUILD_CITY": 14
+          },
+          "champion_family_agreement": 0.5581395348837209,
+          "agreement_denominator": 172
+        }
+      },
+      "cardinality": {
+        "BUILD_ROAD": {
+          "n": 130,
+          "min_legal_actions": 4,
+          "max_legal_actions": 12,
+          "count_vs_probability_pearson": {
+            "uniform": -0.17014944359476192,
+            "max_legal_logit": -0.09316448135506926,
+            "log_mean_exp": -0.1250517860028129,
+            "native_family_logits": 0.018967881783275187
+          }
+        },
+        "BANK_TRADE": {
+          "n": 130,
+          "min_legal_actions": 4,
+          "max_legal_actions": 12,
+          "count_vs_probability_pearson": {
+            "uniform": -0.022789544924215407,
+            "max_legal_logit": 0.23961230049848115,
+            "log_mean_exp": 0.054885535088067955,
+            "native_family_logits": -0.014180502696480036
+          }
+        }
+      }
+    }
+  },
+  "winning_action_detected": 19,
+  "winning_action_missed_by_champion": 3,
+  "winning_action_family": {
+    "BUILD_SETTLEMENT": 10,
+    "BUILD_CITY": 7,
+    "BUILD_ROAD": 2
+  },
+  "winning_miss_champion_family": {
+    "PROTECTED_PLAYER_TRADE": 3
+  },
+  "parity_games": 36,
+  "champion_weights_unchanged": true,
+  "actor_critic_logits_parity_checks": 1123,
+  "zero_residual_prior_checks": 1123,
+  "seed_start": 2940000,
+  "games_per_profile": 12,
+  "champion_model_id": "ppo_gnn_board_65k_s03_exp_v003",
+  "robber_model_id": "ppo_robber_value_73k_s01_exp_v001",
+  "champion_weight_digest": "4225902d41a83540eb1f1552826ec623706e778b99ad4ae8ec015f976644392a",
+  "candidate_surface_version": "strategic_action_surface_step3a12_v1"
+}

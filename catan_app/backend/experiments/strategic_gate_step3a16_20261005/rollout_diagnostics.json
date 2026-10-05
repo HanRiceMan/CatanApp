@@ -1,0 +1,104 @@
+{
+  "games": 72,
+  "transitions": 299,
+  "profile_games": {
+    "rule": 24,
+    "champion": 24,
+    "mixed": 24
+  },
+  "seat_games": {
+    "1": 18,
+    "2": 18,
+    "3": 18,
+    "4": 18
+  },
+  "family_selected": {
+    "BUY_DEVELOPMENT": 81,
+    "BUILD_SETTLEMENT": 39,
+    "BUILD_ROAD": 54,
+    "BUILD_CITY": 22,
+    "BANK_TRADE": 61,
+    "END_TURN": 42
+  },
+  "family_available": {
+    "BUILD_ROAD": 163,
+    "BUY_DEVELOPMENT": 117,
+    "END_TURN": 299,
+    "BUILD_SETTLEMENT": 40,
+    "BANK_TRADE": 160,
+    "BUILD_CITY": 24
+  },
+  "candidate_count": {
+    "3": 91,
+    "4+": 51,
+    "2": 157
+  },
+  "native_top_selected": 238,
+  "native_non_top_selected": 61,
+  "native_non_top_by_family": {
+    "BUILD_ROAD": 3,
+    "END_TURN": 42,
+    "BANK_TRADE": 14,
+    "BUY_DEVELOPMENT": 2
+  },
+  "entropy": {
+    "n": 299,
+    "mean": 0.47134469547947516,
+    "std": 0.2816771143584468,
+    "min": 0.010301019996404648,
+    "p5": 0.040447446331381795,
+    "median": 0.5178182125091553,
+    "p95": 1.0245240688323973,
+    "max": 1.096256136894226
+  },
+  "macro_duration": {
+    "n": 299,
+    "mean": 13.591973244147157,
+    "std": 11.614807285539465,
+    "min": 1.0,
+    "p5": 1.0,
+    "median": 11.0,
+    "p95": 37.0,
+    "max": 70.0
+  },
+  "macro_reward": {
+    "n": 299,
+    "mean": 0.05372742342660209,
+    "std": 0.446643702947115,
+    "min": -1.0,
+    "p5": -0.9236767597758271,
+    "median": 0.04476691271293582,
+    "p95": 1.038253650274487,
+    "max": 1.1475395523949998
+  },
+  "terminal_reward": {
+    "n": 68,
+    "mean": 0.08335049464246339,
+    "std": 0.9305082680831506,
+    "min": -1.0,
+    "p5": -0.99,
+    "median": -0.4182786441579378,
+    "p95": 1.0952406063951274,
+    "max": 1.1475395523949998
+  },
+  "nonterminal_reward": {
+    "n": 231,
+    "mean": 0.04500721198643514,
+    "std": 0.05477019244028448,
+    "min": -0.09801,
+    "p5": 0.0,
+    "median": 0.04476691271293582,
+    "p95": 0.14825022569418483,
+    "max": 0.2732406497258231
+  },
+  "terminal_transitions": 68,
+  "protected_trades_crossed": 559,
+  "nondelegated_surfaces_crossed": 899,
+  "resolver_events": 32,
+  "resolver_crossed": 31,
+  "coverage_gate": {
+    "each_family_at_least_5": true,
+    "non_top_at_least_30": true,
+    "candidate_3plus_at_least_30": true
+  }
+}

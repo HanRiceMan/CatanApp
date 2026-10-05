@@ -224,6 +224,9 @@ def run_strategic_episode(
     stochastic_gate: bool = False, max_policy_steps: int = 5000,
     force_family: str | None = None, resolver_enabled: bool | None = None,
     prior_temperature: float = 1.0,
+    strategic_gate: StrategicActionGate | None = None,
+    strategic_critic: StrategicSurfaceCritic | None = None,
+    record_training_inputs: bool = False,
 ) -> StrategicEpisode:
     """Run one episode; only actual Gate decisions create semi-MDP samples."""
     if profile not in PROFILE_ROLES or mode not in {"legacy", "safety", "strategic"}:
@@ -246,8 +249,10 @@ def run_strategic_episode(
     champion = SettlementPlanningAgent(champion_policy, **planning)
     executors = FrozenStrategicExecutors(champion)
     latent_dim = champion_policy.model.policy.mlp_extractor.latent_dim_pi
-    gate = StrategicActionGate(latent_dim).eval()
-    critic = StrategicSurfaceCritic(latent_dim).eval()
+    gate = (strategic_gate if strategic_gate is not None
+            else StrategicActionGate(latent_dim)).eval()
+    critic = (strategic_critic if strategic_critic is not None
+              else StrategicSurfaceCritic(latent_dim)).eval()
     probe = _seat_probe(seed)
     opponents = {}
     ids = [pid for pid in probe.seat_order if pid != learner_id]
@@ -355,11 +360,12 @@ def run_strategic_episode(
                                     probabilities = torch.softmax(logits, dim=-1)[0].cpu().numpy()
                                     value = critic(snapshot.critic_value, latent,
                                                    context, family_mask)
-                                expected = masked_temperature_probabilities(
-                                    prior["raw_scores"]["native_family_logits"],
-                                    surface.family_mask, prior_temperature)
-                                if not np.allclose(probabilities, expected, rtol=0, atol=1e-6):
-                                    raise AssertionError("Zero residual / calibrated prior mismatch")
+                                if strategic_gate is None:
+                                    expected = masked_temperature_probabilities(
+                                        prior["raw_scores"]["native_family_logits"],
+                                        surface.family_mask, prior_temperature)
+                                    if not np.allclose(probabilities, expected, rtol=0, atol=1e-6):
+                                        raise AssertionError("Zero residual / calibrated prior mismatch")
                                 family_index = (FAMILIES.index(force_family) if force
                                                 else _sample_family(probabilities, gate_rng,
                                                                     stochastic_gate))
@@ -380,7 +386,7 @@ def run_strategic_episode(
                                 selected_value = float(value.item())
                                 delegated = True
                                 forced_applied |= force
-                                decisions.append({
+                                record = {
                                     "pre_policy_step": env.policy_steps,
                                     "turn": game.turn_number, "revision": pre_revision,
                                     "candidate_mask": list(selected_mask),
@@ -404,7 +410,17 @@ def run_strategic_episode(
                                     "entropy": float(-sum(p * log(p) for p in probabilities if p > 0)),
                                     "value": selected_value,
                                     "hand_size": sum(game.players[learner_id - 1].resources.values()),
-                                })
+                                }
+                                if record_training_inputs:
+                                    if snapshot.observation_v2 is None:
+                                        raise AssertionError("Missing pre-action observation")
+                                    record.update({
+                                        "observation_v2": snapshot.observation_v2.tolist(),
+                                        "runtime_context": snapshot.runtime_context.tolist(),
+                                        "old_calibrated_logits": logits[0].cpu().tolist(),
+                                        "frozen_base_value": float(snapshot.critic_value.item()),
+                                    })
+                                decisions.append(record)
                             elif pending is not None:
                                 pending["nondelegated_surfaces_crossed"] += 1
                     # A protected trade is not an on-policy Strategic sample.

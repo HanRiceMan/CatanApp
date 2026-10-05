@@ -1,0 +1,178 @@
+{
+  "rollout": {
+    "games": 72,
+    "transitions": 299,
+    "profile_games": {
+      "rule": 24,
+      "champion": 24,
+      "mixed": 24
+    },
+    "seat_games": {
+      "1": 18,
+      "2": 18,
+      "3": 18,
+      "4": 18
+    },
+    "family_selected": {
+      "BUY_DEVELOPMENT": 81,
+      "BUILD_SETTLEMENT": 39,
+      "BUILD_ROAD": 54,
+      "BUILD_CITY": 22,
+      "BANK_TRADE": 61,
+      "END_TURN": 42
+    },
+    "family_available": {
+      "BUILD_ROAD": 163,
+      "BUY_DEVELOPMENT": 117,
+      "END_TURN": 299,
+      "BUILD_SETTLEMENT": 40,
+      "BANK_TRADE": 160,
+      "BUILD_CITY": 24
+    },
+    "candidate_count": {
+      "3": 91,
+      "4+": 51,
+      "2": 157
+    },
+    "native_top_selected": 238,
+    "native_non_top_selected": 61,
+    "native_non_top_by_family": {
+      "BUILD_ROAD": 3,
+      "END_TURN": 42,
+      "BANK_TRADE": 14,
+      "BUY_DEVELOPMENT": 2
+    },
+    "entropy": {
+      "n": 299,
+      "mean": 0.47134469547947516,
+      "std": 0.2816771143584468,
+      "min": 0.010301019996404648,
+      "p5": 0.040447446331381795,
+      "median": 0.5178182125091553,
+      "p95": 1.0245240688323973,
+      "max": 1.096256136894226
+    },
+    "macro_duration": {
+      "n": 299,
+      "mean": 13.591973244147157,
+      "std": 11.614807285539465,
+      "min": 1.0,
+      "p5": 1.0,
+      "median": 11.0,
+      "p95": 37.0,
+      "max": 70.0
+    },
+    "macro_reward": {
+      "n": 299,
+      "mean": 0.05372742342660209,
+      "std": 0.446643702947115,
+      "min": -1.0,
+      "p5": -0.9236767597758271,
+      "median": 0.04476691271293582,
+      "p95": 1.038253650274487,
+      "max": 1.1475395523949998
+    },
+    "terminal_reward": {
+      "n": 68,
+      "mean": 0.08335049464246339,
+      "std": 0.9305082680831506,
+      "min": -1.0,
+      "p5": -0.99,
+      "median": -0.4182786441579378,
+      "p95": 1.0952406063951274,
+      "max": 1.1475395523949998
+    },
+    "nonterminal_reward": {
+      "n": 231,
+      "mean": 0.04500721198643514,
+      "std": 0.05477019244028448,
+      "min": -0.09801,
+      "p5": 0.0,
+      "median": 0.04476691271293582,
+      "p95": 0.14825022569418483,
+      "max": 0.2732406497258231
+    },
+    "terminal_transitions": 68,
+    "protected_trades_crossed": 559,
+    "nondelegated_surfaces_crossed": 899,
+    "resolver_events": 32,
+    "resolver_crossed": 31
+  },
+  "advantage_raw": {
+    "n": 299,
+    "mean": 0.38635006249200143,
+    "std": 0.7481803129342175,
+    "min": -0.7556638121604919,
+    "p5": -0.5345684051513672,
+    "median": 0.5042000412940979,
+    "p95": 1.4967141747474662,
+    "max": 1.7858682870864868
+  },
+  "advantage_normalized": {
+    "n": 299,
+    "mean": 9.020435371526508e-09,
+    "std": 0.9999999900503082,
+    "min": -1.5263885259628296,
+    "p5": -1.2308776259422303,
+    "median": 0.15751546621322632,
+    "p95": 1.4840862870216358,
+    "max": 1.8705627918243408
+  },
+  "advantage_by_family": {
+    "BUY_DEVELOPMENT": {
+      "n": 81,
+      "mean": 0.3672785241110825
+    },
+    "BUILD_SETTLEMENT": {
+      "n": 39,
+      "mean": 0.6426604052002614
+    },
+    "BUILD_ROAD": {
+      "n": 54,
+      "mean": 0.3456687529881795
+    },
+    "BUILD_CITY": {
+      "n": 22,
+      "mean": 0.6326336833563718
+    },
+    "BANK_TRADE": {
+      "n": 61,
+      "mean": 0.20666780157900247
+    },
+    "END_TURN": {
+      "n": 42,
+      "mean": 0.3693943532804648
+    }
+  },
+  "advantage_by_terminal": {
+    "terminal": {
+      "n": 68,
+      "mean": 0.45504647120833397,
+      "std": 0.933868316997913,
+      "min": -0.7556638121604919,
+      "p5": -0.648512014746666,
+      "median": -0.16972237825393677,
+      "p95": 1.596290475130081,
+      "max": 1.7858682870864868
+    },
+    "nonterminal": {
+      "n": 231,
+      "mean": 0.36612774304303775,
+      "std": 0.6826657296035351,
+      "min": -0.6856370568275452,
+      "p5": -0.4764353632926941,
+      "median": 0.5332598090171814,
+      "p95": 1.3865171074867249,
+      "max": 1.6789470911026
+    }
+  },
+  "stored_log_prob_max_error": 2.384185791015625e-07,
+  "stored_calibrated_logits_max_error": 0.0,
+  "stored_probability_max_error": 1.1920928955078125e-07,
+  "stored_value_max_error": 1.1920928955078125e-07,
+  "stored_base_value_max_error": 1.1920928955078125e-07,
+  "trainable_gate_parameters": 30982,
+  "trainable_critic_parameters": 30657,
+  "optimizer_parameter_ids_disjoint_from_champion": true,
+  "frozen_champion_digest": "4225902d41a83540eb1f1552826ec623706e778b99ad4ae8ec015f976644392a"
+}

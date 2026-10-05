@@ -47,6 +47,7 @@ class FrozenSnapshot:
     candidate_logits: np.ndarray
     old_family_logits: np.ndarray
     runtime_context: np.ndarray
+    observation_v2: np.ndarray | None = None
 
 
 def frozen_snapshot(policy_agent, game: GameState, player_id: int,
@@ -66,7 +67,7 @@ def frozen_snapshot(policy_agent, game: GameState, player_id: int,
     if context.shape != (RUNTIME_CONTEXT_SIZE,) or not np.isfinite(context).all():
         raise AssertionError("Invalid v7 runtime context")
     return FrozenSnapshot(latent, value, all_logits[:ACTION_SPACE_SIZE],
-                          all_logits[ACTION_SPACE_SIZE:], context)
+                          all_logits[ACTION_SPACE_SIZE:], context, observation)
 
 
 def _masked_softmax(scores: np.ndarray, available: tuple[bool, ...]) -> np.ndarray:

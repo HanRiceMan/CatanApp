@@ -1,0 +1,6 @@
+{
+  "schema": "strategic_gate_ppo_step3a16_v1",
+  "minibatch_seed": 3169001,
+  "transitions": 299,
+  "champion_digest": "4225902d41a83540eb1f1552826ec623706e778b99ad4ae8ec015f976644392a"
+}

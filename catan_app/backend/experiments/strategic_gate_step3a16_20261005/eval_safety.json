@@ -1,0 +1,224 @@
+{
+  "variant": "safety",
+  "seed_start": 3260000,
+  "delegation_probability": 0.0,
+  "profile_games": {
+    "rule": 12,
+    "champion": 12,
+    "mixed": 12
+  },
+  "seat_games": {
+    "1": 9,
+    "2": 9,
+    "3": 9,
+    "4": 9
+  },
+  "outcome": {
+    "games": 36,
+    "wins": 19,
+    "win_rate": 0.5277777777777778,
+    "final_vp": {
+      "n": 36,
+      "mean": 8.194444444444445,
+      "median": 10.0,
+      "p95": 10,
+      "min": 3,
+      "max": 11
+    },
+    "rank": {
+      "n": 36,
+      "mean": 1.8888888888888888,
+      "median": 1.0,
+      "p95": 4.0,
+      "min": 1.0,
+      "max": 4.0
+    },
+    "policy_steps": {
+      "n": 36,
+      "mean": 74,
+      "median": 74.0,
+      "p95": 100,
+      "min": 42,
+      "max": 148
+    },
+    "action_phase_family_counts": {
+      "PROTECTED_PLAYER_TRADE": 447,
+      "END_TURN": 602,
+      "BUILD_ROAD": 225,
+      "BUILD_SETTLEMENT": 106,
+      "BUILD_CITY": 61,
+      "BANK_TRADE": 141,
+      "BUY_DEVELOPMENT": 51
+    },
+    "terminal": 36,
+    "truncated": 0,
+    "resolver_fires": 18
+  },
+  "gate": {
+    "gate_surface_total": 1168,
+    "protected_trade_available": 423,
+    "protected_preemption": 423,
+    "delegation_lottery_target": 745,
+    "actual_delegated": 0,
+    "family_selected": {},
+    "selected_probability": {
+      "BUILD_SETTLEMENT": {
+        "n": 0,
+        "mean": null,
+        "median": null,
+        "p95": null,
+        "min": null,
+        "max": null
+      },
+      "BUILD_CITY": {
+        "n": 0,
+        "mean": null,
+        "median": null,
+        "p95": null,
+        "min": null,
+        "max": null
+      },
+      "BUILD_ROAD": {
+        "n": 0,
+        "mean": null,
+        "median": null,
+        "p95": null,
+        "min": null,
+        "max": null
+      },
+      "BUY_DEVELOPMENT": {
+        "n": 0,
+        "mean": null,
+        "median": null,
+        "p95": null,
+        "min": null,
+        "max": null
+      },
+      "BANK_TRADE": {
+        "n": 0,
+        "mean": null,
+        "median": null,
+        "p95": null,
+        "min": null,
+        "max": null
+      },
+      "END_TURN": {
+        "n": 0,
+        "mean": null,
+        "median": null,
+        "p95": null,
+        "min": null,
+        "max": null
+      }
+    },
+    "available_probability": {
+      "BUILD_SETTLEMENT": {
+        "n": 0,
+        "mean": null,
+        "median": null,
+        "p95": null,
+        "min": null,
+        "max": null
+      },
+      "BUILD_CITY": {
+        "n": 0,
+        "mean": null,
+        "median": null,
+        "p95": null,
+        "min": null,
+        "max": null
+      },
+      "BUILD_ROAD": {
+        "n": 0,
+        "mean": null,
+        "median": null,
+        "p95": null,
+        "min": null,
+        "max": null
+      },
+      "BUY_DEVELOPMENT": {
+        "n": 0,
+        "mean": null,
+        "median": null,
+        "p95": null,
+        "min": null,
+        "max": null
+      },
+      "BANK_TRADE": {
+        "n": 0,
+        "mean": null,
+        "median": null,
+        "p95": null,
+        "min": null,
+        "max": null
+      },
+      "END_TURN": {
+        "n": 0,
+        "mean": null,
+        "median": null,
+        "p95": null,
+        "min": null,
+        "max": null
+      }
+    },
+    "selected_top1_rate": {
+      "BUILD_SETTLEMENT": null,
+      "BUILD_CITY": null,
+      "BUILD_ROAD": null,
+      "BUY_DEVELOPMENT": null,
+      "BANK_TRADE": null,
+      "END_TURN": null
+    },
+    "entropy_by_candidate_count": {
+      "2": {
+        "n": 0,
+        "mean": null,
+        "median": null,
+        "p95": null,
+        "min": null,
+        "max": null
+      },
+      "3": {
+        "n": 0,
+        "mean": null,
+        "median": null,
+        "p95": null,
+        "min": null,
+        "max": null
+      },
+      "4+": {
+        "n": 0,
+        "mean": null,
+        "median": null,
+        "p95": null,
+        "min": null,
+        "max": null
+      }
+    },
+    "macro_duration": {
+      "n": 0,
+      "mean": null,
+      "median": null,
+      "p95": null,
+      "min": null,
+      "max": null
+    },
+    "macro_reward": {
+      "n": 0,
+      "mean": null,
+      "median": null,
+      "p95": null,
+      "min": null,
+      "max": null
+    },
+    "next_delegated": 0,
+    "terminal_transitions": 0,
+    "protected_trades_crossed": 0,
+    "nondelegated_surfaces_crossed": 0,
+    "family_agreement": null,
+    "concrete_action_agreement": null,
+    "executor_failure": 0,
+    "illegal_action": 0,
+    "family_outside": 0
+  }
+}

@@ -1,0 +1,290 @@
+[
+  {
+    "profile": "rule",
+    "seed": 3260000,
+    "seat": 1,
+    "decisions": 25,
+    "dev_decisions": 7,
+    "action_outcome_rng_parity": true
+  },
+  {
+    "profile": "rule",
+    "seed": 3260001,
+    "seat": 2,
+    "decisions": 21,
+    "dev_decisions": 4,
+    "action_outcome_rng_parity": true
+  },
+  {
+    "profile": "rule",
+    "seed": 3260002,
+    "seat": 3,
+    "decisions": 20,
+    "dev_decisions": 4,
+    "action_outcome_rng_parity": true
+  },
+  {
+    "profile": "rule",
+    "seed": 3260003,
+    "seat": 4,
+    "decisions": 18,
+    "dev_decisions": 6,
+    "action_outcome_rng_parity": true
+  },
+  {
+    "profile": "rule",
+    "seed": 3260004,
+    "seat": 1,
+    "decisions": 28,
+    "dev_decisions": 5,
+    "action_outcome_rng_parity": true
+  },
+  {
+    "profile": "rule",
+    "seed": 3260005,
+    "seat": 2,
+    "decisions": 20,
+    "dev_decisions": 3,
+    "action_outcome_rng_parity": true
+  },
+  {
+    "profile": "rule",
+    "seed": 3260006,
+    "seat": 3,
+    "decisions": 16,
+    "dev_decisions": 1,
+    "action_outcome_rng_parity": true
+  },
+  {
+    "profile": "rule",
+    "seed": 3260007,
+    "seat": 4,
+    "decisions": 31,
+    "dev_decisions": 6,
+    "action_outcome_rng_parity": true
+  },
+  {
+    "profile": "rule",
+    "seed": 3260008,
+    "seat": 1,
+    "decisions": 18,
+    "dev_decisions": 4,
+    "action_outcome_rng_parity": true
+  },
+  {
+    "profile": "rule",
+    "seed": 3260009,
+    "seat": 2,
+    "decisions": 13,
+    "dev_decisions": 6,
+    "action_outcome_rng_parity": true
+  },
+  {
+    "profile": "rule",
+    "seed": 3260010,
+    "seat": 3,
+    "decisions": 31,
+    "dev_decisions": 5,
+    "action_outcome_rng_parity": true
+  },
+  {
+    "profile": "rule",
+    "seed": 3260011,
+    "seat": 4,
+    "decisions": 19,
+    "dev_decisions": 6,
+    "action_outcome_rng_parity": true
+  },
+  {
+    "profile": "champion",
+    "seed": 3261000,
+    "seat": 1,
+    "decisions": 43,
+    "dev_decisions": 8,
+    "action_outcome_rng_parity": true
+  },
+  {
+    "profile": "champion",
+    "seed": 3261001,
+    "seat": 2,
+    "decisions": 21,
+    "dev_decisions": 5,
+    "action_outcome_rng_parity": true
+  },
+  {
+    "profile": "champion",
+    "seed": 3261002,
+    "seat": 3,
+    "decisions": 11,
+    "dev_decisions": 0,
+    "action_outcome_rng_parity": true
+  },
+  {
+    "profile": "champion",
+    "seed": 3261003,
+    "seat": 4,
+    "decisions": 32,
+    "dev_decisions": 6,
+    "action_outcome_rng_parity": true
+  },
+  {
+    "profile": "champion",
+    "seed": 3261004,
+    "seat": 1,
+    "decisions": 19,
+    "dev_decisions": 2,
+    "action_outcome_rng_parity": true
+  },
+  {
+    "profile": "champion",
+    "seed": 3261005,
+    "seat": 2,
+    "decisions": 17,
+    "dev_decisions": 1,
+    "action_outcome_rng_parity": true
+  },
+  {
+    "profile": "champion",
+    "seed": 3261006,
+    "seat": 3,
+    "decisions": 12,
+    "dev_decisions": 2,
+    "action_outcome_rng_parity": true
+  },
+  {
+    "profile": "champion",
+    "seed": 3261007,
+    "seat": 4,
+    "decisions": 15,
+    "dev_decisions": 6,
+    "action_outcome_rng_parity": true
+  },
+  {
+    "profile": "champion",
+    "seed": 3261008,
+    "seat": 1,
+    "decisions": 12,
+    "dev_decisions": 3,
+    "action_outcome_rng_parity": true
+  },
+  {
+    "profile": "champion",
+    "seed": 3261009,
+    "seat": 2,
+    "decisions": 18,
+    "dev_decisions": 1,
+    "action_outcome_rng_parity": true
+  },
+  {
+    "profile": "champion",
+    "seed": 3261010,
+    "seat": 3,
+    "decisions": 17,
+    "dev_decisions": 2,
+    "action_outcome_rng_parity": true
+  },
+  {
+    "profile": "champion",
+    "seed": 3261011,
+    "seat": 4,
+    "decisions": 17,
+    "dev_decisions": 3,
+    "action_outcome_rng_parity": true
+  },
+  {
+    "profile": "mixed",
+    "seed": 3262000,
+    "seat": 1,
+    "decisions": 33,
+    "dev_decisions": 9,
+    "action_outcome_rng_parity": true
+  },
+  {
+    "profile": "mixed",
+    "seed": 3262001,
+    "seat": 2,
+    "decisions": 23,
+    "dev_decisions": 9,
+    "action_outcome_rng_parity": true
+  },
+  {
+    "profile": "mixed",
+    "seed": 3262002,
+    "seat": 3,
+    "decisions": 22,
+    "dev_decisions": 8,
+    "action_outcome_rng_parity": true
+  },
+  {
+    "profile": "mixed",
+    "seed": 3262003,
+    "seat": 4,
+    "decisions": 16,
+    "dev_decisions": 5,
+    "action_outcome_rng_parity": true
+  },
+  {
+    "profile": "mixed",
+    "seed": 3262004,
+    "seat": 1,
+    "decisions": 27,
+    "dev_decisions": 8,
+    "action_outcome_rng_parity": true
+  },
+  {
+    "profile": "mixed",
+    "seed": 3262005,
+    "seat": 2,
+    "decisions": 19,
+    "dev_decisions": 4,
+    "action_outcome_rng_parity": true
+  },
+  {
+    "profile": "mixed",
+    "seed": 3262006,
+    "seat": 3,
+    "decisions": 8,
+    "dev_decisions": 1,
+    "action_outcome_rng_parity": true
+  },
+  {
+    "profile": "mixed",
+    "seed": 3262007,
+    "seat": 4,
+    "decisions": 11,
+    "dev_decisions": 7,
+    "action_outcome_rng_parity": true
+  },
+  {
+    "profile": "mixed",
+    "seed": 3262008,
+    "seat": 1,
+    "decisions": 18,
+    "dev_decisions": 1,
+    "action_outcome_rng_parity": true
+  },
+  {
+    "profile": "mixed",
+    "seed": 3262009,
+    "seat": 2,
+    "decisions": 17,
+    "dev_decisions": 1,
+    "action_outcome_rng_parity": true
+  },
+  {
+    "profile": "mixed",
+    "seed": 3262010,
+    "seat": 3,
+    "decisions": 17,
+    "dev_decisions": 2,
+    "action_outcome_rng_parity": true
+  },
+  {
+    "profile": "mixed",
+    "seed": 3262011,
+    "seat": 4,
+    "decisions": 18,
+    "dev_decisions": 2,
+    "action_outcome_rng_parity": true
+  }
+]

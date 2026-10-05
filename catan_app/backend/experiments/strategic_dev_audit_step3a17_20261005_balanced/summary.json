@@ -1,0 +1,1541 @@
+{
+  "dev_decisions": 153,
+  "profile": {
+    "rule": 57,
+    "champion": 39,
+    "mixed": 57
+  },
+  "states_with_new_development_cards": 15,
+  "dev_context": {
+    "score": {
+      "n": 153,
+      "mean": 4.555555555555555,
+      "std": 1.9087364547787025,
+      "median": 5.0,
+      "p10": 2.0,
+      "p90": 7.0,
+      "min": 2.0,
+      "max": 9.0
+    },
+    "risk.hand_size": {
+      "n": 153,
+      "mean": 7.437908496732026,
+      "std": 2.2473085228413177,
+      "median": 7.0,
+      "p10": 5.0,
+      "p90": 10.800000000000011,
+      "min": 3.0,
+      "max": 15.0
+    },
+    "risk.discard_exposure": {
+      "n": 153,
+      "mean": 0.38562091503267976,
+      "std": 0.48834013985260566,
+      "median": 0.0,
+      "p10": 0.0,
+      "p90": 1.0,
+      "min": 0.0,
+      "max": 1.0
+    },
+    "settlement.eta": {
+      "n": 142,
+      "mean": 0.6522681007922535,
+      "std": 0.8541296848059441,
+      "median": 0.2607421875,
+      "p10": 0.0,
+      "p90": 1.8735351562500007,
+      "min": 0.0,
+      "max": 3.375
+    },
+    "city.eta": {
+      "n": 151,
+      "mean": 0.6796875,
+      "std": 0.5572533634130495,
+      "median": 0.62109375,
+      "p10": 0.0,
+      "p90": 1.412109375,
+      "min": 0.0,
+      "max": 2.7509765625
+    },
+    "settlement.candidate_count": {
+      "n": 153,
+      "mean": 7.882352941176471,
+      "std": 4.533415664280005,
+      "median": 8.0,
+      "p10": 2.0,
+      "p90": 14.0,
+      "min": 0.0,
+      "max": 19.0
+    },
+    "settlement.min_additional_roads": {
+      "n": 142,
+      "mean": 0.9225352112676056,
+      "std": 0.7444731933594426,
+      "median": 1.0,
+      "p10": 0.0,
+      "p90": 2.0,
+      "min": 0.0,
+      "max": 2.0
+    },
+    "city.best_production_gain": {
+      "n": 151,
+      "mean": 10.748344370860927,
+      "std": 1.8228861476473972,
+      "median": 11.0,
+      "p10": 8.0,
+      "p90": 12.0,
+      "min": 5.0,
+      "max": 13.0
+    },
+    "road.acquisition_gap": {
+      "n": 134,
+      "mean": 2.626865671641791,
+      "std": 1.0087708726710667,
+      "median": 3.0,
+      "p10": 1.0,
+      "p90": 4.0,
+      "min": 1.0,
+      "max": 6.0
+    },
+    "knight.plays_needed": {
+      "n": 153,
+      "mean": 2.026143790849673,
+      "std": 1.0939288946529329,
+      "median": 2.0,
+      "p10": 0.0,
+      "p90": 3.0,
+      "min": 0.0,
+      "max": 4.0
+    },
+    "robber.blocked_pips": {
+      "n": 153,
+      "mean": 1.7189542483660132,
+      "std": 3.633646704468256,
+      "median": 0.0,
+      "p10": 0.0,
+      "p90": 8.0,
+      "min": 0.0,
+      "max": 20.0
+    }
+  },
+  "champion_counterfactual": {
+    "BUILD_ROAD": 56,
+    "END_TURN": 38,
+    "BUY_DEVELOPMENT": 42,
+    "BANK_TRADE": 15,
+    "BUILD_CITY": 1,
+    "BUILD_SETTLEMENT": 1
+  },
+  "native6_rank": {
+    "1": 151,
+    "2": 2
+  },
+  "probability_bins": {
+    ">.9": 114,
+    ".7-.9": 37,
+    "<=.5": 2
+  },
+  "probabilities": {
+    "selected_dev_probability": {
+      "n": 153,
+      "mean": 0.9178542336509898,
+      "std": 0.10750088938554624,
+      "median": 0.9209481477737427,
+      "p10": 0.8686533451080323,
+      "p90": 0.9788560390472412,
+      "min": 0.03898715227842331,
+      "max": 0.983005702495575
+    },
+    "native15_t1_dev_probability": {
+      "n": 153,
+      "mean": 0.982715016197811,
+      "std": 0.11299582743342225,
+      "median": 0.9958195147598865,
+      "p10": 0.990467174287423,
+      "p90": 0.9995335222269404,
+      "min": 0.0016568965092423394,
+      "max": 0.9997012100443299
+    },
+    "native15_t2_dev_probability": {
+      "n": 153,
+      "mean": 0.9178542344722971,
+      "std": 0.10750088683818437,
+      "median": 0.9209481109523461,
+      "p10": 0.8686533719339231,
+      "p90": 0.9788560088289089,
+      "min": 0.03898715196089645,
+      "max": 0.9830056752445122
+    },
+    "strategic6_t1_dev_probability": {
+      "n": 153,
+      "mean": 0.982715016197811,
+      "std": 0.11299582743342225,
+      "median": 0.9958195147598865,
+      "p10": 0.990467174287423,
+      "p90": 0.9995335222269404,
+      "min": 0.0016568965092423394,
+      "max": 0.9997012100443299
+    },
+    "mask_inflation_same_t2": {
+      "n": 153,
+      "mean": 0.0,
+      "std": 0.0,
+      "median": 0.0,
+      "p10": 0.0,
+      "p90": 0.0,
+      "min": 0.0,
+      "max": 0.0
+    },
+    "temperature_shift_full15": {
+      "n": 153,
+      "mean": -0.06486078172551389,
+      "std": 0.04051027894400216,
+      "median": -0.0744216639169466,
+      "p10": -0.11858555495106748,
+      "p90": -0.020081504937374504,
+      "min": -0.1499061827856758,
+      "max": 0.07170380298108202
+    },
+    "mask_inflation_ratio_same_t2": {
+      "n": 153,
+      "mean": 1.0,
+      "std": 0.0,
+      "median": 1.0,
+      "p10": 1.0,
+      "p90": 1.0,
+      "min": 1.0,
+      "max": 1.0
+    },
+    "removed_mass_t2": {
+      "n": 153,
+      "mean": 0.0,
+      "std": 0.0,
+      "median": 0.0,
+      "p10": 0.0,
+      "p90": 0.0,
+      "min": 0.0,
+      "max": 0.0
+    }
+  },
+  "candidate_sets": {
+    "BUY_DEVELOPMENT+END_TURN": {
+      "count": 64,
+      "dev_probability": {
+        "n": 64,
+        "mean": 0.9725772319361567,
+        "std": 0.0070230148534262075,
+        "median": 0.9738454520702362,
+        "p10": 0.9622385680675507,
+        "p90": 0.9801725327968598,
+        "min": 0.9566444754600525,
+        "max": 0.983005702495575
+      }
+    },
+    "BUILD_ROAD+BUY_DEVELOPMENT+END_TURN": {
+      "count": 39,
+      "dev_probability": {
+        "n": 39,
+        "mean": 0.9089433642534109,
+        "std": 0.0122897175454936,
+        "median": 0.9127504229545593,
+        "p10": 0.8903288602828979,
+        "p90": 0.9232150435447692,
+        "min": 0.8861837983131409,
+        "max": 0.9301955699920654
+      }
+    },
+    "BUY_DEVELOPMENT+BANK_TRADE+END_TURN": {
+      "count": 26,
+      "dev_probability": {
+        "n": 26,
+        "mean": 0.9091845108912542,
+        "std": 0.011859917857000746,
+        "median": 0.9102002084255219,
+        "p10": 0.8906887173652649,
+        "p90": 0.9238002896308899,
+        "min": 0.8882115483283997,
+        "max": 0.9257106781005859
+      }
+    },
+    "BUILD_ROAD+BUY_DEVELOPMENT+BANK_TRADE+END_TURN": {
+      "count": 22,
+      "dev_probability": {
+        "n": 22,
+        "mean": 0.8627710044384003,
+        "std": 0.015490409880494415,
+        "median": 0.8664134740829468,
+        "p10": 0.8388940989971161,
+        "p90": 0.883991414308548,
+        "min": 0.836550235748291,
+        "max": 0.8866939544677734
+      }
+    },
+    "BUILD_CITY+BUILD_ROAD+BUY_DEVELOPMENT+BANK_TRADE+END_TURN": {
+      "count": 1,
+      "dev_probability": {
+        "n": 1,
+        "mean": 0.07921716570854187,
+        "std": 0.0,
+        "median": 0.07921716570854187,
+        "p10": 0.07921716570854187,
+        "p90": 0.07921716570854187,
+        "min": 0.07921716570854187,
+        "max": 0.07921716570854187
+      }
+    },
+    "BUILD_SETTLEMENT+BUILD_ROAD+BUY_DEVELOPMENT+END_TURN": {
+      "count": 1,
+      "dev_probability": {
+        "n": 1,
+        "mean": 0.03898715227842331,
+        "std": 0.0,
+        "median": 0.03898715227842331,
+        "p10": 0.03898715227842331,
+        "p90": 0.03898715227842331,
+        "min": 0.03898715227842331,
+        "max": 0.03898715227842331
+      }
+    }
+  },
+  "removed_family_expected_mass_sum": {},
+  "native_logit_by_available_family": {
+    "BUILD_ROAD": {
+      "n": 63,
+      "mean": -2.6284595027802484,
+      "std": 0.27624339079242777,
+      "median": -2.6236722469329834,
+      "p10": -3.004805564880371,
+      "p90": -2.2675280570983887,
+      "min": -3.1672019958496094,
+      "max": -2.0153470039367676
+    },
+    "BUY_DEVELOPMENT": {
+      "n": 153,
+      "mean": 2.658794114792269,
+      "std": 0.14970232601047123,
+      "median": 2.6459455490112305,
+      "p10": 2.458364200592041,
+      "p90": 2.857913684844971,
+      "min": 2.3892016410827637,
+      "max": 2.93398380279541
+    },
+    "END_TURN": {
+      "n": 153,
+      "mean": -4.466334324257047,
+      "std": 0.4834801363524847,
+      "median": -4.505785942077637,
+      "p10": -5.091659927368164,
+      "p90": -3.808839178085327,
+      "min": -5.53665828704834,
+      "max": -3.3605382442474365
+    },
+    "BANK_TRADE": {
+      "n": 49,
+      "mean": -2.910010269709996,
+      "std": 0.21449221811834954,
+      "median": -2.92522931098938,
+      "p10": -3.1675446033477783,
+      "p90": -2.5841347217559814,
+      "min": -3.3159596920013428,
+      "max": -2.5370585918426514
+    },
+    "BUILD_CITY": {
+      "n": 1,
+      "mean": 7.770826816558838,
+      "std": 0.0,
+      "median": 7.770826816558838,
+      "p10": 7.770826816558838,
+      "p90": 7.770826816558838,
+      "min": 7.770826816558838,
+      "max": 7.770826816558838
+    },
+    "BUILD_SETTLEMENT": {
+      "n": 1,
+      "mean": 8.920056343078613,
+      "std": 0.0,
+      "median": 8.920056343078613,
+      "p10": 8.920056343078613,
+      "p90": 8.920056343078613,
+      "min": 8.920056343078613,
+      "max": 8.920056343078613
+    }
+  },
+  "immediate_settlement_competition": 1,
+  "immediate_city_competition": 1,
+  "construction_opportunity_lost": 2,
+  "paired_states": 24,
+  "paired_futures": 192,
+  "paired_delta": {
+    "n": 192,
+    "mean": -0.009324075123647427,
+    "std": 0.5972925540721045,
+    "median": -0.01587238215975867,
+    "p10": -0.25571401791847753,
+    "p90": 0.2732516106791763,
+    "min": -1.6343806061835493,
+    "max": 1.685427666936421
+  },
+  "state_mean_delta": {
+    "n": 24,
+    "mean": -0.00932407512364743,
+    "std": 0.13224393471897813,
+    "median": -0.017228378722810724,
+    "p10": -0.18314973991888592,
+    "p90": 0.17973595924633332,
+    "min": -0.2390397854295805,
+    "max": 0.21201592388379648
+  },
+  "state_summaries": [
+    {
+      "state_id": "champion-3261001-45",
+      "n": 8,
+      "mean_delta": 0.0,
+      "std_delta": 0.0,
+      "approx_ci95": [
+        0.0,
+        0.0
+      ],
+      "dev_better_seeds": 0,
+      "non_dev_better_seeds": 0,
+      "tie_seeds": 8,
+      "probability": 0.8509101271629333,
+      "alternative_family": "BUILD_ROAD",
+      "context": {
+        "settlement.candidate_count": 11,
+        "settlement.min_additional_roads": 1,
+        "settlement.eta": 0.0,
+        "city.eta": 0.0,
+        "city.best_production_gain": 12,
+        "road.acquisition_gap": 2,
+        "knight.plays_needed": 3,
+        "robber.blocked_pips": 0,
+        "risk.discard_exposure": true,
+        "risk.hand_size": 11,
+        "settlement_shortage": {
+          "wood": 1,
+          "brick": 0,
+          "sheep": 0,
+          "wheat": 0
+        },
+        "city_shortage": {
+          "wheat": 0,
+          "ore": 2
+        },
+        "score": 5,
+        "new_development_cards": {}
+      }
+    },
+    {
+      "state_id": "champion-3261000-14",
+      "n": 8,
+      "mean_delta": -0.1835994824528365,
+      "std_delta": 0.38416907275043727,
+      "approx_ci95": [
+        -0.5048239004714956,
+        0.1376249355658226
+      ],
+      "dev_better_seeds": 1,
+      "non_dev_better_seeds": 7,
+      "tie_seeds": 0,
+      "probability": 0.9244715571403503,
+      "alternative_family": "BUILD_ROAD",
+      "context": {
+        "settlement.candidate_count": 13,
+        "settlement.min_additional_roads": 1,
+        "settlement.eta": 0.5302734375,
+        "city.eta": 1.44140625,
+        "city.best_production_gain": 12,
+        "road.acquisition_gap": 4,
+        "knight.plays_needed": 3,
+        "robber.blocked_pips": 0,
+        "risk.discard_exposure": false,
+        "risk.hand_size": 7,
+        "settlement_shortage": {
+          "wood": 0,
+          "brick": 1,
+          "sheep": 0,
+          "wheat": 0
+        },
+        "city_shortage": {
+          "wheat": 0,
+          "ore": 2
+        },
+        "score": 2,
+        "new_development_cards": {}
+      }
+    },
+    {
+      "state_id": "champion-3261000-42",
+      "n": 8,
+      "mean_delta": 0.03634769996008542,
+      "std_delta": 0.13416089446926782,
+      "approx_ci95": [
+        -0.0758314375696788,
+        0.14852683748984963
+      ],
+      "dev_better_seeds": 5,
+      "non_dev_better_seeds": 3,
+      "tie_seeds": 0,
+      "probability": 0.9774009585380554,
+      "alternative_family": "END_TURN",
+      "context": {
+        "settlement.candidate_count": 11,
+        "settlement.min_additional_roads": 0,
+        "settlement.eta": 0.2666015625,
+        "city.eta": 1.8017578125,
+        "city.best_production_gain": 12,
+        "road.acquisition_gap": 2,
+        "knight.plays_needed": 0,
+        "robber.blocked_pips": 0,
+        "risk.discard_exposure": false,
+        "risk.hand_size": 6,
+        "settlement_shortage": {
+          "wood": 0,
+          "brick": 1,
+          "sheep": 0,
+          "wheat": 0
+        },
+        "city_shortage": {
+          "wheat": 0,
+          "ore": 2
+        },
+        "score": 4,
+        "new_development_cards": {}
+      }
+    },
+    {
+      "state_id": "champion-3261003-82",
+      "n": 8,
+      "mean_delta": -0.022502854505145137,
+      "std_delta": 1.433719267121986,
+      "approx_ci95": [
+        -1.2213126230431155,
+        1.1763069140328253
+      ],
+      "dev_better_seeds": 3,
+      "non_dev_better_seeds": 5,
+      "tie_seeds": 0,
+      "probability": 0.8469442129135132,
+      "alternative_family": "BUILD_ROAD",
+      "context": {
+        "settlement.candidate_count": 1,
+        "settlement.min_additional_roads": 2,
+        "settlement.eta": 0.140625,
+        "city.eta": 0.0,
+        "city.best_production_gain": 12,
+        "road.acquisition_gap": 1,
+        "knight.plays_needed": 2,
+        "robber.blocked_pips": 5,
+        "risk.discard_exposure": true,
+        "risk.hand_size": 11,
+        "settlement_shortage": {
+          "wood": 2,
+          "brick": 0,
+          "sheep": 0,
+          "wheat": 0
+        },
+        "city_shortage": {
+          "wheat": 0,
+          "ore": 1
+        },
+        "score": 5,
+        "new_development_cards": {}
+      }
+    },
+    {
+      "state_id": "champion-3261000-21",
+      "n": 8,
+      "mean_delta": -0.09233617774631392,
+      "std_delta": 0.3512133772099458,
+      "approx_ci95": [
+        -0.3860045667369116,
+        0.20133221124428374
+      ],
+      "dev_better_seeds": 3,
+      "non_dev_better_seeds": 5,
+      "tie_seeds": 0,
+      "probability": 0.926961362361908,
+      "alternative_family": "BUILD_ROAD",
+      "context": {
+        "settlement.candidate_count": 13,
+        "settlement.min_additional_roads": 1,
+        "settlement.eta": 0.0,
+        "city.eta": 0.6767578125,
+        "city.best_production_gain": 12,
+        "road.acquisition_gap": 4,
+        "knight.plays_needed": 2,
+        "robber.blocked_pips": 0,
+        "risk.discard_exposure": true,
+        "risk.hand_size": 8,
+        "settlement_shortage": {
+          "wood": 0,
+          "brick": 0,
+          "sheep": 0,
+          "wheat": 0
+        },
+        "city_shortage": {
+          "wheat": 1,
+          "ore": 1
+        },
+        "score": 2,
+        "new_development_cards": {}
+      }
+    },
+    {
+      "state_id": "champion-3261000-104",
+      "n": 8,
+      "mean_delta": 0.032948734936850146,
+      "std_delta": 0.11084258926073529,
+      "approx_ci95": [
+        -0.05973271381186472,
+        0.125630183685565
+      ],
+      "dev_better_seeds": 4,
+      "non_dev_better_seeds": 4,
+      "tie_seeds": 0,
+      "probability": 0.9099485278129578,
+      "alternative_family": "BUILD_ROAD",
+      "context": {
+        "settlement.candidate_count": 0,
+        "settlement.min_additional_roads": null,
+        "settlement.eta": null,
+        "city.eta": 0.474609375,
+        "city.best_production_gain": 12,
+        "road.acquisition_gap": 4,
+        "knight.plays_needed": 3,
+        "robber.blocked_pips": 0,
+        "risk.discard_exposure": false,
+        "risk.hand_size": 7,
+        "settlement_shortage": {
+          "wood": null,
+          "brick": null,
+          "sheep": null,
+          "wheat": null
+        },
+        "city_shortage": {
+          "wheat": 0,
+          "ore": 2
+        },
+        "score": 5,
+        "new_development_cards": {}
+      }
+    },
+    {
+      "state_id": "champion-3261003-104",
+      "n": 8,
+      "mean_delta": -0.03782000435996036,
+      "std_delta": 0.10089123652812405,
+      "approx_ci95": [
+        -0.12218059201711096,
+        0.04654058329719024
+      ],
+      "dev_better_seeds": 1,
+      "non_dev_better_seeds": 7,
+      "tie_seeds": 0,
+      "probability": 0.836550235748291,
+      "alternative_family": "BUILD_ROAD",
+      "context": {
+        "settlement.candidate_count": 2,
+        "settlement.min_additional_roads": 1,
+        "settlement.eta": 0.0,
+        "city.eta": 0.0,
+        "city.best_production_gain": 11,
+        "road.acquisition_gap": 2,
+        "knight.plays_needed": 2,
+        "robber.blocked_pips": 0,
+        "risk.discard_exposure": true,
+        "risk.hand_size": 13,
+        "settlement_shortage": {
+          "wood": 0,
+          "brick": 0,
+          "sheep": 0,
+          "wheat": 0
+        },
+        "city_shortage": {
+          "wheat": 0,
+          "ore": 2
+        },
+        "score": 6,
+        "new_development_cards": {}
+      }
+    },
+    {
+      "state_id": "champion-3261000-34",
+      "n": 8,
+      "mean_delta": 0.18668578999004354,
+      "std_delta": 0.38153326166898677,
+      "approx_ci95": [
+        -0.13233468465913956,
+        0.5057062646392266
+      ],
+      "dev_better_seeds": 7,
+      "non_dev_better_seeds": 1,
+      "tie_seeds": 0,
+      "probability": 0.9800652861595154,
+      "alternative_family": "END_TURN",
+      "context": {
+        "settlement.candidate_count": 15,
+        "settlement.min_additional_roads": 0,
+        "settlement.eta": 0.5302734375,
+        "city.eta": 2.162109375,
+        "city.best_production_gain": 12,
+        "road.acquisition_gap": 2,
+        "knight.plays_needed": 1,
+        "robber.blocked_pips": 0,
+        "risk.discard_exposure": false,
+        "risk.hand_size": 5,
+        "settlement_shortage": {
+          "wood": 0,
+          "brick": 1,
+          "sheep": 0,
+          "wheat": 0
+        },
+        "city_shortage": {
+          "wheat": 0,
+          "ore": 2
+        },
+        "score": 2,
+        "new_development_cards": {}
+      }
+    },
+    {
+      "state_id": "mixed-3262004-32",
+      "n": 8,
+      "mean_delta": -0.12677718260995952,
+      "std_delta": 0.7766262367133988,
+      "approx_ci95": [
+        -0.7761561373503992,
+        0.5226017721304802
+      ],
+      "dev_better_seeds": 5,
+      "non_dev_better_seeds": 3,
+      "tie_seeds": 0,
+      "probability": 0.03898715227842331,
+      "alternative_family": "BUILD_SETTLEMENT",
+      "context": {
+        "settlement.candidate_count": 12,
+        "settlement.min_additional_roads": 0,
+        "settlement.eta": 0.0,
+        "city.eta": 1.412109375,
+        "city.best_production_gain": 13,
+        "road.acquisition_gap": 3,
+        "knight.plays_needed": 3,
+        "robber.blocked_pips": 10,
+        "risk.discard_exposure": false,
+        "risk.hand_size": 6,
+        "settlement_shortage": {
+          "wood": 0,
+          "brick": 0,
+          "sheep": 0,
+          "wheat": 0
+        },
+        "city_shortage": {
+          "wheat": 1,
+          "ore": 2
+        },
+        "score": 3,
+        "new_development_cards": {}
+      }
+    },
+    {
+      "state_id": "mixed-3262000-35",
+      "n": 8,
+      "mean_delta": 0.12492447775286358,
+      "std_delta": 0.46705263601510877,
+      "approx_ci95": [
+        -0.26560334405723596,
+        0.5154522995629631
+      ],
+      "dev_better_seeds": 3,
+      "non_dev_better_seeds": 5,
+      "tie_seeds": 0,
+      "probability": 0.8668908476829529,
+      "alternative_family": "BANK_TRADE",
+      "context": {
+        "settlement.candidate_count": 7,
+        "settlement.min_additional_roads": 2,
+        "settlement.eta": 0.2255859375,
+        "city.eta": 0.1259765625,
+        "city.best_production_gain": 12,
+        "road.acquisition_gap": 3,
+        "knight.plays_needed": 1,
+        "robber.blocked_pips": 0,
+        "risk.discard_exposure": true,
+        "risk.hand_size": 10,
+        "settlement_shortage": {
+          "wood": 1,
+          "brick": 0,
+          "sheep": 0,
+          "wheat": 0
+        },
+        "city_shortage": {
+          "wheat": 1,
+          "ore": 1
+        },
+        "score": 3,
+        "new_development_cards": {}
+      }
+    },
+    {
+      "state_id": "mixed-3262000-7",
+      "n": 8,
+      "mean_delta": 0.21201592388379648,
+      "std_delta": 0.8075313112747514,
+      "approx_ci95": [
+        -0.4632044254247136,
+        0.8872362731923065
+      ],
+      "dev_better_seeds": 4,
+      "non_dev_better_seeds": 4,
+      "tie_seeds": 0,
+      "probability": 0.922900915145874,
+      "alternative_family": "BUILD_ROAD",
+      "context": {
+        "settlement.candidate_count": 11,
+        "settlement.min_additional_roads": 1,
+        "settlement.eta": 0.5830078125,
+        "city.eta": 0.9755859375,
+        "city.best_production_gain": 12,
+        "road.acquisition_gap": 4,
+        "knight.plays_needed": 3,
+        "robber.blocked_pips": 0,
+        "risk.discard_exposure": false,
+        "risk.hand_size": 7,
+        "settlement_shortage": {
+          "wood": 1,
+          "brick": 0,
+          "sheep": 0,
+          "wheat": 0
+        },
+        "city_shortage": {
+          "wheat": 0,
+          "ore": 2
+        },
+        "score": 2,
+        "new_development_cards": {}
+      }
+    },
+    {
+      "state_id": "mixed-3262000-66",
+      "n": 8,
+      "mean_delta": -0.18210034067300124,
+      "std_delta": 0.8722862854627362,
+      "approx_ci95": [
+        -0.9114658056943039,
+        0.5472651243483015
+      ],
+      "dev_better_seeds": 3,
+      "non_dev_better_seeds": 5,
+      "tie_seeds": 0,
+      "probability": 0.9636551141738892,
+      "alternative_family": "END_TURN",
+      "context": {
+        "settlement.candidate_count": 7,
+        "settlement.min_additional_roads": 2,
+        "settlement.eta": 1.78125,
+        "city.eta": 0.931640625,
+        "city.best_production_gain": 10,
+        "road.acquisition_gap": 3,
+        "knight.plays_needed": 0,
+        "robber.blocked_pips": 0,
+        "risk.discard_exposure": false,
+        "risk.hand_size": 5,
+        "settlement_shortage": {
+          "wood": 3,
+          "brick": 2,
+          "sheep": 0,
+          "wheat": 0
+        },
+        "city_shortage": {
+          "wheat": 0,
+          "ore": 2
+        },
+        "score": 6,
+        "new_development_cards": {}
+      }
+    },
+    {
+      "state_id": "mixed-3262000-57",
+      "n": 8,
+      "mean_delta": -0.20118404772483742,
+      "std_delta": 0.7842182588322689,
+      "approx_ci95": [
+        -0.8569111003724272,
+        0.45454300492275235
+      ],
+      "dev_better_seeds": 1,
+      "non_dev_better_seeds": 7,
+      "tie_seeds": 0,
+      "probability": 0.8659361004829407,
+      "alternative_family": "BANK_TRADE",
+      "context": {
+        "settlement.candidate_count": 7,
+        "settlement.min_additional_roads": 2,
+        "settlement.eta": 0.73828125,
+        "city.eta": 0.1875,
+        "city.best_production_gain": 10,
+        "road.acquisition_gap": 3,
+        "knight.plays_needed": 0,
+        "robber.blocked_pips": 0,
+        "risk.discard_exposure": true,
+        "risk.hand_size": 9,
+        "settlement_shortage": {
+          "wood": 2,
+          "brick": 0,
+          "sheep": 0,
+          "wheat": 0
+        },
+        "city_shortage": {
+          "wheat": 1,
+          "ore": 1
+        },
+        "score": 6,
+        "new_development_cards": {}
+      }
+    },
+    {
+      "state_id": "mixed-3262000-27",
+      "n": 8,
+      "mean_delta": -0.11743807264597514,
+      "std_delta": 0.7497997206802944,
+      "approx_ci95": [
+        -0.7443859349028193,
+        0.509509789610869
+      ],
+      "dev_better_seeds": 4,
+      "non_dev_better_seeds": 4,
+      "tie_seeds": 0,
+      "probability": 0.917681097984314,
+      "alternative_family": "BUILD_ROAD",
+      "context": {
+        "settlement.candidate_count": 7,
+        "settlement.min_additional_roads": 2,
+        "settlement.eta": 1.6376953125,
+        "city.eta": 0.8642578125,
+        "city.best_production_gain": 12,
+        "road.acquisition_gap": 3,
+        "knight.plays_needed": 2,
+        "robber.blocked_pips": 0,
+        "risk.discard_exposure": false,
+        "risk.hand_size": 7,
+        "settlement_shortage": {
+          "wood": 2,
+          "brick": 1,
+          "sheep": 0,
+          "wheat": 0
+        },
+        "city_shortage": {
+          "wheat": 1,
+          "ore": 2
+        },
+        "score": 3,
+        "new_development_cards": {}
+      }
+    },
+    {
+      "state_id": "mixed-3262000-92",
+      "n": 8,
+      "mean_delta": 0.00044577605635144624,
+      "std_delta": 0.8544119261791585,
+      "approx_ci95": [
+        -0.713973976085941,
+        0.7148655281986439
+      ],
+      "dev_better_seeds": 2,
+      "non_dev_better_seeds": 6,
+      "tie_seeds": 0,
+      "probability": 0.9596491456031799,
+      "alternative_family": "END_TURN",
+      "context": {
+        "settlement.candidate_count": 4,
+        "settlement.min_additional_roads": 1,
+        "settlement.eta": 0.6357421875,
+        "city.eta": 0.4365234375,
+        "city.best_production_gain": 9,
+        "road.acquisition_gap": 2,
+        "knight.plays_needed": 0,
+        "robber.blocked_pips": 0,
+        "risk.discard_exposure": false,
+        "risk.hand_size": 7,
+        "settlement_shortage": {
+          "wood": 2,
+          "brick": 0,
+          "sheep": 0,
+          "wheat": 0
+        },
+        "city_shortage": {
+          "wheat": 0,
+          "ore": 2
+        },
+        "score": 8,
+        "new_development_cards": {
+          "victory_point": 1
+        }
+      }
+    },
+    {
+      "state_id": "mixed-3262001-98",
+      "n": 8,
+      "mean_delta": -0.018333750600000087,
+      "std_delta": 0.0,
+      "approx_ci95": [
+        -0.018333750600000087,
+        -0.018333750600000087
+      ],
+      "dev_better_seeds": 0,
+      "non_dev_better_seeds": 8,
+      "tie_seeds": 0,
+      "probability": 0.8546660542488098,
+      "alternative_family": "BANK_TRADE",
+      "context": {
+        "settlement.candidate_count": 7,
+        "settlement.min_additional_roads": 1,
+        "settlement.eta": 0.0,
+        "city.eta": 0.0,
+        "city.best_production_gain": 8,
+        "road.acquisition_gap": 3,
+        "knight.plays_needed": 0,
+        "robber.blocked_pips": 0,
+        "risk.discard_exposure": true,
+        "risk.hand_size": 14,
+        "settlement_shortage": {
+          "wood": 0,
+          "brick": 0,
+          "sheep": 0,
+          "wheat": 0
+        },
+        "city_shortage": {
+          "wheat": 0,
+          "ore": 1
+        },
+        "score": 8,
+        "new_development_cards": {}
+      }
+    },
+    {
+      "state_id": "rule-3260007-66",
+      "n": 8,
+      "mean_delta": -0.2390397854295805,
+      "std_delta": 0.564044540270719,
+      "approx_ci95": [
+        -0.7106677535215477,
+        0.23258818266238668
+      ],
+      "dev_better_seeds": 1,
+      "non_dev_better_seeds": 7,
+      "tie_seeds": 0,
+      "probability": 0.07921716570854187,
+      "alternative_family": "BUILD_CITY",
+      "context": {
+        "settlement.candidate_count": 10,
+        "settlement.min_additional_roads": 1,
+        "settlement.eta": 0.0,
+        "city.eta": 0.0,
+        "city.best_production_gain": 10,
+        "road.acquisition_gap": 4,
+        "knight.plays_needed": 2,
+        "robber.blocked_pips": 0,
+        "risk.discard_exposure": true,
+        "risk.hand_size": 15,
+        "settlement_shortage": {
+          "wood": 0,
+          "brick": 0,
+          "sheep": 0,
+          "wheat": 0
+        },
+        "city_shortage": {
+          "wheat": 0,
+          "ore": 0
+        },
+        "score": 5,
+        "new_development_cards": {}
+      }
+    },
+    {
+      "state_id": "rule-3260000-74",
+      "n": 8,
+      "mean_delta": 0.03237548046976606,
+      "std_delta": 0.8380563119935003,
+      "approx_ci95": [
+        -0.6683684632309167,
+        0.7331194241704487
+      ],
+      "dev_better_seeds": 5,
+      "non_dev_better_seeds": 3,
+      "tie_seeds": 0,
+      "probability": 0.8870809078216553,
+      "alternative_family": "BUILD_ROAD",
+      "context": {
+        "settlement.candidate_count": 6,
+        "settlement.min_additional_roads": 2,
+        "settlement.eta": 1.3505859375,
+        "city.eta": 0.5537109375,
+        "city.best_production_gain": 12,
+        "road.acquisition_gap": 5,
+        "knight.plays_needed": 2,
+        "robber.blocked_pips": 0,
+        "risk.discard_exposure": true,
+        "risk.hand_size": 8,
+        "settlement_shortage": {
+          "wood": 2,
+          "brick": 1,
+          "sheep": 0,
+          "wheat": 0
+        },
+        "city_shortage": {
+          "wheat": 1,
+          "ore": 1
+        },
+        "score": 6,
+        "new_development_cards": {}
+      }
+    },
+    {
+      "state_id": "rule-3260000-14",
+      "n": 8,
+      "mean_delta": -0.01612300684562136,
+      "std_delta": 0.08539829191916684,
+      "approx_ci95": [
+        -0.08752911047890947,
+        0.055283096787666755
+      ],
+      "dev_better_seeds": 4,
+      "non_dev_better_seeds": 4,
+      "tie_seeds": 0,
+      "probability": 0.9065614342689514,
+      "alternative_family": "BUILD_ROAD",
+      "context": {
+        "settlement.candidate_count": 10,
+        "settlement.min_additional_roads": 2,
+        "settlement.eta": 2.5224609375,
+        "city.eta": 1.1630859375,
+        "city.best_production_gain": 12,
+        "road.acquisition_gap": 4,
+        "knight.plays_needed": 3,
+        "robber.blocked_pips": 0,
+        "risk.discard_exposure": false,
+        "risk.hand_size": 7,
+        "settlement_shortage": {
+          "wood": 1,
+          "brick": 2,
+          "sheep": 0,
+          "wheat": 0
+        },
+        "city_shortage": {
+          "wheat": 0,
+          "ore": 2
+        },
+        "score": 2,
+        "new_development_cards": {}
+      }
+    },
+    {
+      "state_id": "rule-3260000-43",
+      "n": 8,
+      "mean_delta": -0.05803667205071808,
+      "std_delta": 0.0727612410419846,
+      "approx_ci95": [
+        -0.1188762579671257,
+        0.002802913865689531
+      ],
+      "dev_better_seeds": 2,
+      "non_dev_better_seeds": 6,
+      "tie_seeds": 0,
+      "probability": 0.9790078401565552,
+      "alternative_family": "END_TURN",
+      "context": {
+        "settlement.candidate_count": 8,
+        "settlement.min_additional_roads": 0,
+        "settlement.eta": 0.0,
+        "city.eta": 1.1748046875,
+        "city.best_production_gain": 12,
+        "road.acquisition_gap": 4,
+        "knight.plays_needed": 3,
+        "robber.blocked_pips": 0,
+        "risk.discard_exposure": true,
+        "risk.hand_size": 8,
+        "settlement_shortage": {
+          "wood": 0,
+          "brick": 1,
+          "sheep": 0,
+          "wheat": 0
+        },
+        "city_shortage": {
+          "wheat": 1,
+          "ore": 2
+        },
+        "score": 5,
+        "new_development_cards": {}
+      }
+    },
+    {
+      "state_id": "rule-3260000-81",
+      "n": 8,
+      "mean_delta": 0.21075606023901383,
+      "std_delta": 0.9544956762775761,
+      "approx_ci95": [
+        -0.5873490967390133,
+        1.0088612172170408
+      ],
+      "dev_better_seeds": 6,
+      "non_dev_better_seeds": 2,
+      "tie_seeds": 0,
+      "probability": 0.8901451826095581,
+      "alternative_family": "BUILD_ROAD",
+      "context": {
+        "settlement.candidate_count": 6,
+        "settlement.min_additional_roads": 2,
+        "settlement.eta": 0.0,
+        "city.eta": 0.1845703125,
+        "city.best_production_gain": 12,
+        "road.acquisition_gap": 6,
+        "knight.plays_needed": 2,
+        "robber.blocked_pips": 0,
+        "risk.discard_exposure": true,
+        "risk.hand_size": 10,
+        "settlement_shortage": {
+          "wood": 0,
+          "brick": 0,
+          "sheep": 0,
+          "wheat": 0
+        },
+        "city_shortage": {
+          "wheat": 1,
+          "ore": 1
+        },
+        "score": 6,
+        "new_development_cards": {}
+      }
+    },
+    {
+      "state_id": "rule-3260000-34",
+      "n": 8,
+      "mean_delta": 0.1429137226447466,
+      "std_delta": 0.038886674736122555,
+      "approx_ci95": [
+        0.11039848300986208,
+        0.17542896227963115
+      ],
+      "dev_better_seeds": 8,
+      "non_dev_better_seeds": 0,
+      "tie_seeds": 0,
+      "probability": 0.9014692902565002,
+      "alternative_family": "BUILD_ROAD",
+      "context": {
+        "settlement.candidate_count": 8,
+        "settlement.min_additional_roads": 2,
+        "settlement.eta": 1.1748046875,
+        "city.eta": 0.5888671875,
+        "city.best_production_gain": 12,
+        "road.acquisition_gap": 4,
+        "knight.plays_needed": 3,
+        "robber.blocked_pips": 3,
+        "risk.discard_exposure": true,
+        "risk.hand_size": 8,
+        "settlement_shortage": {
+          "wood": 1,
+          "brick": 1,
+          "sheep": 0,
+          "wheat": 0
+        },
+        "city_shortage": {
+          "wheat": 1,
+          "ore": 1
+        },
+        "score": 4,
+        "new_development_cards": {}
+      }
+    },
+    {
+      "state_id": "rule-3260001-35",
+      "n": 8,
+      "mean_delta": 0.16351968751100954,
+      "std_delta": 0.819896016017218,
+      "approx_ci95": [
+        -0.5220394562674331,
+        0.8490788312894522
+      ],
+      "dev_better_seeds": 4,
+      "non_dev_better_seeds": 4,
+      "tie_seeds": 0,
+      "probability": 0.9756976366043091,
+      "alternative_family": "END_TURN",
+      "context": {
+        "settlement.candidate_count": 3,
+        "settlement.min_additional_roads": 2,
+        "settlement.eta": 3.375,
+        "city.eta": 0.41015625,
+        "city.best_production_gain": 12,
+        "road.acquisition_gap": 3,
+        "knight.plays_needed": 3,
+        "robber.blocked_pips": 0,
+        "risk.discard_exposure": false,
+        "risk.hand_size": 5,
+        "settlement_shortage": {
+          "wood": 3,
+          "brick": 3,
+          "sheep": 0,
+          "wheat": 0
+        },
+        "city_shortage": {
+          "wheat": 0,
+          "ore": 1
+        },
+        "score": 3,
+        "new_development_cards": {}
+      }
+    },
+    {
+      "state_id": "rule-3260000-92",
+      "n": 8,
+      "mean_delta": -0.07141977876811571,
+      "std_delta": 0.05312099245230293,
+      "approx_ci95": [
+        -0.11583709680701339,
+        -0.02700246072921804
+      ],
+      "dev_better_seeds": 1,
+      "non_dev_better_seeds": 7,
+      "tie_seeds": 0,
+      "probability": 0.8903747797012329,
+      "alternative_family": "BUILD_ROAD",
+      "context": {
+        "settlement.candidate_count": 7,
+        "settlement.min_additional_roads": 1,
+        "settlement.eta": 0.0,
+        "city.eta": 0.1845703125,
+        "city.best_production_gain": 12,
+        "road.acquisition_gap": 4,
+        "knight.plays_needed": 1,
+        "robber.blocked_pips": 0,
+        "risk.discard_exposure": true,
+        "risk.hand_size": 10,
+        "settlement_shortage": {
+          "wood": 0,
+          "brick": 0,
+          "sheep": 0,
+          "wheat": 0
+        },
+        "city_shortage": {
+          "wheat": 1,
+          "ore": 1
+        },
+        "score": 6,
+        "new_development_cards": {}
+      }
+    }
+  ],
+  "paired_variance_decomposition": {
+    "mean_within_state_sample_variance": 0.3864462925712715,
+    "between_state_means_variance": 0.01748845826995735,
+    "within_divided_by_futures": 0.04830578657140894,
+    "corrected_between_state_variance": 0.0,
+    "icc_like": 0.0
+  },
+  "dev_advantage_states": 9,
+  "non_dev_advantage_states": 11,
+  "near_tie_states": 4,
+  "sign_stable_7_of_8": 8,
+  "approx_ci95_excludes_zero": 3,
+  "unstable_mixed_sign_2_each": 15,
+  "context_pearson_exploratory": {
+    "probability": {
+      "n": 24,
+      "pearson": 0.4132148159778551
+    },
+    "score": {
+      "n": 24,
+      "pearson": -0.1784324083514222
+    },
+    "risk.hand_size": {
+      "n": 24,
+      "pearson": -0.22015655196356254
+    },
+    "risk.discard_exposure": {
+      "n": 24,
+      "pearson": -0.07007918552869484
+    },
+    "settlement.eta": {
+      "n": 23,
+      "pearson": 0.144085968818082
+    },
+    "city.eta": {
+      "n": 24,
+      "pearson": 0.07842201192036162
+    },
+    "robber.blocked_pips": {
+      "n": 24,
+      "pearson": -0.11257010185236674
+    },
+    "knight.plays_needed": {
+      "n": 24,
+      "pearson": 0.17436715867122807
+    },
+    "road.acquisition_gap": {
+      "n": 24,
+      "pearson": 0.10224596795250492
+    },
+    "settlement.candidate_count": {
+      "n": 24,
+      "pearson": -0.09409297734628212
+    }
+  },
+  "winner_flips": 58,
+  "learner_win_flips": 37,
+  "dev_wins": 110,
+  "non_dev_wins": 111,
+  "own_win_flip_return_direction_mismatch": 0,
+  "delta_vp": {
+    "n": 192,
+    "mean": 0.015625,
+    "std": 1.3747024904221186,
+    "median": 0.0,
+    "p10": -1.8999999999999986,
+    "p90": 1.9000000000000057,
+    "min": -5.0,
+    "max": 6.0
+  },
+  "delta_rank": {
+    "n": 192,
+    "mean": 0.0026041666666666665,
+    "std": 0.7801486565169938,
+    "median": 0.0,
+    "p10": -1.0,
+    "p90": 1.0,
+    "min": -2.5,
+    "max": 2.5
+  },
+  "delta_policy_steps": {
+    "n": 192,
+    "mean": 1.4166666666666667,
+    "std": 15.190012333589129,
+    "median": 2.0,
+    "p10": -18.0,
+    "p90": 19.900000000000006,
+    "min": -48.0,
+    "max": 40.0
+  },
+  "construction_within_30": {
+    "dev": {
+      "settlement": 171,
+      "city": 89
+    },
+    "non_dev": {
+      "settlement": 173,
+      "city": 96
+    }
+  },
+  "construction_timing_delta_both_observed": {
+    "settlement": {
+      "n": 181,
+      "mean": 2.248618784530387,
+      "std": 10.280999777014808,
+      "median": 2.0,
+      "p10": -10.0,
+      "p90": 11.0,
+      "min": -36.0,
+      "max": 45.0
+    },
+    "city": {
+      "n": 125,
+      "mean": 3.584,
+      "std": 16.593422715623046,
+      "median": 4.0,
+      "p10": -17.0,
+      "p90": 20.60000000000001,
+      "min": -38.0,
+      "max": 58.0
+    }
+  },
+  "road_build_count_delta_within_30": {
+    "n": 192,
+    "mean": -0.125,
+    "std": 1.2300768289971167,
+    "median": 0.0,
+    "p10": -2.0,
+    "p90": 1.9000000000000057,
+    "min": -4.0,
+    "max": 3.0
+  },
+  "next_dev_within_30": {
+    "dev": 104,
+    "non_dev": 129
+  },
+  "resource_recovery": {
+    "dev": {
+      "sheep": {
+        "n": 186,
+        "mean": 7.666666666666667,
+        "std": 5.220196399605139,
+        "median": 7.0,
+        "p10": 2.0,
+        "p90": 15.0,
+        "min": 2.0,
+        "max": 30.0
+      },
+      "wheat": {
+        "n": 176,
+        "mean": 7.170454545454546,
+        "std": 6.128568401294927,
+        "median": 5.5,
+        "p10": 2.0,
+        "p90": 13.0,
+        "min": 2.0,
+        "max": 30.0
+      },
+      "ore": {
+        "n": 169,
+        "mean": 9.57396449704142,
+        "std": 6.514327361663867,
+        "median": 8.0,
+        "p10": 2.0,
+        "p90": 18.200000000000017,
+        "min": 2.0,
+        "max": 30.0
+      }
+    },
+    "non_dev": {
+      "sheep": {
+        "n": 192,
+        "mean": 1.0885416666666667,
+        "std": 0.4430663717470825,
+        "median": 1.0,
+        "p10": 1.0,
+        "p90": 1.0,
+        "min": 1.0,
+        "max": 5.0
+      },
+      "wheat": {
+        "n": 181,
+        "mean": 1.7624309392265194,
+        "std": 3.0044268545549215,
+        "median": 1.0,
+        "p10": 1.0,
+        "p90": 2.0,
+        "min": 1.0,
+        "max": 24.0
+      },
+      "ore": {
+        "n": 189,
+        "mean": 1.6984126984126984,
+        "std": 2.9766909406980155,
+        "median": 1.0,
+        "p10": 1.0,
+        "p90": 1.0,
+        "min": 1.0,
+        "max": 25.0
+      }
+    }
+  },
+  "schema": "strategic_development_causal_audit_step3a17_v1",
+  "replay_games": 36,
+  "all_replay_action_outcome_rng_parity": true,
+  "future_seeds_per_state": 8,
+  "paired_continuation_policy": "frozen Champion Planner after one forced family",
+  "future_rng_method": "common future seed per branch, counter reset at fork",
+  "reward_gamma": 0.99,
+  "diagnostic_horizon_policy_steps": 30,
+  "no_optimizer_update": true,
+  "frozen_champion_weight_digest": "4225902d41a83540eb1f1552826ec623706e778b99ad4ae8ec015f976644392a",
+  "gate_weights_unchanged": true
+}

@@ -7,7 +7,7 @@ from copy import deepcopy
 from dataclasses import dataclass
 from math import isfinite, log
 import random
-from typing import Any
+from typing import Any, Callable
 
 import numpy as np
 import torch
@@ -227,6 +227,7 @@ def run_strategic_episode(
     strategic_gate: StrategicActionGate | None = None,
     strategic_critic: StrategicSurfaceCritic | None = None,
     record_training_inputs: bool = False,
+    decision_audit_observer: Callable[..., None] | None = None,
 ) -> StrategicEpisode:
     """Run one episode; only actual Gate decisions create semi-MDP samples."""
     if profile not in PROFILE_ROLES or mode not in {"legacy", "safety", "strategic"}:
@@ -420,6 +421,9 @@ def run_strategic_episode(
                                         "old_calibrated_logits": logits[0].cpu().tolist(),
                                         "frozen_base_value": float(snapshot.critic_value.item()),
                                     })
+                                if decision_audit_observer is not None:
+                                    decision_audit_observer(env, champion, snapshot,
+                                                            mask, record)
                                 decisions.append(record)
                             elif pending is not None:
                                 pending["nondelegated_surfaces_crossed"] += 1

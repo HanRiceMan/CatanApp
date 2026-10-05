@@ -1,0 +1,317 @@
+[
+  {
+    "state_id": "champion-3261001-45",
+    "profile": "champion",
+    "seat": 2,
+    "probability": 0.8509101271629333,
+    "candidate_set": [
+      "BUILD_ROAD",
+      "BUY_DEVELOPMENT",
+      "BANK_TRADE",
+      "END_TURN"
+    ],
+    "alternative_family": "BUILD_ROAD",
+    "champion_family": "BUILD_ROAD"
+  },
+  {
+    "state_id": "champion-3261000-14",
+    "profile": "champion",
+    "seat": 1,
+    "probability": 0.9244715571403503,
+    "candidate_set": [
+      "BUILD_ROAD",
+      "BUY_DEVELOPMENT",
+      "END_TURN"
+    ],
+    "alternative_family": "BUILD_ROAD",
+    "champion_family": "BUILD_ROAD"
+  },
+  {
+    "state_id": "champion-3261000-42",
+    "profile": "champion",
+    "seat": 1,
+    "probability": 0.9774009585380554,
+    "candidate_set": [
+      "BUY_DEVELOPMENT",
+      "END_TURN"
+    ],
+    "alternative_family": "END_TURN",
+    "champion_family": "END_TURN"
+  },
+  {
+    "state_id": "champion-3261003-82",
+    "profile": "champion",
+    "seat": 4,
+    "probability": 0.8469442129135132,
+    "candidate_set": [
+      "BUILD_ROAD",
+      "BUY_DEVELOPMENT",
+      "BANK_TRADE",
+      "END_TURN"
+    ],
+    "alternative_family": "BUILD_ROAD",
+    "champion_family": "BANK_TRADE"
+  },
+  {
+    "state_id": "champion-3261000-21",
+    "profile": "champion",
+    "seat": 1,
+    "probability": 0.926961362361908,
+    "candidate_set": [
+      "BUILD_ROAD",
+      "BUY_DEVELOPMENT",
+      "END_TURN"
+    ],
+    "alternative_family": "BUILD_ROAD",
+    "champion_family": "BUILD_ROAD"
+  },
+  {
+    "state_id": "champion-3261000-104",
+    "profile": "champion",
+    "seat": 1,
+    "probability": 0.9099485278129578,
+    "candidate_set": [
+      "BUILD_ROAD",
+      "BUY_DEVELOPMENT",
+      "END_TURN"
+    ],
+    "alternative_family": "BUILD_ROAD",
+    "champion_family": "END_TURN"
+  },
+  {
+    "state_id": "champion-3261003-104",
+    "profile": "champion",
+    "seat": 4,
+    "probability": 0.836550235748291,
+    "candidate_set": [
+      "BUILD_ROAD",
+      "BUY_DEVELOPMENT",
+      "BANK_TRADE",
+      "END_TURN"
+    ],
+    "alternative_family": "BUILD_ROAD",
+    "champion_family": "BUILD_ROAD"
+  },
+  {
+    "state_id": "champion-3261000-34",
+    "profile": "champion",
+    "seat": 1,
+    "probability": 0.9800652861595154,
+    "candidate_set": [
+      "BUY_DEVELOPMENT",
+      "END_TURN"
+    ],
+    "alternative_family": "END_TURN",
+    "champion_family": "BUY_DEVELOPMENT"
+  },
+  {
+    "state_id": "mixed-3262004-32",
+    "profile": "mixed",
+    "seat": 1,
+    "probability": 0.03898715227842331,
+    "candidate_set": [
+      "BUILD_SETTLEMENT",
+      "BUILD_ROAD",
+      "BUY_DEVELOPMENT",
+      "END_TURN"
+    ],
+    "alternative_family": "BUILD_SETTLEMENT",
+    "champion_family": "BUILD_SETTLEMENT"
+  },
+  {
+    "state_id": "mixed-3262000-35",
+    "profile": "mixed",
+    "seat": 1,
+    "probability": 0.8668908476829529,
+    "candidate_set": [
+      "BUILD_ROAD",
+      "BUY_DEVELOPMENT",
+      "BANK_TRADE",
+      "END_TURN"
+    ],
+    "alternative_family": "BANK_TRADE",
+    "champion_family": "BUILD_ROAD"
+  },
+  {
+    "state_id": "mixed-3262000-7",
+    "profile": "mixed",
+    "seat": 1,
+    "probability": 0.922900915145874,
+    "candidate_set": [
+      "BUILD_ROAD",
+      "BUY_DEVELOPMENT",
+      "END_TURN"
+    ],
+    "alternative_family": "BUILD_ROAD",
+    "champion_family": "BUILD_ROAD"
+  },
+  {
+    "state_id": "mixed-3262000-66",
+    "profile": "mixed",
+    "seat": 1,
+    "probability": 0.9636551141738892,
+    "candidate_set": [
+      "BUY_DEVELOPMENT",
+      "END_TURN"
+    ],
+    "alternative_family": "END_TURN",
+    "champion_family": "END_TURN"
+  },
+  {
+    "state_id": "mixed-3262000-57",
+    "profile": "mixed",
+    "seat": 1,
+    "probability": 0.8659361004829407,
+    "candidate_set": [
+      "BUILD_ROAD",
+      "BUY_DEVELOPMENT",
+      "BANK_TRADE",
+      "END_TURN"
+    ],
+    "alternative_family": "BANK_TRADE",
+    "champion_family": "BUILD_ROAD"
+  },
+  {
+    "state_id": "mixed-3262000-27",
+    "profile": "mixed",
+    "seat": 1,
+    "probability": 0.917681097984314,
+    "candidate_set": [
+      "BUILD_ROAD",
+      "BUY_DEVELOPMENT",
+      "END_TURN"
+    ],
+    "alternative_family": "BUILD_ROAD",
+    "champion_family": "BUILD_ROAD"
+  },
+  {
+    "state_id": "mixed-3262000-92",
+    "profile": "mixed",
+    "seat": 1,
+    "probability": 0.9596491456031799,
+    "candidate_set": [
+      "BUY_DEVELOPMENT",
+      "END_TURN"
+    ],
+    "alternative_family": "END_TURN",
+    "champion_family": "END_TURN"
+  },
+  {
+    "state_id": "mixed-3262001-98",
+    "profile": "mixed",
+    "seat": 2,
+    "probability": 0.8546660542488098,
+    "candidate_set": [
+      "BUILD_ROAD",
+      "BUY_DEVELOPMENT",
+      "BANK_TRADE",
+      "END_TURN"
+    ],
+    "alternative_family": "BANK_TRADE",
+    "champion_family": "BUILD_ROAD"
+  },
+  {
+    "state_id": "rule-3260007-66",
+    "profile": "rule",
+    "seat": 4,
+    "probability": 0.07921716570854187,
+    "candidate_set": [
+      "BUILD_CITY",
+      "BUILD_ROAD",
+      "BUY_DEVELOPMENT",
+      "BANK_TRADE",
+      "END_TURN"
+    ],
+    "alternative_family": "BUILD_CITY",
+    "champion_family": "BUILD_CITY"
+  },
+  {
+    "state_id": "rule-3260000-74",
+    "profile": "rule",
+    "seat": 1,
+    "probability": 0.8870809078216553,
+    "candidate_set": [
+      "BUILD_ROAD",
+      "BUY_DEVELOPMENT",
+      "END_TURN"
+    ],
+    "alternative_family": "BUILD_ROAD",
+    "champion_family": "BUILD_ROAD"
+  },
+  {
+    "state_id": "rule-3260000-14",
+    "profile": "rule",
+    "seat": 1,
+    "probability": 0.9065614342689514,
+    "candidate_set": [
+      "BUILD_ROAD",
+      "BUY_DEVELOPMENT",
+      "END_TURN"
+    ],
+    "alternative_family": "BUILD_ROAD",
+    "champion_family": "BUILD_ROAD"
+  },
+  {
+    "state_id": "rule-3260000-43",
+    "profile": "rule",
+    "seat": 1,
+    "probability": 0.9790078401565552,
+    "candidate_set": [
+      "BUY_DEVELOPMENT",
+      "END_TURN"
+    ],
+    "alternative_family": "END_TURN",
+    "champion_family": "END_TURN"
+  },
+  {
+    "state_id": "rule-3260000-81",
+    "profile": "rule",
+    "seat": 1,
+    "probability": 0.8901451826095581,
+    "candidate_set": [
+      "BUILD_ROAD",
+      "BUY_DEVELOPMENT",
+      "END_TURN"
+    ],
+    "alternative_family": "BUILD_ROAD",
+    "champion_family": "BUILD_ROAD"
+  },
+  {
+    "state_id": "rule-3260000-34",
+    "profile": "rule",
+    "seat": 1,
+    "probability": 0.9014692902565002,
+    "candidate_set": [
+      "BUILD_ROAD",
+      "BUY_DEVELOPMENT",
+      "END_TURN"
+    ],
+    "alternative_family": "BUILD_ROAD",
+    "champion_family": "BUILD_ROAD"
+  },
+  {
+    "state_id": "rule-3260001-35",
+    "profile": "rule",
+    "seat": 2,
+    "probability": 0.9756976366043091,
+    "candidate_set": [
+      "BUY_DEVELOPMENT",
+      "END_TURN"
+    ],
+    "alternative_family": "END_TURN",
+    "champion_family": "END_TURN"
+  },
+  {
+    "state_id": "rule-3260000-92",
+    "profile": "rule",
+    "seat": 1,
+    "probability": 0.8903747797012329,
+    "candidate_set": [
+      "BUILD_ROAD",
+      "BUY_DEVELOPMENT",
+      "END_TURN"
+    ],
+    "alternative_family": "BUILD_ROAD",
+    "champion_family": "BUILD_ROAD"
+  }
+]

@@ -1,0 +1,675 @@
+{
+  "native_t2": {
+    "games": 36,
+    "profile": {
+      "rule": 12,
+      "champion": 12,
+      "mixed": 12
+    },
+    "seat": {
+      "1": 9,
+      "2": 9,
+      "3": 9,
+      "4": 9
+    },
+    "outcome": {
+      "games": 36,
+      "wins": 14,
+      "win_rate": 0.3888888888888889,
+      "final_vp": {
+        "n": 36,
+        "mean": 7.555555555555555,
+        "median": 7.5,
+        "p95": 10,
+        "min": 3,
+        "max": 11
+      },
+      "rank": {
+        "n": 36,
+        "mean": 2.125,
+        "median": 2.0,
+        "p95": 4.0,
+        "min": 1.0,
+        "max": 4.0
+      },
+      "policy_steps": {
+        "n": 36,
+        "mean": 81.91666666666667,
+        "median": 72.0,
+        "p95": 123,
+        "min": 49,
+        "max": 154
+      },
+      "action_phase_family_counts": {
+        "PROTECTED_PLAYER_TRADE": 449,
+        "END_TURN": 636,
+        "BUY_DEVELOPMENT": 153,
+        "BUILD_ROAD": 229,
+        "BUILD_SETTLEMENT": 80,
+        "BANK_TRADE": 136,
+        "BUILD_CITY": 33
+      },
+      "terminal": 36,
+      "truncated": 0,
+      "resolver_fires": 13
+    },
+    "selected_family": {
+      "BUY_DEVELOPMENT": 153,
+      "BUILD_ROAD": 197,
+      "BUILD_SETTLEMENT": 74,
+      "BANK_TRADE": 136,
+      "END_TURN": 132,
+      "BUILD_CITY": 31
+    },
+    "action_family": {
+      "PROTECTED_PLAYER_TRADE": 449,
+      "END_TURN": 636,
+      "BUY_DEVELOPMENT": 153,
+      "BUILD_ROAD": 229,
+      "BUILD_SETTLEMENT": 80,
+      "BANK_TRADE": 136,
+      "BUILD_CITY": 33
+    },
+    "candidate_set_selection": {
+      "BUILD_ROAD+BUY_DEVELOPMENT+END_TURN": {
+        "BUY_DEVELOPMENT": 39,
+        "END_TURN": 3,
+        "BUILD_ROAD": 1
+      },
+      "BUILD_ROAD+END_TURN": {
+        "BUILD_ROAD": 154,
+        "END_TURN": 64
+      },
+      "BUILD_SETTLEMENT+BUILD_ROAD+END_TURN": {
+        "BUILD_SETTLEMENT": 41
+      },
+      "BANK_TRADE+END_TURN": {
+        "BANK_TRADE": 98,
+        "END_TURN": 46
+      },
+      "BUY_DEVELOPMENT+END_TURN": {
+        "BUY_DEVELOPMENT": 64,
+        "END_TURN": 2
+      },
+      "BUY_DEVELOPMENT+BANK_TRADE+END_TURN": {
+        "BUY_DEVELOPMENT": 26,
+        "BANK_TRADE": 2
+      },
+      "BUILD_CITY+BUY_DEVELOPMENT+BANK_TRADE+END_TURN": {
+        "BUILD_CITY": 8,
+        "BANK_TRADE": 1
+      },
+      "BUILD_ROAD+BANK_TRADE+END_TURN": {
+        "BUILD_ROAD": 40,
+        "END_TURN": 17,
+        "BANK_TRADE": 34
+      },
+      "BUILD_CITY+BUY_DEVELOPMENT+END_TURN": {
+        "BUILD_CITY": 2
+      },
+      "BUILD_SETTLEMENT+BUILD_ROAD+BANK_TRADE+END_TURN": {
+        "BUILD_SETTLEMENT": 12
+      },
+      "BUILD_SETTLEMENT+BUILD_ROAD+BUY_DEVELOPMENT+END_TURN": {
+        "BUILD_SETTLEMENT": 13,
+        "BUY_DEVELOPMENT": 1
+      },
+      "BUILD_CITY+BANK_TRADE+END_TURN": {
+        "BUILD_CITY": 8
+      },
+      "BUILD_ROAD+BUY_DEVELOPMENT+BANK_TRADE+END_TURN": {
+        "BUY_DEVELOPMENT": 22,
+        "BANK_TRADE": 1,
+        "BUILD_ROAD": 2
+      },
+      "BUILD_CITY+BUILD_ROAD+BUY_DEVELOPMENT+BANK_TRADE+END_TURN": {
+        "BUILD_CITY": 4,
+        "BUY_DEVELOPMENT": 1
+      },
+      "BUILD_CITY+BUILD_ROAD+BANK_TRADE+END_TURN": {
+        "BUILD_CITY": 1
+      },
+      "BUILD_SETTLEMENT+BUILD_CITY+BUILD_ROAD+BUY_DEVELOPMENT+BANK_TRADE+END_TURN": {
+        "BUILD_SETTLEMENT": 2,
+        "BUILD_CITY": 1
+      },
+      "BUILD_SETTLEMENT+BUILD_CITY+BUILD_ROAD+BUY_DEVELOPMENT+END_TURN": {
+        "BUILD_CITY": 2
+      },
+      "BUILD_CITY+BUILD_ROAD+BUY_DEVELOPMENT+END_TURN": {
+        "BUILD_CITY": 2
+      },
+      "BUILD_SETTLEMENT+BUILD_ROAD+BUY_DEVELOPMENT+BANK_TRADE+END_TURN": {
+        "BUILD_SETTLEMENT": 6
+      },
+      "BUILD_CITY+END_TURN": {
+        "BUILD_CITY": 3
+      }
+    },
+    "immediate_build_competition": {
+      "BUILD_SETTLEMENT": 74,
+      "BUILD_CITY": 31,
+      "BUY_DEVELOPMENT": 2,
+      "BANK_TRADE": 1
+    },
+    "terminal": 36,
+    "truncated": 0
+  },
+  "rank_b1.0": {
+    "games": 36,
+    "profile": {
+      "rule": 12,
+      "champion": 12,
+      "mixed": 12
+    },
+    "seat": {
+      "1": 9,
+      "2": 9,
+      "3": 9,
+      "4": 9
+    },
+    "outcome": {
+      "games": 36,
+      "wins": 14,
+      "win_rate": 0.3888888888888889,
+      "final_vp": {
+        "n": 36,
+        "mean": 7.194444444444445,
+        "median": 7.0,
+        "p95": 10,
+        "min": 3,
+        "max": 11
+      },
+      "rank": {
+        "n": 36,
+        "mean": 2.2916666666666665,
+        "median": 2.0,
+        "p95": 4.0,
+        "min": 1.0,
+        "max": 4.0
+      },
+      "policy_steps": {
+        "n": 36,
+        "mean": 87.55555555555556,
+        "median": 83.0,
+        "p95": 129,
+        "min": 53,
+        "max": 136
+      },
+      "action_phase_family_counts": {
+        "PROTECTED_PLAYER_TRADE": 479,
+        "END_TURN": 704,
+        "BUY_DEVELOPMENT": 120,
+        "BUILD_ROAD": 275,
+        "BUILD_SETTLEMENT": 84,
+        "BANK_TRADE": 184,
+        "BUILD_CITY": 34
+      },
+      "terminal": 36,
+      "truncated": 0,
+      "resolver_fires": 14
+    },
+    "selected_family": {
+      "BUY_DEVELOPMENT": 120,
+      "BUILD_ROAD": 247,
+      "BUILD_SETTLEMENT": 76,
+      "BANK_TRADE": 184,
+      "END_TURN": 151,
+      "BUILD_CITY": 32
+    },
+    "action_family": {
+      "PROTECTED_PLAYER_TRADE": 479,
+      "END_TURN": 704,
+      "BUY_DEVELOPMENT": 120,
+      "BUILD_ROAD": 275,
+      "BUILD_SETTLEMENT": 84,
+      "BANK_TRADE": 184,
+      "BUILD_CITY": 34
+    },
+    "candidate_set_selection": {
+      "BUILD_ROAD+BUY_DEVELOPMENT+END_TURN": {
+        "BUY_DEVELOPMENT": 26,
+        "BUILD_ROAD": 12,
+        "END_TURN": 3
+      },
+      "BUILD_ROAD+END_TURN": {
+        "BUILD_ROAD": 150,
+        "END_TURN": 63
+      },
+      "BUILD_SETTLEMENT+BUILD_ROAD+END_TURN": {
+        "BUILD_SETTLEMENT": 37,
+        "END_TURN": 3,
+        "BUILD_ROAD": 11
+      },
+      "BANK_TRADE+END_TURN": {
+        "BANK_TRADE": 132,
+        "END_TURN": 43
+      },
+      "BUY_DEVELOPMENT+END_TURN": {
+        "END_TURN": 19,
+        "BUY_DEVELOPMENT": 39
+      },
+      "BUILD_SETTLEMENT+BUILD_ROAD+BUY_DEVELOPMENT+BANK_TRADE+END_TURN": {
+        "BUILD_SETTLEMENT": 9,
+        "BUY_DEVELOPMENT": 1,
+        "BANK_TRADE": 1,
+        "BUILD_ROAD": 2
+      },
+      "BUILD_ROAD+BANK_TRADE+END_TURN": {
+        "BANK_TRADE": 29,
+        "BUILD_ROAD": 57,
+        "END_TURN": 8
+      },
+      "BUILD_ROAD+BUY_DEVELOPMENT+BANK_TRADE+END_TURN": {
+        "BANK_TRADE": 5,
+        "BUILD_ROAD": 9,
+        "BUY_DEVELOPMENT": 10
+      },
+      "BUILD_SETTLEMENT+BUILD_ROAD+BUY_DEVELOPMENT+END_TURN": {
+        "BUY_DEVELOPMENT": 14,
+        "BUILD_SETTLEMENT": 23,
+        "BUILD_ROAD": 2,
+        "END_TURN": 3
+      },
+      "BUILD_CITY+BUY_DEVELOPMENT+BANK_TRADE+END_TURN": {
+        "BUILD_CITY": 9,
+        "BUY_DEVELOPMENT": 2,
+        "END_TURN": 1
+      },
+      "BUY_DEVELOPMENT+BANK_TRADE+END_TURN": {
+        "END_TURN": 5,
+        "BANK_TRADE": 10,
+        "BUY_DEVELOPMENT": 25
+      },
+      "BUILD_CITY+END_TURN": {
+        "BUILD_CITY": 4,
+        "END_TURN": 1
+      },
+      "BUILD_SETTLEMENT+BUILD_ROAD+BANK_TRADE+END_TURN": {
+        "BANK_TRADE": 2,
+        "BUILD_ROAD": 2,
+        "BUILD_SETTLEMENT": 5,
+        "END_TURN": 2
+      },
+      "BUILD_CITY+BANK_TRADE+END_TURN": {
+        "BANK_TRADE": 3,
+        "BUILD_CITY": 10
+      },
+      "BUILD_CITY+BUILD_ROAD+BANK_TRADE+END_TURN": {
+        "BUILD_CITY": 4,
+        "BANK_TRADE": 2,
+        "BUILD_ROAD": 1
+      },
+      "BUILD_CITY+BUILD_ROAD+BUY_DEVELOPMENT+BANK_TRADE+END_TURN": {
+        "BUY_DEVELOPMENT": 1,
+        "BUILD_ROAD": 1,
+        "BUILD_CITY": 1
+      },
+      "BUILD_CITY+BUY_DEVELOPMENT+END_TURN": {
+        "BUILD_CITY": 2,
+        "BUY_DEVELOPMENT": 1
+      },
+      "BUILD_SETTLEMENT+BUILD_CITY+BUILD_ROAD+BUY_DEVELOPMENT+BANK_TRADE+END_TURN": {
+        "BUY_DEVELOPMENT": 1,
+        "BUILD_SETTLEMENT": 1,
+        "BUILD_CITY": 1
+      },
+      "BUILD_SETTLEMENT+BUILD_CITY+BUILD_ROAD+BUY_DEVELOPMENT+END_TURN": {
+        "BUILD_CITY": 1
+      },
+      "BUILD_SETTLEMENT+BANK_TRADE+END_TURN": {
+        "BUILD_SETTLEMENT": 1
+      }
+    },
+    "immediate_build_competition": {
+      "BUILD_SETTLEMENT": 76,
+      "BUY_DEVELOPMENT": 20,
+      "BUILD_CITY": 32,
+      "BANK_TRADE": 8,
+      "BUILD_ROAD": 19,
+      "END_TURN": 10
+    },
+    "terminal": 36,
+    "truncated": 0
+  },
+  "rank_b1.5": {
+    "games": 36,
+    "profile": {
+      "rule": 12,
+      "champion": 12,
+      "mixed": 12
+    },
+    "seat": {
+      "1": 9,
+      "2": 9,
+      "3": 9,
+      "4": 9
+    },
+    "outcome": {
+      "games": 36,
+      "wins": 13,
+      "win_rate": 0.3611111111111111,
+      "final_vp": {
+        "n": 36,
+        "mean": 7.5,
+        "median": 7.0,
+        "p95": 11,
+        "min": 3,
+        "max": 11
+      },
+      "rank": {
+        "n": 36,
+        "mean": 2.2222222222222223,
+        "median": 2.0,
+        "p95": 4.0,
+        "min": 1.0,
+        "max": 4.0
+      },
+      "policy_steps": {
+        "n": 36,
+        "mean": 84.41666666666667,
+        "median": 79.0,
+        "p95": 122,
+        "min": 48,
+        "max": 153
+      },
+      "action_phase_family_counts": {
+        "PROTECTED_PLAYER_TRADE": 385,
+        "END_TURN": 687,
+        "BUY_DEVELOPMENT": 132,
+        "BUILD_ROAD": 264,
+        "BUILD_SETTLEMENT": 85,
+        "BANK_TRADE": 194,
+        "BUILD_CITY": 31
+      },
+      "terminal": 36,
+      "truncated": 0,
+      "resolver_fires": 11
+    },
+    "selected_family": {
+      "BUY_DEVELOPMENT": 132,
+      "BUILD_ROAD": 247,
+      "BUILD_SETTLEMENT": 81,
+      "BANK_TRADE": 194,
+      "END_TURN": 110,
+      "BUILD_CITY": 29
+    },
+    "action_family": {
+      "PROTECTED_PLAYER_TRADE": 385,
+      "END_TURN": 687,
+      "BUY_DEVELOPMENT": 132,
+      "BUILD_ROAD": 264,
+      "BUILD_SETTLEMENT": 85,
+      "BANK_TRADE": 194,
+      "BUILD_CITY": 31
+    },
+    "candidate_set_selection": {
+      "BUILD_ROAD+BUY_DEVELOPMENT+END_TURN": {
+        "BUY_DEVELOPMENT": 27,
+        "BUILD_ROAD": 6,
+        "END_TURN": 1
+      },
+      "BUILD_ROAD+END_TURN": {
+        "BUILD_ROAD": 165,
+        "END_TURN": 50
+      },
+      "BUILD_SETTLEMENT+BUILD_ROAD+END_TURN": {
+        "BUILD_SETTLEMENT": 39,
+        "BUILD_ROAD": 12,
+        "END_TURN": 2
+      },
+      "BANK_TRADE+END_TURN": {
+        "BANK_TRADE": 154,
+        "END_TURN": 26
+      },
+      "BUY_DEVELOPMENT+END_TURN": {
+        "END_TURN": 21,
+        "BUY_DEVELOPMENT": 58
+      },
+      "BUILD_SETTLEMENT+BUILD_ROAD+BUY_DEVELOPMENT+BANK_TRADE+END_TURN": {
+        "BUILD_SETTLEMENT": 9
+      },
+      "BUILD_ROAD+BANK_TRADE+END_TURN": {
+        "BUILD_ROAD": 55,
+        "BANK_TRADE": 31,
+        "END_TURN": 2
+      },
+      "BUILD_ROAD+BUY_DEVELOPMENT+BANK_TRADE+END_TURN": {
+        "BUY_DEVELOPMENT": 14,
+        "BANK_TRADE": 1,
+        "BUILD_ROAD": 3
+      },
+      "BUILD_SETTLEMENT+BUILD_ROAD+BANK_TRADE+END_TURN": {
+        "BUILD_SETTLEMENT": 9,
+        "END_TURN": 2,
+        "BUILD_ROAD": 2,
+        "BANK_TRADE": 2
+      },
+      "BUILD_CITY+BUILD_ROAD+BUY_DEVELOPMENT+BANK_TRADE+END_TURN": {
+        "BUILD_CITY": 3
+      },
+      "BUILD_CITY+BANK_TRADE+END_TURN": {
+        "BUILD_CITY": 10
+      },
+      "BUILD_CITY+BUILD_ROAD+BANK_TRADE+END_TURN": {
+        "BUILD_CITY": 3
+      },
+      "BUILD_SETTLEMENT+BUILD_CITY+BUILD_ROAD+BUY_DEVELOPMENT+END_TURN": {
+        "BUILD_CITY": 2,
+        "BUILD_SETTLEMENT": 1
+      },
+      "BUILD_CITY+BUY_DEVELOPMENT+END_TURN": {
+        "BUILD_CITY": 4
+      },
+      "BUILD_SETTLEMENT+BUILD_ROAD+BUY_DEVELOPMENT+END_TURN": {
+        "BUILD_SETTLEMENT": 21,
+        "BUILD_ROAD": 4,
+        "BUY_DEVELOPMENT": 4,
+        "END_TURN": 1
+      },
+      "BUY_DEVELOPMENT+BANK_TRADE+END_TURN": {
+        "BUY_DEVELOPMENT": 28,
+        "BANK_TRADE": 5,
+        "END_TURN": 2
+      },
+      "BUILD_SETTLEMENT+BUILD_CITY+BUILD_ROAD+BUY_DEVELOPMENT+BANK_TRADE+END_TURN": {
+        "BUILD_SETTLEMENT": 2
+      },
+      "BUILD_CITY+BUY_DEVELOPMENT+BANK_TRADE+END_TURN": {
+        "BUILD_CITY": 5,
+        "END_TURN": 1,
+        "BUY_DEVELOPMENT": 1,
+        "BANK_TRADE": 1
+      },
+      "BUILD_CITY+END_TURN": {
+        "BUILD_CITY": 2,
+        "END_TURN": 2
+      }
+    },
+    "immediate_build_competition": {
+      "BUILD_SETTLEMENT": 81,
+      "BUILD_CITY": 29,
+      "BUILD_ROAD": 18,
+      "END_TURN": 8,
+      "BUY_DEVELOPMENT": 5,
+      "BANK_TRADE": 3
+    },
+    "terminal": 36,
+    "truncated": 0
+  },
+  "gap_c2.0": {
+    "games": 36,
+    "profile": {
+      "rule": 12,
+      "champion": 12,
+      "mixed": 12
+    },
+    "seat": {
+      "1": 9,
+      "2": 9,
+      "3": 9,
+      "4": 9
+    },
+    "outcome": {
+      "games": 36,
+      "wins": 14,
+      "win_rate": 0.3888888888888889,
+      "final_vp": {
+        "n": 36,
+        "mean": 7.277777777777778,
+        "median": 7.0,
+        "p95": 10,
+        "min": 3,
+        "max": 11
+      },
+      "rank": {
+        "n": 36,
+        "mean": 2.388888888888889,
+        "median": 2.5,
+        "p95": 4.0,
+        "min": 1.0,
+        "max": 4.0
+      },
+      "policy_steps": {
+        "n": 36,
+        "mean": 84.16666666666667,
+        "median": 78.0,
+        "p95": 125,
+        "min": 48,
+        "max": 164
+      },
+      "action_phase_family_counts": {
+        "PROTECTED_PLAYER_TRADE": 392,
+        "END_TURN": 685,
+        "BUY_DEVELOPMENT": 134,
+        "BUILD_ROAD": 237,
+        "BUILD_SETTLEMENT": 80,
+        "BANK_TRADE": 188,
+        "BUILD_CITY": 36
+      },
+      "terminal": 36,
+      "truncated": 0,
+      "resolver_fires": 13
+    },
+    "selected_family": {
+      "BUY_DEVELOPMENT": 134,
+      "BUILD_ROAD": 220,
+      "BUILD_SETTLEMENT": 76,
+      "BANK_TRADE": 188,
+      "END_TURN": 115,
+      "BUILD_CITY": 33
+    },
+    "action_family": {
+      "PROTECTED_PLAYER_TRADE": 392,
+      "END_TURN": 685,
+      "BUY_DEVELOPMENT": 134,
+      "BUILD_ROAD": 237,
+      "BUILD_SETTLEMENT": 80,
+      "BANK_TRADE": 188,
+      "BUILD_CITY": 36
+    },
+    "candidate_set_selection": {
+      "BUILD_ROAD+BUY_DEVELOPMENT+END_TURN": {
+        "BUY_DEVELOPMENT": 31,
+        "END_TURN": 3,
+        "BUILD_ROAD": 3
+      },
+      "BUILD_ROAD+END_TURN": {
+        "BUILD_ROAD": 162,
+        "END_TURN": 37
+      },
+      "BUILD_SETTLEMENT+BUILD_ROAD+END_TURN": {
+        "BUILD_SETTLEMENT": 42,
+        "BUILD_ROAD": 9,
+        "END_TURN": 6
+      },
+      "BANK_TRADE+END_TURN": {
+        "BANK_TRADE": 137,
+        "END_TURN": 34
+      },
+      "BUY_DEVELOPMENT+END_TURN": {
+        "BUY_DEVELOPMENT": 57,
+        "END_TURN": 9
+      },
+      "BUILD_ROAD+BUY_DEVELOPMENT+BANK_TRADE+END_TURN": {
+        "BUY_DEVELOPMENT": 14,
+        "BANK_TRADE": 3,
+        "END_TURN": 5,
+        "BUILD_ROAD": 3
+      },
+      "BUILD_CITY+BUILD_ROAD+BANK_TRADE+END_TURN": {
+        "BUILD_CITY": 3,
+        "BANK_TRADE": 1
+      },
+      "BUILD_SETTLEMENT+BUILD_CITY+BUILD_ROAD+BUY_DEVELOPMENT+BANK_TRADE+END_TURN": {
+        "BUILD_SETTLEMENT": 1
+      },
+      "BUILD_ROAD+BANK_TRADE+END_TURN": {
+        "BANK_TRADE": 44,
+        "BUILD_ROAD": 38,
+        "END_TURN": 8
+      },
+      "BUILD_CITY+END_TURN": {
+        "END_TURN": 1,
+        "BUILD_CITY": 4
+      },
+      "BUILD_CITY+BUY_DEVELOPMENT+END_TURN": {
+        "BUY_DEVELOPMENT": 1,
+        "BUILD_CITY": 4
+      },
+      "BUILD_CITY+BUILD_ROAD+END_TURN": {
+        "BUILD_CITY": 1
+      },
+      "BUILD_CITY+BUY_DEVELOPMENT+BANK_TRADE+END_TURN": {
+        "BUILD_CITY": 10,
+        "BUY_DEVELOPMENT": 1,
+        "BANK_TRADE": 1
+      },
+      "BUILD_SETTLEMENT+BUILD_ROAD+BANK_TRADE+END_TURN": {
+        "BUILD_SETTLEMENT": 7,
+        "END_TURN": 2,
+        "BUILD_ROAD": 2,
+        "BANK_TRADE": 1
+      },
+      "BUY_DEVELOPMENT+BANK_TRADE+END_TURN": {
+        "BUY_DEVELOPMENT": 28,
+        "END_TURN": 6,
+        "BANK_TRADE": 1
+      },
+      "BUILD_SETTLEMENT+BUILD_CITY+BUILD_ROAD+BUY_DEVELOPMENT+END_TURN": {
+        "BUILD_ROAD": 1,
+        "BUILD_CITY": 1
+      },
+      "BUILD_SETTLEMENT+BUILD_ROAD+BUY_DEVELOPMENT+END_TURN": {
+        "BUILD_SETTLEMENT": 18,
+        "BUILD_ROAD": 1,
+        "END_TURN": 3,
+        "BUY_DEVELOPMENT": 2
+      },
+      "BUILD_CITY+BANK_TRADE+END_TURN": {
+        "BUILD_CITY": 7
+      },
+      "BUILD_CITY+BUILD_ROAD+BUY_DEVELOPMENT+BANK_TRADE+END_TURN": {
+        "BUILD_ROAD": 1,
+        "BUILD_CITY": 3
+      },
+      "BUILD_SETTLEMENT+BUILD_ROAD+BUY_DEVELOPMENT+BANK_TRADE+END_TURN": {
+        "BUILD_SETTLEMENT": 7,
+        "END_TURN": 1
+      },
+      "BUILD_SETTLEMENT+BUILD_CITY+BUILD_ROAD+BANK_TRADE+END_TURN": {
+        "BUILD_SETTLEMENT": 1
+      }
+    },
+    "immediate_build_competition": {
+      "BUILD_SETTLEMENT": 76,
+      "BUILD_CITY": 33,
+      "END_TURN": 13,
+      "BUY_DEVELOPMENT": 4,
+      "BUILD_ROAD": 14,
+      "BANK_TRADE": 3
+    },
+    "terminal": 36,
+    "truncated": 0
+  }
+}

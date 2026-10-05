@@ -20,6 +20,7 @@ from app.domain.game import (
 )
 
 from .action_space import action_to_id, get_action_mask
+from .construction_city_counterfactual import LearnerBoundary
 from .construction_timing_rollout import _HeuristicRollOrder, _TradeResponseOnly, _normalized_state
 from .diagnostics_metrics import endgame_rank
 from .env import CatanEnv, CatanEnvConfig
@@ -157,6 +158,7 @@ class StrategicEpisode:
     learner_action_families: dict[str, int]
     forced_applied: bool = False
     prior_temperature: float = 1.0
+    discounted_return_from_start: float = 0.0
 
 
 def _seat_probe(seed: int) -> GameState:
@@ -228,6 +230,12 @@ def run_strategic_episode(
     strategic_critic: StrategicSurfaceCritic | None = None,
     record_training_inputs: bool = False,
     decision_audit_observer: Callable[..., None] | None = None,
+    pre_action_audit_observer: Callable[..., None] | None = None,
+    prior_calibrator: Callable[[list[float], tuple[bool, ...]], np.ndarray] | None = None,
+    prior_name: str | None = None,
+    initial_boundary: LearnerBoundary | None = None,
+    continuation_seed: int | None = None,
+    first_action_override: Action | None = None,
 ) -> StrategicEpisode:
     """Run one episode; only actual Gate decisions create semi-MDP samples."""
     if profile not in PROFILE_ROLES or mode not in {"legacy", "safety", "strategic"}:
@@ -274,6 +282,25 @@ def run_strategic_episode(
         action_observer=lambda _game, player_id, action: trace.append((player_id, action)),
     )
     env.reset(seed=seed)
+    if initial_boundary is not None:
+        if initial_boundary.episode_seed != seed:
+            raise ValueError("Continuation boundary seed differs from episode seed")
+        env.game = deepcopy(initial_boundary.game)
+        env.episode_seed = initial_boundary.episode_seed
+        env.policy_steps = initial_boundary.policy_steps
+        env._request_number = initial_boundary.request_number
+        env._learning_score = initial_boundary.learning_score
+        env._learner_auxiliary_actions = initial_boundary.learner_auxiliary_actions
+        env._controllers = dict(initial_boundary.controllers)
+        env._pending_external_player_id = None
+        env._is_truncated = False
+        if continuation_seed is not None:
+            env.game.random_source.seed = continuation_seed
+            env.game.random_source.counter = 0
+        trace.clear()
+    elif continuation_seed is not None or first_action_override is not None:
+        raise ValueError("Continuation seed/action requires an initial boundary")
+    start_policy_step = env.policy_steps
     delegation_rng = random.Random(delegation_seed)
     gate_rng = random.Random(gate_sampling_seed)
     gamma = float(champion_policy.model.gamma)
@@ -284,6 +311,8 @@ def run_strategic_episode(
     action_families: Counter[str] = Counter()
     surface_count = lottery_count = protected_available = protected_selected = 0
     forced_applied = terminal = truncated = False
+    override_used = False
+    discounted_return_from_start = 0.0
     heuristic = HeuristicAgent()
     try:
         while not (terminal or truncated):
@@ -299,7 +328,10 @@ def run_strategic_episode(
             selected_mask: tuple[bool, ...] | None = None
             selected_family_index: int | None = None
             selected_log_prob = selected_value = 0.0
-            if pre_phase == "rolling_order":
+            if first_action_override is not None and not override_used:
+                action = first_action_override
+                override_used = True
+            elif pre_phase == "rolling_order":
                 action = heuristic.select_action(game, learner_id)
             else:
                 win = (resolve_immediate_win(game, learner_id)
@@ -352,16 +384,21 @@ def run_strategic_episode(
                                     device=latent.device).unsqueeze(0)
                                 family_mask = torch.tensor([surface.family_mask],
                                                            dtype=torch.bool, device=latent.device)
+                                native_scores = prior["raw_scores"]["native_family_logits"]
+                                calibrated = (prior_calibrator(native_scores, surface.family_mask)
+                                              if prior_calibrator is not None else native_scores)
                                 scores = torch.tensor(
-                                    [prior["raw_scores"]["native_family_logits"]],
+                                    [calibrated],
                                     dtype=latent.dtype, device=latent.device)
+                                gate_temperature = (1.0 if prior_calibrator is not None
+                                                    else prior_temperature)
                                 with torch.no_grad():
                                     logits = gate(latent, context, family_mask,
-                                                  scores, temperature=prior_temperature)
+                                                  scores, temperature=gate_temperature)
                                     probabilities = torch.softmax(logits, dim=-1)[0].cpu().numpy()
                                     value = critic(snapshot.critic_value, latent,
                                                    context, family_mask)
-                                if strategic_gate is None:
+                                if strategic_gate is None and prior_calibrator is None:
                                     expected = masked_temperature_probabilities(
                                         prior["raw_scores"]["native_family_logits"],
                                         surface.family_mask, prior_temperature)
@@ -392,7 +429,9 @@ def run_strategic_episode(
                                     "turn": game.turn_number, "revision": pre_revision,
                                     "candidate_mask": list(selected_mask),
                                     "candidate_count": surface.candidate_count,
-                                    "native_family_logits": scores[0].cpu().tolist(),
+                                    "native_family_logits": native_scores,
+                                    "calibrated_prior_scores": scores[0].cpu().tolist(),
+                                    "prior_name": prior_name or f"native_t{prior_temperature:g}",
                                     "masked_probability": probabilities.tolist(),
                                     "selected_family": family,
                                     "selected_probability": float(probabilities[family_index]),
@@ -449,9 +488,16 @@ def run_strategic_episode(
                 action_families[family_of(action)] += 1
             if game.random_source.counter != pre_game_rng_counter:
                 raise AssertionError("Controller arbitration consumed GameState RNG")
+            if pre_action_audit_observer is not None:
+                pre_action_audit_observer(env, action,
+                                          decisions[-1] if delegated else None,
+                                          len(trace))
+            if game.random_source.counter != pre_game_rng_counter:
+                raise AssertionError("Pre-action audit consumed GameState RNG")
             _, reward, terminal, truncated, info = env.step_action(action)
             if not isfinite(reward):
                 raise AssertionError("Nonfinite environment reward")
+            discounted_return_from_start += gamma ** (env.policy_steps - start_policy_step - 1) * float(reward)
             if resolver_events and resolver_events[-1]["revision"] == pre_revision:
                 event = resolver_events[-1]
                 event.update({"immediate_terminal": terminal,
@@ -486,7 +532,7 @@ def run_strategic_episode(
             env.game.random_source.counter, surface_count, lottery_count,
             protected_available, protected_selected, tuple(decisions),
             tuple(resolver_events), tuple(transitions), dict(action_families),
-            forced_applied, prior_temperature,
+            forced_applied, prior_temperature, discounted_return_from_start,
         )
     finally:
         env.close()

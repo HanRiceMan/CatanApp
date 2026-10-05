@@ -1,0 +1,5378 @@
+[
+  {
+    "state_id": "rule-3260000",
+    "future_seed": 373420000,
+    "first_pair": "BUILD_ROAD -> BUY_DEVELOPMENT",
+    "safety": {
+      "winner": 1,
+      "won": true,
+      "vp": 10,
+      "rank": 1.0,
+      "policy_steps": 71,
+      "terminal": true,
+      "truncated": false,
+      "return": 0.867337420765049
+    },
+    "full": {
+      "winner": 1,
+      "won": true,
+      "vp": 10,
+      "rank": 1.0,
+      "policy_steps": 117,
+      "terminal": true,
+      "truncated": false,
+      "return": 0.5949136490313202
+    },
+    "delta_return": -0.2724237717337289,
+    "delta_vp": 0,
+    "delta_rank": 0.0
+  },
+  {
+    "state_id": "rule-3260000",
+    "future_seed": 373420001,
+    "first_pair": "BUILD_ROAD -> BUY_DEVELOPMENT",
+    "safety": {
+      "winner": 1,
+      "won": true,
+      "vp": 10,
+      "rank": 1.0,
+      "policy_steps": 95,
+      "terminal": true,
+      "truncated": false,
+      "return": 0.7107722184035679
+    },
+    "full": {
+      "winner": 1,
+      "won": true,
+      "vp": 10,
+      "rank": 1.0,
+      "policy_steps": 89,
+      "terminal": true,
+      "truncated": false,
+      "return": 0.7636148012181087
+    },
+    "delta_return": 0.052842582814540795,
+    "delta_vp": 0,
+    "delta_rank": 0.0
+  },
+  {
+    "state_id": "rule-3260000",
+    "future_seed": 373420002,
+    "first_pair": "BUILD_ROAD -> BUY_DEVELOPMENT",
+    "safety": {
+      "winner": 1,
+      "won": true,
+      "vp": 10,
+      "rank": 1.0,
+      "policy_steps": 74,
+      "terminal": true,
+      "truncated": false,
+      "return": 0.8273337508554705
+    },
+    "full": {
+      "winner": 1,
+      "won": true,
+      "vp": 10,
+      "rank": 1.0,
+      "policy_steps": 135,
+      "terminal": true,
+      "truncated": false,
+      "return": 0.5333342275341604
+    },
+    "delta_return": -0.2939995233213101,
+    "delta_vp": 0,
+    "delta_rank": 0.0
+  },
+  {
+    "state_id": "rule-3260000",
+    "future_seed": 373420003,
+    "first_pair": "BUILD_ROAD -> BUY_DEVELOPMENT",
+    "safety": {
+      "winner": 1,
+      "won": true,
+      "vp": 10,
+      "rank": 1.0,
+      "policy_steps": 98,
+      "terminal": true,
+      "truncated": false,
+      "return": 0.6874361319094957
+    },
+    "full": {
+      "winner": 1,
+      "won": true,
+      "vp": 10,
+      "rank": 1.0,
+      "policy_steps": 136,
+      "terminal": true,
+      "truncated": false,
+      "return": 0.5393715992181328
+    },
+    "delta_return": -0.14806453269136288,
+    "delta_vp": 0,
+    "delta_rank": 0.0
+  },
+  {
+    "state_id": "rule-3260000",
+    "future_seed": 373420004,
+    "first_pair": "BUILD_ROAD -> BUY_DEVELOPMENT",
+    "safety": {
+      "winner": 1,
+      "won": true,
+      "vp": 10,
+      "rank": 1.0,
+      "policy_steps": 70,
+      "terminal": true,
+      "truncated": false,
+      "return": 0.876674837499883
+    },
+    "full": {
+      "winner": 1,
+      "won": true,
+      "vp": 11,
+      "rank": 1.0,
+      "policy_steps": 95,
+      "terminal": true,
+      "truncated": false,
+      "return": 0.7401537347797401
+    },
+    "delta_return": -0.13652110272014284,
+    "delta_vp": 1,
+    "delta_rank": 0.0
+  },
+  {
+    "state_id": "rule-3260000",
+    "future_seed": 373420005,
+    "first_pair": "BUILD_ROAD -> BUY_DEVELOPMENT",
+    "safety": {
+      "winner": 1,
+      "won": true,
+      "vp": 11,
+      "rank": 1.0,
+      "policy_steps": 99,
+      "terminal": true,
+      "truncated": false,
+      "return": 0.7127267077010593
+    },
+    "full": {
+      "winner": 1,
+      "won": true,
+      "vp": 11,
+      "rank": 1.0,
+      "policy_steps": 89,
+      "terminal": true,
+      "truncated": false,
+      "return": 0.7764598848173085
+    },
+    "delta_return": 0.06373317711624926,
+    "delta_vp": 0,
+    "delta_rank": 0.0
+  },
+  {
+    "state_id": "rule-3260000",
+    "future_seed": 373420006,
+    "first_pair": "BUILD_ROAD -> BUY_DEVELOPMENT",
+    "safety": {
+      "winner": 1,
+      "won": true,
+      "vp": 10,
+      "rank": 1.0,
+      "policy_steps": 84,
+      "terminal": true,
+      "truncated": false,
+      "return": 0.7669847981032134
+    },
+    "full": {
+      "winner": 1,
+      "won": true,
+      "vp": 10,
+      "rank": 1.0,
+      "policy_steps": 106,
+      "terminal": true,
+      "truncated": false,
+      "return": 0.6495516244253435
+    },
+    "delta_return": -0.11743317367786987,
+    "delta_vp": 0,
+    "delta_rank": 0.0
+  },
+  {
+    "state_id": "rule-3260000",
+    "future_seed": 373420007,
+    "first_pair": "BUILD_ROAD -> BUY_DEVELOPMENT",
+    "safety": {
+      "winner": 1,
+      "won": true,
+      "vp": 10,
+      "rank": 1.0,
+      "policy_steps": 72,
+      "terminal": true,
+      "truncated": false,
+      "return": 0.8557856471478238
+    },
+    "full": {
+      "winner": 1,
+      "won": true,
+      "vp": 11,
+      "rank": 1.0,
+      "policy_steps": 118,
+      "terminal": true,
+      "truncated": false,
+      "return": 0.6343717520553535
+    },
+    "delta_return": -0.22141389509247034,
+    "delta_vp": 1,
+    "delta_rank": 0.0
+  },
+  {
+    "state_id": "rule-3260003",
+    "future_seed": 373420051,
+    "first_pair": "BUILD_ROAD -> BUY_DEVELOPMENT",
+    "safety": {
+      "winner": 3,
+      "won": true,
+      "vp": 10,
+      "rank": 1.0,
+      "policy_steps": 72,
+      "terminal": true,
+      "truncated": false,
+      "return": 0.7627957985314251
+    },
+    "full": {
+      "winner": 3,
+      "won": true,
+      "vp": 10,
+      "rank": 1.0,
+      "policy_steps": 77,
+      "terminal": true,
+      "truncated": false,
+      "return": 0.7437112527960352
+    },
+    "delta_return": -0.01908454573538987,
+    "delta_vp": 0,
+    "delta_rank": 0.0
+  },
+  {
+    "state_id": "rule-3260003",
+    "future_seed": 373420052,
+    "first_pair": "BUILD_ROAD -> BUY_DEVELOPMENT",
+    "safety": {
+      "winner": 3,
+      "won": true,
+      "vp": 10,
+      "rank": 1.0,
+      "policy_steps": 60,
+      "terminal": true,
+      "truncated": false,
+      "return": 0.8477398308376164
+    },
+    "full": {
+      "winner": 3,
+      "won": true,
+      "vp": 10,
+      "rank": 1.0,
+      "policy_steps": 83,
+      "terminal": true,
+      "truncated": false,
+      "return": 0.7089398845739687
+    },
+    "delta_return": -0.13879994626364767,
+    "delta_vp": 0,
+    "delta_rank": 0.0
+  },
+  {
+    "state_id": "rule-3260003",
+    "future_seed": 373420053,
+    "first_pair": "BUILD_ROAD -> BUY_DEVELOPMENT",
+    "safety": {
+      "winner": 3,
+      "won": true,
+      "vp": 10,
+      "rank": 1.0,
+      "policy_steps": 76,
+      "terminal": true,
+      "truncated": false,
+      "return": 0.7374307452571962
+    },
+    "full": {
+      "winner": 4,
+      "won": false,
+      "vp": 8,
+      "rank": 2.0,
+      "policy_steps": 99,
+      "terminal": true,
+      "truncated": false,
+      "return": -0.23766239821871057
+    },
+    "delta_return": -0.9750931434759068,
+    "delta_vp": -2,
+    "delta_rank": 1.0
+  },
+  {
+    "state_id": "rule-3260003",
+    "future_seed": 373420054,
+    "first_pair": "BUILD_ROAD -> BUY_DEVELOPMENT",
+    "safety": {
+      "winner": 3,
+      "won": true,
+      "vp": 11,
+      "rank": 1.0,
+      "policy_steps": 68,
+      "terminal": true,
+      "truncated": false,
+      "return": 0.853648466603649
+    },
+    "full": {
+      "winner": 3,
+      "won": true,
+      "vp": 11,
+      "rank": 1.0,
+      "policy_steps": 68,
+      "terminal": true,
+      "truncated": false,
+      "return": 0.8118194105545357
+    },
+    "delta_return": -0.041829056049113356,
+    "delta_vp": 0,
+    "delta_rank": 0.0
+  },
+  {
+    "state_id": "rule-3260003",
+    "future_seed": 373420055,
+    "first_pair": "BUILD_ROAD -> BUY_DEVELOPMENT",
+    "safety": {
+      "winner": 3,
+      "won": true,
+      "vp": 10,
+      "rank": 1.0,
+      "policy_steps": 64,
+      "terminal": true,
+      "truncated": false,
+      "return": 0.8200278674739717
+    },
+    "full": {
+      "winner": 3,
+      "won": true,
+      "vp": 10,
+      "rank": 1.0,
+      "policy_steps": 114,
+      "terminal": true,
+      "truncated": false,
+      "return": 0.5264163517246314
+    },
+    "delta_return": -0.2936115157493403,
+    "delta_vp": 0,
+    "delta_rank": 0.0
+  },
+  {
+    "state_id": "rule-3260003",
+    "future_seed": 373420056,
+    "first_pair": "BUILD_ROAD -> BUY_DEVELOPMENT",
+    "safety": {
+      "winner": 3,
+      "won": true,
+      "vp": 10,
+      "rank": 1.0,
+      "policy_steps": 86,
+      "terminal": true,
+      "truncated": false,
+      "return": 0.6934068441129295
+    },
+    "full": {
+      "winner": 3,
+      "won": true,
+      "vp": 10,
+      "rank": 1.0,
+      "policy_steps": 83,
+      "terminal": true,
+      "truncated": false,
+      "return": 0.6990149615189228
+    },
+    "delta_return": 0.005608117405993318,
+    "delta_vp": 0,
+    "delta_rank": 0.0
+  },
+  {
+    "state_id": "rule-3260003",
+    "future_seed": 373420057,
+    "first_pair": "BUILD_ROAD -> BUY_DEVELOPMENT",
+    "safety": {
+      "winner": 3,
+      "won": true,
+      "vp": 10,
+      "rank": 1.0,
+      "policy_steps": 68,
+      "terminal": true,
+      "truncated": false,
+      "return": 0.8162957613220125
+    },
+    "full": {
+      "winner": 3,
+      "won": true,
+      "vp": 10,
+      "rank": 1.0,
+      "policy_steps": 87,
+      "terminal": true,
+      "truncated": false,
+      "return": 0.6830585238068433
+    },
+    "delta_return": -0.13323723751516925,
+    "delta_vp": 0,
+    "delta_rank": 0.0
+  },
+  {
+    "state_id": "rule-3260003",
+    "future_seed": 373420058,
+    "first_pair": "BUILD_ROAD -> BUY_DEVELOPMENT",
+    "safety": {
+      "winner": 3,
+      "won": true,
+      "vp": 10,
+      "rank": 1.0,
+      "policy_steps": 71,
+      "terminal": true,
+      "truncated": false,
+      "return": 0.7988454022056461
+    },
+    "full": {
+      "winner": 3,
+      "won": true,
+      "vp": 10,
+      "rank": 1.0,
+      "policy_steps": 61,
+      "terminal": true,
+      "truncated": false,
+      "return": 0.8482565235542354
+    },
+    "delta_return": 0.04941112134858927,
+    "delta_vp": 0,
+    "delta_rank": 0.0
+  },
+  {
+    "state_id": "rule-3260001",
+    "future_seed": 373420017,
+    "first_pair": "BUILD_ROAD -> END_TURN",
+    "safety": {
+      "winner": 2,
+      "won": true,
+      "vp": 10,
+      "rank": 1.0,
+      "policy_steps": 72,
+      "terminal": true,
+      "truncated": false,
+      "return": 0.7872365158713854
+    },
+    "full": {
+      "winner": 4,
+      "won": false,
+      "vp": 6,
+      "rank": 3.5,
+      "policy_steps": 85,
+      "terminal": true,
+      "truncated": false,
+      "return": -0.3277260267700199
+    },
+    "delta_return": -1.1149625426414054,
+    "delta_vp": -4,
+    "delta_rank": 2.5
+  },
+  {
+    "state_id": "rule-3260001",
+    "future_seed": 373420018,
+    "first_pair": "BUILD_ROAD -> END_TURN",
+    "safety": {
+      "winner": 2,
+      "won": true,
+      "vp": 10,
+      "rank": 1.0,
+      "policy_steps": 60,
+      "terminal": true,
+      "truncated": false,
+      "return": 0.8532509846665772
+    },
+    "full": {
+      "winner": 3,
+      "won": false,
+      "vp": 5,
+      "rank": 3.0,
+      "policy_steps": 79,
+      "terminal": true,
+      "truncated": false,
+      "return": -0.37276278226884796
+    },
+    "delta_return": -1.2260137669354252,
+    "delta_vp": -5,
+    "delta_rank": 2.0
+  },
+  {
+    "state_id": "rule-3260001",
+    "future_seed": 373420019,
+    "first_pair": "BUILD_ROAD -> END_TURN",
+    "safety": {
+      "winner": 2,
+      "won": true,
+      "vp": 10,
+      "rank": 1.0,
+      "policy_steps": 76,
+      "terminal": true,
+      "truncated": false,
+      "return": 0.7494505384824781
+    },
+    "full": {
+      "winner": 3,
+      "won": false,
+      "vp": 6,
+      "rank": 2.0,
+      "policy_steps": 75,
+      "terminal": true,
+      "truncated": false,
+      "return": -0.37378112402226615
+    },
+    "delta_return": -1.1232316625047443,
+    "delta_vp": -4,
+    "delta_rank": 1.0
+  },
+  {
+    "state_id": "rule-3260001",
+    "future_seed": 373420020,
+    "first_pair": "BUILD_ROAD -> END_TURN",
+    "safety": {
+      "winner": 2,
+      "won": true,
+      "vp": 10,
+      "rank": 1.0,
+      "policy_steps": 65,
+      "terminal": true,
+      "truncated": false,
+      "return": 0.8510475938489785
+    },
+    "full": {
+      "winner": 3,
+      "won": false,
+      "vp": 5,
+      "rank": 2.0,
+      "policy_steps": 58,
+      "terminal": true,
+      "truncated": false,
+      "return": -0.48637524019906664
+    },
+    "delta_return": -1.3374228340480452,
+    "delta_vp": -5,
+    "delta_rank": 1.0
+  },
+  {
+    "state_id": "rule-3260001",
+    "future_seed": 373420021,
+    "first_pair": "BUILD_ROAD -> END_TURN",
+    "safety": {
+      "winner": 2,
+      "won": true,
+      "vp": 11,
+      "rank": 1.0,
+      "policy_steps": 64,
+      "terminal": true,
+      "truncated": false,
+      "return": 0.870572225512356
+    },
+    "full": {
+      "winner": 3,
+      "won": false,
+      "vp": 5,
+      "rank": 3.0,
+      "policy_steps": 75,
+      "terminal": true,
+      "truncated": false,
+      "return": -0.3994116634713308
+    },
+    "delta_return": -1.2699838889836867,
+    "delta_vp": -6,
+    "delta_rank": 2.0
+  },
+  {
+    "state_id": "rule-3260001",
+    "future_seed": 373420022,
+    "first_pair": "BUILD_ROAD -> END_TURN",
+    "safety": {
+      "winner": 2,
+      "won": true,
+      "vp": 10,
+      "rank": 1.0,
+      "policy_steps": 61,
+      "terminal": true,
+      "truncated": false,
+      "return": 0.8754459528293843
+    },
+    "full": {
+      "winner": 3,
+      "won": false,
+      "vp": 9,
+      "rank": 2.0,
+      "policy_steps": 93,
+      "terminal": true,
+      "truncated": false,
+      "return": -0.22572382786784412
+    },
+    "delta_return": -1.1011697806972285,
+    "delta_vp": -1,
+    "delta_rank": 1.0
+  },
+  {
+    "state_id": "rule-3260001",
+    "future_seed": 373420023,
+    "first_pair": "BUILD_ROAD -> END_TURN",
+    "safety": {
+      "winner": 2,
+      "won": true,
+      "vp": 10,
+      "rank": 1.0,
+      "policy_steps": 71,
+      "terminal": true,
+      "truncated": false,
+      "return": 0.7828168274306266
+    },
+    "full": {
+      "winner": 2,
+      "won": true,
+      "vp": 10,
+      "rank": 1.0,
+      "policy_steps": 80,
+      "terminal": true,
+      "truncated": false,
+      "return": 0.7267689419043314
+    },
+    "delta_return": -0.05604788552629525,
+    "delta_vp": 0,
+    "delta_rank": 0.0
+  },
+  {
+    "state_id": "rule-3260001",
+    "future_seed": 373420024,
+    "first_pair": "BUILD_ROAD -> END_TURN",
+    "safety": {
+      "winner": 2,
+      "won": true,
+      "vp": 10,
+      "rank": 1.0,
+      "policy_steps": 55,
+      "terminal": true,
+      "truncated": false,
+      "return": 0.9125761640054331
+    },
+    "full": {
+      "winner": 2,
+      "won": true,
+      "vp": 10,
+      "rank": 1.0,
+      "policy_steps": 79,
+      "terminal": true,
+      "truncated": false,
+      "return": 0.7282960239582531
+    },
+    "delta_return": -0.18428014004717996,
+    "delta_vp": 0,
+    "delta_rank": 0.0
+  },
+  {
+    "state_id": "rule-3260002",
+    "future_seed": 373420034,
+    "first_pair": "BUILD_ROAD -> BUILD_ROAD",
+    "safety": {
+      "winner": 2,
+      "won": true,
+      "vp": 10,
+      "rank": 1.0,
+      "policy_steps": 78,
+      "terminal": true,
+      "truncated": false,
+      "return": 0.7497573040302714
+    },
+    "full": {
+      "winner": 3,
+      "won": false,
+      "vp": 8,
+      "rank": 2.0,
+      "policy_steps": 120,
+      "terminal": true,
+      "truncated": false,
+      "return": -0.1746813757684309
+    },
+    "delta_return": -0.9244386797987023,
+    "delta_vp": -2,
+    "delta_rank": 1.0
+  },
+  {
+    "state_id": "rule-3260002",
+    "future_seed": 373420035,
+    "first_pair": "BUILD_ROAD -> BUILD_ROAD",
+    "safety": {
+      "winner": 3,
+      "won": false,
+      "vp": 5,
+      "rank": 3.0,
+      "policy_steps": 73,
+      "terminal": true,
+      "truncated": false,
+      "return": -0.3992815340221821
+    },
+    "full": {
+      "winner": 2,
+      "won": true,
+      "vp": 10,
+      "rank": 1.0,
+      "policy_steps": 102,
+      "terminal": true,
+      "truncated": false,
+      "return": 0.6208626697255638
+    },
+    "delta_return": 1.020144203747746,
+    "delta_vp": 5,
+    "delta_rank": -2.0
+  },
+  {
+    "state_id": "rule-3260002",
+    "future_seed": 373420036,
+    "first_pair": "BUILD_ROAD -> BUILD_ROAD",
+    "safety": {
+      "winner": 2,
+      "won": true,
+      "vp": 10,
+      "rank": 1.0,
+      "policy_steps": 51,
+      "terminal": true,
+      "truncated": false,
+      "return": 0.9536354643766124
+    },
+    "full": {
+      "winner": 2,
+      "won": true,
+      "vp": 10,
+      "rank": 1.0,
+      "policy_steps": 115,
+      "terminal": true,
+      "truncated": false,
+      "return": 0.5910759232926648
+    },
+    "delta_return": -0.3625595410839476,
+    "delta_vp": 0,
+    "delta_rank": 0.0
+  },
+  {
+    "state_id": "rule-3260002",
+    "future_seed": 373420037,
+    "first_pair": "BUILD_ROAD -> BUILD_ROAD",
+    "safety": {
+      "winner": 2,
+      "won": true,
+      "vp": 10,
+      "rank": 1.0,
+      "policy_steps": 81,
+      "terminal": true,
+      "truncated": false,
+      "return": 0.7611425534013113
+    },
+    "full": {
+      "winner": 2,
+      "won": true,
+      "vp": 10,
+      "rank": 1.0,
+      "policy_steps": 71,
+      "terminal": true,
+      "truncated": false,
+      "return": 0.80547581438645
+    },
+    "delta_return": 0.04433326098513868,
+    "delta_vp": 0,
+    "delta_rank": 0.0
+  },
+  {
+    "state_id": "rule-3260002",
+    "future_seed": 373420038,
+    "first_pair": "BUILD_ROAD -> BUILD_ROAD",
+    "safety": {
+      "winner": 3,
+      "won": false,
+      "vp": 6,
+      "rank": 2.0,
+      "policy_steps": 56,
+      "terminal": true,
+      "truncated": false,
+      "return": -0.47025662656528244
+    },
+    "full": {
+      "winner": 3,
+      "won": false,
+      "vp": 4,
+      "rank": 2.5,
+      "policy_steps": 63,
+      "terminal": true,
+      "truncated": false,
+      "return": -0.5126683078960493
+    },
+    "delta_return": -0.04241168133076689,
+    "delta_vp": -2,
+    "delta_rank": 0.5
+  },
+  {
+    "state_id": "rule-3260002",
+    "future_seed": 373420039,
+    "first_pair": "BUILD_ROAD -> BUILD_ROAD",
+    "safety": {
+      "winner": 3,
+      "won": false,
+      "vp": 9,
+      "rank": 2.0,
+      "policy_steps": 69,
+      "terminal": true,
+      "truncated": false,
+      "return": -0.29974291209979403
+    },
+    "full": {
+      "winner": 3,
+      "won": false,
+      "vp": 7,
+      "rank": 2.5,
+      "policy_steps": 78,
+      "terminal": true,
+      "truncated": false,
+      "return": -0.308739344543033
+    },
+    "delta_return": -0.008996432443238944,
+    "delta_vp": -2,
+    "delta_rank": 0.5
+  },
+  {
+    "state_id": "rule-3260002",
+    "future_seed": 373420040,
+    "first_pair": "BUILD_ROAD -> BUILD_ROAD",
+    "safety": {
+      "winner": 3,
+      "won": false,
+      "vp": 7,
+      "rank": 2.5,
+      "policy_steps": 69,
+      "terminal": true,
+      "truncated": false,
+      "return": -0.3521608656081744
+    },
+    "full": {
+      "winner": 2,
+      "won": true,
+      "vp": 10,
+      "rank": 1.0,
+      "policy_steps": 60,
+      "terminal": true,
+      "truncated": false,
+      "return": 0.8642250361199756
+    },
+    "delta_return": 1.21638590172815,
+    "delta_vp": 3,
+    "delta_rank": -1.5
+  },
+  {
+    "state_id": "rule-3260002",
+    "future_seed": 373420041,
+    "first_pair": "BUILD_ROAD -> BUILD_ROAD",
+    "safety": {
+      "winner": 2,
+      "won": true,
+      "vp": 11,
+      "rank": 1.0,
+      "policy_steps": 95,
+      "terminal": true,
+      "truncated": false,
+      "return": 0.7165538872900031
+    },
+    "full": {
+      "winner": 2,
+      "won": true,
+      "vp": 11,
+      "rank": 1.0,
+      "policy_steps": 86,
+      "terminal": true,
+      "truncated": false,
+      "return": 0.7144633658499451
+    },
+    "delta_return": -0.0020905214400580574,
+    "delta_vp": 0,
+    "delta_rank": 0.0
+  },
+  {
+    "state_id": "rule-3260004",
+    "future_seed": 373420068,
+    "first_pair": "BUILD_ROAD -> END_TURN",
+    "safety": {
+      "winner": 1,
+      "won": true,
+      "vp": 10,
+      "rank": 1.0,
+      "policy_steps": 95,
+      "terminal": true,
+      "truncated": false,
+      "return": 0.6360801931893518
+    },
+    "full": {
+      "winner": 1,
+      "won": true,
+      "vp": 10,
+      "rank": 1.0,
+      "policy_steps": 107,
+      "terminal": true,
+      "truncated": false,
+      "return": 0.5757242703902463
+    },
+    "delta_return": -0.06035592279910551,
+    "delta_vp": 0,
+    "delta_rank": 0.0
+  },
+  {
+    "state_id": "rule-3260004",
+    "future_seed": 373420069,
+    "first_pair": "BUILD_ROAD -> END_TURN",
+    "safety": {
+      "winner": 1,
+      "won": true,
+      "vp": 10,
+      "rank": 1.0,
+      "policy_steps": 74,
+      "terminal": true,
+      "truncated": false,
+      "return": 0.7874227677289489
+    },
+    "full": {
+      "winner": 1,
+      "won": true,
+      "vp": 10,
+      "rank": 1.0,
+      "policy_steps": 97,
+      "terminal": true,
+      "truncated": false,
+      "return": 0.6063431701558888
+    },
+    "delta_return": -0.18107959757306014,
+    "delta_vp": 0,
+    "delta_rank": 0.0
+  },
+  {
+    "state_id": "rule-3260004",
+    "future_seed": 373420070,
+    "first_pair": "BUILD_ROAD -> END_TURN",
+    "safety": {
+      "winner": 1,
+      "won": true,
+      "vp": 10,
+      "rank": 1.0,
+      "policy_steps": 103,
+      "terminal": true,
+      "truncated": false,
+      "return": 0.6209470100482791
+    },
+    "full": {
+      "winner": 1,
+      "won": true,
+      "vp": 10,
+      "rank": 1.0,
+      "policy_steps": 169,
+      "terminal": true,
+      "truncated": false,
+      "return": 0.3615367270704627
+    },
+    "delta_return": -0.25941028297781643,
+    "delta_vp": 0,
+    "delta_rank": 0.0
+  },
+  {
+    "state_id": "rule-3260004",
+    "future_seed": 373420071,
+    "first_pair": "BUILD_ROAD -> END_TURN",
+    "safety": {
+      "winner": 1,
+      "won": true,
+      "vp": 10,
+      "rank": 1.0,
+      "policy_steps": 86,
+      "terminal": true,
+      "truncated": false,
+      "return": 0.6983904279052626
+    },
+    "full": {
+      "winner": 4,
+      "won": false,
+      "vp": 5,
+      "rank": 2.5,
+      "policy_steps": 90,
+      "terminal": true,
+      "truncated": false,
+      "return": -0.32897086782805923
+    },
+    "delta_return": -1.0273612957333218,
+    "delta_vp": -5,
+    "delta_rank": 1.5
+  },
+  {
+    "state_id": "rule-3260004",
+    "future_seed": 373420072,
+    "first_pair": "BUILD_ROAD -> END_TURN",
+    "safety": {
+      "winner": 1,
+      "won": true,
+      "vp": 10,
+      "rank": 1.0,
+      "policy_steps": 85,
+      "terminal": true,
+      "truncated": false,
+      "return": 0.6712557442642862
+    },
+    "full": {
+      "winner": 1,
+      "won": true,
+      "vp": 10,
+      "rank": 1.0,
+      "policy_steps": 112,
+      "terminal": true,
+      "truncated": false,
+      "return": 0.5843503461943016
+    },
+    "delta_return": -0.08690539806998465,
+    "delta_vp": 0,
+    "delta_rank": 0.0
+  },
+  {
+    "state_id": "rule-3260004",
+    "future_seed": 373420073,
+    "first_pair": "BUILD_ROAD -> END_TURN",
+    "safety": {
+      "winner": 1,
+      "won": true,
+      "vp": 10,
+      "rank": 1.0,
+      "policy_steps": 77,
+      "terminal": true,
+      "truncated": false,
+      "return": 0.7336492253638457
+    },
+    "full": {
+      "winner": 1,
+      "won": true,
+      "vp": 10,
+      "rank": 1.0,
+      "policy_steps": 150,
+      "terminal": true,
+      "truncated": false,
+      "return": 0.4153721876593398
+    },
+    "delta_return": -0.3182770377045059,
+    "delta_vp": 0,
+    "delta_rank": 0.0
+  },
+  {
+    "state_id": "rule-3260004",
+    "future_seed": 373420074,
+    "first_pair": "BUILD_ROAD -> END_TURN",
+    "safety": {
+      "winner": 1,
+      "won": true,
+      "vp": 10,
+      "rank": 1.0,
+      "policy_steps": 80,
+      "terminal": true,
+      "truncated": false,
+      "return": 0.7285927775218597
+    },
+    "full": {
+      "winner": 1,
+      "won": true,
+      "vp": 10,
+      "rank": 1.0,
+      "policy_steps": 125,
+      "terminal": true,
+      "truncated": false,
+      "return": 0.5458665448026914
+    },
+    "delta_return": -0.18272623271916832,
+    "delta_vp": 0,
+    "delta_rank": 0.0
+  },
+  {
+    "state_id": "rule-3260004",
+    "future_seed": 373420075,
+    "first_pair": "BUILD_ROAD -> END_TURN",
+    "safety": {
+      "winner": 1,
+      "won": true,
+      "vp": 10,
+      "rank": 1.0,
+      "policy_steps": 93,
+      "terminal": true,
+      "truncated": false,
+      "return": 0.6487042102395373
+    },
+    "full": {
+      "winner": 1,
+      "won": true,
+      "vp": 10,
+      "rank": 1.0,
+      "policy_steps": 123,
+      "terminal": true,
+      "truncated": false,
+      "return": 0.5213726145386389
+    },
+    "delta_return": -0.12733159570089836,
+    "delta_vp": 0,
+    "delta_rank": 0.0
+  },
+  {
+    "state_id": "rule-3260005",
+    "future_seed": 373420085,
+    "first_pair": "BUILD_ROAD -> END_TURN",
+    "safety": {
+      "winner": 4,
+      "won": true,
+      "vp": 10,
+      "rank": 1.0,
+      "policy_steps": 87,
+      "terminal": true,
+      "truncated": false,
+      "return": 0.6950730830241625
+    },
+    "full": {
+      "winner": 3,
+      "won": false,
+      "vp": 8,
+      "rank": 2.0,
+      "policy_steps": 79,
+      "terminal": true,
+      "truncated": false,
+      "return": -0.3520839167713026
+    },
+    "delta_return": -1.047156999795465,
+    "delta_vp": -2,
+    "delta_rank": 1.0
+  },
+  {
+    "state_id": "rule-3260005",
+    "future_seed": 373420086,
+    "first_pair": "BUILD_ROAD -> END_TURN",
+    "safety": {
+      "winner": 4,
+      "won": true,
+      "vp": 10,
+      "rank": 1.0,
+      "policy_steps": 74,
+      "terminal": true,
+      "truncated": false,
+      "return": 0.7935294123489125
+    },
+    "full": {
+      "winner": 4,
+      "won": true,
+      "vp": 10,
+      "rank": 1.0,
+      "policy_steps": 77,
+      "terminal": true,
+      "truncated": false,
+      "return": 0.7761593421647179
+    },
+    "delta_return": -0.017370070184194564,
+    "delta_vp": 0,
+    "delta_rank": 0.0
+  },
+  {
+    "state_id": "rule-3260005",
+    "future_seed": 373420087,
+    "first_pair": "BUILD_ROAD -> END_TURN",
+    "safety": {
+      "winner": 4,
+      "won": true,
+      "vp": 10,
+      "rank": 1.0,
+      "policy_steps": 76,
+      "terminal": true,
+      "truncated": false,
+      "return": 0.7676110299138162
+    },
+    "full": {
+      "winner": 2,
+      "won": false,
+      "vp": 8,
+      "rank": 2.0,
+      "policy_steps": 74,
+      "terminal": true,
+      "truncated": false,
+      "return": -0.3752198385581689
+    },
+    "delta_return": -1.1428308684719852,
+    "delta_vp": -2,
+    "delta_rank": 1.0
+  },
+  {
+    "state_id": "rule-3260005",
+    "future_seed": 373420088,
+    "first_pair": "BUILD_ROAD -> END_TURN",
+    "safety": {
+      "winner": 4,
+      "won": true,
+      "vp": 10,
+      "rank": 1.0,
+      "policy_steps": 86,
+      "terminal": true,
+      "truncated": false,
+      "return": 0.6963488518916124
+    },
+    "full": {
+      "winner": 4,
+      "won": true,
+      "vp": 10,
+      "rank": 1.0,
+      "policy_steps": 108,
+      "terminal": true,
+      "truncated": false,
+      "return": 0.5898350097528148
+    },
+    "delta_return": -0.10651384213879767,
+    "delta_vp": 0,
+    "delta_rank": 0.0
+  },
+  {
+    "state_id": "rule-3260005",
+    "future_seed": 373420089,
+    "first_pair": "BUILD_ROAD -> END_TURN",
+    "safety": {
+      "winner": 4,
+      "won": true,
+      "vp": 10,
+      "rank": 1.0,
+      "policy_steps": 63,
+      "terminal": true,
+      "truncated": false,
+      "return": 0.8716889060686671
+    },
+    "full": {
+      "winner": 3,
+      "won": false,
+      "vp": 9,
+      "rank": 2.0,
+      "policy_steps": 97,
+      "terminal": true,
+      "truncated": false,
+      "return": -0.25525727786936203
+    },
+    "delta_return": -1.126946183938029,
+    "delta_vp": -1,
+    "delta_rank": 1.0
+  },
+  {
+    "state_id": "rule-3260005",
+    "future_seed": 373420090,
+    "first_pair": "BUILD_ROAD -> END_TURN",
+    "safety": {
+      "winner": 4,
+      "won": true,
+      "vp": 10,
+      "rank": 1.0,
+      "policy_steps": 52,
+      "terminal": true,
+      "truncated": false,
+      "return": 0.9574581790662051
+    },
+    "full": {
+      "winner": 4,
+      "won": true,
+      "vp": 10,
+      "rank": 1.0,
+      "policy_steps": 65,
+      "terminal": true,
+      "truncated": false,
+      "return": 0.8413620016216142
+    },
+    "delta_return": -0.11609617744459089,
+    "delta_vp": 0,
+    "delta_rank": 0.0
+  },
+  {
+    "state_id": "rule-3260005",
+    "future_seed": 373420091,
+    "first_pair": "BUILD_ROAD -> END_TURN",
+    "safety": {
+      "winner": 4,
+      "won": true,
+      "vp": 10,
+      "rank": 1.0,
+      "policy_steps": 77,
+      "terminal": true,
+      "truncated": false,
+      "return": 0.771253950842445
+    },
+    "full": {
+      "winner": 2,
+      "won": false,
+      "vp": 8,
+      "rank": 2.5,
+      "policy_steps": 90,
+      "terminal": true,
+      "truncated": false,
+      "return": -0.2977511403358386
+    },
+    "delta_return": -1.0690050911782836,
+    "delta_vp": -2,
+    "delta_rank": 1.5
+  },
+  {
+    "state_id": "rule-3260005",
+    "future_seed": 373420092,
+    "first_pair": "BUILD_ROAD -> END_TURN",
+    "safety": {
+      "winner": 4,
+      "won": true,
+      "vp": 10,
+      "rank": 1.0,
+      "policy_steps": 72,
+      "terminal": true,
+      "truncated": false,
+      "return": 0.8032906922397458
+    },
+    "full": {
+      "winner": 4,
+      "won": true,
+      "vp": 10,
+      "rank": 1.0,
+      "policy_steps": 100,
+      "terminal": true,
+      "truncated": false,
+      "return": 0.6343200050047052
+    },
+    "delta_return": -0.1689706872350406,
+    "delta_vp": 0,
+    "delta_rank": 0.0
+  },
+  {
+    "state_id": "rule-3260006",
+    "future_seed": 373420102,
+    "first_pair": "BUILD_ROAD -> BUY_DEVELOPMENT",
+    "safety": {
+      "winner": 1,
+      "won": true,
+      "vp": 10,
+      "rank": 1.0,
+      "policy_steps": 71,
+      "terminal": true,
+      "truncated": false,
+      "return": 0.7973829415961442
+    },
+    "full": {
+      "winner": 1,
+      "won": true,
+      "vp": 11,
+      "rank": 1.0,
+      "policy_steps": 93,
+      "terminal": true,
+      "truncated": false,
+      "return": 0.6816335849643044
+    },
+    "delta_return": -0.11574935663183983,
+    "delta_vp": 1,
+    "delta_rank": 0.0
+  },
+  {
+    "state_id": "rule-3260006",
+    "future_seed": 373420103,
+    "first_pair": "BUILD_ROAD -> BUY_DEVELOPMENT",
+    "safety": {
+      "winner": 1,
+      "won": true,
+      "vp": 10,
+      "rank": 1.0,
+      "policy_steps": 58,
+      "terminal": true,
+      "truncated": false,
+      "return": 0.8987017474914883
+    },
+    "full": {
+      "winner": 1,
+      "won": true,
+      "vp": 10,
+      "rank": 1.0,
+      "policy_steps": 89,
+      "terminal": true,
+      "truncated": false,
+      "return": 0.6574713962447629
+    },
+    "delta_return": -0.24123035124672543,
+    "delta_vp": 0,
+    "delta_rank": 0.0
+  },
+  {
+    "state_id": "rule-3260006",
+    "future_seed": 373420104,
+    "first_pair": "BUILD_ROAD -> BUY_DEVELOPMENT",
+    "safety": {
+      "winner": 1,
+      "won": true,
+      "vp": 10,
+      "rank": 1.0,
+      "policy_steps": 75,
+      "terminal": true,
+      "truncated": false,
+      "return": 0.7824295030008548
+    },
+    "full": {
+      "winner": 1,
+      "won": true,
+      "vp": 10,
+      "rank": 1.0,
+      "policy_steps": 84,
+      "terminal": true,
+      "truncated": false,
+      "return": 0.6967502110276678
+    },
+    "delta_return": -0.08567929197318702,
+    "delta_vp": 0,
+    "delta_rank": 0.0
+  },
+  {
+    "state_id": "rule-3260006",
+    "future_seed": 373420105,
+    "first_pair": "BUILD_ROAD -> BUY_DEVELOPMENT",
+    "safety": {
+      "winner": 1,
+      "won": true,
+      "vp": 10,
+      "rank": 1.0,
+      "policy_steps": 47,
+      "terminal": true,
+      "truncated": false,
+      "return": 0.9845568063834353
+    },
+    "full": {
+      "winner": 1,
+      "won": true,
+      "vp": 10,
+      "rank": 1.0,
+      "policy_steps": 59,
+      "terminal": true,
+      "truncated": false,
+      "return": 0.8646297896630029
+    },
+    "delta_return": -0.11992701672043249,
+    "delta_vp": 0,
+    "delta_rank": 0.0
+  },
+  {
+    "state_id": "rule-3260006",
+    "future_seed": 373420106,
+    "first_pair": "BUILD_ROAD -> BUY_DEVELOPMENT",
+    "safety": {
+      "winner": 1,
+      "won": true,
+      "vp": 10,
+      "rank": 1.0,
+      "policy_steps": 70,
+      "terminal": true,
+      "truncated": false,
+      "return": 0.7966919513676803
+    },
+    "full": {
+      "winner": 1,
+      "won": true,
+      "vp": 10,
+      "rank": 1.0,
+      "policy_steps": 89,
+      "terminal": true,
+      "truncated": false,
+      "return": 0.6739693485007566
+    },
+    "delta_return": -0.12272260286692371,
+    "delta_vp": 0,
+    "delta_rank": 0.0
+  },
+  {
+    "state_id": "rule-3260006",
+    "future_seed": 373420107,
+    "first_pair": "BUILD_ROAD -> BUY_DEVELOPMENT",
+    "safety": {
+      "winner": 1,
+      "won": true,
+      "vp": 10,
+      "rank": 1.0,
+      "policy_steps": 48,
+      "terminal": true,
+      "truncated": false,
+      "return": 0.9724511017161364
+    },
+    "full": {
+      "winner": 1,
+      "won": true,
+      "vp": 10,
+      "rank": 1.0,
+      "policy_steps": 82,
+      "terminal": true,
+      "truncated": false,
+      "return": 0.7461700400514066
+    },
+    "delta_return": -0.22628106166472972,
+    "delta_vp": 0,
+    "delta_rank": 0.0
+  },
+  {
+    "state_id": "rule-3260006",
+    "future_seed": 373420108,
+    "first_pair": "BUILD_ROAD -> BUY_DEVELOPMENT",
+    "safety": {
+      "winner": 1,
+      "won": true,
+      "vp": 10,
+      "rank": 1.0,
+      "policy_steps": 55,
+      "terminal": true,
+      "truncated": false,
+      "return": 0.9355954260477122
+    },
+    "full": {
+      "winner": 1,
+      "won": true,
+      "vp": 11,
+      "rank": 1.0,
+      "policy_steps": 78,
+      "terminal": true,
+      "truncated": false,
+      "return": 0.7773063975836642
+    },
+    "delta_return": -0.15828902846404802,
+    "delta_vp": 1,
+    "delta_rank": 0.0
+  },
+  {
+    "state_id": "rule-3260006",
+    "future_seed": 373420109,
+    "first_pair": "BUILD_ROAD -> BUY_DEVELOPMENT",
+    "safety": {
+      "winner": 1,
+      "won": true,
+      "vp": 10,
+      "rank": 1.0,
+      "policy_steps": 48,
+      "terminal": true,
+      "truncated": false,
+      "return": 0.9742590658145573
+    },
+    "full": {
+      "winner": 1,
+      "won": true,
+      "vp": 10,
+      "rank": 1.0,
+      "policy_steps": 88,
+      "terminal": true,
+      "truncated": false,
+      "return": 0.6961734378433584
+    },
+    "delta_return": -0.27808562797119896,
+    "delta_vp": 0,
+    "delta_rank": 0.0
+  },
+  {
+    "state_id": "rule-3260007",
+    "future_seed": 373420119,
+    "first_pair": "BUILD_ROAD -> END_TURN",
+    "safety": {
+      "winner": 4,
+      "won": true,
+      "vp": 10,
+      "rank": 1.0,
+      "policy_steps": 87,
+      "terminal": true,
+      "truncated": false,
+      "return": 0.7121264309396456
+    },
+    "full": {
+      "winner": 4,
+      "won": true,
+      "vp": 10,
+      "rank": 1.0,
+      "policy_steps": 102,
+      "terminal": true,
+      "truncated": false,
+      "return": 0.6248863269068472
+    },
+    "delta_return": -0.08724010403279836,
+    "delta_vp": 0,
+    "delta_rank": 0.0
+  },
+  {
+    "state_id": "rule-3260007",
+    "future_seed": 373420120,
+    "first_pair": "BUILD_ROAD -> END_TURN",
+    "safety": {
+      "winner": 4,
+      "won": true,
+      "vp": 10,
+      "rank": 1.0,
+      "policy_steps": 54,
+      "terminal": true,
+      "truncated": false,
+      "return": 0.9187322958400375
+    },
+    "full": {
+      "winner": 4,
+      "won": true,
+      "vp": 10,
+      "rank": 1.0,
+      "policy_steps": 82,
+      "terminal": true,
+      "truncated": false,
+      "return": 0.7083834047473547
+    },
+    "delta_return": -0.21034889109268273,
+    "delta_vp": 0,
+    "delta_rank": 0.0
+  },
+  {
+    "state_id": "rule-3260007",
+    "future_seed": 373420121,
+    "first_pair": "BUILD_ROAD -> END_TURN",
+    "safety": {
+      "winner": 4,
+      "won": true,
+      "vp": 10,
+      "rank": 1.0,
+      "policy_steps": 48,
+      "terminal": true,
+      "truncated": false,
+      "return": 0.9462512065758556
+    },
+    "full": {
+      "winner": 4,
+      "won": true,
+      "vp": 10,
+      "rank": 1.0,
+      "policy_steps": 106,
+      "terminal": true,
+      "truncated": false,
+      "return": 0.577842759786793
+    },
+    "delta_return": -0.3684084467890626,
+    "delta_vp": 0,
+    "delta_rank": 0.0
+  },
+  {
+    "state_id": "rule-3260007",
+    "future_seed": 373420122,
+    "first_pair": "BUILD_ROAD -> END_TURN",
+    "safety": {
+      "winner": 4,
+      "won": true,
+      "vp": 10,
+      "rank": 1.0,
+      "policy_steps": 61,
+      "terminal": true,
+      "truncated": false,
+      "return": 0.8368215779457226
+    },
+    "full": {
+      "winner": 1,
+      "won": false,
+      "vp": 7,
+      "rank": 2.0,
+      "policy_steps": 80,
+      "terminal": true,
+      "truncated": false,
+      "return": -0.29894411136545584
+    },
+    "delta_return": -1.1357656893111785,
+    "delta_vp": -3,
+    "delta_rank": 1.0
+  },
+  {
+    "state_id": "rule-3260007",
+    "future_seed": 373420123,
+    "first_pair": "BUILD_ROAD -> END_TURN",
+    "safety": {
+      "winner": 2,
+      "won": false,
+      "vp": 7,
+      "rank": 2.0,
+      "policy_steps": 86,
+      "terminal": true,
+      "truncated": false,
+      "return": -0.2691206867918907
+    },
+    "full": {
+      "winner": 1,
+      "won": false,
+      "vp": 8,
+      "rank": 2.0,
+      "policy_steps": 89,
+      "terminal": true,
+      "truncated": false,
+      "return": -0.23275899083158166
+    },
+    "delta_return": 0.036361695960309054,
+    "delta_vp": 1,
+    "delta_rank": 0.0
+  },
+  {
+    "state_id": "rule-3260007",
+    "future_seed": 373420124,
+    "first_pair": "BUILD_ROAD -> END_TURN",
+    "safety": {
+      "winner": 4,
+      "won": true,
+      "vp": 10,
+      "rank": 1.0,
+      "policy_steps": 49,
+      "terminal": true,
+      "truncated": false,
+      "return": 0.935622601857023
+    },
+    "full": {
+      "winner": 4,
+      "won": true,
+      "vp": 10,
+      "rank": 1.0,
+      "policy_steps": 84,
+      "terminal": true,
+      "truncated": false,
+      "return": 0.6735792021452357
+    },
+    "delta_return": -0.26204339971178725,
+    "delta_vp": 0,
+    "delta_rank": 0.0
+  },
+  {
+    "state_id": "rule-3260007",
+    "future_seed": 373420125,
+    "first_pair": "BUILD_ROAD -> END_TURN",
+    "safety": {
+      "winner": 3,
+      "won": false,
+      "vp": 9,
+      "rank": 2.0,
+      "policy_steps": 73,
+      "terminal": true,
+      "truncated": false,
+      "return": -0.2619974285247303
+    },
+    "full": {
+      "winner": 4,
+      "won": true,
+      "vp": 10,
+      "rank": 1.0,
+      "policy_steps": 111,
+      "terminal": true,
+      "truncated": false,
+      "return": 0.5725797737531345
+    },
+    "delta_return": 0.8345772022778648,
+    "delta_vp": 1,
+    "delta_rank": -1.0
+  },
+  {
+    "state_id": "rule-3260007",
+    "future_seed": 373420126,
+    "first_pair": "BUILD_ROAD -> END_TURN",
+    "safety": {
+      "winner": 4,
+      "won": true,
+      "vp": 10,
+      "rank": 1.0,
+      "policy_steps": 78,
+      "terminal": true,
+      "truncated": false,
+      "return": 0.7423437179789956
+    },
+    "full": {
+      "winner": 4,
+      "won": true,
+      "vp": 10,
+      "rank": 1.0,
+      "policy_steps": 67,
+      "terminal": true,
+      "truncated": false,
+      "return": 0.8007009360009882
+    },
+    "delta_return": 0.058357218021992674,
+    "delta_vp": 0,
+    "delta_rank": 0.0
+  },
+  {
+    "state_id": "champion-3261000",
+    "future_seed": 373437000,
+    "first_pair": "BUILD_ROAD -> BUY_DEVELOPMENT",
+    "safety": {
+      "winner": 3,
+      "won": false,
+      "vp": 5,
+      "rank": 4.0,
+      "policy_steps": 122,
+      "terminal": true,
+      "truncated": false,
+      "return": -0.2397887198983173
+    },
+    "full": {
+      "winner": 3,
+      "won": false,
+      "vp": 6,
+      "rank": 3.5,
+      "policy_steps": 121,
+      "terminal": true,
+      "truncated": false,
+      "return": -0.22476883262361777
+    },
+    "delta_return": 0.015019887274699523,
+    "delta_vp": 1,
+    "delta_rank": -0.5
+  },
+  {
+    "state_id": "champion-3261000",
+    "future_seed": 373437001,
+    "first_pair": "BUILD_ROAD -> BUY_DEVELOPMENT",
+    "safety": {
+      "winner": 3,
+      "won": false,
+      "vp": 3,
+      "rank": 4.0,
+      "policy_steps": 45,
+      "terminal": true,
+      "truncated": false,
+      "return": -0.6996188439113279
+    },
+    "full": {
+      "winner": 3,
+      "won": false,
+      "vp": 5,
+      "rank": 3.5,
+      "policy_steps": 63,
+      "terminal": true,
+      "truncated": false,
+      "return": -0.514828752878763
+    },
+    "delta_return": 0.18479009103256494,
+    "delta_vp": 2,
+    "delta_rank": -0.5
+  },
+  {
+    "state_id": "champion-3261000",
+    "future_seed": 373437002,
+    "first_pair": "BUILD_ROAD -> BUY_DEVELOPMENT",
+    "safety": {
+      "winner": 3,
+      "won": false,
+      "vp": 7,
+      "rank": 2.0,
+      "policy_steps": 78,
+      "terminal": true,
+      "truncated": false,
+      "return": -0.36655503065640777
+    },
+    "full": {
+      "winner": 3,
+      "won": false,
+      "vp": 6,
+      "rank": 3.0,
+      "policy_steps": 84,
+      "terminal": true,
+      "truncated": false,
+      "return": -0.34508896961272006
+    },
+    "delta_return": 0.0214660610436877,
+    "delta_vp": -1,
+    "delta_rank": 1.0
+  },
+  {
+    "state_id": "champion-3261000",
+    "future_seed": 373437003,
+    "first_pair": "BUILD_ROAD -> BUY_DEVELOPMENT",
+    "safety": {
+      "winner": 3,
+      "won": false,
+      "vp": 8,
+      "rank": 2.0,
+      "policy_steps": 97,
+      "terminal": true,
+      "truncated": false,
+      "return": -0.24462909937936417
+    },
+    "full": {
+      "winner": 2,
+      "won": false,
+      "vp": 4,
+      "rank": 3.5,
+      "policy_steps": 80,
+      "terminal": true,
+      "truncated": false,
+      "return": -0.4519408223118503
+    },
+    "delta_return": -0.20731172293248612,
+    "delta_vp": -4,
+    "delta_rank": 1.5
+  },
+  {
+    "state_id": "champion-3261000",
+    "future_seed": 373437004,
+    "first_pair": "BUILD_ROAD -> BUY_DEVELOPMENT",
+    "safety": {
+      "winner": 3,
+      "won": false,
+      "vp": 5,
+      "rank": 3.5,
+      "policy_steps": 78,
+      "terminal": true,
+      "truncated": false,
+      "return": -0.415827198648726
+    },
+    "full": {
+      "winner": 3,
+      "won": false,
+      "vp": 5,
+      "rank": 3.5,
+      "policy_steps": 62,
+      "terminal": true,
+      "truncated": false,
+      "return": -0.5197385456167819
+    },
+    "delta_return": -0.10391134696805587,
+    "delta_vp": 0,
+    "delta_rank": 0.0
+  },
+  {
+    "state_id": "champion-3261000",
+    "future_seed": 373437005,
+    "first_pair": "BUILD_ROAD -> BUY_DEVELOPMENT",
+    "safety": {
+      "winner": 2,
+      "won": false,
+      "vp": 4,
+      "rank": 3.0,
+      "policy_steps": 81,
+      "terminal": true,
+      "truncated": false,
+      "return": -0.45019734793515764
+    },
+    "full": {
+      "winner": 3,
+      "won": false,
+      "vp": 8,
+      "rank": 2.0,
+      "policy_steps": 132,
+      "terminal": true,
+      "truncated": false,
+      "return": -0.15048267004778976
+    },
+    "delta_return": 0.2997146778873679,
+    "delta_vp": 4,
+    "delta_rank": -1.0
+  },
+  {
+    "state_id": "champion-3261000",
+    "future_seed": 373437006,
+    "first_pair": "BUILD_ROAD -> BUY_DEVELOPMENT",
+    "safety": {
+      "winner": 1,
+      "won": false,
+      "vp": 7,
+      "rank": 4.0,
+      "policy_steps": 131,
+      "terminal": true,
+      "truncated": false,
+      "return": -0.14754011639067122
+    },
+    "full": {
+      "winner": 3,
+      "won": false,
+      "vp": 5,
+      "rank": 4.0,
+      "policy_steps": 97,
+      "terminal": true,
+      "truncated": false,
+      "return": -0.32799850892421584
+    },
+    "delta_return": -0.18045839253354462,
+    "delta_vp": -2,
+    "delta_rank": 0.0
+  },
+  {
+    "state_id": "champion-3261000",
+    "future_seed": 373437007,
+    "first_pair": "BUILD_ROAD -> BUY_DEVELOPMENT",
+    "safety": {
+      "winner": 4,
+      "won": true,
+      "vp": 10,
+      "rank": 1.0,
+      "policy_steps": 89,
+      "terminal": true,
+      "truncated": false,
+      "return": 0.7323777843041188
+    },
+    "full": {
+      "winner": 3,
+      "won": false,
+      "vp": 7,
+      "rank": 2.5,
+      "policy_steps": 89,
+      "terminal": true,
+      "truncated": false,
+      "return": -0.28435155569624193
+    },
+    "delta_return": -1.0167293400003607,
+    "delta_vp": -3,
+    "delta_rank": 1.5
+  },
+  {
+    "state_id": "champion-3261008",
+    "future_seed": 373437136,
+    "first_pair": "BUILD_ROAD -> BUY_DEVELOPMENT",
+    "safety": {
+      "winner": 1,
+      "won": true,
+      "vp": 10,
+      "rank": 1.0,
+      "policy_steps": 81,
+      "terminal": true,
+      "truncated": false,
+      "return": 0.8155387609768184
+    },
+    "full": {
+      "winner": 1,
+      "won": true,
+      "vp": 10,
+      "rank": 1.0,
+      "policy_steps": 98,
+      "terminal": true,
+      "truncated": false,
+      "return": 0.7143716735270987
+    },
+    "delta_return": -0.1011670874497197,
+    "delta_vp": 0,
+    "delta_rank": 0.0
+  },
+  {
+    "state_id": "champion-3261008",
+    "future_seed": 373437137,
+    "first_pair": "BUILD_ROAD -> BUY_DEVELOPMENT",
+    "safety": {
+      "winner": 1,
+      "won": true,
+      "vp": 10,
+      "rank": 1.0,
+      "policy_steps": 114,
+      "terminal": true,
+      "truncated": false,
+      "return": 0.5908898207675651
+    },
+    "full": {
+      "winner": 3,
+      "won": false,
+      "vp": 7,
+      "rank": 3.0,
+      "policy_steps": 94,
+      "terminal": true,
+      "truncated": false,
+      "return": -0.322525677247129
+    },
+    "delta_return": -0.9134154980146941,
+    "delta_vp": -3,
+    "delta_rank": 2.0
+  },
+  {
+    "state_id": "champion-3261008",
+    "future_seed": 373437138,
+    "first_pair": "BUILD_ROAD -> BUY_DEVELOPMENT",
+    "safety": {
+      "winner": 1,
+      "won": true,
+      "vp": 10,
+      "rank": 1.0,
+      "policy_steps": 55,
+      "terminal": true,
+      "truncated": false,
+      "return": 1.0040661717293597
+    },
+    "full": {
+      "winner": 3,
+      "won": false,
+      "vp": 9,
+      "rank": 2.0,
+      "policy_steps": 87,
+      "terminal": true,
+      "truncated": false,
+      "return": -0.26968049190699067
+    },
+    "delta_return": -1.2737466636363504,
+    "delta_vp": -1,
+    "delta_rank": 1.0
+  },
+  {
+    "state_id": "champion-3261008",
+    "future_seed": 373437139,
+    "first_pair": "BUILD_ROAD -> BUY_DEVELOPMENT",
+    "safety": {
+      "winner": 4,
+      "won": false,
+      "vp": 9,
+      "rank": 2.0,
+      "policy_steps": 83,
+      "terminal": true,
+      "truncated": false,
+      "return": -0.31159460686415813
+    },
+    "full": {
+      "winner": 4,
+      "won": false,
+      "vp": 8,
+      "rank": 4.0,
+      "policy_steps": 94,
+      "terminal": true,
+      "truncated": false,
+      "return": -0.28259365804229547
+    },
+    "delta_return": 0.02900094882186266,
+    "delta_vp": -1,
+    "delta_rank": 2.0
+  },
+  {
+    "state_id": "champion-3261008",
+    "future_seed": 373437140,
+    "first_pair": "BUILD_ROAD -> BUY_DEVELOPMENT",
+    "safety": {
+      "winner": 1,
+      "won": true,
+      "vp": 10,
+      "rank": 1.0,
+      "policy_steps": 119,
+      "terminal": true,
+      "truncated": false,
+      "return": 0.5910649914360062
+    },
+    "full": {
+      "winner": 3,
+      "won": false,
+      "vp": 6,
+      "rank": 3.0,
+      "policy_steps": 72,
+      "terminal": true,
+      "truncated": false,
+      "return": -0.45078038594865527
+    },
+    "delta_return": -1.0418453773846614,
+    "delta_vp": -4,
+    "delta_rank": 2.0
+  },
+  {
+    "state_id": "champion-3261008",
+    "future_seed": 373437141,
+    "first_pair": "BUILD_ROAD -> BUY_DEVELOPMENT",
+    "safety": {
+      "winner": 1,
+      "won": true,
+      "vp": 10,
+      "rank": 1.0,
+      "policy_steps": 107,
+      "terminal": true,
+      "truncated": false,
+      "return": 0.6621964403444186
+    },
+    "full": {
+      "winner": 1,
+      "won": true,
+      "vp": 10,
+      "rank": 1.0,
+      "policy_steps": 105,
+      "terminal": true,
+      "truncated": false,
+      "return": 0.6822177411568351
+    },
+    "delta_return": 0.020021300812416487,
+    "delta_vp": 0,
+    "delta_rank": 0.0
+  },
+  {
+    "state_id": "champion-3261008",
+    "future_seed": 373437142,
+    "first_pair": "BUILD_ROAD -> BUY_DEVELOPMENT",
+    "safety": {
+      "winner": 4,
+      "won": false,
+      "vp": 7,
+      "rank": 3.0,
+      "policy_steps": 84,
+      "terminal": true,
+      "truncated": false,
+      "return": -0.37554148621570926
+    },
+    "full": {
+      "winner": 3,
+      "won": false,
+      "vp": 7,
+      "rank": 3.0,
+      "policy_steps": 89,
+      "terminal": true,
+      "truncated": false,
+      "return": -0.3067778954979091
+    },
+    "delta_return": 0.06876359071780014,
+    "delta_vp": 0,
+    "delta_rank": 0.0
+  },
+  {
+    "state_id": "champion-3261008",
+    "future_seed": 373437143,
+    "first_pair": "BUILD_ROAD -> BUY_DEVELOPMENT",
+    "safety": {
+      "winner": 4,
+      "won": false,
+      "vp": 7,
+      "rank": 2.5,
+      "policy_steps": 78,
+      "terminal": true,
+      "truncated": false,
+      "return": -0.39622281597645514
+    },
+    "full": {
+      "winner": 1,
+      "won": true,
+      "vp": 10,
+      "rank": 1.0,
+      "policy_steps": 85,
+      "terminal": true,
+      "truncated": false,
+      "return": 0.8027181898686722
+    },
+    "delta_return": 1.1989410058451273,
+    "delta_vp": 3,
+    "delta_rank": -1.5
+  },
+  {
+    "state_id": "champion-3261001",
+    "future_seed": 373437017,
+    "first_pair": "BUILD_ROAD -> BUILD_ROAD",
+    "safety": {
+      "winner": 4,
+      "won": false,
+      "vp": 7,
+      "rank": 3.0,
+      "policy_steps": 77,
+      "terminal": true,
+      "truncated": false,
+      "return": -0.31690598120455793
+    },
+    "full": {
+      "winner": 1,
+      "won": false,
+      "vp": 4,
+      "rank": 4.0,
+      "policy_steps": 85,
+      "terminal": true,
+      "truncated": false,
+      "return": -0.3704533160081991
+    },
+    "delta_return": -0.053547334803641156,
+    "delta_vp": -3,
+    "delta_rank": 1.0
+  },
+  {
+    "state_id": "champion-3261001",
+    "future_seed": 373437018,
+    "first_pair": "BUILD_ROAD -> BUILD_ROAD",
+    "safety": {
+      "winner": 3,
+      "won": false,
+      "vp": 7,
+      "rank": 3.0,
+      "policy_steps": 66,
+      "terminal": true,
+      "truncated": false,
+      "return": -0.34696788406190626
+    },
+    "full": {
+      "winner": 2,
+      "won": true,
+      "vp": 10,
+      "rank": 1.0,
+      "policy_steps": 62,
+      "terminal": true,
+      "truncated": false,
+      "return": 0.8357924257102415
+    },
+    "delta_return": 1.1827603097721477,
+    "delta_vp": 3,
+    "delta_rank": -2.0
+  },
+  {
+    "state_id": "champion-3261001",
+    "future_seed": 373437019,
+    "first_pair": "BUILD_ROAD -> BUILD_ROAD",
+    "safety": {
+      "winner": 1,
+      "won": false,
+      "vp": 7,
+      "rank": 2.0,
+      "policy_steps": 100,
+      "terminal": true,
+      "truncated": false,
+      "return": -0.1957324643872742
+    },
+    "full": {
+      "winner": 1,
+      "won": false,
+      "vp": 4,
+      "rank": 4.0,
+      "policy_steps": 75,
+      "terminal": true,
+      "truncated": false,
+      "return": -0.39997655110474883
+    },
+    "delta_return": -0.20424408671747463,
+    "delta_vp": -3,
+    "delta_rank": 2.0
+  },
+  {
+    "state_id": "champion-3261001",
+    "future_seed": 373437020,
+    "first_pair": "BUILD_ROAD -> BUILD_ROAD",
+    "safety": {
+      "winner": 3,
+      "won": false,
+      "vp": 7,
+      "rank": 4.0,
+      "policy_steps": 93,
+      "terminal": true,
+      "truncated": false,
+      "return": -0.23736506828240608
+    },
+    "full": {
+      "winner": 1,
+      "won": false,
+      "vp": 6,
+      "rank": 3.5,
+      "policy_steps": 78,
+      "terminal": true,
+      "truncated": false,
+      "return": -0.3143119063987278
+    },
+    "delta_return": -0.07694683811632172,
+    "delta_vp": -1,
+    "delta_rank": -0.5
+  },
+  {
+    "state_id": "champion-3261001",
+    "future_seed": 373437021,
+    "first_pair": "BUILD_ROAD -> BUILD_ROAD",
+    "safety": {
+      "winner": 3,
+      "won": false,
+      "vp": 7,
+      "rank": 3.0,
+      "policy_steps": 90,
+      "terminal": true,
+      "truncated": false,
+      "return": -0.28106683203525923
+    },
+    "full": {
+      "winner": 2,
+      "won": true,
+      "vp": 10,
+      "rank": 1.0,
+      "policy_steps": 108,
+      "terminal": true,
+      "truncated": false,
+      "return": 0.5565825324755598
+    },
+    "delta_return": 0.837649364510819,
+    "delta_vp": 3,
+    "delta_rank": -2.0
+  },
+  {
+    "state_id": "champion-3261001",
+    "future_seed": 373437022,
+    "first_pair": "BUILD_ROAD -> BUILD_ROAD",
+    "safety": {
+      "winner": 2,
+      "won": true,
+      "vp": 11,
+      "rank": 1.0,
+      "policy_steps": 92,
+      "terminal": true,
+      "truncated": false,
+      "return": 0.6540398185400433
+    },
+    "full": {
+      "winner": 1,
+      "won": false,
+      "vp": 7,
+      "rank": 2.0,
+      "policy_steps": 81,
+      "terminal": true,
+      "truncated": false,
+      "return": -0.3007625515959017
+    },
+    "delta_return": -0.954802370135945,
+    "delta_vp": -4,
+    "delta_rank": 1.0
+  },
+  {
+    "state_id": "champion-3261001",
+    "future_seed": 373437023,
+    "first_pair": "BUILD_ROAD -> BUILD_ROAD",
+    "safety": {
+      "winner": 1,
+      "won": false,
+      "vp": 8,
+      "rank": 2.5,
+      "policy_steps": 90,
+      "terminal": true,
+      "truncated": false,
+      "return": -0.21824949809533012
+    },
+    "full": {
+      "winner": 1,
+      "won": false,
+      "vp": 5,
+      "rank": 4.0,
+      "policy_steps": 66,
+      "terminal": true,
+      "truncated": false,
+      "return": -0.4124413078581794
+    },
+    "delta_return": -0.19419180976284928,
+    "delta_vp": -3,
+    "delta_rank": 1.5
+  },
+  {
+    "state_id": "champion-3261001",
+    "future_seed": 373437024,
+    "first_pair": "BUILD_ROAD -> BUILD_ROAD",
+    "safety": {
+      "winner": 1,
+      "won": false,
+      "vp": 7,
+      "rank": 2.0,
+      "policy_steps": 45,
+      "terminal": true,
+      "truncated": false,
+      "return": -0.45401799342748295
+    },
+    "full": {
+      "winner": 4,
+      "won": false,
+      "vp": 7,
+      "rank": 3.5,
+      "policy_steps": 74,
+      "terminal": true,
+      "truncated": false,
+      "return": -0.3001813973314546
+    },
+    "delta_return": 0.15383659609602834,
+    "delta_vp": 0,
+    "delta_rank": 1.5
+  },
+  {
+    "state_id": "champion-3261002",
+    "future_seed": 373437034,
+    "first_pair": "BANK_TRADE -> BANK_TRADE",
+    "safety": {
+      "winner": 1,
+      "won": false,
+      "vp": 5,
+      "rank": 4.0,
+      "policy_steps": 67,
+      "terminal": true,
+      "truncated": false,
+      "return": -0.4724339065242513
+    },
+    "full": {
+      "winner": 1,
+      "won": false,
+      "vp": 4,
+      "rank": 3.5,
+      "policy_steps": 59,
+      "terminal": true,
+      "truncated": false,
+      "return": -0.5641945211568223
+    },
+    "delta_return": -0.09176061463257101,
+    "delta_vp": -1,
+    "delta_rank": -0.5
+  },
+  {
+    "state_id": "champion-3261002",
+    "future_seed": 373437035,
+    "first_pair": "BANK_TRADE -> BANK_TRADE",
+    "safety": {
+      "winner": 4,
+      "won": false,
+      "vp": 7,
+      "rank": 2.5,
+      "policy_steps": 115,
+      "terminal": true,
+      "truncated": false,
+      "return": -0.1944103084077452
+    },
+    "full": {
+      "winner": 4,
+      "won": false,
+      "vp": 5,
+      "rank": 4.0,
+      "policy_steps": 112,
+      "terminal": true,
+      "truncated": false,
+      "return": -0.28153359347959317
+    },
+    "delta_return": -0.08712328507184797,
+    "delta_vp": -2,
+    "delta_rank": 1.5
+  },
+  {
+    "state_id": "champion-3261002",
+    "future_seed": 373437036,
+    "first_pair": "BANK_TRADE -> BANK_TRADE",
+    "safety": {
+      "winner": 4,
+      "won": false,
+      "vp": 6,
+      "rank": 4.0,
+      "policy_steps": 80,
+      "terminal": true,
+      "truncated": false,
+      "return": -0.3762585206043741
+    },
+    "full": {
+      "winner": 4,
+      "won": false,
+      "vp": 7,
+      "rank": 4.0,
+      "policy_steps": 120,
+      "terminal": true,
+      "truncated": false,
+      "return": -0.18142331215468038
+    },
+    "delta_return": 0.1948352084496937,
+    "delta_vp": 1,
+    "delta_rank": 0.0
+  },
+  {
+    "state_id": "champion-3261002",
+    "future_seed": 373437037,
+    "first_pair": "BANK_TRADE -> BANK_TRADE",
+    "safety": {
+      "winner": 1,
+      "won": false,
+      "vp": 3,
+      "rank": 4.0,
+      "policy_steps": 85,
+      "terminal": true,
+      "truncated": false,
+      "return": -0.4513220798991989
+    },
+    "full": {
+      "winner": 4,
+      "won": false,
+      "vp": 6,
+      "rank": 3.5,
+      "policy_steps": 85,
+      "terminal": true,
+      "truncated": false,
+      "return": -0.35498460411629096
+    },
+    "delta_return": 0.09633747578290797,
+    "delta_vp": 3,
+    "delta_rank": -0.5
+  },
+  {
+    "state_id": "champion-3261002",
+    "future_seed": 373437038,
+    "first_pair": "BANK_TRADE -> BANK_TRADE",
+    "safety": {
+      "winner": 4,
+      "won": false,
+      "vp": 3,
+      "rank": 4.0,
+      "policy_steps": 65,
+      "terminal": true,
+      "truncated": false,
+      "return": -0.564043232062815
+    },
+    "full": {
+      "winner": 1,
+      "won": false,
+      "vp": 4,
+      "rank": 3.5,
+      "policy_steps": 70,
+      "terminal": true,
+      "truncated": false,
+      "return": -0.5027194407817838
+    },
+    "delta_return": 0.06132379128103127,
+    "delta_vp": 1,
+    "delta_rank": -0.5
+  },
+  {
+    "state_id": "champion-3261002",
+    "future_seed": 373437039,
+    "first_pair": "BANK_TRADE -> BANK_TRADE",
+    "safety": {
+      "winner": 3,
+      "won": false,
+      "vp": 5,
+      "rank": 4.0,
+      "policy_steps": 114,
+      "terminal": true,
+      "truncated": false,
+      "return": -0.28149242174023925
+    },
+    "full": {
+      "winner": 1,
+      "won": false,
+      "vp": 5,
+      "rank": 4.0,
+      "policy_steps": 105,
+      "terminal": true,
+      "truncated": false,
+      "return": -0.3179261655724006
+    },
+    "delta_return": -0.03643374383216136,
+    "delta_vp": 0,
+    "delta_rank": 0.0
+  },
+  {
+    "state_id": "champion-3261002",
+    "future_seed": 373437040,
+    "first_pair": "BANK_TRADE -> BANK_TRADE",
+    "safety": {
+      "winner": 4,
+      "won": false,
+      "vp": 6,
+      "rank": 3.0,
+      "policy_steps": 90,
+      "terminal": true,
+      "truncated": false,
+      "return": -0.3451223209904635
+    },
+    "full": {
+      "winner": 4,
+      "won": false,
+      "vp": 4,
+      "rank": 4.0,
+      "policy_steps": 79,
+      "terminal": true,
+      "truncated": false,
+      "return": -0.45913248969528564
+    },
+    "delta_return": -0.11401016870482211,
+    "delta_vp": -2,
+    "delta_rank": 1.0
+  },
+  {
+    "state_id": "champion-3261002",
+    "future_seed": 373437041,
+    "first_pair": "BANK_TRADE -> BANK_TRADE",
+    "safety": {
+      "winner": 4,
+      "won": false,
+      "vp": 3,
+      "rank": 4.0,
+      "policy_steps": 45,
+      "terminal": true,
+      "truncated": false,
+      "return": -0.7082810263616388
+    },
+    "full": {
+      "winner": 4,
+      "won": false,
+      "vp": 6,
+      "rank": 3.0,
+      "policy_steps": 66,
+      "terminal": true,
+      "truncated": false,
+      "return": -0.4675067522109593
+    },
+    "delta_return": 0.24077427415067953,
+    "delta_vp": 3,
+    "delta_rank": -1.0
+  },
+  {
+    "state_id": "champion-3261003",
+    "future_seed": 373437051,
+    "first_pair": "BUILD_ROAD -> END_TURN",
+    "safety": {
+      "winner": 4,
+      "won": false,
+      "vp": 7,
+      "rank": 2.5,
+      "policy_steps": 115,
+      "terminal": true,
+      "truncated": false,
+      "return": -0.18492703697489835
+    },
+    "full": {
+      "winner": 2,
+      "won": false,
+      "vp": 7,
+      "rank": 3.0,
+      "policy_steps": 97,
+      "terminal": true,
+      "truncated": false,
+      "return": -0.23306937135042807
+    },
+    "delta_return": -0.04814233437552973,
+    "delta_vp": 0,
+    "delta_rank": 0.5
+  },
+  {
+    "state_id": "champion-3261003",
+    "future_seed": 373437052,
+    "first_pair": "BUILD_ROAD -> END_TURN",
+    "safety": {
+      "winner": 4,
+      "won": false,
+      "vp": 5,
+      "rank": 2.0,
+      "policy_steps": 74,
+      "terminal": true,
+      "truncated": false,
+      "return": -0.40101480473868667
+    },
+    "full": {
+      "winner": 4,
+      "won": false,
+      "vp": 5,
+      "rank": 2.5,
+      "policy_steps": 87,
+      "terminal": true,
+      "truncated": false,
+      "return": -0.3436667994090242
+    },
+    "delta_return": 0.057348005329662444,
+    "delta_vp": 0,
+    "delta_rank": 0.5
+  },
+  {
+    "state_id": "champion-3261003",
+    "future_seed": 373437053,
+    "first_pair": "BUILD_ROAD -> END_TURN",
+    "safety": {
+      "winner": 1,
+      "won": true,
+      "vp": 10,
+      "rank": 1.0,
+      "policy_steps": 84,
+      "terminal": true,
+      "truncated": false,
+      "return": 0.7105216672936117
+    },
+    "full": {
+      "winner": 1,
+      "won": true,
+      "vp": 10,
+      "rank": 1.0,
+      "policy_steps": 122,
+      "terminal": true,
+      "truncated": false,
+      "return": 0.5322772057358538
+    },
+    "delta_return": -0.17824446155775786,
+    "delta_vp": 0,
+    "delta_rank": 0.0
+  },
+  {
+    "state_id": "champion-3261003",
+    "future_seed": 373437054,
+    "first_pair": "BUILD_ROAD -> END_TURN",
+    "safety": {
+      "winner": 4,
+      "won": false,
+      "vp": 6,
+      "rank": 3.0,
+      "policy_steps": 101,
+      "terminal": true,
+      "truncated": false,
+      "return": -0.24620071298422608
+    },
+    "full": {
+      "winner": 4,
+      "won": false,
+      "vp": 8,
+      "rank": 2.0,
+      "policy_steps": 111,
+      "terminal": true,
+      "truncated": false,
+      "return": -0.17366670897599967
+    },
+    "delta_return": 0.0725340040082264,
+    "delta_vp": 2,
+    "delta_rank": -1.0
+  },
+  {
+    "state_id": "champion-3261003",
+    "future_seed": 373437055,
+    "first_pair": "BUILD_ROAD -> END_TURN",
+    "safety": {
+      "winner": 1,
+      "won": true,
+      "vp": 10,
+      "rank": 1.0,
+      "policy_steps": 107,
+      "terminal": true,
+      "truncated": false,
+      "return": 0.5957837721522776
+    },
+    "full": {
+      "winner": 2,
+      "won": false,
+      "vp": 7,
+      "rank": 3.0,
+      "policy_steps": 141,
+      "terminal": true,
+      "truncated": false,
+      "return": -0.13706845246243599
+    },
+    "delta_return": -0.7328522246147136,
+    "delta_vp": -3,
+    "delta_rank": 2.0
+  },
+  {
+    "state_id": "champion-3261003",
+    "future_seed": 373437056,
+    "first_pair": "BUILD_ROAD -> END_TURN",
+    "safety": {
+      "winner": 4,
+      "won": false,
+      "vp": 9,
+      "rank": 2.0,
+      "policy_steps": 90,
+      "terminal": true,
+      "truncated": false,
+      "return": -0.2058666694493412
+    },
+    "full": {
+      "winner": 1,
+      "won": true,
+      "vp": 10,
+      "rank": 1.0,
+      "policy_steps": 150,
+      "terminal": true,
+      "truncated": false,
+      "return": 0.44247922393761463
+    },
+    "delta_return": 0.6483458933869558,
+    "delta_vp": 1,
+    "delta_rank": -1.0
+  },
+  {
+    "state_id": "champion-3261003",
+    "future_seed": 373437057,
+    "first_pair": "BUILD_ROAD -> END_TURN",
+    "safety": {
+      "winner": 1,
+      "won": true,
+      "vp": 10,
+      "rank": 1.0,
+      "policy_steps": 109,
+      "terminal": true,
+      "truncated": false,
+      "return": 0.5832560045975012
+    },
+    "full": {
+      "winner": 4,
+      "won": false,
+      "vp": 6,
+      "rank": 2.0,
+      "policy_steps": 92,
+      "terminal": true,
+      "truncated": false,
+      "return": -0.2971883804294283
+    },
+    "delta_return": -0.8804443850269295,
+    "delta_vp": -4,
+    "delta_rank": 1.0
+  },
+  {
+    "state_id": "champion-3261003",
+    "future_seed": 373437058,
+    "first_pair": "BUILD_ROAD -> END_TURN",
+    "safety": {
+      "winner": 4,
+      "won": false,
+      "vp": 9,
+      "rank": 2.0,
+      "policy_steps": 84,
+      "terminal": true,
+      "truncated": false,
+      "return": -0.2294843339974545
+    },
+    "full": {
+      "winner": 4,
+      "won": false,
+      "vp": 8,
+      "rank": 2.0,
+      "policy_steps": 89,
+      "terminal": true,
+      "truncated": false,
+      "return": -0.23926067941518472
+    },
+    "delta_return": -0.009776345417730231,
+    "delta_vp": -1,
+    "delta_rank": 0.0
+  },
+  {
+    "state_id": "champion-3261004",
+    "future_seed": 373437068,
+    "first_pair": "BANK_TRADE -> BUILD_ROAD",
+    "safety": {
+      "winner": 3,
+      "won": false,
+      "vp": 7,
+      "rank": 3.5,
+      "policy_steps": 95,
+      "terminal": true,
+      "truncated": false,
+      "return": -0.23263262496567264
+    },
+    "full": {
+      "winner": 4,
+      "won": false,
+      "vp": 6,
+      "rank": 4.0,
+      "policy_steps": 54,
+      "terminal": true,
+      "truncated": false,
+      "return": -0.4960094586222084
+    },
+    "delta_return": -0.26337683365653575,
+    "delta_vp": -1,
+    "delta_rank": 0.5
+  },
+  {
+    "state_id": "champion-3261004",
+    "future_seed": 373437069,
+    "first_pair": "BANK_TRADE -> BUILD_ROAD",
+    "safety": {
+      "winner": 4,
+      "won": false,
+      "vp": 7,
+      "rank": 3.0,
+      "policy_steps": 84,
+      "terminal": true,
+      "truncated": false,
+      "return": -0.31108341462447686
+    },
+    "full": {
+      "winner": 2,
+      "won": false,
+      "vp": 5,
+      "rank": 4.0,
+      "policy_steps": 68,
+      "terminal": true,
+      "truncated": false,
+      "return": -0.44507433540731045
+    },
+    "delta_return": -0.1339909207828336,
+    "delta_vp": -2,
+    "delta_rank": 1.0
+  },
+  {
+    "state_id": "champion-3261004",
+    "future_seed": 373437070,
+    "first_pair": "BANK_TRADE -> BUILD_ROAD",
+    "safety": {
+      "winner": 4,
+      "won": false,
+      "vp": 9,
+      "rank": 2.0,
+      "policy_steps": 87,
+      "terminal": true,
+      "truncated": false,
+      "return": -0.23612399393416783
+    },
+    "full": {
+      "winner": 2,
+      "won": false,
+      "vp": 6,
+      "rank": 3.0,
+      "policy_steps": 77,
+      "terminal": true,
+      "truncated": false,
+      "return": -0.3747909822354466
+    },
+    "delta_return": -0.13866698830127877,
+    "delta_vp": -3,
+    "delta_rank": 1.0
+  },
+  {
+    "state_id": "champion-3261004",
+    "future_seed": 373437071,
+    "first_pair": "BANK_TRADE -> BUILD_ROAD",
+    "safety": {
+      "winner": 3,
+      "won": false,
+      "vp": 7,
+      "rank": 4.0,
+      "policy_steps": 89,
+      "terminal": true,
+      "truncated": false,
+      "return": -0.2766799862427394
+    },
+    "full": {
+      "winner": 3,
+      "won": false,
+      "vp": 6,
+      "rank": 3.5,
+      "policy_steps": 101,
+      "terminal": true,
+      "truncated": false,
+      "return": -0.27666233367558535
+    },
+    "delta_return": 1.765256715402508e-05,
+    "delta_vp": -1,
+    "delta_rank": -0.5
+  },
+  {
+    "state_id": "champion-3261004",
+    "future_seed": 373437072,
+    "first_pair": "BANK_TRADE -> BUILD_ROAD",
+    "safety": {
+      "winner": 1,
+      "won": true,
+      "vp": 10,
+      "rank": 1.0,
+      "policy_steps": 86,
+      "terminal": true,
+      "truncated": false,
+      "return": 0.7199049070705591
+    },
+    "full": {
+      "winner": 1,
+      "won": true,
+      "vp": 10,
+      "rank": 1.0,
+      "policy_steps": 133,
+      "terminal": true,
+      "truncated": false,
+      "return": 0.5015398677504307
+    },
+    "delta_return": -0.2183650393201284,
+    "delta_vp": 0,
+    "delta_rank": 0.0
+  },
+  {
+    "state_id": "champion-3261004",
+    "future_seed": 373437073,
+    "first_pair": "BANK_TRADE -> BUILD_ROAD",
+    "safety": {
+      "winner": 4,
+      "won": false,
+      "vp": 7,
+      "rank": 3.0,
+      "policy_steps": 72,
+      "terminal": true,
+      "truncated": false,
+      "return": -0.37027524169778187
+    },
+    "full": {
+      "winner": 4,
+      "won": false,
+      "vp": 4,
+      "rank": 4.0,
+      "policy_steps": 70,
+      "terminal": true,
+      "truncated": false,
+      "return": -0.48546652579592275
+    },
+    "delta_return": -0.11519128409814089,
+    "delta_vp": -3,
+    "delta_rank": 1.0
+  },
+  {
+    "state_id": "champion-3261004",
+    "future_seed": 373437074,
+    "first_pair": "BANK_TRADE -> BUILD_ROAD",
+    "safety": {
+      "winner": 3,
+      "won": false,
+      "vp": 8,
+      "rank": 3.0,
+      "policy_steps": 71,
+      "terminal": true,
+      "truncated": false,
+      "return": -0.32884884691845107
+    },
+    "full": {
+      "winner": 2,
+      "won": false,
+      "vp": 6,
+      "rank": 3.5,
+      "policy_steps": 74,
+      "terminal": true,
+      "truncated": false,
+      "return": -0.37001843874889107
+    },
+    "delta_return": -0.04116959183044,
+    "delta_vp": -2,
+    "delta_rank": 0.5
+  },
+  {
+    "state_id": "champion-3261004",
+    "future_seed": 373437075,
+    "first_pair": "BANK_TRADE -> BUILD_ROAD",
+    "safety": {
+      "winner": 1,
+      "won": true,
+      "vp": 10,
+      "rank": 1.0,
+      "policy_steps": 111,
+      "terminal": true,
+      "truncated": false,
+      "return": 0.5877903357856309
+    },
+    "full": {
+      "winner": 2,
+      "won": false,
+      "vp": 4,
+      "rank": 4.0,
+      "policy_steps": 70,
+      "terminal": true,
+      "truncated": false,
+      "return": -0.48997447726631366
+    },
+    "delta_return": -1.0777648130519446,
+    "delta_vp": -6,
+    "delta_rank": 3.0
+  },
+  {
+    "state_id": "champion-3261005",
+    "future_seed": 373437085,
+    "first_pair": "BUILD_ROAD -> BUILD_ROAD",
+    "safety": {
+      "winner": 4,
+      "won": false,
+      "vp": 5,
+      "rank": 3.5,
+      "policy_steps": 82,
+      "terminal": true,
+      "truncated": false,
+      "return": -0.38688627400528325
+    },
+    "full": {
+      "winner": 1,
+      "won": false,
+      "vp": 8,
+      "rank": 2.0,
+      "policy_steps": 107,
+      "terminal": true,
+      "truncated": false,
+      "return": -0.19622697159936733
+    },
+    "delta_return": 0.19065930240591591,
+    "delta_vp": 3,
+    "delta_rank": -1.5
+  },
+  {
+    "state_id": "champion-3261005",
+    "future_seed": 373437086,
+    "first_pair": "BUILD_ROAD -> BUILD_ROAD",
+    "safety": {
+      "winner": 1,
+      "won": false,
+      "vp": 7,
+      "rank": 3.0,
+      "policy_steps": 73,
+      "terminal": true,
+      "truncated": false,
+      "return": -0.34505614105895677
+    },
+    "full": {
+      "winner": 4,
+      "won": false,
+      "vp": 4,
+      "rank": 4.0,
+      "policy_steps": 102,
+      "terminal": true,
+      "truncated": false,
+      "return": -0.31265908412358
+    },
+    "delta_return": 0.032397056935376756,
+    "delta_vp": -3,
+    "delta_rank": 1.0
+  },
+  {
+    "state_id": "champion-3261005",
+    "future_seed": 373437087,
+    "first_pair": "BUILD_ROAD -> BUILD_ROAD",
+    "safety": {
+      "winner": 2,
+      "won": false,
+      "vp": 4,
+      "rank": 4.0,
+      "policy_steps": 60,
+      "terminal": true,
+      "truncated": false,
+      "return": -0.5290607683026054
+    },
+    "full": {
+      "winner": 1,
+      "won": false,
+      "vp": 5,
+      "rank": 4.0,
+      "policy_steps": 83,
+      "terminal": true,
+      "truncated": false,
+      "return": -0.3726815148639841
+    },
+    "delta_return": 0.1563792534386213,
+    "delta_vp": 1,
+    "delta_rank": 0.0
+  },
+  {
+    "state_id": "champion-3261005",
+    "future_seed": 373437088,
+    "first_pair": "BUILD_ROAD -> BUILD_ROAD",
+    "safety": {
+      "winner": 4,
+      "won": false,
+      "vp": 6,
+      "rank": 4.0,
+      "policy_steps": 85,
+      "terminal": true,
+      "truncated": false,
+      "return": -0.3390188768086329
+    },
+    "full": {
+      "winner": 4,
+      "won": false,
+      "vp": 4,
+      "rank": 3.0,
+      "policy_steps": 65,
+      "terminal": true,
+      "truncated": false,
+      "return": -0.5016502553075707
+    },
+    "delta_return": -0.16263137849893777,
+    "delta_vp": -2,
+    "delta_rank": -1.0
+  },
+  {
+    "state_id": "champion-3261005",
+    "future_seed": 373437089,
+    "first_pair": "BUILD_ROAD -> BUILD_ROAD",
+    "safety": {
+      "winner": 1,
+      "won": false,
+      "vp": 3,
+      "rank": 3.5,
+      "policy_steps": 34,
+      "terminal": true,
+      "truncated": false,
+      "return": -0.7536007890390459
+    },
+    "full": {
+      "winner": 1,
+      "won": false,
+      "vp": 5,
+      "rank": 3.5,
+      "policy_steps": 83,
+      "terminal": true,
+      "truncated": false,
+      "return": -0.36101281162318466
+    },
+    "delta_return": 0.39258797741586127,
+    "delta_vp": 2,
+    "delta_rank": 0.0
+  },
+  {
+    "state_id": "champion-3261005",
+    "future_seed": 373437090,
+    "first_pair": "BUILD_ROAD -> BUILD_ROAD",
+    "safety": {
+      "winner": 1,
+      "won": false,
+      "vp": 4,
+      "rank": 4.0,
+      "policy_steps": 55,
+      "terminal": true,
+      "truncated": false,
+      "return": -0.5647930604695477
+    },
+    "full": {
+      "winner": 4,
+      "won": false,
+      "vp": 6,
+      "rank": 3.0,
+      "policy_steps": 67,
+      "terminal": true,
+      "truncated": false,
+      "return": -0.40344347739379083
+    },
+    "delta_return": 0.16134958307575686,
+    "delta_vp": 2,
+    "delta_rank": -1.0
+  },
+  {
+    "state_id": "champion-3261005",
+    "future_seed": 373437091,
+    "first_pair": "BUILD_ROAD -> BUILD_ROAD",
+    "safety": {
+      "winner": 4,
+      "won": false,
+      "vp": 4,
+      "rank": 3.5,
+      "policy_steps": 72,
+      "terminal": true,
+      "truncated": false,
+      "return": -0.4630156728488354
+    },
+    "full": {
+      "winner": 4,
+      "won": false,
+      "vp": 5,
+      "rank": 4.0,
+      "policy_steps": 78,
+      "terminal": true,
+      "truncated": false,
+      "return": -0.39557665082721377
+    },
+    "delta_return": 0.06743902202162161,
+    "delta_vp": 1,
+    "delta_rank": 0.5
+  },
+  {
+    "state_id": "champion-3261005",
+    "future_seed": 373437092,
+    "first_pair": "BUILD_ROAD -> BUILD_ROAD",
+    "safety": {
+      "winner": 1,
+      "won": false,
+      "vp": 5,
+      "rank": 3.0,
+      "policy_steps": 65,
+      "terminal": true,
+      "truncated": false,
+      "return": -0.47359456642335
+    },
+    "full": {
+      "winner": 1,
+      "won": false,
+      "vp": 5,
+      "rank": 4.0,
+      "policy_steps": 57,
+      "terminal": true,
+      "truncated": false,
+      "return": -0.5103125660228942
+    },
+    "delta_return": -0.03671799959954419,
+    "delta_vp": 0,
+    "delta_rank": 1.0
+  },
+  {
+    "state_id": "champion-3261006",
+    "future_seed": 373437102,
+    "first_pair": "BUILD_ROAD -> END_TURN",
+    "safety": {
+      "winner": 1,
+      "won": true,
+      "vp": 10,
+      "rank": 1.0,
+      "policy_steps": 80,
+      "terminal": true,
+      "truncated": false,
+      "return": 0.7124826887115459
+    },
+    "full": {
+      "winner": 1,
+      "won": true,
+      "vp": 10,
+      "rank": 1.0,
+      "policy_steps": 76,
+      "terminal": true,
+      "truncated": false,
+      "return": 0.7520100090923624
+    },
+    "delta_return": 0.03952732038081652,
+    "delta_vp": 0,
+    "delta_rank": 0.0
+  },
+  {
+    "state_id": "champion-3261006",
+    "future_seed": 373437103,
+    "first_pair": "BUILD_ROAD -> END_TURN",
+    "safety": {
+      "winner": 2,
+      "won": false,
+      "vp": 9,
+      "rank": 2.0,
+      "policy_steps": 88,
+      "terminal": true,
+      "truncated": false,
+      "return": -0.20345992652727826
+    },
+    "full": {
+      "winner": 2,
+      "won": false,
+      "vp": 5,
+      "rank": 2.5,
+      "policy_steps": 49,
+      "terminal": true,
+      "truncated": false,
+      "return": -0.514482752394414
+    },
+    "delta_return": -0.3110228258671357,
+    "delta_vp": -4,
+    "delta_rank": 0.5
+  },
+  {
+    "state_id": "champion-3261006",
+    "future_seed": 373437104,
+    "first_pair": "BUILD_ROAD -> END_TURN",
+    "safety": {
+      "winner": 1,
+      "won": true,
+      "vp": 10,
+      "rank": 1.0,
+      "policy_steps": 89,
+      "terminal": true,
+      "truncated": false,
+      "return": 0.6491329510366324
+    },
+    "full": {
+      "winner": 2,
+      "won": false,
+      "vp": 6,
+      "rank": 3.5,
+      "policy_steps": 105,
+      "terminal": true,
+      "truncated": false,
+      "return": -0.231530361813458
+    },
+    "delta_return": -0.8806633128500904,
+    "delta_vp": -4,
+    "delta_rank": 2.5
+  },
+  {
+    "state_id": "champion-3261006",
+    "future_seed": 373437105,
+    "first_pair": "BUILD_ROAD -> END_TURN",
+    "safety": {
+      "winner": 3,
+      "won": false,
+      "vp": 5,
+      "rank": 3.5,
+      "policy_steps": 82,
+      "terminal": true,
+      "truncated": false,
+      "return": -0.3567704423143824
+    },
+    "full": {
+      "winner": 3,
+      "won": false,
+      "vp": 5,
+      "rank": 4.0,
+      "policy_steps": 111,
+      "terminal": true,
+      "truncated": false,
+      "return": -0.2701785516860081
+    },
+    "delta_return": 0.0865918906283743,
+    "delta_vp": 0,
+    "delta_rank": 0.5
+  },
+  {
+    "state_id": "champion-3261006",
+    "future_seed": 373437106,
+    "first_pair": "BUILD_ROAD -> END_TURN",
+    "safety": {
+      "winner": 3,
+      "won": false,
+      "vp": 9,
+      "rank": 2.0,
+      "policy_steps": 82,
+      "terminal": true,
+      "truncated": false,
+      "return": -0.23642042350574707
+    },
+    "full": {
+      "winner": 4,
+      "won": false,
+      "vp": 4,
+      "rank": 4.0,
+      "policy_steps": 52,
+      "terminal": true,
+      "truncated": false,
+      "return": -0.5361583918283482
+    },
+    "delta_return": -0.29973796832260113,
+    "delta_vp": -5,
+    "delta_rank": 2.0
+  },
+  {
+    "state_id": "champion-3261006",
+    "future_seed": 373437107,
+    "first_pair": "BUILD_ROAD -> END_TURN",
+    "safety": {
+      "winner": 1,
+      "won": true,
+      "vp": 11,
+      "rank": 1.0,
+      "policy_steps": 100,
+      "terminal": true,
+      "truncated": false,
+      "return": 0.6189238052876264
+    },
+    "full": {
+      "winner": 2,
+      "won": false,
+      "vp": 8,
+      "rank": 3.0,
+      "policy_steps": 96,
+      "terminal": true,
+      "truncated": false,
+      "return": -0.16957333924040835
+    },
+    "delta_return": -0.7884971445280347,
+    "delta_vp": -3,
+    "delta_rank": 2.0
+  },
+  {
+    "state_id": "champion-3261006",
+    "future_seed": 373437108,
+    "first_pair": "BUILD_ROAD -> END_TURN",
+    "safety": {
+      "winner": 3,
+      "won": false,
+      "vp": 4,
+      "rank": 4.0,
+      "policy_steps": 61,
+      "terminal": true,
+      "truncated": false,
+      "return": -0.4955984247317904
+    },
+    "full": {
+      "winner": 4,
+      "won": false,
+      "vp": 3,
+      "rank": 4.0,
+      "policy_steps": 33,
+      "terminal": true,
+      "truncated": false,
+      "return": -0.701583237670925
+    },
+    "delta_return": -0.20598481293913462,
+    "delta_vp": -1,
+    "delta_rank": 0.0
+  },
+  {
+    "state_id": "champion-3261006",
+    "future_seed": 373437109,
+    "first_pair": "BUILD_ROAD -> END_TURN",
+    "safety": {
+      "winner": 1,
+      "won": true,
+      "vp": 10,
+      "rank": 1.0,
+      "policy_steps": 81,
+      "terminal": true,
+      "truncated": false,
+      "return": 0.7294200141808644
+    },
+    "full": {
+      "winner": 1,
+      "won": true,
+      "vp": 10,
+      "rank": 1.0,
+      "policy_steps": 92,
+      "terminal": true,
+      "truncated": false,
+      "return": 0.6392043585562133
+    },
+    "delta_return": -0.09021565562465117,
+    "delta_vp": 0,
+    "delta_rank": 0.0
+  },
+  {
+    "state_id": "mixed-3262000",
+    "future_seed": 373454000,
+    "first_pair": "BUILD_ROAD -> BUY_DEVELOPMENT",
+    "safety": {
+      "winner": 1,
+      "won": true,
+      "vp": 10,
+      "rank": 1.0,
+      "policy_steps": 65,
+      "terminal": true,
+      "truncated": false,
+      "return": 0.8503978039479586
+    },
+    "full": {
+      "winner": 4,
+      "won": false,
+      "vp": 8,
+      "rank": 2.0,
+      "policy_steps": 103,
+      "terminal": true,
+      "truncated": false,
+      "return": -0.18857325061497177
+    },
+    "delta_return": -1.0389710545629303,
+    "delta_vp": -2,
+    "delta_rank": 1.0
+  },
+  {
+    "state_id": "mixed-3262000",
+    "future_seed": 373454001,
+    "first_pair": "BUILD_ROAD -> BUY_DEVELOPMENT",
+    "safety": {
+      "winner": 2,
+      "won": false,
+      "vp": 9,
+      "rank": 2.0,
+      "policy_steps": 75,
+      "terminal": true,
+      "truncated": false,
+      "return": -0.26504911267377884
+    },
+    "full": {
+      "winner": 2,
+      "won": false,
+      "vp": 7,
+      "rank": 2.0,
+      "policy_steps": 93,
+      "terminal": true,
+      "truncated": false,
+      "return": -0.24462946177253567
+    },
+    "delta_return": 0.020419650901243175,
+    "delta_vp": -2,
+    "delta_rank": 0.0
+  },
+  {
+    "state_id": "mixed-3262000",
+    "future_seed": 373454002,
+    "first_pair": "BUILD_ROAD -> BUY_DEVELOPMENT",
+    "safety": {
+      "winner": 2,
+      "won": false,
+      "vp": 9,
+      "rank": 2.5,
+      "policy_steps": 91,
+      "terminal": true,
+      "truncated": false,
+      "return": -0.23072657697486854
+    },
+    "full": {
+      "winner": 2,
+      "won": false,
+      "vp": 6,
+      "rank": 2.0,
+      "policy_steps": 85,
+      "terminal": true,
+      "truncated": false,
+      "return": -0.32480320945162344
+    },
+    "delta_return": -0.0940766324767549,
+    "delta_vp": -3,
+    "delta_rank": -0.5
+  },
+  {
+    "state_id": "mixed-3262000",
+    "future_seed": 373454003,
+    "first_pair": "BUILD_ROAD -> BUY_DEVELOPMENT",
+    "safety": {
+      "winner": 1,
+      "won": true,
+      "vp": 10,
+      "rank": 1.0,
+      "policy_steps": 68,
+      "terminal": true,
+      "truncated": false,
+      "return": 0.8242353584239838
+    },
+    "full": {
+      "winner": 1,
+      "won": true,
+      "vp": 11,
+      "rank": 1.0,
+      "policy_steps": 117,
+      "terminal": true,
+      "truncated": false,
+      "return": 0.5768455176051556
+    },
+    "delta_return": -0.2473898408188282,
+    "delta_vp": 1,
+    "delta_rank": 0.0
+  },
+  {
+    "state_id": "mixed-3262000",
+    "future_seed": 373454004,
+    "first_pair": "BUILD_ROAD -> BUY_DEVELOPMENT",
+    "safety": {
+      "winner": 2,
+      "won": false,
+      "vp": 9,
+      "rank": 2.0,
+      "policy_steps": 93,
+      "terminal": true,
+      "truncated": false,
+      "return": -0.23217150722436464
+    },
+    "full": {
+      "winner": 2,
+      "won": false,
+      "vp": 4,
+      "rank": 2.0,
+      "policy_steps": 91,
+      "terminal": true,
+      "truncated": false,
+      "return": -0.3566014573451184
+    },
+    "delta_return": -0.12442995012075375,
+    "delta_vp": -5,
+    "delta_rank": 0.0
+  },
+  {
+    "state_id": "mixed-3262000",
+    "future_seed": 373454005,
+    "first_pair": "BUILD_ROAD -> BUY_DEVELOPMENT",
+    "safety": {
+      "winner": 1,
+      "won": true,
+      "vp": 10,
+      "rank": 1.0,
+      "policy_steps": 73,
+      "terminal": true,
+      "truncated": false,
+      "return": 0.7885604075737448
+    },
+    "full": {
+      "winner": 1,
+      "won": true,
+      "vp": 10,
+      "rank": 1.0,
+      "policy_steps": 69,
+      "terminal": true,
+      "truncated": false,
+      "return": 0.8316491327018727
+    },
+    "delta_return": 0.04308872512812789,
+    "delta_vp": 0,
+    "delta_rank": 0.0
+  },
+  {
+    "state_id": "mixed-3262000",
+    "future_seed": 373454006,
+    "first_pair": "BUILD_ROAD -> BUY_DEVELOPMENT",
+    "safety": {
+      "winner": 1,
+      "won": true,
+      "vp": 10,
+      "rank": 1.0,
+      "policy_steps": 88,
+      "terminal": true,
+      "truncated": false,
+      "return": 0.703670981664382
+    },
+    "full": {
+      "winner": 2,
+      "won": false,
+      "vp": 7,
+      "rank": 3.0,
+      "policy_steps": 114,
+      "terminal": true,
+      "truncated": false,
+      "return": -0.15743821092580787
+    },
+    "delta_return": -0.8611091925901899,
+    "delta_vp": -3,
+    "delta_rank": 2.0
+  },
+  {
+    "state_id": "mixed-3262000",
+    "future_seed": 373454007,
+    "first_pair": "BUILD_ROAD -> BUY_DEVELOPMENT",
+    "safety": {
+      "winner": 2,
+      "won": false,
+      "vp": 7,
+      "rank": 2.0,
+      "policy_steps": 80,
+      "terminal": true,
+      "truncated": false,
+      "return": -0.3083289097065209
+    },
+    "full": {
+      "winner": 1,
+      "won": true,
+      "vp": 10,
+      "rank": 1.0,
+      "policy_steps": 103,
+      "terminal": true,
+      "truncated": false,
+      "return": 0.619903205873918
+    },
+    "delta_return": 0.9282321155804389,
+    "delta_vp": 3,
+    "delta_rank": -1.0
+  },
+  {
+    "state_id": "mixed-3262007",
+    "future_seed": 373454119,
+    "first_pair": "BUILD_ROAD -> BUY_DEVELOPMENT",
+    "safety": {
+      "winner": 2,
+      "won": false,
+      "vp": 6,
+      "rank": 3.0,
+      "policy_steps": 80,
+      "terminal": true,
+      "truncated": false,
+      "return": -0.36734327326059646
+    },
+    "full": {
+      "winner": 1,
+      "won": false,
+      "vp": 6,
+      "rank": 2.5,
+      "policy_steps": 94,
+      "terminal": true,
+      "truncated": false,
+      "return": -0.3045398517139428
+    },
+    "delta_return": 0.06280342154665364,
+    "delta_vp": 0,
+    "delta_rank": -0.5
+  },
+  {
+    "state_id": "mixed-3262007",
+    "future_seed": 373454120,
+    "first_pair": "BUILD_ROAD -> BUY_DEVELOPMENT",
+    "safety": {
+      "winner": 2,
+      "won": false,
+      "vp": 5,
+      "rank": 3.0,
+      "policy_steps": 71,
+      "terminal": true,
+      "truncated": false,
+      "return": -0.43269840691802364
+    },
+    "full": {
+      "winner": 1,
+      "won": false,
+      "vp": 7,
+      "rank": 3.0,
+      "policy_steps": 106,
+      "terminal": true,
+      "truncated": false,
+      "return": -0.23712531990972732
+    },
+    "delta_return": 0.19557308700829631,
+    "delta_vp": 2,
+    "delta_rank": 0.0
+  },
+  {
+    "state_id": "mixed-3262007",
+    "future_seed": 373454121,
+    "first_pair": "BUILD_ROAD -> BUY_DEVELOPMENT",
+    "safety": {
+      "winner": 1,
+      "won": false,
+      "vp": 8,
+      "rank": 2.0,
+      "policy_steps": 89,
+      "terminal": true,
+      "truncated": false,
+      "return": -0.2522536527075532
+    },
+    "full": {
+      "winner": 1,
+      "won": false,
+      "vp": 7,
+      "rank": 3.0,
+      "policy_steps": 94,
+      "terminal": true,
+      "truncated": false,
+      "return": -0.2494028723145868
+    },
+    "delta_return": 0.002850780392966379,
+    "delta_vp": -1,
+    "delta_rank": 1.0
+  },
+  {
+    "state_id": "mixed-3262007",
+    "future_seed": 373454122,
+    "first_pair": "BUILD_ROAD -> BUY_DEVELOPMENT",
+    "safety": {
+      "winner": 3,
+      "won": true,
+      "vp": 10,
+      "rank": 1.0,
+      "policy_steps": 76,
+      "terminal": true,
+      "truncated": false,
+      "return": 0.8156035796720806
+    },
+    "full": {
+      "winner": 3,
+      "won": true,
+      "vp": 10,
+      "rank": 1.0,
+      "policy_steps": 94,
+      "terminal": true,
+      "truncated": false,
+      "return": 0.6929785688267971
+    },
+    "delta_return": -0.12262501084528354,
+    "delta_vp": 0,
+    "delta_rank": 0.0
+  },
+  {
+    "state_id": "mixed-3262007",
+    "future_seed": 373454123,
+    "first_pair": "BUILD_ROAD -> BUY_DEVELOPMENT",
+    "safety": {
+      "winner": 1,
+      "won": false,
+      "vp": 9,
+      "rank": 2.0,
+      "policy_steps": 86,
+      "terminal": true,
+      "truncated": false,
+      "return": -0.21832117438675835
+    },
+    "full": {
+      "winner": 1,
+      "won": false,
+      "vp": 4,
+      "rank": 3.5,
+      "policy_steps": 66,
+      "terminal": true,
+      "truncated": false,
+      "return": -0.5201039629447624
+    },
+    "delta_return": -0.301782788558004,
+    "delta_vp": -5,
+    "delta_rank": 1.5
+  },
+  {
+    "state_id": "mixed-3262007",
+    "future_seed": 373454124,
+    "first_pair": "BUILD_ROAD -> BUY_DEVELOPMENT",
+    "safety": {
+      "winner": 2,
+      "won": false,
+      "vp": 7,
+      "rank": 4.0,
+      "policy_steps": 87,
+      "terminal": true,
+      "truncated": false,
+      "return": -0.3098582958525086
+    },
+    "full": {
+      "winner": 2,
+      "won": false,
+      "vp": 8,
+      "rank": 2.0,
+      "policy_steps": 110,
+      "terminal": true,
+      "truncated": false,
+      "return": -0.15696600263627353
+    },
+    "delta_return": 0.1528922932162351,
+    "delta_vp": 1,
+    "delta_rank": -2.0
+  },
+  {
+    "state_id": "mixed-3262007",
+    "future_seed": 373454125,
+    "first_pair": "BUILD_ROAD -> BUY_DEVELOPMENT",
+    "safety": {
+      "winner": 1,
+      "won": false,
+      "vp": 5,
+      "rank": 3.0,
+      "policy_steps": 57,
+      "terminal": true,
+      "truncated": false,
+      "return": -0.5137877848163555
+    },
+    "full": {
+      "winner": 1,
+      "won": false,
+      "vp": 5,
+      "rank": 3.0,
+      "policy_steps": 74,
+      "terminal": true,
+      "truncated": false,
+      "return": -0.4300509443407451
+    },
+    "delta_return": 0.08373684047561036,
+    "delta_vp": 0,
+    "delta_rank": 0.0
+  },
+  {
+    "state_id": "mixed-3262007",
+    "future_seed": 373454126,
+    "first_pair": "BUILD_ROAD -> BUY_DEVELOPMENT",
+    "safety": {
+      "winner": 3,
+      "won": true,
+      "vp": 11,
+      "rank": 1.0,
+      "policy_steps": 87,
+      "terminal": true,
+      "truncated": false,
+      "return": 0.7722031323001445
+    },
+    "full": {
+      "winner": 2,
+      "won": false,
+      "vp": 7,
+      "rank": 2.0,
+      "policy_steps": 88,
+      "terminal": true,
+      "truncated": false,
+      "return": -0.2948833674125597
+    },
+    "delta_return": -1.0670864997127043,
+    "delta_vp": -4,
+    "delta_rank": 1.0
+  },
+  {
+    "state_id": "mixed-3262002",
+    "future_seed": 373454034,
+    "first_pair": "END_TURN -> BUY_DEVELOPMENT",
+    "safety": {
+      "winner": 1,
+      "won": false,
+      "vp": 4,
+      "rank": 3.0,
+      "policy_steps": 56,
+      "terminal": true,
+      "truncated": false,
+      "return": -0.5512201020748142
+    },
+    "full": {
+      "winner": 2,
+      "won": true,
+      "vp": 10,
+      "rank": 1.0,
+      "policy_steps": 74,
+      "terminal": true,
+      "truncated": false,
+      "return": 0.8105994015844253
+    },
+    "delta_return": 1.3618195036592395,
+    "delta_vp": 6,
+    "delta_rank": -2.0
+  },
+  {
+    "state_id": "mixed-3262002",
+    "future_seed": 373454035,
+    "first_pair": "END_TURN -> BUY_DEVELOPMENT",
+    "safety": {
+      "winner": 2,
+      "won": true,
+      "vp": 10,
+      "rank": 1.0,
+      "policy_steps": 88,
+      "terminal": true,
+      "truncated": false,
+      "return": 0.7039870085641029
+    },
+    "full": {
+      "winner": 3,
+      "won": false,
+      "vp": 5,
+      "rank": 2.5,
+      "policy_steps": 51,
+      "terminal": true,
+      "truncated": false,
+      "return": -0.5309367955872492
+    },
+    "delta_return": -1.234923804151352,
+    "delta_vp": -5,
+    "delta_rank": 1.5
+  },
+  {
+    "state_id": "mixed-3262002",
+    "future_seed": 373454036,
+    "first_pair": "END_TURN -> BUY_DEVELOPMENT",
+    "safety": {
+      "winner": 3,
+      "won": false,
+      "vp": 3,
+      "rank": 3.5,
+      "policy_steps": 51,
+      "terminal": true,
+      "truncated": false,
+      "return": -0.6229981339436226
+    },
+    "full": {
+      "winner": 3,
+      "won": false,
+      "vp": 9,
+      "rank": 2.0,
+      "policy_steps": 65,
+      "terminal": true,
+      "truncated": false,
+      "return": -0.3165069553583147
+    },
+    "delta_return": 0.3064911785853079,
+    "delta_vp": 6,
+    "delta_rank": -1.5
+  },
+  {
+    "state_id": "mixed-3262002",
+    "future_seed": 373454037,
+    "first_pair": "END_TURN -> BUY_DEVELOPMENT",
+    "safety": {
+      "winner": 1,
+      "won": false,
+      "vp": 9,
+      "rank": 2.0,
+      "policy_steps": 81,
+      "terminal": true,
+      "truncated": false,
+      "return": -0.25202236222466434
+    },
+    "full": {
+      "winner": 2,
+      "won": true,
+      "vp": 11,
+      "rank": 1.0,
+      "policy_steps": 77,
+      "terminal": true,
+      "truncated": false,
+      "return": 0.7820601416392509
+    },
+    "delta_return": 1.0340825038639152,
+    "delta_vp": 2,
+    "delta_rank": -1.0
+  },
+  {
+    "state_id": "mixed-3262002",
+    "future_seed": 373454038,
+    "first_pair": "END_TURN -> BUY_DEVELOPMENT",
+    "safety": {
+      "winner": 3,
+      "won": false,
+      "vp": 6,
+      "rank": 2.5,
+      "policy_steps": 68,
+      "terminal": true,
+      "truncated": false,
+      "return": -0.42192225546251094
+    },
+    "full": {
+      "winner": 3,
+      "won": false,
+      "vp": 6,
+      "rank": 2.0,
+      "policy_steps": 83,
+      "terminal": true,
+      "truncated": false,
+      "return": -0.298304875851759
+    },
+    "delta_return": 0.12361737961075192,
+    "delta_vp": 0,
+    "delta_rank": -0.5
+  },
+  {
+    "state_id": "mixed-3262002",
+    "future_seed": 373454039,
+    "first_pair": "END_TURN -> BUY_DEVELOPMENT",
+    "safety": {
+      "winner": 1,
+      "won": false,
+      "vp": 9,
+      "rank": 2.0,
+      "policy_steps": 114,
+      "terminal": true,
+      "truncated": false,
+      "return": -0.15294644073930078
+    },
+    "full": {
+      "winner": 2,
+      "won": true,
+      "vp": 11,
+      "rank": 1.0,
+      "policy_steps": 105,
+      "terminal": true,
+      "truncated": false,
+      "return": 0.6562270447860529
+    },
+    "delta_return": 0.8091734855253536,
+    "delta_vp": 2,
+    "delta_rank": -1.0
+  },
+  {
+    "state_id": "mixed-3262002",
+    "future_seed": 373454040,
+    "first_pair": "END_TURN -> BUY_DEVELOPMENT",
+    "safety": {
+      "winner": 3,
+      "won": false,
+      "vp": 4,
+      "rank": 3.0,
+      "policy_steps": 43,
+      "terminal": true,
+      "truncated": false,
+      "return": -0.6330911405866211
+    },
+    "full": {
+      "winner": 3,
+      "won": false,
+      "vp": 9,
+      "rank": 2.0,
+      "policy_steps": 109,
+      "terminal": true,
+      "truncated": false,
+      "return": -0.12929444919194383
+    },
+    "delta_return": 0.5037966913946772,
+    "delta_vp": 5,
+    "delta_rank": -1.0
+  },
+  {
+    "state_id": "mixed-3262002",
+    "future_seed": 373454041,
+    "first_pair": "END_TURN -> BUY_DEVELOPMENT",
+    "safety": {
+      "winner": 2,
+      "won": true,
+      "vp": 10,
+      "rank": 1.0,
+      "policy_steps": 63,
+      "terminal": true,
+      "truncated": false,
+      "return": 0.8631225214732695
+    },
+    "full": {
+      "winner": 3,
+      "won": false,
+      "vp": 8,
+      "rank": 2.0,
+      "policy_steps": 86,
+      "terminal": true,
+      "truncated": false,
+      "return": -0.2721998059874373
+    },
+    "delta_return": -1.135322327460707,
+    "delta_vp": -2,
+    "delta_rank": 1.0
+  },
+  {
+    "state_id": "mixed-3262003",
+    "future_seed": 373454051,
+    "first_pair": "END_TURN -> BUY_DEVELOPMENT",
+    "safety": {
+      "winner": 1,
+      "won": false,
+      "vp": 5,
+      "rank": 3.0,
+      "policy_steps": 59,
+      "terminal": true,
+      "truncated": false,
+      "return": -0.5698506938384451
+    },
+    "full": {
+      "winner": 1,
+      "won": false,
+      "vp": 6,
+      "rank": 3.0,
+      "policy_steps": 96,
+      "terminal": true,
+      "truncated": false,
+      "return": -0.34827263151396204
+    },
+    "delta_return": 0.22157806232448307,
+    "delta_vp": 1,
+    "delta_rank": 0.0
+  },
+  {
+    "state_id": "mixed-3262003",
+    "future_seed": 373454052,
+    "first_pair": "END_TURN -> BUY_DEVELOPMENT",
+    "safety": {
+      "winner": 3,
+      "won": false,
+      "vp": 5,
+      "rank": 3.0,
+      "policy_steps": 60,
+      "terminal": true,
+      "truncated": false,
+      "return": -0.5633722350783285
+    },
+    "full": {
+      "winner": 3,
+      "won": false,
+      "vp": 3,
+      "rank": 4.0,
+      "policy_steps": 51,
+      "terminal": true,
+      "truncated": false,
+      "return": -0.7034476949995692
+    },
+    "delta_return": -0.1400754599212407,
+    "delta_vp": -2,
+    "delta_rank": 1.0
+  },
+  {
+    "state_id": "mixed-3262003",
+    "future_seed": 373454053,
+    "first_pair": "END_TURN -> BUY_DEVELOPMENT",
+    "safety": {
+      "winner": 1,
+      "won": false,
+      "vp": 4,
+      "rank": 3.0,
+      "policy_steps": 47,
+      "terminal": true,
+      "truncated": false,
+      "return": -0.688427318504449
+    },
+    "full": {
+      "winner": 1,
+      "won": false,
+      "vp": 4,
+      "rank": 3.0,
+      "policy_steps": 50,
+      "terminal": true,
+      "truncated": false,
+      "return": -0.6634792198022421
+    },
+    "delta_return": 0.024948098702206933,
+    "delta_vp": 0,
+    "delta_rank": 0.0
+  },
+  {
+    "state_id": "mixed-3262003",
+    "future_seed": 373454054,
+    "first_pair": "END_TURN -> BUY_DEVELOPMENT",
+    "safety": {
+      "winner": 3,
+      "won": false,
+      "vp": 3,
+      "rank": 3.0,
+      "policy_steps": 46,
+      "terminal": true,
+      "truncated": false,
+      "return": -0.7397003733882802
+    },
+    "full": {
+      "winner": 3,
+      "won": false,
+      "vp": 3,
+      "rank": 4.0,
+      "policy_steps": 56,
+      "terminal": true,
+      "truncated": false,
+      "return": -0.6689717585696803
+    },
+    "delta_return": 0.07072861481859993,
+    "delta_vp": 0,
+    "delta_rank": 1.0
+  },
+  {
+    "state_id": "mixed-3262003",
+    "future_seed": 373454055,
+    "first_pair": "END_TURN -> BUY_DEVELOPMENT",
+    "safety": {
+      "winner": 1,
+      "won": false,
+      "vp": 4,
+      "rank": 3.5,
+      "policy_steps": 39,
+      "terminal": true,
+      "truncated": false,
+      "return": -0.7506113659115909
+    },
+    "full": {
+      "winner": 1,
+      "won": false,
+      "vp": 3,
+      "rank": 3.5,
+      "policy_steps": 44,
+      "terminal": true,
+      "truncated": false,
+      "return": -0.7547192872036326
+    },
+    "delta_return": -0.0041079212920416275,
+    "delta_vp": -1,
+    "delta_rank": 0.0
+  },
+  {
+    "state_id": "mixed-3262003",
+    "future_seed": 373454056,
+    "first_pair": "END_TURN -> BUY_DEVELOPMENT",
+    "safety": {
+      "winner": 3,
+      "won": false,
+      "vp": 4,
+      "rank": 3.0,
+      "policy_steps": 44,
+      "terminal": true,
+      "truncated": false,
+      "return": -0.7158282192336752
+    },
+    "full": {
+      "winner": 3,
+      "won": false,
+      "vp": 3,
+      "rank": 3.5,
+      "policy_steps": 55,
+      "terminal": true,
+      "truncated": false,
+      "return": -0.6757290490602831
+    },
+    "delta_return": 0.04009917017339215,
+    "delta_vp": -1,
+    "delta_rank": 0.5
+  },
+  {
+    "state_id": "mixed-3262003",
+    "future_seed": 373454057,
+    "first_pair": "END_TURN -> BUY_DEVELOPMENT",
+    "safety": {
+      "winner": 3,
+      "won": false,
+      "vp": 6,
+      "rank": 2.0,
+      "policy_steps": 66,
+      "terminal": true,
+      "truncated": false,
+      "return": -0.4886150676447517
+    },
+    "full": {
+      "winner": 3,
+      "won": false,
+      "vp": 4,
+      "rank": 3.0,
+      "policy_steps": 52,
+      "terminal": true,
+      "truncated": false,
+      "return": -0.6538403294948296
+    },
+    "delta_return": -0.1652252618500779,
+    "delta_vp": -2,
+    "delta_rank": 1.0
+  },
+  {
+    "state_id": "mixed-3262003",
+    "future_seed": 373454058,
+    "first_pair": "END_TURN -> BUY_DEVELOPMENT",
+    "safety": {
+      "winner": 3,
+      "won": false,
+      "vp": 4,
+      "rank": 3.0,
+      "policy_steps": 56,
+      "terminal": true,
+      "truncated": false,
+      "return": -0.6259688408376158
+    },
+    "full": {
+      "winner": 3,
+      "won": false,
+      "vp": 3,
+      "rank": 3.5,
+      "policy_steps": 36,
+      "terminal": true,
+      "truncated": false,
+      "return": -0.8179069375972308
+    },
+    "delta_return": -0.19193809675961493,
+    "delta_vp": -1,
+    "delta_rank": 0.5
+  },
+  {
+    "state_id": "mixed-3262001",
+    "future_seed": 373454017,
+    "first_pair": "BUILD_ROAD -> BUILD_ROAD",
+    "safety": {
+      "winner": 2,
+      "won": false,
+      "vp": 7,
+      "rank": 2.5,
+      "policy_steps": 61,
+      "terminal": true,
+      "truncated": false,
+      "return": -0.37794346776006693
+    },
+    "full": {
+      "winner": 2,
+      "won": false,
+      "vp": 7,
+      "rank": 2.5,
+      "policy_steps": 82,
+      "terminal": true,
+      "truncated": false,
+      "return": -0.26410789780261856
+    },
+    "delta_return": 0.11383556995744837,
+    "delta_vp": 0,
+    "delta_rank": 0.0
+  },
+  {
+    "state_id": "mixed-3262001",
+    "future_seed": 373454018,
+    "first_pair": "BUILD_ROAD -> BUILD_ROAD",
+    "safety": {
+      "winner": 4,
+      "won": true,
+      "vp": 10,
+      "rank": 1.0,
+      "policy_steps": 68,
+      "terminal": true,
+      "truncated": false,
+      "return": 0.8044413033040934
+    },
+    "full": {
+      "winner": 4,
+      "won": true,
+      "vp": 10,
+      "rank": 1.0,
+      "policy_steps": 70,
+      "terminal": true,
+      "truncated": false,
+      "return": 0.7876254709899366
+    },
+    "delta_return": -0.01681583231415673,
+    "delta_vp": 0,
+    "delta_rank": 0.0
+  },
+  {
+    "state_id": "mixed-3262001",
+    "future_seed": 373454019,
+    "first_pair": "BUILD_ROAD -> BUILD_ROAD",
+    "safety": {
+      "winner": 4,
+      "won": true,
+      "vp": 10,
+      "rank": 1.0,
+      "policy_steps": 68,
+      "terminal": true,
+      "truncated": false,
+      "return": 0.7998842748864513
+    },
+    "full": {
+      "winner": 1,
+      "won": false,
+      "vp": 8,
+      "rank": 3.0,
+      "policy_steps": 97,
+      "terminal": true,
+      "truncated": false,
+      "return": -0.20926197563532153
+    },
+    "delta_return": -1.0091462505217728,
+    "delta_vp": -2,
+    "delta_rank": 2.0
+  },
+  {
+    "state_id": "mixed-3262001",
+    "future_seed": 373454020,
+    "first_pair": "BUILD_ROAD -> BUILD_ROAD",
+    "safety": {
+      "winner": 2,
+      "won": false,
+      "vp": 8,
+      "rank": 2.0,
+      "policy_steps": 65,
+      "terminal": true,
+      "truncated": false,
+      "return": -0.3146249308352663
+    },
+    "full": {
+      "winner": 2,
+      "won": false,
+      "vp": 5,
+      "rank": 3.0,
+      "policy_steps": 67,
+      "terminal": true,
+      "truncated": false,
+      "return": -0.42185338556273133
+    },
+    "delta_return": -0.107228454727465,
+    "delta_vp": -3,
+    "delta_rank": 1.0
+  },
+  {
+    "state_id": "mixed-3262001",
+    "future_seed": 373454021,
+    "first_pair": "BUILD_ROAD -> BUILD_ROAD",
+    "safety": {
+      "winner": 4,
+      "won": true,
+      "vp": 10,
+      "rank": 1.0,
+      "policy_steps": 64,
+      "terminal": true,
+      "truncated": false,
+      "return": 0.8284982177292
+    },
+    "full": {
+      "winner": 4,
+      "won": true,
+      "vp": 10,
+      "rank": 1.0,
+      "policy_steps": 92,
+      "terminal": true,
+      "truncated": false,
+      "return": 0.6793473155660239
+    },
+    "delta_return": -0.14915090216317606,
+    "delta_vp": 0,
+    "delta_rank": 0.0
+  },
+  {
+    "state_id": "mixed-3262001",
+    "future_seed": 373454022,
+    "first_pair": "BUILD_ROAD -> BUILD_ROAD",
+    "safety": {
+      "winner": 1,
+      "won": false,
+      "vp": 7,
+      "rank": 3.0,
+      "policy_steps": 75,
+      "terminal": true,
+      "truncated": false,
+      "return": -0.3173700155908926
+    },
+    "full": {
+      "winner": 2,
+      "won": false,
+      "vp": 7,
+      "rank": 2.0,
+      "policy_steps": 72,
+      "terminal": true,
+      "truncated": false,
+      "return": -0.33191069565754544
+    },
+    "delta_return": -0.014540680066652822,
+    "delta_vp": 0,
+    "delta_rank": -1.0
+  },
+  {
+    "state_id": "mixed-3262001",
+    "future_seed": 373454023,
+    "first_pair": "BUILD_ROAD -> BUILD_ROAD",
+    "safety": {
+      "winner": 4,
+      "won": true,
+      "vp": 10,
+      "rank": 1.0,
+      "policy_steps": 48,
+      "terminal": true,
+      "truncated": false,
+      "return": 0.9428314771675661
+    },
+    "full": {
+      "winner": 4,
+      "won": true,
+      "vp": 10,
+      "rank": 1.0,
+      "policy_steps": 97,
+      "terminal": true,
+      "truncated": false,
+      "return": 0.624137351673081
+    },
+    "delta_return": -0.31869412549448506,
+    "delta_vp": 0,
+    "delta_rank": 0.0
+  },
+  {
+    "state_id": "mixed-3262001",
+    "future_seed": 373454024,
+    "first_pair": "BUILD_ROAD -> BUILD_ROAD",
+    "safety": {
+      "winner": 4,
+      "won": true,
+      "vp": 10,
+      "rank": 1.0,
+      "policy_steps": 66,
+      "terminal": true,
+      "truncated": false,
+      "return": 0.8244208747312478
+    },
+    "full": {
+      "winner": 2,
+      "won": false,
+      "vp": 6,
+      "rank": 3.0,
+      "policy_steps": 83,
+      "terminal": true,
+      "truncated": false,
+      "return": -0.31863958819854327
+    },
+    "delta_return": -1.1430604629297911,
+    "delta_vp": -4,
+    "delta_rank": 2.0
+  },
+  {
+    "state_id": "mixed-3262004",
+    "future_seed": 373454068,
+    "first_pair": "END_TURN -> BANK_TRADE",
+    "safety": {
+      "winner": 2,
+      "won": false,
+      "vp": 4,
+      "rank": 3.5,
+      "policy_steps": 69,
+      "terminal": true,
+      "truncated": false,
+      "return": -0.46362443655839014
+    },
+    "full": {
+      "winner": 2,
+      "won": false,
+      "vp": 3,
+      "rank": 4.0,
+      "policy_steps": 54,
+      "terminal": true,
+      "truncated": false,
+      "return": -0.5907424338624928
+    },
+    "delta_return": -0.12711799730410267,
+    "delta_vp": -1,
+    "delta_rank": 0.5
+  },
+  {
+    "state_id": "mixed-3262004",
+    "future_seed": 373454069,
+    "first_pair": "END_TURN -> BANK_TRADE",
+    "safety": {
+      "winner": 2,
+      "won": false,
+      "vp": 7,
+      "rank": 3.0,
+      "policy_steps": 71,
+      "terminal": true,
+      "truncated": false,
+      "return": -0.3557963568028053
+    },
+    "full": {
+      "winner": 2,
+      "won": false,
+      "vp": 4,
+      "rank": 3.0,
+      "policy_steps": 66,
+      "terminal": true,
+      "truncated": false,
+      "return": -0.4733596598940224
+    },
+    "delta_return": -0.1175633030912171,
+    "delta_vp": -3,
+    "delta_rank": 0.0
+  },
+  {
+    "state_id": "mixed-3262004",
+    "future_seed": 373454070,
+    "first_pair": "END_TURN -> BANK_TRADE",
+    "safety": {
+      "winner": 4,
+      "won": false,
+      "vp": 8,
+      "rank": 2.0,
+      "policy_steps": 81,
+      "terminal": true,
+      "truncated": false,
+      "return": -0.29835082194773604
+    },
+    "full": {
+      "winner": 2,
+      "won": false,
+      "vp": 3,
+      "rank": 4.0,
+      "policy_steps": 38,
+      "terminal": true,
+      "truncated": false,
+      "return": -0.6852293621843475
+    },
+    "delta_return": -0.38687854023661145,
+    "delta_vp": -5,
+    "delta_rank": 2.0
+  },
+  {
+    "state_id": "mixed-3262004",
+    "future_seed": 373454071,
+    "first_pair": "END_TURN -> BANK_TRADE",
+    "safety": {
+      "winner": 3,
+      "won": true,
+      "vp": 10,
+      "rank": 1.0,
+      "policy_steps": 90,
+      "terminal": true,
+      "truncated": false,
+      "return": 0.6735491977195706
+    },
+    "full": {
+      "winner": 2,
+      "won": false,
+      "vp": 6,
+      "rank": 3.0,
+      "policy_steps": 88,
+      "terminal": true,
+      "truncated": false,
+      "return": -0.3100197135727221
+    },
+    "delta_return": -0.9835689112922927,
+    "delta_vp": -4,
+    "delta_rank": 2.0
+  },
+  {
+    "state_id": "mixed-3262004",
+    "future_seed": 373454072,
+    "first_pair": "END_TURN -> BANK_TRADE",
+    "safety": {
+      "winner": 4,
+      "won": false,
+      "vp": 6,
+      "rank": 2.5,
+      "policy_steps": 89,
+      "terminal": true,
+      "truncated": false,
+      "return": -0.31842864435592655
+    },
+    "full": {
+      "winner": 2,
+      "won": false,
+      "vp": 8,
+      "rank": 2.5,
+      "policy_steps": 94,
+      "terminal": true,
+      "truncated": false,
+      "return": -0.22951014509089238
+    },
+    "delta_return": 0.08891849926503417,
+    "delta_vp": 2,
+    "delta_rank": 0.0
+  },
+  {
+    "state_id": "mixed-3262004",
+    "future_seed": 373454073,
+    "first_pair": "END_TURN -> BANK_TRADE",
+    "safety": {
+      "winner": 2,
+      "won": false,
+      "vp": 7,
+      "rank": 2.5,
+      "policy_steps": 92,
+      "terminal": true,
+      "truncated": false,
+      "return": -0.25879819316355723
+    },
+    "full": {
+      "winner": 2,
+      "won": false,
+      "vp": 8,
+      "rank": 2.0,
+      "policy_steps": 120,
+      "terminal": true,
+      "truncated": false,
+      "return": -0.168759049325225
+    },
+    "delta_return": 0.09003914383833223,
+    "delta_vp": 1,
+    "delta_rank": -0.5
+  },
+  {
+    "state_id": "mixed-3262004",
+    "future_seed": 373454074,
+    "first_pair": "END_TURN -> BANK_TRADE",
+    "safety": {
+      "winner": 4,
+      "won": false,
+      "vp": 8,
+      "rank": 2.0,
+      "policy_steps": 107,
+      "terminal": true,
+      "truncated": false,
+      "return": -0.20034637832821464
+    },
+    "full": {
+      "winner": 4,
+      "won": false,
+      "vp": 3,
+      "rank": 4.0,
+      "policy_steps": 46,
+      "terminal": true,
+      "truncated": false,
+      "return": -0.630053186686101
+    },
+    "delta_return": -0.4297068083578863,
+    "delta_vp": -5,
+    "delta_rank": 2.0
+  },
+  {
+    "state_id": "mixed-3262004",
+    "future_seed": 373454075,
+    "first_pair": "END_TURN -> BANK_TRADE",
+    "safety": {
+      "winner": 2,
+      "won": false,
+      "vp": 6,
+      "rank": 3.0,
+      "policy_steps": 102,
+      "terminal": true,
+      "truncated": false,
+      "return": -0.27435673978252806
+    },
+    "full": {
+      "winner": 2,
+      "won": false,
+      "vp": 3,
+      "rank": 4.0,
+      "policy_steps": 77,
+      "terminal": true,
+      "truncated": false,
+      "return": -0.44870142487881093
+    },
+    "delta_return": -0.17434468509628287,
+    "delta_vp": -3,
+    "delta_rank": 1.0
+  },
+  {
+    "state_id": "mixed-3262005",
+    "future_seed": 373454085,
+    "first_pair": "BUILD_ROAD -> BUILD_ROAD",
+    "safety": {
+      "winner": 4,
+      "won": false,
+      "vp": 9,
+      "rank": 2.0,
+      "policy_steps": 73,
+      "terminal": true,
+      "truncated": false,
+      "return": -0.26967604545160545
+    },
+    "full": {
+      "winner": 4,
+      "won": false,
+      "vp": 6,
+      "rank": 2.5,
+      "policy_steps": 76,
+      "terminal": true,
+      "truncated": false,
+      "return": -0.3605824152293906
+    },
+    "delta_return": -0.09090636977778516,
+    "delta_vp": -3,
+    "delta_rank": 0.5
+  },
+  {
+    "state_id": "mixed-3262005",
+    "future_seed": 373454086,
+    "first_pair": "BUILD_ROAD -> BUILD_ROAD",
+    "safety": {
+      "winner": 1,
+      "won": true,
+      "vp": 10,
+      "rank": 1.0,
+      "policy_steps": 58,
+      "terminal": true,
+      "truncated": false,
+      "return": 0.8712427309777047
+    },
+    "full": {
+      "winner": 4,
+      "won": false,
+      "vp": 7,
+      "rank": 2.5,
+      "policy_steps": 63,
+      "terminal": true,
+      "truncated": false,
+      "return": -0.36836085160790843
+    },
+    "delta_return": -1.239603582585613,
+    "delta_vp": -3,
+    "delta_rank": 1.5
+  },
+  {
+    "state_id": "mixed-3262005",
+    "future_seed": 373454087,
+    "first_pair": "BUILD_ROAD -> BUILD_ROAD",
+    "safety": {
+      "winner": 3,
+      "won": false,
+      "vp": 6,
+      "rank": 2.0,
+      "policy_steps": 69,
+      "terminal": true,
+      "truncated": false,
+      "return": -0.3899068009822718
+    },
+    "full": {
+      "winner": 3,
+      "won": false,
+      "vp": 7,
+      "rank": 3.0,
+      "policy_steps": 99,
+      "terminal": true,
+      "truncated": false,
+      "return": -0.19651367781180779
+    },
+    "delta_return": 0.19339312317046403,
+    "delta_vp": 1,
+    "delta_rank": 1.0
+  },
+  {
+    "state_id": "mixed-3262005",
+    "future_seed": 373454088,
+    "first_pair": "BUILD_ROAD -> BUILD_ROAD",
+    "safety": {
+      "winner": 1,
+      "won": true,
+      "vp": 10,
+      "rank": 1.0,
+      "policy_steps": 73,
+      "terminal": true,
+      "truncated": false,
+      "return": 0.7549163519197617
+    },
+    "full": {
+      "winner": 4,
+      "won": false,
+      "vp": 9,
+      "rank": 2.0,
+      "policy_steps": 77,
+      "terminal": true,
+      "truncated": false,
+      "return": -0.2469640551275265
+    },
+    "delta_return": -1.0018804070472882,
+    "delta_vp": -1,
+    "delta_rank": 1.0
+  },
+  {
+    "state_id": "mixed-3262005",
+    "future_seed": 373454089,
+    "first_pair": "BUILD_ROAD -> BUILD_ROAD",
+    "safety": {
+      "winner": 1,
+      "won": true,
+      "vp": 10,
+      "rank": 1.0,
+      "policy_steps": 69,
+      "terminal": true,
+      "truncated": false,
+      "return": 0.7848902466330228
+    },
+    "full": {
+      "winner": 3,
+      "won": false,
+      "vp": 6,
+      "rank": 2.0,
+      "policy_steps": 71,
+      "terminal": true,
+      "truncated": false,
+      "return": -0.3662952762347741
+    },
+    "delta_return": -1.151185522867797,
+    "delta_vp": -4,
+    "delta_rank": 1.0
+  },
+  {
+    "state_id": "mixed-3262005",
+    "future_seed": 373454090,
+    "first_pair": "BUILD_ROAD -> BUILD_ROAD",
+    "safety": {
+      "winner": 1,
+      "won": true,
+      "vp": 10,
+      "rank": 1.0,
+      "policy_steps": 94,
+      "terminal": true,
+      "truncated": false,
+      "return": 0.6258598270485657
+    },
+    "full": {
+      "winner": 1,
+      "won": true,
+      "vp": 10,
+      "rank": 1.0,
+      "policy_steps": 54,
+      "terminal": true,
+      "truncated": false,
+      "return": 0.8826878457451608
+    },
+    "delta_return": 0.2568280186965951,
+    "delta_vp": 0,
+    "delta_rank": 0.0
+  },
+  {
+    "state_id": "mixed-3262005",
+    "future_seed": 373454091,
+    "first_pair": "BUILD_ROAD -> BUILD_ROAD",
+    "safety": {
+      "winner": 4,
+      "won": false,
+      "vp": 9,
+      "rank": 2.0,
+      "policy_steps": 74,
+      "terminal": true,
+      "truncated": false,
+      "return": -0.24434121302865403
+    },
+    "full": {
+      "winner": 3,
+      "won": false,
+      "vp": 7,
+      "rank": 2.0,
+      "policy_steps": 65,
+      "terminal": true,
+      "truncated": false,
+      "return": -0.3778486851492315
+    },
+    "delta_return": -0.13350747212057745,
+    "delta_vp": -2,
+    "delta_rank": 0.0
+  },
+  {
+    "state_id": "mixed-3262005",
+    "future_seed": 373454092,
+    "first_pair": "BUILD_ROAD -> BUILD_ROAD",
+    "safety": {
+      "winner": 3,
+      "won": false,
+      "vp": 5,
+      "rank": 3.0,
+      "policy_steps": 64,
+      "terminal": true,
+      "truncated": false,
+      "return": -0.42038774079431984
+    },
+    "full": {
+      "winner": 4,
+      "won": false,
+      "vp": 4,
+      "rank": 4.0,
+      "policy_steps": 71,
+      "terminal": true,
+      "truncated": false,
+      "return": -0.4282588631243689
+    },
+    "delta_return": -0.007871122330049052,
+    "delta_vp": -1,
+    "delta_rank": 1.0
+  },
+  {
+    "state_id": "mixed-3262006",
+    "future_seed": 373454102,
+    "first_pair": "END_TURN -> BANK_TRADE",
+    "safety": {
+      "winner": 1,
+      "won": false,
+      "vp": 5,
+      "rank": 4.0,
+      "policy_steps": 79,
+      "terminal": true,
+      "truncated": false,
+      "return": -0.39058879663296686
+    },
+    "full": {
+      "winner": 2,
+      "won": false,
+      "vp": 6,
+      "rank": 3.0,
+      "policy_steps": 76,
+      "terminal": true,
+      "truncated": false,
+      "return": -0.35268920421480704
+    },
+    "delta_return": 0.03789959241815982,
+    "delta_vp": 1,
+    "delta_rank": -1.0
+  },
+  {
+    "state_id": "mixed-3262006",
+    "future_seed": 373454103,
+    "first_pair": "END_TURN -> BANK_TRADE",
+    "safety": {
+      "winner": 2,
+      "won": false,
+      "vp": 5,
+      "rank": 3.0,
+      "policy_steps": 62,
+      "terminal": true,
+      "truncated": false,
+      "return": -0.4694995961158198
+    },
+    "full": {
+      "winner": 1,
+      "won": false,
+      "vp": 3,
+      "rank": 4.0,
+      "policy_steps": 33,
+      "terminal": true,
+      "truncated": false,
+      "return": -0.7360956713266422
+    },
+    "delta_return": -0.2665960752108224,
+    "delta_vp": -2,
+    "delta_rank": 1.0
+  },
+  {
+    "state_id": "mixed-3262006",
+    "future_seed": 373454104,
+    "first_pair": "END_TURN -> BANK_TRADE",
+    "safety": {
+      "winner": 1,
+      "won": false,
+      "vp": 7,
+      "rank": 3.0,
+      "policy_steps": 60,
+      "terminal": true,
+      "truncated": false,
+      "return": -0.4020210506237042
+    },
+    "full": {
+      "winner": 2,
+      "won": false,
+      "vp": 3,
+      "rank": 4.0,
+      "policy_steps": 49,
+      "terminal": true,
+      "truncated": false,
+      "return": -0.621689079235253
+    },
+    "delta_return": -0.21966802861154877,
+    "delta_vp": -4,
+    "delta_rank": 1.0
+  },
+  {
+    "state_id": "mixed-3262006",
+    "future_seed": 373454105,
+    "first_pair": "END_TURN -> BANK_TRADE",
+    "safety": {
+      "winner": 1,
+      "won": false,
+      "vp": 4,
+      "rank": 4.0,
+      "policy_steps": 53,
+      "terminal": true,
+      "truncated": false,
+      "return": -0.5585229824609084
+    },
+    "full": {
+      "winner": 1,
+      "won": false,
+      "vp": 3,
+      "rank": 4.0,
+      "policy_steps": 62,
+      "terminal": true,
+      "truncated": false,
+      "return": -0.5410848846411572
+    },
+    "delta_return": 0.01743809781975114,
+    "delta_vp": -1,
+    "delta_rank": 0.0
+  },
+  {
+    "state_id": "mixed-3262006",
+    "future_seed": 373454106,
+    "first_pair": "END_TURN -> BANK_TRADE",
+    "safety": {
+      "winner": 2,
+      "won": false,
+      "vp": 3,
+      "rank": 4.0,
+      "policy_steps": 39,
+      "terminal": true,
+      "truncated": false,
+      "return": -0.6897304810996536
+    },
+    "full": {
+      "winner": 1,
+      "won": false,
+      "vp": 4,
+      "rank": 3.5,
+      "policy_steps": 49,
+      "terminal": true,
+      "truncated": false,
+      "return": -0.5738996023221541
+    },
+    "delta_return": 0.11583087877749954,
+    "delta_vp": 1,
+    "delta_rank": -0.5
+  },
+  {
+    "state_id": "mixed-3262006",
+    "future_seed": 373454107,
+    "first_pair": "END_TURN -> BANK_TRADE",
+    "safety": {
+      "winner": 2,
+      "won": false,
+      "vp": 4,
+      "rank": 4.0,
+      "policy_steps": 57,
+      "terminal": true,
+      "truncated": false,
+      "return": -0.5430108894899836
+    },
+    "full": {
+      "winner": 2,
+      "won": false,
+      "vp": 3,
+      "rank": 4.0,
+      "policy_steps": 57,
+      "terminal": true,
+      "truncated": false,
+      "return": -0.5730001038155098
+    },
+    "delta_return": -0.02998921432552626,
+    "delta_vp": -1,
+    "delta_rank": 0.0
+  },
+  {
+    "state_id": "mixed-3262006",
+    "future_seed": 373454108,
+    "first_pair": "END_TURN -> BANK_TRADE",
+    "safety": {
+      "winner": 1,
+      "won": false,
+      "vp": 5,
+      "rank": 4.0,
+      "policy_steps": 74,
+      "terminal": true,
+      "truncated": false,
+      "return": -0.4194744391876454
+    },
+    "full": {
+      "winner": 2,
+      "won": false,
+      "vp": 6,
+      "rank": 3.5,
+      "policy_steps": 71,
+      "terminal": true,
+      "truncated": false,
+      "return": -0.40090613282427146
+    },
+    "delta_return": 0.01856830636337392,
+    "delta_vp": 1,
+    "delta_rank": -0.5
+  },
+  {
+    "state_id": "mixed-3262006",
+    "future_seed": 373454109,
+    "first_pair": "END_TURN -> BANK_TRADE",
+    "safety": {
+      "winner": 2,
+      "won": false,
+      "vp": 5,
+      "rank": 4.0,
+      "policy_steps": 62,
+      "terminal": true,
+      "truncated": false,
+      "return": -0.47025218601713953
+    },
+    "full": {
+      "winner": 4,
+      "won": false,
+      "vp": 5,
+      "rank": 4.0,
+      "policy_steps": 66,
+      "terminal": true,
+      "truncated": false,
+      "return": -0.45294533971040984
+    },
+    "delta_return": 0.017306846306729684,
+    "delta_vp": 0,
+    "delta_rank": 0.0
+  }
+]

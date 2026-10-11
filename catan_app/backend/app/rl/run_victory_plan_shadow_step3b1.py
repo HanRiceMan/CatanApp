@@ -17,10 +17,10 @@ from app.agents.ppo import PPOAgent
 from .collect_strategic_gate_shadow_step3a13 import _weight_digest
 from .run_strategic_gate_step3a14 import CHAMPION_ID, ROBBER_ID, _strict_parity
 from .strategic_gate_rollout_step3a14 import run_strategic_episode
-from .victory_plan_context import build_victory_plan_context
+from .victory_plan_context import SCHEMA_VERSION, build_victory_plan_context
 
 
-SCHEMA = "victory_plan_shadow_step3b1_v1"
+SCHEMA = "victory_plan_shadow_step3b1a_v2"
 PROFILES = ("rule", "champion", "mixed")
 SEED_BASES = {"rule": 33000000, "champion": 33001000, "mixed": 33002000}
 
@@ -51,7 +51,8 @@ def _record(env, _action, _decision, _trace_index, *, seed: int, profile: str,
         "owned_titles": list(titles),
         "candidate_list": [
             {**asdict(candidate), "candidate_id": list(candidate.candidate_id),
-             "planned_point_gain": candidate.planned_point_gain}
+             "planned_point_gain": candidate.planned_point_gain,
+             "overshoot_points": context.overshoot_points(candidate)}
             for candidate in context.candidates],
         "candidate_count": len(context.candidates),
         "valid_candidate_count": sum(context.candidate_mask),
@@ -118,6 +119,7 @@ def collect(output: Path) -> dict:
                 for c in row["candidate_list"] if c["valid"]][:12]
     summary = {
         "schema": SCHEMA,
+        "context_schema_version": SCHEMA_VERSION,
         "seed_bases": SEED_BASES,
         "games": len(episode_rows), "records": len(records),
         "profile_seat": dict(Counter(f"{r['profile']}/seat{r['seat']}" for r in episode_rows)),

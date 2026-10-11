@@ -99,8 +99,27 @@ class VictoryPlanContext:
     def candidate_mask(self) -> tuple[bool, ...]:
         return tuple(candidate.valid for candidate in self.candidates)
 
+    def overshoot_points(self, candidate: VictoryPlanCandidate) -> int:
+        """Arithmetic diagnostic only; not a preference or value score."""
+        return candidate.planned_point_gain - self.remaining_points
 
-SCHEMA_VERSION = "victory_plan_context_v1"
+
+SCHEMA_VERSION = "victory_plan_context_v2"
+
+
+def _is_minimal_winning_composition(
+    settlement_gain: int, city_upgrade: int, road: bool, army: bool,
+    remaining_points: int,
+) -> bool:
+    gain = settlement_gain + city_upgrade + 2 * int(road) + 2 * int(army)
+    if gain < remaining_points:
+        return False
+    return not any((
+        settlement_gain > 0 and gain - 1 >= remaining_points,
+        city_upgrade > 0 and gain - 1 >= remaining_points,
+        road and gain - 2 >= remaining_points,
+        army and gain - 2 >= remaining_points,
+    ))
 
 
 def _distance_rule_vertices(game: GameState) -> tuple[int, ...]:
@@ -233,7 +252,7 @@ def _candidate_feasibility(
 
 
 def build_victory_plan_context(game: GameState, player_id: int) -> VictoryPlanContext:
-    """Derive an immutable exact-gain candidate set from presently known facts.
+    """Derive an immutable minimal-winning set from presently known facts.
 
     IMPOSSIBLE tuples remain in the ordered audit list with ``valid=False``;
     ``candidate_mask`` is the list for a future categorical head. No chosen
@@ -281,7 +300,7 @@ def build_victory_plan_context(game: GameState, player_id: int) -> VictoryPlanCo
             for c in range(remaining+1):
                 for r in (False, True):
                     for a in (False, True):
-                        if s+c+2*int(r)+2*int(a) != remaining:
+                        if not _is_minimal_winning_composition(s, c, r, a, remaining):
                             continue
                         feasibility, reasons = _candidate_feasibility(
                             s, c, r, a, settlement, city, longest, largest,

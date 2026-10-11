@@ -1,5 +1,7 @@
 # Step 3B-1 — Victory Plan Context / Candidate Schema
 
+> 履歴記録: 本レポートは当時のexact-gain候補仕様を記録する。現行の候補意味論は [Step 3B-1A](rl_victory_plan_minimal_winning_step3b1a_20261012.md) の「10点以上へ到達するための最小得点構成」（schema v2）に更新済み。以下の分布・例はv1の結果として参照すること。
+
 2026-10-12。L1 Victory Planの**決定論的な状態と候補列挙のみ**を実装した。Plan選択、PPO head/update、Priority、Investment、Observation、Action、Controller、Reward、Champion artifactには触れていない。実験記録は本レポートと同梱のShadow datasetに保存する。
 
 ## 1. API・責務

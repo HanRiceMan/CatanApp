@@ -6,6 +6,7 @@ from app.domain.game import (BUILD_COSTS, build_piece, create_game,
                              use_development)
 from app.rl.reward import actual_score
 from app.rl.victory_plan_context import (PlanFeasibility,
+                                         _is_minimal_winning_composition,
                                          build_victory_plan_context)
 
 
@@ -48,6 +49,9 @@ def test_exact_gain_stable_immutable_and_no_side_effects():
     assert len({candidate.candidate_id for candidate in first.candidates}) == len(first.candidates)
     assert len(first.candidates) == 28  # score 2, exact remaining gain 8
     assert all(candidate.planned_point_gain == first.remaining_points
+               for candidate in first.candidates)
+    assert all(_is_minimal_winning_composition(*candidate.candidate_id,
+                                              first.remaining_points)
                for candidate in first.candidates)
     assert first.candidate_mask == tuple(c.valid for c in first.candidates)
     assert all(c.valid == (c.feasibility is not PlanFeasibility.IMPOSSIBLE)
@@ -100,7 +104,7 @@ def test_city_upgrade_is_net_one_and_recycles_settlement_piece():
                and c.city_upgrade_count > 0 and c.valid for c in before.candidates)
 
 
-def test_titles_gain_two_once_and_score_nine_does_not_plan_title_only():
+def test_titles_gain_two_once_and_owned_titles_remain_invalid_at_score_nine():
     game = _game_with_buildable_settlement()
     before = build_victory_plan_context(game, 1)
     game.longest_road_holder_id = 1
@@ -118,7 +122,7 @@ def test_titles_gain_two_once_and_score_nine_does_not_plan_title_only():
     assert nine.current_score == 9
     assert nine.remaining_points == 1
     assert all(not c.acquire_longest_road and not c.acquire_largest_army
-               for c in nine.candidates)
+               for c in nine.candidates if c.valid)
 
 
 def test_actual_road_and_knight_actions_acquire_titles_and_replan():
@@ -218,7 +222,7 @@ def test_blocked_network_is_impossible_but_unplaced_setup_is_unknown():
                for c in before_placement.candidates if c.valid)
 
 
-def test_no_exact_physical_candidate_sets_unresolved_without_overshoot():
+def test_score_nine_title_only_routes_resolve_when_plus_one_routes_fail():
     game = create_game(33010003)
     game.phase = "action"
     game.current_player_id = 1
@@ -238,6 +242,39 @@ def test_no_exact_physical_candidate_sets_unresolved_without_overshoot():
     context = build_victory_plan_context(game, 1)
     assert context.current_score == 9
     assert context.remaining_points == 1
-    assert len(context.candidates) == 2
-    assert not any(context.candidate_mask)
-    assert context.unresolved
+    assert len(context.candidates) == 4
+    assert [candidate.candidate_id for candidate in context.candidates] == sorted(
+        candidate.candidate_id for candidate in context.candidates)
+    by_id = {candidate.candidate_id: candidate for candidate in context.candidates}
+    assert not by_id[(1, 0, False, False)].valid
+    assert not by_id[(0, 1, False, False)].valid
+    assert by_id[(0, 0, True, False)].valid
+    assert by_id[(0, 0, False, True)].valid
+    assert by_id[(0, 0, True, False)].feasibility is PlanFeasibility.UNKNOWN
+    assert by_id[(0, 0, False, True)].feasibility is PlanFeasibility.UNKNOWN
+    assert context.overshoot_points(by_id[(0, 0, True, False)]) == 1
+    assert not context.unresolved
+
+
+def test_remaining_three_dual_title_minimality_and_exact_regression():
+    game = _game_with_buildable_settlement()
+    game.players[0].development_cards.extend(["victory_point"] * 5)
+    context = build_victory_plan_context(game, 1)
+    assert context.current_score == 7 and context.remaining_points == 3
+    ids = {candidate.candidate_id for candidate in context.candidates}
+    assert (0, 0, True, True) in ids  # 4 points, but either title is essential
+    assert (1, 0, True, True) not in ids  # redundant +1 settlement
+    assert (0, 1, True, True) not in ids  # redundant +1 city
+    assert (1, 0, True, False) in ids
+    assert (0, 1, False, True) in ids
+    dual = next(candidate for candidate in context.candidates
+                if candidate.candidate_id == (0, 0, True, True))
+    assert dual.planned_point_gain == 4
+    assert context.overshoot_points(dual) == 1
+    assert all(context.overshoot_points(candidate) in (0, 1)
+               for candidate in context.candidates)
+
+    start = _game_with_buildable_settlement()
+    original_exact = build_victory_plan_context(start, 1)
+    assert (2, 2, True, True) in {candidate.candidate_id for candidate in original_exact.candidates}
+    assert original_exact.remaining_points == 8

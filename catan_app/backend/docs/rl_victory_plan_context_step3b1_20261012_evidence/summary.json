@@ -1,0 +1,1684 @@
+{
+  "schema": "victory_plan_shadow_step3b1_v1",
+  "seed_bases": {
+    "rule": 33000000,
+    "champion": 33001000,
+    "mixed": 33002000
+  },
+  "games": 36,
+  "records": 2810,
+  "profile_seat": {
+    "rule/seat1": 3,
+    "rule/seat2": 3,
+    "rule/seat3": 3,
+    "rule/seat4": 3,
+    "champion/seat1": 3,
+    "champion/seat2": 3,
+    "champion/seat3": 3,
+    "champion/seat4": 3,
+    "mixed/seat1": 3,
+    "mixed/seat2": 3,
+    "mixed/seat3": 3,
+    "mixed/seat4": 3
+  },
+  "candidate_count_distribution": {
+    "2": 220,
+    "5": 245,
+    "8": 195,
+    "12": 225,
+    "16": 308,
+    "20": 429,
+    "24": 521,
+    "28": 615,
+    "36": 52
+  },
+  "valid_candidate_count_distribution": {
+    "1": 70,
+    "2": 155,
+    "3": 228,
+    "4": 57,
+    "5": 153,
+    "6": 138,
+    "7": 237,
+    "8": 16,
+    "9": 12,
+    "10": 439,
+    "11": 1283,
+    "12": 22
+  },
+  "maximum_enumerated": 36,
+  "maximum_valid": 12,
+  "score_valid_candidate_count": {
+    "0": {
+      "n": 52,
+      "mean": 11,
+      "min": 11,
+      "max": 11
+    },
+    "2": {
+      "n": 615,
+      "mean": 10.840650406504064,
+      "min": 4,
+      "max": 11
+    },
+    "3": {
+      "n": 521,
+      "mean": 10.825335892514396,
+      "min": 4,
+      "max": 11
+    },
+    "4": {
+      "n": 429,
+      "mean": 10.121212121212121,
+      "min": 4,
+      "max": 12
+    },
+    "5": {
+      "n": 308,
+      "mean": 8.64935064935065,
+      "min": 4,
+      "max": 11
+    },
+    "6": {
+      "n": 225,
+      "mean": 6.36,
+      "min": 3,
+      "max": 10
+    },
+    "7": {
+      "n": 195,
+      "mean": 5.328205128205128,
+      "min": 2,
+      "max": 7
+    },
+    "8": {
+      "n": 245,
+      "mean": 3.3551020408163263,
+      "min": 3,
+      "max": 5
+    },
+    "9": {
+      "n": 220,
+      "mean": 1.6818181818181819,
+      "min": 1,
+      "max": 2
+    }
+  },
+  "title_valid_candidate_count": {
+    "00": {
+      "n": 2265,
+      "mean": 9.562913907284768,
+      "min": 1,
+      "max": 12
+    },
+    "01": {
+      "n": 130,
+      "mean": 3.8153846153846156,
+      "min": 2,
+      "max": 6
+    },
+    "10": {
+      "n": 403,
+      "mean": 3.4218362282878414,
+      "min": 1,
+      "max": 6
+    },
+    "11": {
+      "n": 12,
+      "mean": 1,
+      "min": 1,
+      "max": 1
+    }
+  },
+  "feasibility_total": {
+    "FEASIBLE": 815,
+    "UNKNOWN": 22732,
+    "IMPOSSIBLE": 27482
+  },
+  "unresolved_records": 0,
+  "mutation_failures": 0,
+  "rng_failures": 0,
+  "episode_parity_failures": 0,
+  "weights_before_after": {
+    "champion": "4225902d41a83540eb1f1552826ec623706e778b99ad4ae8ec015f976644392a",
+    "robber": "ecde7fa9e9d67370bb76686ecd767d2d532a76d467c0051aaebdf8d4aff702bf"
+  },
+  "examples": {
+    "score0_titles00": {
+      "seed": 33000000,
+      "profile": "rule",
+      "seat": 1,
+      "turn": 0,
+      "revision": 0,
+      "current_score": 0,
+      "remaining_points": 10,
+      "owned_titles": [
+        0,
+        0
+      ],
+      "candidate_count": 36,
+      "valid_candidate_count": 11,
+      "feasibility_counts": {
+        "FEASIBLE": 0,
+        "UNKNOWN": 11,
+        "IMPOSSIBLE": 25
+      },
+      "unresolved": false,
+      "valid_plan_ids": [
+        [
+          3,
+          3,
+          true,
+          true
+        ],
+        [
+          4,
+          2,
+          true,
+          true
+        ],
+        [
+          4,
+          4,
+          false,
+          true
+        ],
+        [
+          4,
+          4,
+          true,
+          false
+        ],
+        [
+          5,
+          1,
+          true,
+          true
+        ],
+        [
+          5,
+          3,
+          false,
+          true
+        ],
+        [
+          5,
+          3,
+          true,
+          false
+        ],
+        [
+          6,
+          2,
+          false,
+          true
+        ],
+        [
+          6,
+          2,
+          true,
+          false
+        ],
+        [
+          6,
+          4,
+          false,
+          false
+        ],
+        [
+          7,
+          3,
+          false,
+          false
+        ]
+      ]
+    },
+    "score2_titles00": {
+      "seed": 33000000,
+      "profile": "rule",
+      "seat": 1,
+      "turn": 0,
+      "revision": 22,
+      "current_score": 2,
+      "remaining_points": 8,
+      "owned_titles": [
+        0,
+        0
+      ],
+      "candidate_count": 28,
+      "valid_candidate_count": 11,
+      "feasibility_counts": {
+        "FEASIBLE": 0,
+        "UNKNOWN": 11,
+        "IMPOSSIBLE": 17
+      },
+      "unresolved": false,
+      "valid_plan_ids": [
+        [
+          1,
+          3,
+          true,
+          true
+        ],
+        [
+          2,
+          2,
+          true,
+          true
+        ],
+        [
+          2,
+          4,
+          false,
+          true
+        ],
+        [
+          2,
+          4,
+          true,
+          false
+        ],
+        [
+          3,
+          1,
+          true,
+          true
+        ],
+        [
+          3,
+          3,
+          false,
+          true
+        ],
+        [
+          3,
+          3,
+          true,
+          false
+        ],
+        [
+          4,
+          2,
+          false,
+          true
+        ],
+        [
+          4,
+          2,
+          true,
+          false
+        ],
+        [
+          4,
+          4,
+          false,
+          false
+        ],
+        [
+          5,
+          3,
+          false,
+          false
+        ]
+      ]
+    },
+    "score3_titles00": {
+      "seed": 33000000,
+      "profile": "rule",
+      "seat": 1,
+      "turn": 29,
+      "revision": 211,
+      "current_score": 3,
+      "remaining_points": 7,
+      "owned_titles": [
+        0,
+        0
+      ],
+      "candidate_count": 24,
+      "valid_candidate_count": 11,
+      "feasibility_counts": {
+        "FEASIBLE": 0,
+        "UNKNOWN": 11,
+        "IMPOSSIBLE": 13
+      },
+      "unresolved": false,
+      "valid_plan_ids": [
+        [
+          1,
+          2,
+          true,
+          true
+        ],
+        [
+          2,
+          1,
+          true,
+          true
+        ],
+        [
+          2,
+          3,
+          false,
+          true
+        ],
+        [
+          2,
+          3,
+          true,
+          false
+        ],
+        [
+          3,
+          0,
+          true,
+          true
+        ],
+        [
+          3,
+          2,
+          false,
+          true
+        ],
+        [
+          3,
+          2,
+          true,
+          false
+        ],
+        [
+          4,
+          1,
+          false,
+          true
+        ],
+        [
+          4,
+          1,
+          true,
+          false
+        ],
+        [
+          4,
+          3,
+          false,
+          false
+        ],
+        [
+          5,
+          2,
+          false,
+          false
+        ]
+      ]
+    },
+    "score4_titles00": {
+      "seed": 33000000,
+      "profile": "rule",
+      "seat": 1,
+      "turn": 41,
+      "revision": 288,
+      "current_score": 4,
+      "remaining_points": 6,
+      "owned_titles": [
+        0,
+        0
+      ],
+      "candidate_count": 20,
+      "valid_candidate_count": 11,
+      "feasibility_counts": {
+        "FEASIBLE": 0,
+        "UNKNOWN": 11,
+        "IMPOSSIBLE": 9
+      },
+      "unresolved": false,
+      "valid_plan_ids": [
+        [
+          0,
+          2,
+          true,
+          true
+        ],
+        [
+          1,
+          1,
+          true,
+          true
+        ],
+        [
+          1,
+          3,
+          false,
+          true
+        ],
+        [
+          1,
+          3,
+          true,
+          false
+        ],
+        [
+          2,
+          0,
+          true,
+          true
+        ],
+        [
+          2,
+          2,
+          false,
+          true
+        ],
+        [
+          2,
+          2,
+          true,
+          false
+        ],
+        [
+          3,
+          1,
+          false,
+          true
+        ],
+        [
+          3,
+          1,
+          true,
+          false
+        ],
+        [
+          3,
+          3,
+          false,
+          false
+        ],
+        [
+          4,
+          2,
+          false,
+          false
+        ]
+      ]
+    },
+    "score5_titles00": {
+      "seed": 33000000,
+      "profile": "rule",
+      "seat": 1,
+      "turn": 53,
+      "revision": 362,
+      "current_score": 5,
+      "remaining_points": 5,
+      "owned_titles": [
+        0,
+        0
+      ],
+      "candidate_count": 16,
+      "valid_candidate_count": 10,
+      "feasibility_counts": {
+        "FEASIBLE": 0,
+        "UNKNOWN": 10,
+        "IMPOSSIBLE": 6
+      },
+      "unresolved": false,
+      "valid_plan_ids": [
+        [
+          0,
+          1,
+          true,
+          true
+        ],
+        [
+          0,
+          3,
+          false,
+          true
+        ],
+        [
+          0,
+          3,
+          true,
+          false
+        ],
+        [
+          1,
+          0,
+          true,
+          true
+        ],
+        [
+          1,
+          2,
+          false,
+          true
+        ],
+        [
+          1,
+          2,
+          true,
+          false
+        ],
+        [
+          2,
+          1,
+          false,
+          true
+        ],
+        [
+          2,
+          1,
+          true,
+          false
+        ],
+        [
+          2,
+          3,
+          false,
+          false
+        ],
+        [
+          3,
+          2,
+          false,
+          false
+        ]
+      ]
+    },
+    "score6_titles00": {
+      "seed": 33000000,
+      "profile": "rule",
+      "seat": 1,
+      "turn": 53,
+      "revision": 366,
+      "current_score": 6,
+      "remaining_points": 4,
+      "owned_titles": [
+        0,
+        0
+      ],
+      "candidate_count": 12,
+      "valid_candidate_count": 7,
+      "feasibility_counts": {
+        "FEASIBLE": 0,
+        "UNKNOWN": 7,
+        "IMPOSSIBLE": 5
+      },
+      "unresolved": false,
+      "valid_plan_ids": [
+        [
+          0,
+          0,
+          true,
+          true
+        ],
+        [
+          0,
+          2,
+          false,
+          true
+        ],
+        [
+          0,
+          2,
+          true,
+          false
+        ],
+        [
+          1,
+          1,
+          false,
+          true
+        ],
+        [
+          1,
+          1,
+          true,
+          false
+        ],
+        [
+          1,
+          3,
+          false,
+          false
+        ],
+        [
+          2,
+          2,
+          false,
+          false
+        ]
+      ]
+    },
+    "score8_titles10": {
+      "seed": 33000000,
+      "profile": "rule",
+      "seat": 1,
+      "turn": 57,
+      "revision": 390,
+      "current_score": 8,
+      "remaining_points": 2,
+      "owned_titles": [
+        1,
+        0
+      ],
+      "candidate_count": 5,
+      "valid_candidate_count": 3,
+      "feasibility_counts": {
+        "FEASIBLE": 2,
+        "UNKNOWN": 1,
+        "IMPOSSIBLE": 2
+      },
+      "unresolved": false,
+      "valid_plan_ids": [
+        [
+          0,
+          0,
+          false,
+          true
+        ],
+        [
+          0,
+          2,
+          false,
+          false
+        ],
+        [
+          1,
+          1,
+          false,
+          false
+        ]
+      ]
+    },
+    "score9_titles10": {
+      "seed": 33000000,
+      "profile": "rule",
+      "seat": 1,
+      "turn": 73,
+      "revision": 501,
+      "current_score": 9,
+      "remaining_points": 1,
+      "owned_titles": [
+        1,
+        0
+      ],
+      "candidate_count": 2,
+      "valid_candidate_count": 2,
+      "feasibility_counts": {
+        "FEASIBLE": 2,
+        "UNKNOWN": 0,
+        "IMPOSSIBLE": 0
+      },
+      "unresolved": false,
+      "valid_plan_ids": [
+        [
+          0,
+          1,
+          false,
+          false
+        ],
+        [
+          1,
+          0,
+          false,
+          false
+        ]
+      ]
+    },
+    "score7_titles00": {
+      "seed": 33000001,
+      "profile": "rule",
+      "seat": 2,
+      "turn": 70,
+      "revision": 496,
+      "current_score": 7,
+      "remaining_points": 3,
+      "owned_titles": [
+        0,
+        0
+      ],
+      "candidate_count": 8,
+      "valid_candidate_count": 6,
+      "feasibility_counts": {
+        "FEASIBLE": 0,
+        "UNKNOWN": 6,
+        "IMPOSSIBLE": 2
+      },
+      "unresolved": false,
+      "valid_plan_ids": [
+        [
+          0,
+          1,
+          false,
+          true
+        ],
+        [
+          0,
+          1,
+          true,
+          false
+        ],
+        [
+          1,
+          0,
+          false,
+          true
+        ],
+        [
+          1,
+          0,
+          true,
+          false
+        ],
+        [
+          1,
+          2,
+          false,
+          false
+        ],
+        [
+          2,
+          1,
+          false,
+          false
+        ]
+      ]
+    },
+    "score8_titles00": {
+      "seed": 33000001,
+      "profile": "rule",
+      "seat": 2,
+      "turn": 70,
+      "revision": 501,
+      "current_score": 8,
+      "remaining_points": 2,
+      "owned_titles": [
+        0,
+        0
+      ],
+      "candidate_count": 5,
+      "valid_candidate_count": 5,
+      "feasibility_counts": {
+        "FEASIBLE": 1,
+        "UNKNOWN": 4,
+        "IMPOSSIBLE": 0
+      },
+      "unresolved": false,
+      "valid_plan_ids": [
+        [
+          0,
+          0,
+          false,
+          true
+        ],
+        [
+          0,
+          0,
+          true,
+          false
+        ],
+        [
+          0,
+          2,
+          false,
+          false
+        ],
+        [
+          1,
+          1,
+          false,
+          false
+        ],
+        [
+          2,
+          0,
+          false,
+          false
+        ]
+      ]
+    },
+    "score9_titles00": {
+      "seed": 33000001,
+      "profile": "rule",
+      "seat": 2,
+      "turn": 74,
+      "revision": 531,
+      "current_score": 9,
+      "remaining_points": 1,
+      "owned_titles": [
+        0,
+        0
+      ],
+      "candidate_count": 2,
+      "valid_candidate_count": 2,
+      "feasibility_counts": {
+        "FEASIBLE": 1,
+        "UNKNOWN": 1,
+        "IMPOSSIBLE": 0
+      },
+      "unresolved": false,
+      "valid_plan_ids": [
+        [
+          0,
+          1,
+          false,
+          false
+        ],
+        [
+          1,
+          0,
+          false,
+          false
+        ]
+      ]
+    },
+    "score6_titles10": {
+      "seed": 33000002,
+      "profile": "rule",
+      "seat": 3,
+      "turn": 39,
+      "revision": 268,
+      "current_score": 6,
+      "remaining_points": 4,
+      "owned_titles": [
+        1,
+        0
+      ],
+      "candidate_count": 12,
+      "valid_candidate_count": 5,
+      "feasibility_counts": {
+        "FEASIBLE": 2,
+        "UNKNOWN": 3,
+        "IMPOSSIBLE": 7
+      },
+      "unresolved": false,
+      "valid_plan_ids": [
+        [
+          0,
+          2,
+          false,
+          true
+        ],
+        [
+          0,
+          4,
+          false,
+          false
+        ],
+        [
+          1,
+          1,
+          false,
+          true
+        ],
+        [
+          1,
+          3,
+          false,
+          false
+        ],
+        [
+          2,
+          2,
+          false,
+          false
+        ]
+      ]
+    },
+    "score7_titles10": {
+      "seed": 33000002,
+      "profile": "rule",
+      "seat": 3,
+      "turn": 39,
+      "revision": 269,
+      "current_score": 7,
+      "remaining_points": 3,
+      "owned_titles": [
+        1,
+        0
+      ],
+      "candidate_count": 8,
+      "valid_candidate_count": 3,
+      "feasibility_counts": {
+        "FEASIBLE": 1,
+        "UNKNOWN": 2,
+        "IMPOSSIBLE": 5
+      },
+      "unresolved": false,
+      "valid_plan_ids": [
+        [
+          0,
+          1,
+          false,
+          true
+        ],
+        [
+          0,
+          3,
+          false,
+          false
+        ],
+        [
+          1,
+          2,
+          false,
+          false
+        ]
+      ]
+    },
+    "score6_titles01": {
+      "seed": 33000010,
+      "profile": "rule",
+      "seat": 3,
+      "turn": 59,
+      "revision": 397,
+      "current_score": 6,
+      "remaining_points": 4,
+      "owned_titles": [
+        0,
+        1
+      ],
+      "candidate_count": 12,
+      "valid_candidate_count": 5,
+      "feasibility_counts": {
+        "FEASIBLE": 1,
+        "UNKNOWN": 4,
+        "IMPOSSIBLE": 7
+      },
+      "unresolved": false,
+      "valid_plan_ids": [
+        [
+          0,
+          2,
+          true,
+          false
+        ],
+        [
+          0,
+          4,
+          false,
+          false
+        ],
+        [
+          1,
+          1,
+          true,
+          false
+        ],
+        [
+          1,
+          3,
+          false,
+          false
+        ],
+        [
+          2,
+          2,
+          false,
+          false
+        ]
+      ]
+    },
+    "score7_titles01": {
+      "seed": 33000010,
+      "profile": "rule",
+      "seat": 3,
+      "turn": 63,
+      "revision": 428,
+      "current_score": 7,
+      "remaining_points": 3,
+      "owned_titles": [
+        0,
+        1
+      ],
+      "candidate_count": 8,
+      "valid_candidate_count": 3,
+      "feasibility_counts": {
+        "FEASIBLE": 1,
+        "UNKNOWN": 2,
+        "IMPOSSIBLE": 5
+      },
+      "unresolved": false,
+      "valid_plan_ids": [
+        [
+          0,
+          1,
+          true,
+          false
+        ],
+        [
+          0,
+          3,
+          false,
+          false
+        ],
+        [
+          1,
+          2,
+          false,
+          false
+        ]
+      ]
+    },
+    "score9_titles11": {
+      "seed": 33000010,
+      "profile": "rule",
+      "seat": 3,
+      "turn": 67,
+      "revision": 456,
+      "current_score": 9,
+      "remaining_points": 1,
+      "owned_titles": [
+        1,
+        1
+      ],
+      "candidate_count": 2,
+      "valid_candidate_count": 1,
+      "feasibility_counts": {
+        "FEASIBLE": 1,
+        "UNKNOWN": 0,
+        "IMPOSSIBLE": 1
+      },
+      "unresolved": false,
+      "valid_plan_ids": [
+        [
+          0,
+          1,
+          false,
+          false
+        ]
+      ]
+    },
+    "score8_titles01": {
+      "seed": 33001008,
+      "profile": "champion",
+      "seat": 1,
+      "turn": 45,
+      "revision": 307,
+      "current_score": 8,
+      "remaining_points": 2,
+      "owned_titles": [
+        0,
+        1
+      ],
+      "candidate_count": 5,
+      "valid_candidate_count": 3,
+      "feasibility_counts": {
+        "FEASIBLE": 1,
+        "UNKNOWN": 2,
+        "IMPOSSIBLE": 2
+      },
+      "unresolved": false,
+      "valid_plan_ids": [
+        [
+          0,
+          0,
+          true,
+          false
+        ],
+        [
+          0,
+          2,
+          false,
+          false
+        ],
+        [
+          1,
+          1,
+          false,
+          false
+        ]
+      ]
+    },
+    "score9_titles01": {
+      "seed": 33001008,
+      "profile": "champion",
+      "seat": 1,
+      "turn": 45,
+      "revision": 309,
+      "current_score": 9,
+      "remaining_points": 1,
+      "owned_titles": [
+        0,
+        1
+      ],
+      "candidate_count": 2,
+      "valid_candidate_count": 2,
+      "feasibility_counts": {
+        "FEASIBLE": 1,
+        "UNKNOWN": 1,
+        "IMPOSSIBLE": 0
+      },
+      "unresolved": false,
+      "valid_plan_ids": [
+        [
+          0,
+          1,
+          false,
+          false
+        ],
+        [
+          1,
+          0,
+          false,
+          false
+        ]
+      ]
+    },
+    "score5_titles10": {
+      "seed": 33002002,
+      "profile": "mixed",
+      "seat": 3,
+      "turn": 27,
+      "revision": 155,
+      "current_score": 5,
+      "remaining_points": 5,
+      "owned_titles": [
+        1,
+        0
+      ],
+      "candidate_count": 16,
+      "valid_candidate_count": 6,
+      "feasibility_counts": {
+        "FEASIBLE": 1,
+        "UNKNOWN": 5,
+        "IMPOSSIBLE": 10
+      },
+      "unresolved": false,
+      "valid_plan_ids": [
+        [
+          0,
+          3,
+          false,
+          true
+        ],
+        [
+          1,
+          2,
+          false,
+          true
+        ],
+        [
+          1,
+          4,
+          false,
+          false
+        ],
+        [
+          2,
+          1,
+          false,
+          true
+        ],
+        [
+          2,
+          3,
+          false,
+          false
+        ],
+        [
+          3,
+          2,
+          false,
+          false
+        ]
+      ]
+    },
+    "score4_titles10": {
+      "seed": 33002003,
+      "profile": "mixed",
+      "seat": 4,
+      "turn": 16,
+      "revision": 126,
+      "current_score": 4,
+      "remaining_points": 6,
+      "owned_titles": [
+        1,
+        0
+      ],
+      "candidate_count": 20,
+      "valid_candidate_count": 6,
+      "feasibility_counts": {
+        "FEASIBLE": 0,
+        "UNKNOWN": 6,
+        "IMPOSSIBLE": 14
+      },
+      "unresolved": false,
+      "valid_plan_ids": [
+        [
+          1,
+          3,
+          false,
+          true
+        ],
+        [
+          2,
+          2,
+          false,
+          true
+        ],
+        [
+          2,
+          4,
+          false,
+          false
+        ],
+        [
+          3,
+          1,
+          false,
+          true
+        ],
+        [
+          3,
+          3,
+          false,
+          false
+        ],
+        [
+          4,
+          2,
+          false,
+          false
+        ]
+      ]
+    }
+  },
+  "episodes": [
+    {
+      "profile": "rule",
+      "seed": 33000000,
+      "seat": 1,
+      "winner": 1,
+      "final_vp": 10,
+      "policy_steps": 83,
+      "rng_counter": 38,
+      "action_count": 523,
+      "parity": true
+    },
+    {
+      "profile": "rule",
+      "seed": 33000001,
+      "seat": 2,
+      "winner": 2,
+      "final_vp": 9,
+      "policy_steps": 79,
+      "rng_counter": 37,
+      "action_count": 543,
+      "parity": true
+    },
+    {
+      "profile": "rule",
+      "seed": 33000002,
+      "seat": 3,
+      "winner": 1,
+      "final_vp": 10,
+      "policy_steps": 78,
+      "rng_counter": 36,
+      "action_count": 536,
+      "parity": true
+    },
+    {
+      "profile": "rule",
+      "seed": 33000003,
+      "seat": 4,
+      "winner": 1,
+      "final_vp": 10,
+      "policy_steps": 69,
+      "rng_counter": 24,
+      "action_count": 408,
+      "parity": true
+    },
+    {
+      "profile": "rule",
+      "seed": 33000004,
+      "seat": 1,
+      "winner": 2,
+      "final_vp": 6,
+      "policy_steps": 51,
+      "rng_counter": 19,
+      "action_count": 332,
+      "parity": true
+    },
+    {
+      "profile": "rule",
+      "seed": 33000005,
+      "seat": 2,
+      "winner": 3,
+      "final_vp": 10,
+      "policy_steps": 84,
+      "rng_counter": 41,
+      "action_count": 586,
+      "parity": true
+    },
+    {
+      "profile": "rule",
+      "seed": 33000006,
+      "seat": 3,
+      "winner": 4,
+      "final_vp": 10,
+      "policy_steps": 56,
+      "rng_counter": 23,
+      "action_count": 368,
+      "parity": true
+    },
+    {
+      "profile": "rule",
+      "seed": 33000007,
+      "seat": 4,
+      "winner": 1,
+      "final_vp": 10,
+      "policy_steps": 82,
+      "rng_counter": 37,
+      "action_count": 550,
+      "parity": true
+    },
+    {
+      "profile": "rule",
+      "seed": 33000008,
+      "seat": 1,
+      "winner": 3,
+      "final_vp": 7,
+      "policy_steps": 67,
+      "rng_counter": 35,
+      "action_count": 466,
+      "parity": true
+    },
+    {
+      "profile": "rule",
+      "seed": 33000009,
+      "seat": 2,
+      "winner": 4,
+      "final_vp": 10,
+      "policy_steps": 83,
+      "rng_counter": 38,
+      "action_count": 553,
+      "parity": true
+    },
+    {
+      "profile": "rule",
+      "seed": 33000010,
+      "seat": 3,
+      "winner": 1,
+      "final_vp": 10,
+      "policy_steps": 82,
+      "rng_counter": 39,
+      "action_count": 538,
+      "parity": true
+    },
+    {
+      "profile": "rule",
+      "seed": 33000011,
+      "seat": 4,
+      "winner": 2,
+      "final_vp": 10,
+      "policy_steps": 68,
+      "rng_counter": 35,
+      "action_count": 518,
+      "parity": true
+    },
+    {
+      "profile": "champion",
+      "seed": 33001000,
+      "seat": 1,
+      "winner": 3,
+      "final_vp": 5,
+      "policy_steps": 46,
+      "rng_counter": 52,
+      "action_count": 271,
+      "parity": true
+    },
+    {
+      "profile": "champion",
+      "seed": 33001001,
+      "seat": 2,
+      "winner": 4,
+      "final_vp": 8,
+      "policy_steps": 76,
+      "rng_counter": 79,
+      "action_count": 431,
+      "parity": true
+    },
+    {
+      "profile": "champion",
+      "seed": 33001002,
+      "seat": 3,
+      "winner": 2,
+      "final_vp": 6,
+      "policy_steps": 84,
+      "rng_counter": 105,
+      "action_count": 504,
+      "parity": true
+    },
+    {
+      "profile": "champion",
+      "seed": 33001003,
+      "seat": 4,
+      "winner": 2,
+      "final_vp": 9,
+      "policy_steps": 108,
+      "rng_counter": 109,
+      "action_count": 577,
+      "parity": true
+    },
+    {
+      "profile": "champion",
+      "seed": 33001004,
+      "seat": 1,
+      "winner": 3,
+      "final_vp": 10,
+      "policy_steps": 75,
+      "rng_counter": 64,
+      "action_count": 326,
+      "parity": true
+    },
+    {
+      "profile": "champion",
+      "seed": 33001005,
+      "seat": 2,
+      "winner": 4,
+      "final_vp": 6,
+      "policy_steps": 75,
+      "rng_counter": 97,
+      "action_count": 581,
+      "parity": true
+    },
+    {
+      "profile": "champion",
+      "seed": 33001006,
+      "seat": 3,
+      "winner": 3,
+      "final_vp": 2,
+      "policy_steps": 80,
+      "rng_counter": 94,
+      "action_count": 423,
+      "parity": true
+    },
+    {
+      "profile": "champion",
+      "seed": 33001007,
+      "seat": 4,
+      "winner": 4,
+      "final_vp": 10,
+      "policy_steps": 70,
+      "rng_counter": 70,
+      "action_count": 333,
+      "parity": true
+    },
+    {
+      "profile": "champion",
+      "seed": 33001008,
+      "seat": 1,
+      "winner": 4,
+      "final_vp": 10,
+      "policy_steps": 81,
+      "rng_counter": 63,
+      "action_count": 379,
+      "parity": true
+    },
+    {
+      "profile": "champion",
+      "seed": 33001009,
+      "seat": 2,
+      "winner": 3,
+      "final_vp": 10,
+      "policy_steps": 120,
+      "rng_counter": 110,
+      "action_count": 530,
+      "parity": true
+    },
+    {
+      "profile": "champion",
+      "seed": 33001010,
+      "seat": 3,
+      "winner": 3,
+      "final_vp": 10,
+      "policy_steps": 95,
+      "rng_counter": 118,
+      "action_count": 563,
+      "parity": true
+    },
+    {
+      "profile": "champion",
+      "seed": 33001011,
+      "seat": 4,
+      "winner": 4,
+      "final_vp": 4,
+      "policy_steps": 69,
+      "rng_counter": 86,
+      "action_count": 391,
+      "parity": true
+    },
+    {
+      "profile": "mixed",
+      "seed": 33002000,
+      "seat": 1,
+      "winner": 3,
+      "final_vp": 8,
+      "policy_steps": 73,
+      "rng_counter": 49,
+      "action_count": 312,
+      "parity": true
+    },
+    {
+      "profile": "mixed",
+      "seed": 33002001,
+      "seat": 2,
+      "winner": 3,
+      "final_vp": 9,
+      "policy_steps": 105,
+      "rng_counter": 110,
+      "action_count": 559,
+      "parity": true
+    },
+    {
+      "profile": "mixed",
+      "seed": 33002002,
+      "seat": 3,
+      "winner": 4,
+      "final_vp": 10,
+      "policy_steps": 75,
+      "rng_counter": 51,
+      "action_count": 377,
+      "parity": true
+    },
+    {
+      "profile": "mixed",
+      "seed": 33002003,
+      "seat": 4,
+      "winner": 1,
+      "final_vp": 6,
+      "policy_steps": 87,
+      "rng_counter": 60,
+      "action_count": 428,
+      "parity": true
+    },
+    {
+      "profile": "mixed",
+      "seed": 33002004,
+      "seat": 1,
+      "winner": 1,
+      "final_vp": 10,
+      "policy_steps": 73,
+      "rng_counter": 61,
+      "action_count": 361,
+      "parity": true
+    },
+    {
+      "profile": "mixed",
+      "seed": 33002005,
+      "seat": 2,
+      "winner": 4,
+      "final_vp": 7,
+      "policy_steps": 88,
+      "rng_counter": 78,
+      "action_count": 480,
+      "parity": true
+    },
+    {
+      "profile": "mixed",
+      "seed": 33002006,
+      "seat": 3,
+      "winner": 2,
+      "final_vp": 10,
+      "policy_steps": 86,
+      "rng_counter": 81,
+      "action_count": 478,
+      "parity": true
+    },
+    {
+      "profile": "mixed",
+      "seed": 33002007,
+      "seat": 4,
+      "winner": 3,
+      "final_vp": 10,
+      "policy_steps": 65,
+      "rng_counter": 61,
+      "action_count": 338,
+      "parity": true
+    },
+    {
+      "profile": "mixed",
+      "seed": 33002008,
+      "seat": 1,
+      "winner": 1,
+      "final_vp": 7,
+      "policy_steps": 102,
+      "rng_counter": 89,
+      "action_count": 496,
+      "parity": true
+    },
+    {
+      "profile": "mixed",
+      "seed": 33002009,
+      "seat": 2,
+      "winner": 1,
+      "final_vp": 10,
+      "policy_steps": 78,
+      "rng_counter": 59,
+      "action_count": 306,
+      "parity": true
+    },
+    {
+      "profile": "mixed",
+      "seed": 33002010,
+      "seat": 3,
+      "winner": 1,
+      "final_vp": 7,
+      "policy_steps": 40,
+      "rng_counter": 38,
+      "action_count": 271,
+      "parity": true
+    },
+    {
+      "profile": "mixed",
+      "seed": 33002011,
+      "seat": 4,
+      "winner": 3,
+      "final_vp": 8,
+      "policy_steps": 77,
+      "rng_counter": 51,
+      "action_count": 382,
+      "parity": true
+    }
+  ]
+}

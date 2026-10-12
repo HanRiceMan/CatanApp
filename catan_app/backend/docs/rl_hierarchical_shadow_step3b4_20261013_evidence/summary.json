@@ -1,0 +1,563 @@
+{
+  "schema": "hierarchical_shadow_step3b4_v1",
+  "source_schema": "immediate_construction_audit_step3b3_v1",
+  "games": 300,
+  "seed_bases": {
+    "rule": 34000000,
+    "champion": 34001000,
+    "mixed": 34002000
+  },
+  "profile_seat": {
+    "rule/seat1": 25,
+    "rule/seat2": 25,
+    "rule/seat3": 25,
+    "rule/seat4": 25,
+    "champion/seat1": 25,
+    "champion/seat2": 25,
+    "champion/seat3": 25,
+    "champion/seat4": 25,
+    "mixed/seat1": 25,
+    "mixed/seat2": 25,
+    "mixed/seat3": 25,
+    "mixed/seat4": 25
+  },
+  "route_counts": {
+    "FORCED_PHASE": 8757,
+    "INVESTMENT": 11600,
+    "CONSTRUCTION_COMMIT": 816,
+    "PRE_ROLL_DEV_USAGE": 447,
+    "IMMEDIATE_WIN": 173,
+    "CITY_VALUE_COMPARISON": 543,
+    "DUAL_CONSTRUCTION_COMPARISON": 19
+  },
+  "route_by_phase": {
+    "rolling_order->FORCED_PHASE": 412,
+    "ready_to_play->FORCED_PHASE": 75,
+    "turn_pre_roll->FORCED_PHASE": 5178,
+    "action->INVESTMENT": 11600,
+    "action->CONSTRUCTION_COMMIT": 816,
+    "robber_move->FORCED_PHASE": 1260,
+    "robber_steal->FORCED_PHASE": 1253,
+    "turn_pre_roll->PRE_ROLL_DEV_USAGE": 447,
+    "action->IMMEDIATE_WIN": 166,
+    "action->CITY_VALUE_COMPARISON": 543,
+    "discarding->FORCED_PHASE": 515,
+    "action->DUAL_CONSTRUCTION_COMPARISON": 19,
+    "action->FORCED_PHASE": 64,
+    "turn_pre_roll->IMMEDIATE_WIN": 7
+  },
+  "normal_action_immediate_win_count": 166,
+  "protected_trade_without_rule_availability": 0,
+  "route_by_profile": {
+    "rule": {
+      "FORCED_PHASE": 2936,
+      "INVESTMENT": 3491,
+      "CONSTRUCTION_COMMIT": 299,
+      "PRE_ROLL_DEV_USAGE": 160,
+      "IMMEDIATE_WIN": 100,
+      "CITY_VALUE_COMPARISON": 218,
+      "DUAL_CONSTRUCTION_COMPARISON": 6
+    },
+    "champion": {
+      "FORCED_PHASE": 3078,
+      "INVESTMENT": 4398,
+      "CONSTRUCTION_COMMIT": 252,
+      "PRE_ROLL_DEV_USAGE": 150,
+      "CITY_VALUE_COMPARISON": 166,
+      "IMMEDIATE_WIN": 27,
+      "DUAL_CONSTRUCTION_COMPARISON": 5
+    },
+    "mixed": {
+      "FORCED_PHASE": 2743,
+      "INVESTMENT": 3711,
+      "CONSTRUCTION_COMMIT": 265,
+      "PRE_ROLL_DEV_USAGE": 137,
+      "IMMEDIATE_WIN": 46,
+      "CITY_VALUE_COMPARISON": 159,
+      "DUAL_CONSTRUCTION_COMPARISON": 8
+    }
+  },
+  "phase_counts": {
+    "rolling_order": 412,
+    "ready_to_play": 75,
+    "turn_pre_roll": 5632,
+    "action": 13208,
+    "robber_move": 1260,
+    "robber_steal": 1253,
+    "discarding": 515
+  },
+  "fallback_route_counts": {
+    "INVESTMENT": 11600,
+    "CONSTRUCTION_COMMIT": 816,
+    "CITY_VALUE_COMPARISON": 543,
+    "DUAL_CONSTRUCTION_COMPARISON": 19
+  },
+  "forced_reasons": {
+    "ROLLING_ORDER": 412,
+    "READY_TO_PLAY": 75,
+    "ROLL_ONLY": 5178,
+    "ROBBER_MOVE": 1260,
+    "ROBBER_STEAL": 1253,
+    "DISCARDING": 515,
+    "FREE_ROAD": 64
+  },
+  "build_class_to_route": {
+    "NONE->INVESTMENT": 11600,
+    "SETTLEMENT_ONLY->CONSTRUCTION_COMMIT": 816,
+    "CITY_ONLY->CITY_VALUE_COMPARISON": 543,
+    "BOTH->DUAL_CONSTRUCTION_COMPARISON": 19
+  },
+  "comparison_family_available_by_route": {
+    "IMMEDIATE_WIN": {
+      "BUILD_SETTLEMENT": 0,
+      "BUILD_CITY": 0,
+      "BUILD_ROAD": 0,
+      "BUY_DEVELOPMENT": 0,
+      "BANK_TRADE": 0,
+      "PLAYER_TRADE": 0,
+      "END_TURN": 0
+    },
+    "FORCED_PHASE": {
+      "BUILD_SETTLEMENT": 0,
+      "BUILD_CITY": 0,
+      "BUILD_ROAD": 0,
+      "BUY_DEVELOPMENT": 0,
+      "BANK_TRADE": 0,
+      "PLAYER_TRADE": 0,
+      "END_TURN": 0
+    },
+    "PRE_ROLL_DEV_USAGE": {
+      "BUILD_SETTLEMENT": 0,
+      "BUILD_CITY": 0,
+      "BUILD_ROAD": 0,
+      "BUY_DEVELOPMENT": 0,
+      "BANK_TRADE": 0,
+      "PLAYER_TRADE": 0,
+      "END_TURN": 0
+    },
+    "ACTION_DEV_USAGE": {},
+    "CONSTRUCTION_COMMIT": {
+      "BUILD_SETTLEMENT": 816,
+      "BUILD_CITY": 0,
+      "BUILD_ROAD": 816,
+      "BUY_DEVELOPMENT": 370,
+      "BANK_TRADE": 285,
+      "PLAYER_TRADE": 809,
+      "END_TURN": 816
+    },
+    "CITY_VALUE_COMPARISON": {
+      "BUILD_SETTLEMENT": 0,
+      "BUILD_CITY": 543,
+      "BUILD_ROAD": 133,
+      "BUY_DEVELOPMENT": 299,
+      "BANK_TRADE": 389,
+      "PLAYER_TRADE": 541,
+      "END_TURN": 543
+    },
+    "DUAL_CONSTRUCTION_COMPARISON": {
+      "BUILD_SETTLEMENT": 19,
+      "BUILD_CITY": 19,
+      "BUILD_ROAD": 0,
+      "BUY_DEVELOPMENT": 0,
+      "BANK_TRADE": 0,
+      "PLAYER_TRADE": 0,
+      "END_TURN": 0
+    },
+    "INVESTMENT": {
+      "BUILD_SETTLEMENT": 0,
+      "BUILD_CITY": 0,
+      "BUILD_ROAD": 3592,
+      "BUY_DEVELOPMENT": 3117,
+      "BANK_TRADE": 4915,
+      "PLAYER_TRADE": 11321,
+      "END_TURN": 11600
+    }
+  },
+  "legal_family_available_by_route": {
+    "IMMEDIATE_WIN": {
+      "BUILD_SETTLEMENT": 49,
+      "BUILD_CITY": 87,
+      "BUILD_ROAD": 104,
+      "BUY_DEVELOPMENT": 75,
+      "BANK_TRADE": 134,
+      "PLAYER_TRADE": 165,
+      "END_TURN": 166
+    },
+    "FORCED_PHASE": {
+      "BUILD_SETTLEMENT": 0,
+      "BUILD_CITY": 0,
+      "BUILD_ROAD": 64,
+      "BUY_DEVELOPMENT": 0,
+      "BANK_TRADE": 0,
+      "PLAYER_TRADE": 0,
+      "END_TURN": 0
+    },
+    "PRE_ROLL_DEV_USAGE": {
+      "BUILD_SETTLEMENT": 0,
+      "BUILD_CITY": 0,
+      "BUILD_ROAD": 0,
+      "BUY_DEVELOPMENT": 0,
+      "BANK_TRADE": 0,
+      "PLAYER_TRADE": 0,
+      "END_TURN": 0
+    },
+    "ACTION_DEV_USAGE": {},
+    "CONSTRUCTION_COMMIT": {
+      "BUILD_SETTLEMENT": 816,
+      "BUILD_CITY": 0,
+      "BUILD_ROAD": 816,
+      "BUY_DEVELOPMENT": 370,
+      "BANK_TRADE": 285,
+      "PLAYER_TRADE": 809,
+      "END_TURN": 816
+    },
+    "CITY_VALUE_COMPARISON": {
+      "BUILD_SETTLEMENT": 0,
+      "BUILD_CITY": 543,
+      "BUILD_ROAD": 133,
+      "BUY_DEVELOPMENT": 299,
+      "BANK_TRADE": 389,
+      "PLAYER_TRADE": 541,
+      "END_TURN": 543
+    },
+    "DUAL_CONSTRUCTION_COMPARISON": {
+      "BUILD_SETTLEMENT": 19,
+      "BUILD_CITY": 19,
+      "BUILD_ROAD": 19,
+      "BUY_DEVELOPMENT": 19,
+      "BANK_TRADE": 14,
+      "PLAYER_TRADE": 19,
+      "END_TURN": 19
+    },
+    "INVESTMENT": {
+      "BUILD_SETTLEMENT": 0,
+      "BUILD_CITY": 0,
+      "BUILD_ROAD": 3592,
+      "BUY_DEVELOPMENT": 3117,
+      "BANK_TRADE": 4915,
+      "PLAYER_TRADE": 11321,
+      "END_TURN": 11600
+    }
+  },
+  "development_usage_available_by_route": {
+    "IMMEDIATE_WIN": {
+      "NO_USE": 0,
+      "KNIGHT": 0,
+      "MONOPOLY": 0,
+      "YEAR_OF_PLENTY": 0,
+      "ROAD_BUILDING": 0
+    },
+    "FORCED_PHASE": {
+      "NO_USE": 0,
+      "KNIGHT": 0,
+      "MONOPOLY": 0,
+      "YEAR_OF_PLENTY": 0,
+      "ROAD_BUILDING": 0
+    },
+    "PRE_ROLL_DEV_USAGE": {
+      "NO_USE": 447,
+      "KNIGHT": 334,
+      "MONOPOLY": 45,
+      "YEAR_OF_PLENTY": 38,
+      "ROAD_BUILDING": 34
+    },
+    "ACTION_DEV_USAGE": {},
+    "CONSTRUCTION_COMMIT": {
+      "NO_USE": 0,
+      "KNIGHT": 0,
+      "MONOPOLY": 0,
+      "YEAR_OF_PLENTY": 0,
+      "ROAD_BUILDING": 0
+    },
+    "CITY_VALUE_COMPARISON": {
+      "NO_USE": 0,
+      "KNIGHT": 0,
+      "MONOPOLY": 0,
+      "YEAR_OF_PLENTY": 0,
+      "ROAD_BUILDING": 0
+    },
+    "DUAL_CONSTRUCTION_COMPARISON": {
+      "NO_USE": 0,
+      "KNIGHT": 0,
+      "MONOPOLY": 0,
+      "YEAR_OF_PLENTY": 0,
+      "ROAD_BUILDING": 0
+    },
+    "INVESTMENT": {
+      "NO_USE": 0,
+      "KNIGHT": 0,
+      "MONOPOLY": 0,
+      "YEAR_OF_PLENTY": 0,
+      "ROAD_BUILDING": 0
+    }
+  },
+  "selected_action_family_by_route_diagnostic": {
+    "IMMEDIATE_WIN": {
+      "BUILD_CITY": 83,
+      "BUILD_SETTLEMENT": 44,
+      "PLAYER_TRADE": 15,
+      "BUILD_ROAD": 19,
+      "PLAY_DEVELOPMENT": 7,
+      "END_TURN": 3,
+      "BANK_TRADE": 2
+    },
+    "FORCED_PHASE": {
+      "OTHER": 8693,
+      "BUILD_ROAD": 64
+    },
+    "PRE_ROLL_DEV_USAGE": {
+      "PLAY_DEVELOPMENT": 447
+    },
+    "ACTION_DEV_USAGE": {},
+    "CONSTRUCTION_COMMIT": {
+      "BUILD_SETTLEMENT": 802,
+      "BANK_TRADE": 9,
+      "PLAYER_TRADE": 5
+    },
+    "CITY_VALUE_COMPARISON": {
+      "BUILD_CITY": 418,
+      "BUILD_ROAD": 32,
+      "END_TURN": 41,
+      "PLAYER_TRADE": 28,
+      "BANK_TRADE": 24
+    },
+    "DUAL_CONSTRUCTION_COMPARISON": {
+      "BUILD_SETTLEMENT": 15,
+      "BUILD_CITY": 4
+    },
+    "INVESTMENT": {
+      "BUILD_ROAD": 1603,
+      "END_TURN": 4989,
+      "PLAYER_TRADE": 3389,
+      "BANK_TRADE": 1022,
+      "BUY_DEVELOPMENT": 597
+    }
+  },
+  "soft_plan_available_states": 13425,
+  "soft_plan_unavailable_states": 0,
+  "soft_plan_available_by_route": {
+    "INVESTMENT": 11600,
+    "CONSTRUCTION_COMMIT": 816,
+    "PRE_ROLL_DEV_USAGE": 447,
+    "CITY_VALUE_COMPARISON": 543,
+    "DUAL_CONSTRUCTION_COMPARISON": 19
+  },
+  "soft_plan_unavailable_by_route": {},
+  "expected_priority_mean": [
+    0.500000013007021,
+    0.500000013007021,
+    0.500000013007021,
+    0.500000013007021
+  ],
+  "representative": {
+    "FORCED_PHASE": {
+      "profile": "rule",
+      "seed": 34000000,
+      "seat": 1,
+      "turn": 0,
+      "revision": 3,
+      "policy_step": 0,
+      "build_class": null,
+      "comparison_family_mask": [
+        false,
+        false,
+        false,
+        false,
+        false,
+        false,
+        false
+      ],
+      "soft_plan_features": null,
+      "expected_priorities": null
+    },
+    "INVESTMENT": {
+      "profile": "rule",
+      "seed": 34000000,
+      "seat": 1,
+      "turn": 1,
+      "revision": 24,
+      "policy_step": 3,
+      "build_class": "NONE",
+      "comparison_family_mask": [
+        false,
+        false,
+        true,
+        false,
+        false,
+        true,
+        true
+      ],
+      "soft_plan_features": [
+        3.000000089406967,
+        2.8181819021701813,
+        0.5454545617103577,
+        0.5454545617103577,
+        8.000000238418579,
+        0.0
+      ],
+      "expected_priorities": [
+        0.5000000149011612,
+        0.5000000149011612,
+        0.5000000149011612,
+        0.5000000149011612
+      ]
+    },
+    "CONSTRUCTION_COMMIT": {
+      "profile": "rule",
+      "seed": 34000000,
+      "seat": 1,
+      "turn": 13,
+      "revision": 101,
+      "policy_step": 12,
+      "build_class": "SETTLEMENT_ONLY",
+      "comparison_family_mask": [
+        true,
+        false,
+        true,
+        false,
+        false,
+        true,
+        true
+      ],
+      "soft_plan_features": [
+        3.000000089406967,
+        2.8181819021701813,
+        0.5454545617103577,
+        0.5454545617103577,
+        8.000000238418579,
+        0.0
+      ],
+      "expected_priorities": [
+        0.5000000149011612,
+        0.5000000149011612,
+        0.5000000149011612,
+        0.5000000149011612
+      ]
+    },
+    "PRE_ROLL_DEV_USAGE": {
+      "profile": "rule",
+      "seed": 34000000,
+      "seat": 1,
+      "turn": 53,
+      "revision": 339,
+      "policy_step": 46,
+      "build_class": null,
+      "comparison_family_mask": [
+        false,
+        false,
+        false,
+        false,
+        false,
+        false,
+        false
+      ],
+      "soft_plan_features": [
+        0.3333333432674408,
+        2.0000000596046448,
+        0.0,
+        0.3333333432674408,
+        3.000000089406967,
+        0.0
+      ],
+      "expected_priorities": [
+        0.5000000149011612,
+        0.5000000149011612,
+        0.5000000149011612,
+        0.5000000149011612
+      ]
+    },
+    "IMMEDIATE_WIN": {
+      "profile": "rule",
+      "seed": 34000000,
+      "seat": 1,
+      "turn": 69,
+      "revision": 463,
+      "policy_step": 73,
+      "build_class": "CITY_ONLY",
+      "comparison_family_mask": [
+        false,
+        false,
+        false,
+        false,
+        false,
+        false,
+        false
+      ],
+      "soft_plan_features": null,
+      "expected_priorities": null
+    },
+    "CITY_VALUE_COMPARISON": {
+      "profile": "rule",
+      "seed": 34000001,
+      "seat": 2,
+      "turn": 38,
+      "revision": 287,
+      "policy_step": 51,
+      "build_class": "CITY_ONLY",
+      "comparison_family_mask": [
+        false,
+        true,
+        false,
+        true,
+        true,
+        true,
+        true
+      ],
+      "soft_plan_features": [
+        0.3333333432674408,
+        1.0000000298023224,
+        0.3333333432674408,
+        0.0,
+        2.0000000596046448,
+        0.0
+      ],
+      "expected_priorities": [
+        0.5000000149011612,
+        0.5000000149011612,
+        0.5000000149011612,
+        0.5000000149011612
+      ]
+    },
+    "DUAL_CONSTRUCTION_COMPARISON": {
+      "profile": "rule",
+      "seed": 34000003,
+      "seat": 4,
+      "turn": 40,
+      "revision": 255,
+      "policy_step": 33,
+      "build_class": "BOTH",
+      "comparison_family_mask": [
+        true,
+        true,
+        false,
+        false,
+        false,
+        false,
+        false
+      ],
+      "soft_plan_features": [
+        2.0000000596046448,
+        2.8181819021701813,
+        0.5454545617103577,
+        0.5454545617103577,
+        7.000000208616257,
+        0.0
+      ],
+      "expected_priorities": [
+        0.5000000149011612,
+        0.5000000149011612,
+        0.5000000149011612,
+        0.5000000149011612
+      ]
+    }
+  },
+  "game_state_mutations": 0,
+  "rng_mutations": 0,
+  "behavior_parity_games": 300,
+  "optimizer_created": false,
+  "weight_digests_before_and_after": {
+    "champion": "4225902d41a83540eb1f1552826ec623706e778b99ad4ae8ec015f976644392a",
+    "robber": "ecde7fa9e9d67370bb76686ecd767d2d532a76d467c0051aaebdf8d4aff702bf",
+    "plan_priority_head": "2000b1390fcf8135ba819ba40b1ee1720f0596327c2c658ec1e2f24a29dd1887"
+  }
+}

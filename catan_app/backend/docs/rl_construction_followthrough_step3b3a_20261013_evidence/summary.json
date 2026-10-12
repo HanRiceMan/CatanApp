@@ -1,0 +1,343 @@
+{
+  "schema": "construction_followthrough_step3b3a_v1",
+  "source_schema": "immediate_construction_audit_step3b3_v1",
+  "source_games": 300,
+  "source_seed_bases": {
+    "rule": 34000000,
+    "champion": 34001000,
+    "mixed": 34002000
+  },
+  "profile_seat": {
+    "rule/seat1": 25,
+    "rule/seat2": 25,
+    "rule/seat3": 25,
+    "rule/seat4": 25,
+    "champion/seat1": 25,
+    "champion/seat2": 25,
+    "champion/seat3": 25,
+    "champion/seat4": 25,
+    "mixed/seat1": 25,
+    "mixed/seat2": 25,
+    "mixed/seat3": 25,
+    "mixed/seat4": 25
+  },
+  "immediate_win_excluded_by_class": {
+    "CITY_ONLY": 83,
+    "SETTLEMENT_ONLY": 45,
+    "BOTH": 4
+  },
+  "state_level_count": 1378,
+  "opportunity_count": 1305,
+  "state_to_opportunity_reduction": 73,
+  "class_summary": {
+    "SETTLEMENT_ONLY": {
+      "opportunities": 802,
+      "state_level": 816,
+      "outcomes": {
+        "BUILT_TARGET_IMMEDIATELY": 792,
+        "BUILT_TARGET_LATER_SAME_TURN": 5,
+        "BUILT_OTHER_SCORE_SOURCE": 5,
+        "ENDED_TURN_WITHOUT_BUILD": 0,
+        "BUILDABILITY_LOST_WITHOUT_BUILD": 0,
+        "TERMINAL_OTHER": 0
+      },
+      "same_turn_target_build": 797,
+      "same_turn_target_build_rate": 0.9937655860349127,
+      "no_target_build_same_turn": 5,
+      "ended_turn_without_target": 4,
+      "buildability_lost_before_close": 6,
+      "other_score_before_close": 6,
+      "profile": {
+        "rule": {
+          "opportunities": 290,
+          "same_turn_target_build": 289,
+          "rate": 0.996551724137931
+        },
+        "champion": {
+          "opportunities": 250,
+          "same_turn_target_build": 249,
+          "rate": 0.996
+        },
+        "mixed": {
+          "opportunities": 262,
+          "same_turn_target_build": 259,
+          "rate": 0.9885496183206107
+        }
+      },
+      "later_actions_before_count": {
+        "2": 1,
+        "3+": 1,
+        "1": 3
+      },
+      "all_build_actions_before_count": {
+        "0": 792,
+        "2": 1,
+        "3+": 1,
+        "1": 3
+      },
+      "later_actions_before_family": {
+        "BANK_TRADE": 4,
+        "PLAYER_TRADE": 4,
+        "BUILD_CITY": 1
+      },
+      "first_action_distribution": {
+        "BUILD_SETTLEMENT": 792,
+        "BANK_TRADE": 6,
+        "PLAYER_TRADE": 4
+      },
+      "state_nonimmediate_count": 14,
+      "state_nonimmediate_outcomes": {
+        "BUILT_TARGET_IMMEDIATELY": 0,
+        "BUILT_TARGET_LATER_SAME_TURN": 6,
+        "BUILT_OTHER_SCORE_SOURCE": 8,
+        "ENDED_TURN_WITHOUT_BUILD": 0,
+        "BUILDABILITY_LOST_WITHOUT_BUILD": 0,
+        "TERMINAL_OTHER": 0
+      }
+    },
+    "CITY_ONLY": {
+      "opportunities": 484,
+      "state_level": 543,
+      "outcomes": {
+        "BUILT_TARGET_IMMEDIATELY": 382,
+        "BUILT_TARGET_LATER_SAME_TURN": 29,
+        "BUILT_OTHER_SCORE_SOURCE": 11,
+        "ENDED_TURN_WITHOUT_BUILD": 41,
+        "BUILDABILITY_LOST_WITHOUT_BUILD": 20,
+        "TERMINAL_OTHER": 1
+      },
+      "same_turn_target_build": 411,
+      "same_turn_target_build_rate": 0.8491735537190083,
+      "no_target_build_same_turn": 73,
+      "ended_turn_without_target": 72,
+      "buildability_lost_before_close": 31,
+      "other_score_before_close": 26,
+      "profile": {
+        "rule": {
+          "opportunities": 199,
+          "same_turn_target_build": 188,
+          "rate": 0.9447236180904522
+        },
+        "champion": {
+          "opportunities": 146,
+          "same_turn_target_build": 103,
+          "rate": 0.7054794520547946
+        },
+        "mixed": {
+          "opportunities": 139,
+          "same_turn_target_build": 120,
+          "rate": 0.8633093525179856
+        }
+      },
+      "later_actions_before_count": {
+        "1": 27,
+        "2": 2
+      },
+      "all_build_actions_before_count": {
+        "0": 382,
+        "1": 27,
+        "2": 2
+      },
+      "later_actions_before_family": {
+        "BUILD_ROAD": 25,
+        "PLAYER_TRADE": 6
+      },
+      "first_action_distribution": {
+        "BUILD_CITY": 382,
+        "BUILD_ROAD": 29,
+        "END_TURN": 32,
+        "PLAYER_TRADE": 20,
+        "BANK_TRADE": 21
+      },
+      "state_nonimmediate_count": 125,
+      "state_nonimmediate_outcomes": {
+        "BUILT_TARGET_IMMEDIATELY": 0,
+        "BUILT_TARGET_LATER_SAME_TURN": 31,
+        "BUILT_OTHER_SCORE_SOURCE": 17,
+        "ENDED_TURN_WITHOUT_BUILD": 56,
+        "BUILDABILITY_LOST_WITHOUT_BUILD": 20,
+        "TERMINAL_OTHER": 1
+      }
+    },
+    "BOTH": {
+      "opportunities": 19,
+      "state_level": 19,
+      "outcomes": {
+        "BUILT_TARGET_IMMEDIATELY": 19,
+        "BUILT_TARGET_LATER_SAME_TURN": 0,
+        "BUILT_OTHER_SCORE_SOURCE": 0,
+        "ENDED_TURN_WITHOUT_BUILD": 0,
+        "BUILDABILITY_LOST_WITHOUT_BUILD": 0,
+        "TERMINAL_OTHER": 0
+      },
+      "same_turn_target_build": 19,
+      "same_turn_target_build_rate": 1.0,
+      "no_target_build_same_turn": 0,
+      "ended_turn_without_target": 0,
+      "buildability_lost_before_close": 0,
+      "other_score_before_close": 0,
+      "profile": {
+        "rule": {
+          "opportunities": 6,
+          "same_turn_target_build": 6,
+          "rate": 1.0
+        },
+        "champion": {
+          "opportunities": 5,
+          "same_turn_target_build": 5,
+          "rate": 1.0
+        },
+        "mixed": {
+          "opportunities": 8,
+          "same_turn_target_build": 8,
+          "rate": 1.0
+        }
+      },
+      "later_actions_before_count": {},
+      "all_build_actions_before_count": {
+        "0": 19
+      },
+      "later_actions_before_family": {},
+      "first_action_distribution": {
+        "BUILD_SETTLEMENT": 15,
+        "BUILD_CITY": 4
+      },
+      "state_nonimmediate_count": 0,
+      "state_nonimmediate_outcomes": {
+        "BUILT_TARGET_IMMEDIATELY": 0,
+        "BUILT_TARGET_LATER_SAME_TURN": 0,
+        "BUILT_OTHER_SCORE_SOURCE": 0,
+        "ENDED_TURN_WITHOUT_BUILD": 0,
+        "BUILDABILITY_LOST_WITHOUT_BUILD": 0,
+        "TERMINAL_OTHER": 0
+      }
+    }
+  },
+  "state_level_nonimmediate": {
+    "count": 139,
+    "by_class_and_first_action": {
+      "SETTLEMENT_ONLY": {
+        "BANK_TRADE": {
+          "BUILT_TARGET_IMMEDIATELY": 0,
+          "BUILT_TARGET_LATER_SAME_TURN": 3,
+          "BUILT_OTHER_SCORE_SOURCE": 6,
+          "ENDED_TURN_WITHOUT_BUILD": 0,
+          "BUILDABILITY_LOST_WITHOUT_BUILD": 0,
+          "TERMINAL_OTHER": 0
+        },
+        "PLAYER_TRADE": {
+          "BUILT_TARGET_IMMEDIATELY": 0,
+          "BUILT_TARGET_LATER_SAME_TURN": 3,
+          "BUILT_OTHER_SCORE_SOURCE": 2,
+          "ENDED_TURN_WITHOUT_BUILD": 0,
+          "BUILDABILITY_LOST_WITHOUT_BUILD": 0,
+          "TERMINAL_OTHER": 0
+        }
+      },
+      "CITY_ONLY": {
+        "BANK_TRADE": {
+          "BUILT_TARGET_IMMEDIATELY": 0,
+          "BUILT_TARGET_LATER_SAME_TURN": 0,
+          "BUILT_OTHER_SCORE_SOURCE": 3,
+          "ENDED_TURN_WITHOUT_BUILD": 1,
+          "BUILDABILITY_LOST_WITHOUT_BUILD": 20,
+          "TERMINAL_OTHER": 0
+        },
+        "BUILD_ROAD": {
+          "BUILT_TARGET_IMMEDIATELY": 0,
+          "BUILT_TARGET_LATER_SAME_TURN": 25,
+          "BUILT_OTHER_SCORE_SOURCE": 2,
+          "ENDED_TURN_WITHOUT_BUILD": 4,
+          "BUILDABILITY_LOST_WITHOUT_BUILD": 0,
+          "TERMINAL_OTHER": 1
+        },
+        "END_TURN": {
+          "BUILT_TARGET_IMMEDIATELY": 0,
+          "BUILT_TARGET_LATER_SAME_TURN": 0,
+          "BUILT_OTHER_SCORE_SOURCE": 0,
+          "ENDED_TURN_WITHOUT_BUILD": 41,
+          "BUILDABILITY_LOST_WITHOUT_BUILD": 0,
+          "TERMINAL_OTHER": 0
+        },
+        "PLAYER_TRADE": {
+          "BUILT_TARGET_IMMEDIATELY": 0,
+          "BUILT_TARGET_LATER_SAME_TURN": 6,
+          "BUILT_OTHER_SCORE_SOURCE": 12,
+          "ENDED_TURN_WITHOUT_BUILD": 10,
+          "BUILDABILITY_LOST_WITHOUT_BUILD": 0,
+          "TERMINAL_OTHER": 0
+        }
+      },
+      "BOTH": {}
+    }
+  },
+  "later_build_actions_before_family": {
+    "BUILD_ROAD": 25,
+    "BANK_TRADE": 4,
+    "PLAYER_TRADE": 10,
+    "BUILD_CITY": 1
+  },
+  "later_build_actions_before_count": {
+    "1": 30,
+    "2": 3,
+    "3+": 1
+  },
+  "bank_trade_to_build": 2,
+  "player_trade_to_build": 8,
+  "road_to_build": 24,
+  "play_development_to_build": 0,
+  "trade_events": {
+    "bank": 36,
+    "player": 51,
+    "player_returned_to_action_same_turn": 51
+  },
+  "resource_delta_to_endpoint_by_outcome": {
+    "BUILT_TARGET_IMMEDIATELY": {
+      "wood": 0.0,
+      "brick": 0.0,
+      "sheep": 0.0,
+      "wheat": 0.0,
+      "ore": 0.0
+    },
+    "BUILT_TARGET_LATER_SAME_TURN": {
+      "wood": -0.7352941176470589,
+      "brick": -0.9117647058823529,
+      "sheep": -0.11764705882352941,
+      "wheat": 0.029411764705882353,
+      "ore": -0.029411764705882353
+    },
+    "BUILT_OTHER_SCORE_SOURCE": {
+      "wood": -1.0,
+      "brick": -0.8125,
+      "sheep": -1.4375,
+      "wheat": -1.5,
+      "ore": -1.75
+    },
+    "ENDED_TURN_WITHOUT_BUILD": {
+      "wood": -0.0975609756097561,
+      "brick": -0.0975609756097561,
+      "sheep": 0.024390243902439025,
+      "wheat": 0.0,
+      "ore": -0.0975609756097561
+    },
+    "BUILDABILITY_LOST_WITHOUT_BUILD": {
+      "wood": 0.55,
+      "brick": -0.2,
+      "sheep": 0.15,
+      "wheat": -1.05,
+      "ore": -3.3
+    },
+    "TERMINAL_OTHER": {
+      "wood": -1.0,
+      "brick": -1.0,
+      "sheep": 0.0,
+      "wheat": 0.0,
+      "ore": 0.0
+    }
+  },
+  "same_turn_multiple_build_opportunities": 61,
+  "source_parity_failures": 0,
+  "source_observer_mutation_and_rng_parity_inherited": true,
+  "optimizer_created": false,
+  "game_reruns": 0
+}

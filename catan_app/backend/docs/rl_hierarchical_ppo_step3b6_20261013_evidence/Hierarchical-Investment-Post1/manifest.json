@@ -1,0 +1,65 @@
+{
+  "schema": "hierarchical_investment_ppo_step3b6_v1",
+  "name": "Hierarchical-Investment-Post1",
+  "champion_model_id": "ppo_gnn_board_65k_s03_exp_v003",
+  "champion_digest": "4225902d41a83540eb1f1552826ec623706e778b99ad4ae8ec015f976644392a",
+  "robber_digest": "ecde7fa9e9d67370bb76686ecd767d2d532a76d467c0051aaebdf8d4aff702bf",
+  "plan_priority_initialization_seed": 3302,
+  "l3_initialization_seed": 3505,
+  "critic_initialization_seed": 3606,
+  "plan_priority_digest": "891e666cfa4a3988179ea82de3b39f9401e60eb7b840b2c479f12bfffb44c0f5",
+  "l3_digest": "bb680e69a1641d26b56a3e6d4a4660b5a13a4406d0cb744e82c261576ba35e2e",
+  "critic_digest": "6e02bce919083d3382de5cd33f3ad82776f728872eb1ac3ca09eedf8807267f9",
+  "delegation_probability": 0.1,
+  "family_order": [
+    "BUILD_SETTLEMENT",
+    "BUILD_CITY",
+    "BUILD_ROAD",
+    "BUY_DEVELOPMENT",
+    "BANK_TRADE",
+    "PLAYER_TRADE",
+    "END_TURN"
+  ],
+  "training_families": [
+    "BUILD_ROAD",
+    "BUY_DEVELOPMENT",
+    "BANK_TRADE",
+    "END_TURN"
+  ],
+  "executor": "step3a14_B_FROZEN_PPO",
+  "resolver": "step3a13_single_action_v1",
+  "protected_trade": "champion_selected_player_trade_preempts",
+  "runtime_context": "runtime_context_v1_79",
+  "reward": {
+    "win": 1,
+    "loss": -1,
+    "victory_point_delta": 0.05,
+    "gamma": 0.99,
+    "gae_lambda": 0.95
+  },
+  "training_seed_bases": {
+    "rule": 35000000,
+    "champion": 35001000,
+    "mixed": 35002000
+  },
+  "evaluation_seed_bases": {
+    "rule": 35100000,
+    "champion": 35101000,
+    "mixed": 35102000
+  },
+  "minibatch_seed": 3606001,
+  "ppo": {
+    "actor_lr": 0.0001,
+    "critic_lr": 0.0003,
+    "batch_size": 64,
+    "epochs": 2,
+    "clip_range": 0.1,
+    "entropy_coef": 0.005
+  },
+  "parent": "Hierarchical-Investment-Pre",
+  "parent_sha256": "7c5dd4b7352e7425d4a91ade7b35ff9dfc009a56456baba0f42c87d588d6e392",
+  "training_games": 96,
+  "training_transitions": 269,
+  "policy_digest": "d91697b52cf25d088c12165e3daf5b47def02347c7a989663c69a98366e6c61c",
+  "update_count": 1
+}

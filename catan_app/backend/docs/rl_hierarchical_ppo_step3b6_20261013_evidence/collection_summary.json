@@ -1,0 +1,34 @@
+{
+  "games": 96,
+  "transitions": 269,
+  "balanced_blocks": 8,
+  "profile_games": {
+    "rule": 32,
+    "champion": 32,
+    "mixed": 32
+  },
+  "seat_games": {
+    "1": 24,
+    "2": 24,
+    "3": 24,
+    "4": 24
+  },
+  "seed_ranges": {
+    "rule": [
+      35000000,
+      35000031
+    ],
+    "champion": [
+      35001000,
+      35001031
+    ],
+    "mixed": [
+      35002000,
+      35002031
+    ]
+  },
+  "weight_digests_unchanged": true,
+  "actual_delegated": 269,
+  "protected_preemption": 1040,
+  "resolver_count": 44
+}

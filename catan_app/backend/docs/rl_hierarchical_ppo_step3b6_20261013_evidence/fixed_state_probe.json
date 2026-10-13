@@ -1,0 +1,60 @@
+{
+  "held_out_delegated_states": 218,
+  "old_probability_replay_max_error": 0.0,
+  "kl_mean": 2.9780769182252698e-05,
+  "kl_max": 0.00012942147441208363,
+  "l3_entropy_pre": 0.548153817653656,
+  "l3_entropy_post": 0.5481240749359131,
+  "plan_entropy_pre": 2.1000893115997314,
+  "plan_entropy_post": 2.1000890731811523,
+  "priority_mean_pre": [
+    0.5,
+    0.5,
+    0.5,
+    0.5
+  ],
+  "priority_mean_post": [
+    0.5011513233184814,
+    0.5003405213356018,
+    0.5009495615959167,
+    0.5008739233016968
+  ],
+  "top_family_flips": 79,
+  "family_probability_shift": {
+    "BUILD_SETTLEMENT": {
+      "available": 0,
+      "mean_pre": null,
+      "mean_post": null
+    },
+    "BUILD_CITY": {
+      "available": 0,
+      "mean_pre": null,
+      "mean_post": null
+    },
+    "BUILD_ROAD": {
+      "available": 66,
+      "mean_pre": 0.3863636553287506,
+      "mean_post": 0.38280266523361206
+    },
+    "BUY_DEVELOPMENT": {
+      "available": 58,
+      "mean_pre": 0.3850574791431427,
+      "mean_post": 0.3850310742855072
+    },
+    "BANK_TRADE": {
+      "available": 77,
+      "mean_pre": 0.39393943548202515,
+      "mean_post": 0.399657279253006
+    },
+    "PLAYER_TRADE": {
+      "available": 0,
+      "mean_pre": null,
+      "mean_post": null
+    },
+    "END_TURN": {
+      "available": 218,
+      "mean_pre": 0.6414373517036438,
+      "mean_post": 0.6405028104782104
+    }
+  }
+}

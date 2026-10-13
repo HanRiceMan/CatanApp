@@ -1,2 +1,5 @@
 catan_app/backend/docs/rl_hierarchical_ppo_step3b7_20261013_evidence/*.json -text
 catan_app/backend/docs/rl_hierarchical_ppo_step3b7_20261013_evidence/Hierarchical-Investment-Post2/*.json -text
+catan_app/backend/docs/rl_plan_conditioned_step3b8_20261014_evidence/*.json -text
+catan_app/backend/docs/rl_plan_conditioned_step3b8_20261014_evidence/Plan-Conditioned-Investment-Pre/*.json -text
+catan_app/backend/docs/rl_plan_conditioned_step3b8_20261014_evidence/Plan-Conditioned-Investment-Post1/*.json -text

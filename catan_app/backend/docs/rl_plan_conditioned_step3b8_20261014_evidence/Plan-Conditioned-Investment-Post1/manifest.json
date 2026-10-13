@@ -1,0 +1,46 @@
+{
+  "schema": "plan_conditioned_investment_step3b8_v1",
+  "step": "3B-8",
+  "name": "Plan-Conditioned-Investment-Post1",
+  "parent": "Hierarchical-Investment-Post2",
+  "parent_sha256": "57ad50d066712ce6feee4d0b1944f69dc76b61665e44e8ccf1950efcf29a16c0",
+  "champion_digest": "4225902d41a83540eb1f1552826ec623706e778b99ad4ae8ec015f976644392a",
+  "robber_digest": "ecde7fa9e9d67370bb76686ecd767d2d532a76d467c0051aaebdf8d4aff702bf",
+  "l3_initialization_seed": 3808,
+  "actor_mixture": "sum_i P(plan_i|state)*P(family|state,plan_i)",
+  "plan_sampling": false,
+  "delegation_probability": 0.1,
+  "boundary": "INVESTMENT executable multi-choice, protected PlayerTrade",
+  "training_seed_bases": {
+    "rule": 35400000,
+    "champion": 35401000,
+    "mixed": 35402000
+  },
+  "evaluation_seed_bases": {
+    "rule": 35500000,
+    "champion": 35501000,
+    "mixed": 35502000
+  },
+  "minibatch_seed": 3808001,
+  "reward": {
+    "win": 1,
+    "loss": -1,
+    "victory_point_delta": 0.05,
+    "gamma": 0.99,
+    "gae_lambda": 0.95
+  },
+  "ppo": {
+    "actor_lr": 0.0001,
+    "critic_lr": 0.0003,
+    "batch_size": 64,
+    "epochs": 2,
+    "clip_range": 0.1,
+    "entropy_coef": 0.005
+  },
+  "policy_digest": "1c8a376ce97238169c6dd276395fac74eac0b631290db603531318a76a20ec9c",
+  "critic_digest": "bf4ce0cbac9c730532edf35d35d9a5e786099a9eac5a355cbbfa5a0afa3d8b48",
+  "training_games": 144,
+  "training_transitions": 265,
+  "pre_sha256": "fd6fb48c1cb67c14f7dfd0229be43a351e85e9682cee69e1a705883324d41aa8",
+  "update_count": 1
+}

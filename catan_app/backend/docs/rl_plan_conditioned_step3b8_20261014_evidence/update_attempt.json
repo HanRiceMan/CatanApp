@@ -1,0 +1,5 @@
+{
+  "one_shot": true,
+  "transitions": 265,
+  "minibatch_seed": 3808001
+}

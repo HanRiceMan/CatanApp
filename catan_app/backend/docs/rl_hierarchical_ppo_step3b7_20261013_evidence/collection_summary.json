@@ -1,0 +1,39 @@
+{
+  "games": 240,
+  "transitions": 399,
+  "profile_games": {
+    "rule": 80,
+    "champion": 80,
+    "mixed": 80
+  },
+  "seat_games": {
+    "1": 60,
+    "2": 60,
+    "3": 60,
+    "4": 60
+  },
+  "seed_ranges": {
+    "rule": [
+      35200000,
+      35200079
+    ],
+    "champion": [
+      35201000,
+      35201079
+    ],
+    "mixed": [
+      35202000,
+      35202079
+    ]
+  },
+  "single_choice_skipped": 2855,
+  "eligible_multi_choice": 4003,
+  "selected": {
+    "END_TURN": 183,
+    "BUILD_ROAD": 71,
+    "BANK_TRADE": 77,
+    "BUY_DEVELOPMENT": 68
+  },
+  "parent_sha256": "8f88f806f4eb7b0a5fdf1e7b53b3c118d01756e3371f7929e78c9b9ef5b2fa3b",
+  "weight_digests_unchanged": true
+}

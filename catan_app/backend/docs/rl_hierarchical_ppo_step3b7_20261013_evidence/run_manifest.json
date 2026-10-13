@@ -1,0 +1,51 @@
+{
+  "schema": "hierarchical_investment_ppo_step3b6_v1",
+  "step": "3B-7",
+  "parent": "Hierarchical-Investment-Post1",
+  "parent_weights_sha256": "8f88f806f4eb7b0a5fdf1e7b53b3c118d01756e3371f7929e78c9b9ef5b2fa3b",
+  "champion_digest": "4225902d41a83540eb1f1552826ec623706e778b99ad4ae8ec015f976644392a",
+  "robber_digest": "ecde7fa9e9d67370bb76686ecd767d2d532a76d467c0051aaebdf8d4aff702bf",
+  "delegation_probability": 0.1,
+  "boundary": "INVESTMENT, executable family count >= 2; protected PlayerTrade",
+  "training_families": [
+    "BUILD_ROAD",
+    "BUY_DEVELOPMENT",
+    "BANK_TRADE",
+    "END_TURN"
+  ],
+  "family_order": [
+    "BUILD_SETTLEMENT",
+    "BUILD_CITY",
+    "BUILD_ROAD",
+    "BUY_DEVELOPMENT",
+    "BANK_TRADE",
+    "PLAYER_TRADE",
+    "END_TURN"
+  ],
+  "training_seed_bases": {
+    "rule": 35200000,
+    "champion": 35201000,
+    "mixed": 35202000
+  },
+  "evaluation_seed_bases": {
+    "rule": 35300000,
+    "champion": 35301000,
+    "mixed": 35302000
+  },
+  "minibatch_seed": 3707001,
+  "reward": {
+    "win": 1,
+    "loss": -1,
+    "victory_point_delta": 0.05,
+    "gamma": 0.99,
+    "gae_lambda": 0.95
+  },
+  "ppo": {
+    "actor_lr": 0.0001,
+    "critic_lr": 0.0003,
+    "batch_size": 64,
+    "epochs": 2,
+    "clip_range": 0.1,
+    "entropy_coef": 0.005
+  }
+}

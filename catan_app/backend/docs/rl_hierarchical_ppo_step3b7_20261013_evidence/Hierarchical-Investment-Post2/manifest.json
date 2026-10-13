@@ -1,0 +1,68 @@
+{
+  "schema": "hierarchical_investment_ppo_step3b6_v1",
+  "name": "Hierarchical-Investment-Post2",
+  "champion_model_id": "ppo_gnn_board_65k_s03_exp_v003",
+  "champion_digest": "4225902d41a83540eb1f1552826ec623706e778b99ad4ae8ec015f976644392a",
+  "robber_digest": "ecde7fa9e9d67370bb76686ecd767d2d532a76d467c0051aaebdf8d4aff702bf",
+  "plan_priority_initialization_seed": 3302,
+  "l3_initialization_seed": 3505,
+  "critic_initialization_seed": 3606,
+  "plan_priority_digest": "93cf70ceade94619e0ef6e4f695cbb24b51d31d870f712deab623d27c2afb384",
+  "l3_digest": "5f91e4414210ad237c0d0b54652487f64a8deb55ca8f39d8eb410236f98b8e1e",
+  "critic_digest": "36fac51949d1ee1db095123410e8ab6a1e8bd59485c3ad61d34c6d2e667428df",
+  "delegation_probability": 0.1,
+  "family_order": [
+    "BUILD_SETTLEMENT",
+    "BUILD_CITY",
+    "BUILD_ROAD",
+    "BUY_DEVELOPMENT",
+    "BANK_TRADE",
+    "PLAYER_TRADE",
+    "END_TURN"
+  ],
+  "training_families": [
+    "BUILD_ROAD",
+    "BUY_DEVELOPMENT",
+    "BANK_TRADE",
+    "END_TURN"
+  ],
+  "executor": "step3a14_B_FROZEN_PPO",
+  "resolver": "step3a13_single_action_v1",
+  "protected_trade": "champion_selected_player_trade_preempts",
+  "runtime_context": "runtime_context_v1_79",
+  "reward": {
+    "win": 1,
+    "loss": -1,
+    "victory_point_delta": 0.05,
+    "gamma": 0.99,
+    "gae_lambda": 0.95
+  },
+  "training_seed_bases": {
+    "rule": 35200000,
+    "champion": 35201000,
+    "mixed": 35202000
+  },
+  "evaluation_seed_bases": {
+    "rule": 35300000,
+    "champion": 35301000,
+    "mixed": 35302000
+  },
+  "minibatch_seed": 3707001,
+  "ppo": {
+    "actor_lr": 0.0001,
+    "critic_lr": 0.0003,
+    "batch_size": 64,
+    "epochs": 2,
+    "clip_range": 0.1,
+    "entropy_coef": 0.005
+  },
+  "parent": "Hierarchical-Investment-Post1",
+  "parent_sha256": "8f88f806f4eb7b0a5fdf1e7b53b3c118d01756e3371f7929e78c9b9ef5b2fa3b",
+  "training_games": 240,
+  "training_transitions": 399,
+  "policy_digest": "2694a2532b21713d27a6c863b0b9984004836e59b0ece393ce8cc96694caa143",
+  "update_count": 2,
+  "step": "3B-7",
+  "parent_weights_sha256": "8f88f806f4eb7b0a5fdf1e7b53b3c118d01756e3371f7929e78c9b9ef5b2fa3b",
+  "boundary": "INVESTMENT, executable family count >= 2; protected PlayerTrade"
+}

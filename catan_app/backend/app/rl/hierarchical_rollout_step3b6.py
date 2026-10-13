@@ -53,6 +53,12 @@ def _sample(probs: np.ndarray, rng: random.Random) -> int:
     return int(np.flatnonzero(probs)[-1])
 
 
+def _delegation_candidate(training_mask: tuple[bool, ...],
+                          multi_choice_only: bool) -> bool:
+    count = sum(training_mask)
+    return count >= (2 if multi_choice_only else 1)
+
+
 def _close(pending: dict, *, next_mask: tuple[bool, ...] | None,
            terminal: bool, truncated: bool, policy_step: int) -> dict:
     rewards = pending.pop("rewards")
@@ -75,6 +81,7 @@ def run_hierarchical_episode(
     critic: HierarchicalInvestmentCritic, *, seed: int, seat: int,
     profile: str, delegation_probability: float,
     delegation_seed: int, family_seed: int,
+    multi_choice_only: bool = False,
     max_policy_steps: int = 5000,
 ) -> dict:
     if profile not in PROFILE_ROLES or not 0 <= delegation_probability <= 1:
@@ -110,7 +117,7 @@ def run_hierarchical_episode(
     pending = None
     action_families = Counter()
     routes = Counter()
-    protected = resolver = eligible = lottery = 0
+    protected = resolver = eligible = lottery = single_choice_skipped = 0
     terminal = truncated = False
     try:
         while not (terminal or truncated):
@@ -151,7 +158,9 @@ def run_hierarchical_episode(
                             if family in _EXECUTABLE else False for family in FAMILY_ORDER)
                         training_mask = investment_training_mask(
                             route.route, route.comparison_family_mask, executable)
-                        if any(training_mask):
+                        if multi_choice_only and sum(training_mask) == 1:
+                            single_choice_skipped += 1
+                        if _delegation_candidate(training_mask, multi_choice_only):
                             eligible += 1
                             lottery += 1
                             if delegation_rng.random() < delegation_probability:
@@ -269,6 +278,7 @@ def run_hierarchical_episode(
             "final_state": _normalized_state(env.game),
             "rng_counter": env.game.random_source.counter,
             "eligible_investment": eligible, "delegation_lottery_count": lottery,
+            "single_choice_skipped": single_choice_skipped,
             "actual_delegated": len(decisions), "protected_preemption": protected,
             "resolver_count": resolver, "route_counts": dict(routes),
             "learner_action_families": dict(action_families),

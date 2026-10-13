@@ -1,0 +1,399 @@
+{
+  "schema": "hierarchical_l3_shadow_step3b5_v1",
+  "policy_schema": "hierarchical_l3_shadow_step3b5_v1",
+  "games": 36,
+  "seed_bases": {
+    "rule": 34000000,
+    "champion": 34001000,
+    "mixed": 34002000
+  },
+  "seeds_per_profile": 12,
+  "profile_seat": {
+    "rule/seat1": 3,
+    "rule/seat2": 3,
+    "rule/seat3": 3,
+    "rule/seat4": 3,
+    "champion/seat1": 3,
+    "champion/seat2": 3,
+    "champion/seat3": 3,
+    "champion/seat4": 3,
+    "mixed/seat1": 3,
+    "mixed/seat2": 3,
+    "mixed/seat3": 3,
+    "mixed/seat4": 3
+  },
+  "route_counts": {
+    "FORCED_PHASE": 1012,
+    "INVESTMENT": 1347,
+    "CONSTRUCTION_COMMIT": 94,
+    "PRE_ROLL_DEV_USAGE": 61,
+    "IMMEDIATE_WIN": 20,
+    "CITY_VALUE_COMPARISON": 52,
+    "DUAL_CONSTRUCTION_COMPARISON": 2
+  },
+  "route_by_profile": {
+    "rule": {
+      "FORCED_PHASE": 326,
+      "INVESTMENT": 391,
+      "CONSTRUCTION_COMMIT": 35,
+      "PRE_ROLL_DEV_USAGE": 21,
+      "IMMEDIATE_WIN": 11,
+      "CITY_VALUE_COMPARISON": 19,
+      "DUAL_CONSTRUCTION_COMPARISON": 1
+    },
+    "champion": {
+      "FORCED_PHASE": 389,
+      "INVESTMENT": 580,
+      "CONSTRUCTION_COMMIT": 32,
+      "PRE_ROLL_DEV_USAGE": 22,
+      "CITY_VALUE_COMPARISON": 21,
+      "IMMEDIATE_WIN": 3
+    },
+    "mixed": {
+      "FORCED_PHASE": 297,
+      "INVESTMENT": 376,
+      "CONSTRUCTION_COMMIT": 27,
+      "PRE_ROLL_DEV_USAGE": 18,
+      "IMMEDIATE_WIN": 6,
+      "CITY_VALUE_COMPARISON": 12,
+      "DUAL_CONSTRUCTION_COMPARISON": 1
+    }
+  },
+  "shadow_forward_states": 1556,
+  "plan_available_states": 1556,
+  "l3_available_states": 1495,
+  "l3_available_by_route": {
+    "INVESTMENT": 1347,
+    "CONSTRUCTION_COMMIT": 94,
+    "PRE_ROLL_DEV_USAGE": 0,
+    "CITY_VALUE_COMPARISON": 52,
+    "DUAL_CONSTRUCTION_COMPARISON": 2
+  },
+  "observer_seconds_total": 34.66699579753913,
+  "shadow_forward_seconds_total": 32.877816000487655,
+  "forward_seconds_per_shadow_state": 0.021129701799799266,
+  "parameter_counts": {
+    "plan_priority_head": 41349,
+    "l3_encoder": 34304,
+    "l3_family_head": 455,
+    "l3_total": 34759,
+    "bridge": 0
+  },
+  "representative": {
+    "FORCED_PHASE": {
+      "profile": "rule",
+      "seed": 34000000,
+      "seat": 1,
+      "turn": 0,
+      "revision": 3,
+      "build_class": null,
+      "shadow": null
+    },
+    "INVESTMENT": {
+      "profile": "rule",
+      "seed": 34000000,
+      "seat": 1,
+      "turn": 1,
+      "revision": 24,
+      "build_class": "NONE",
+      "shadow": {
+        "plan_available": true,
+        "soft_plan_features": [
+          3.0,
+          2.8181819915771484,
+          0.5454545617103577,
+          0.5454545617103577,
+          8.0,
+          0.0
+        ],
+        "expected_priorities": [
+          0.5,
+          0.5,
+          0.5,
+          0.5
+        ],
+        "bridge_matches_3b4": true,
+        "comparison_available": true,
+        "candidate_family_mask": [
+          false,
+          false,
+          true,
+          false,
+          false,
+          true,
+          true
+        ],
+        "raw_l3_logits": [
+          0.0,
+          0.0,
+          0.0,
+          0.0,
+          0.0,
+          0.0,
+          0.0
+        ],
+        "masked_l3_probabilities": [
+          0.0,
+          0.0,
+          0.3333333432674408,
+          0.0,
+          0.0,
+          0.3333333432674408,
+          0.3333333432674408
+        ],
+        "l3_entropy": 1.0986123085021973,
+        "plan_candidate_count": 28,
+        "valid_plan_candidate_count": 11
+      }
+    },
+    "CONSTRUCTION_COMMIT": {
+      "profile": "rule",
+      "seed": 34000000,
+      "seat": 1,
+      "turn": 13,
+      "revision": 101,
+      "build_class": "SETTLEMENT_ONLY",
+      "shadow": {
+        "plan_available": true,
+        "soft_plan_features": [
+          3.0,
+          2.8181819915771484,
+          0.5454545617103577,
+          0.5454545617103577,
+          8.0,
+          0.0
+        ],
+        "expected_priorities": [
+          0.5,
+          0.5,
+          0.5,
+          0.5
+        ],
+        "bridge_matches_3b4": true,
+        "comparison_available": true,
+        "candidate_family_mask": [
+          true,
+          false,
+          true,
+          false,
+          false,
+          true,
+          true
+        ],
+        "raw_l3_logits": [
+          0.0,
+          0.0,
+          0.0,
+          0.0,
+          0.0,
+          0.0,
+          0.0
+        ],
+        "masked_l3_probabilities": [
+          0.25,
+          0.0,
+          0.25,
+          0.0,
+          0.0,
+          0.25,
+          0.25
+        ],
+        "l3_entropy": 1.3862943649291992,
+        "plan_candidate_count": 28,
+        "valid_plan_candidate_count": 11
+      }
+    },
+    "PRE_ROLL_DEV_USAGE": {
+      "profile": "rule",
+      "seed": 34000000,
+      "seat": 1,
+      "turn": 53,
+      "revision": 339,
+      "build_class": null,
+      "shadow": {
+        "plan_available": true,
+        "soft_plan_features": [
+          0.3333333432674408,
+          2.0,
+          0.0,
+          0.3333333432674408,
+          3.0,
+          0.0
+        ],
+        "expected_priorities": [
+          0.5,
+          0.5,
+          0.5,
+          0.5
+        ],
+        "bridge_matches_3b4": true,
+        "comparison_available": false,
+        "candidate_family_mask": [
+          false,
+          false,
+          false,
+          false,
+          false,
+          false,
+          false
+        ],
+        "raw_l3_logits": [
+          0.0,
+          0.0,
+          0.0,
+          0.0,
+          0.0,
+          0.0,
+          0.0
+        ],
+        "masked_l3_probabilities": [
+          0.0,
+          0.0,
+          0.0,
+          0.0,
+          0.0,
+          0.0,
+          0.0
+        ],
+        "l3_entropy": -0.0,
+        "plan_candidate_count": 9,
+        "valid_plan_candidate_count": 3
+      }
+    },
+    "IMMEDIATE_WIN": {
+      "profile": "rule",
+      "seed": 34000000,
+      "seat": 1,
+      "turn": 69,
+      "revision": 463,
+      "build_class": "CITY_ONLY",
+      "shadow": null
+    },
+    "CITY_VALUE_COMPARISON": {
+      "profile": "rule",
+      "seed": 34000001,
+      "seat": 2,
+      "turn": 38,
+      "revision": 287,
+      "build_class": "CITY_ONLY",
+      "shadow": {
+        "plan_available": true,
+        "soft_plan_features": [
+          0.3333333432674408,
+          1.0,
+          0.3333333432674408,
+          0.0,
+          2.0,
+          0.0
+        ],
+        "expected_priorities": [
+          0.5,
+          0.5,
+          0.5,
+          0.5
+        ],
+        "bridge_matches_3b4": true,
+        "comparison_available": true,
+        "candidate_family_mask": [
+          false,
+          true,
+          false,
+          true,
+          true,
+          true,
+          true
+        ],
+        "raw_l3_logits": [
+          0.0,
+          0.0,
+          0.0,
+          0.0,
+          0.0,
+          0.0,
+          0.0
+        ],
+        "masked_l3_probabilities": [
+          0.0,
+          0.20000000298023224,
+          0.0,
+          0.20000000298023224,
+          0.20000000298023224,
+          0.20000000298023224,
+          0.20000000298023224
+        ],
+        "l3_entropy": 1.6094379425048828,
+        "plan_candidate_count": 5,
+        "valid_plan_candidate_count": 3
+      }
+    },
+    "DUAL_CONSTRUCTION_COMPARISON": {
+      "profile": "rule",
+      "seed": 34000003,
+      "seat": 4,
+      "turn": 40,
+      "revision": 255,
+      "build_class": "BOTH",
+      "shadow": {
+        "plan_available": true,
+        "soft_plan_features": [
+          2.0,
+          2.8181817531585693,
+          0.5454545617103577,
+          0.5454545617103577,
+          6.999999523162842,
+          0.0
+        ],
+        "expected_priorities": [
+          0.5000000596046448,
+          0.5000000596046448,
+          0.5000000596046448,
+          0.5000000596046448
+        ],
+        "bridge_matches_3b4": true,
+        "comparison_available": true,
+        "candidate_family_mask": [
+          true,
+          true,
+          false,
+          false,
+          false,
+          false,
+          false
+        ],
+        "raw_l3_logits": [
+          0.0,
+          0.0,
+          0.0,
+          0.0,
+          0.0,
+          0.0,
+          0.0
+        ],
+        "masked_l3_probabilities": [
+          0.5,
+          0.5,
+          0.0,
+          0.0,
+          0.0,
+          0.0,
+          0.0
+        ],
+        "l3_entropy": 0.6931471824645996,
+        "plan_candidate_count": 24,
+        "valid_plan_candidate_count": 11
+      }
+    }
+  },
+  "behavior_parity_games": 36,
+  "game_state_mutations": 0,
+  "rng_mutations": 0,
+  "bridge_diagnostic_mismatches": 0,
+  "masked_probability_failures": 0,
+  "optimizer_created": false,
+  "weight_digests_before_and_after": {
+    "champion": "4225902d41a83540eb1f1552826ec623706e778b99ad4ae8ec015f976644392a",
+    "robber": "ecde7fa9e9d67370bb76686ecd767d2d532a76d467c0051aaebdf8d4aff702bf",
+    "plan_priority_head": "2000b1390fcf8135ba819ba40b1ee1720f0596327c2c658ec1e2f24a29dd1887",
+    "l3_head": "a5bd513d4a10c2a848996906443de05ab46c46ecb8519f621df29e679a742748"
+  }
+}

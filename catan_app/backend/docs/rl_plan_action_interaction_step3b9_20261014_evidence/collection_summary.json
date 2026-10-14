@@ -1,0 +1,24 @@
+{
+  "games": 156,
+  "transitions": 272,
+  "profiles": {
+    "rule": 52,
+    "champion": 52,
+    "mixed": 52
+  },
+  "seats": {
+    "1": 39,
+    "2": 39,
+    "3": 39,
+    "4": 39
+  },
+  "family_selected": {
+    "BUILD_ROAD": 58,
+    "BUY_DEVELOPMENT": 45,
+    "BANK_TRADE": 58,
+    "END_TURN": 111
+  },
+  "single_choice_skipped": 1822,
+  "parent_unchanged": true,
+  "pre_sha256": "59653b9a96f30b456c2e8ac7c66396455949079067a6846f25695dbaae12660b"
+}

@@ -1,0 +1,233 @@
+{
+  "variants": {
+    "safety": {
+      "games": 72,
+      "wins": 43,
+      "win_rate": 0.5972222222222222,
+      "mean_vp": 8.652777777777779,
+      "mean_rank": 1.6666666666666667,
+      "mean_policy_steps": 76.5,
+      "terminal_rate": 1.0,
+      "actual_delegated": 0,
+      "action_families": {
+        "END_TURN": 1206,
+        "BUILD_ROAD": 414,
+        "BANK_TRADE": 285,
+        "BUILD_SETTLEMENT": 217,
+        "PROTECTED_PLAYER_TRADE": 880,
+        "BUILD_CITY": 138,
+        "BUY_DEVELOPMENT": 153
+      },
+      "delegated_families": {},
+      "protected_preemption": 880,
+      "resolver_count": 42,
+      "mean_plan_entropy": null,
+      "mean_l3_entropy": null,
+      "mean_priority": null
+    },
+    "old_post1": {
+      "games": 72,
+      "wins": 39,
+      "win_rate": 0.5416666666666666,
+      "mean_vp": 8.375,
+      "mean_rank": 1.8333333333333333,
+      "mean_policy_steps": 78.98611111111111,
+      "terminal_rate": 1.0,
+      "actual_delegated": 126,
+      "action_families": {
+        "END_TURN": 1270,
+        "BUILD_ROAD": 418,
+        "BANK_TRADE": 302,
+        "BUILD_SETTLEMENT": 215,
+        "PROTECTED_PLAYER_TRADE": 904,
+        "BUY_DEVELOPMENT": 159,
+        "BUILD_CITY": 134
+      },
+      "delegated_families": {
+        "BUY_DEVELOPMENT": 22,
+        "BUILD_ROAD": 19,
+        "END_TURN": 54,
+        "BANK_TRADE": 31
+      },
+      "protected_preemption": 904,
+      "resolver_count": 36,
+      "mean_plan_entropy": 2.087490759198628,
+      "mean_l3_entropy": 0.8279249185607547,
+      "mean_priority": [
+        0.4984386411924211,
+        0.49952284636951627,
+        0.5009049673875173,
+        0.5019819949354444
+      ]
+    },
+    "new_pre": {
+      "games": 72,
+      "wins": 38,
+      "win_rate": 0.5277777777777778,
+      "mean_vp": 8.305555555555555,
+      "mean_rank": 1.8472222222222223,
+      "mean_policy_steps": 78.25,
+      "terminal_rate": 1.0,
+      "actual_delegated": 126,
+      "action_families": {
+        "END_TURN": 1263,
+        "BUILD_ROAD": 418,
+        "BANK_TRADE": 297,
+        "BUILD_SETTLEMENT": 212,
+        "PROTECTED_PLAYER_TRADE": 895,
+        "BUY_DEVELOPMENT": 159,
+        "BUILD_CITY": 130
+      },
+      "delegated_families": {
+        "BUY_DEVELOPMENT": 19,
+        "BUILD_ROAD": 20,
+        "END_TURN": 55,
+        "BANK_TRADE": 32
+      },
+      "protected_preemption": 895,
+      "resolver_count": 35,
+      "mean_plan_entropy": 2.0807661735822283,
+      "mean_l3_entropy": 0.8274376732962472,
+      "mean_priority": [
+        0.49843893022764296,
+        0.4995235412839859,
+        0.5009064787910098,
+        0.5019845290789529
+      ]
+    },
+    "new_post": {
+      "games": 72,
+      "wins": 38,
+      "win_rate": 0.5277777777777778,
+      "mean_vp": 8.319444444444445,
+      "mean_rank": 1.8541666666666667,
+      "mean_policy_steps": 78.11111111111111,
+      "terminal_rate": 1.0,
+      "actual_delegated": 125,
+      "action_families": {
+        "END_TURN": 1267,
+        "BUILD_ROAD": 414,
+        "BANK_TRADE": 293,
+        "BUILD_SETTLEMENT": 210,
+        "PROTECTED_PLAYER_TRADE": 887,
+        "BUY_DEVELOPMENT": 161,
+        "BUILD_CITY": 130
+      },
+      "delegated_families": {
+        "BUY_DEVELOPMENT": 18,
+        "BUILD_ROAD": 19,
+        "END_TURN": 58,
+        "BANK_TRADE": 30
+      },
+      "protected_preemption": 887,
+      "resolver_count": 35,
+      "mean_plan_entropy": 2.0900811185836794,
+      "mean_l3_entropy": 0.8237441601753235,
+      "mean_priority": [
+        0.49901068115234376,
+        0.5000335128307343,
+        0.5007855701446533,
+        0.5015967979431152
+      ]
+    }
+  },
+  "old_post1_to_new_pre": {
+    "final_vp": {
+      "mean": -0.06944444444444445,
+      "bootstrap_95_ci": [
+        -0.19444444444444445,
+        0.0
+      ]
+    },
+    "final_rank": {
+      "mean": 0.013888888888888888,
+      "bootstrap_95_ci": [
+        0.0,
+        0.041666666666666664
+      ]
+    },
+    "policy_steps": {
+      "mean": -0.7361111111111112,
+      "bootstrap_95_ci": [
+        -1.9722222222222223,
+        0.0
+      ]
+    }
+  },
+  "old_post1_to_new_post": {
+    "final_vp": {
+      "mean": -0.05555555555555555,
+      "bootstrap_95_ci": [
+        -0.19444444444444445,
+        0.05555555555555555
+      ]
+    },
+    "final_rank": {
+      "mean": 0.020833333333333332,
+      "bootstrap_95_ci": [
+        0.0,
+        0.05555555555555555
+      ]
+    },
+    "policy_steps": {
+      "mean": -0.875,
+      "bootstrap_95_ci": [
+        -2.3059027777777774,
+        0.1388888888888889
+      ]
+    }
+  },
+  "new_pre_to_new_post": {
+    "final_vp": {
+      "mean": 0.013888888888888888,
+      "bootstrap_95_ci": [
+        -0.06944444444444445,
+        0.09722222222222222
+      ]
+    },
+    "final_rank": {
+      "mean": 0.006944444444444444,
+      "bootstrap_95_ci": [
+        0.0,
+        0.020833333333333332
+      ]
+    },
+    "policy_steps": {
+      "mean": -0.1388888888888889,
+      "bootstrap_95_ci": [
+        -0.8611111111111112,
+        0.3888888888888889
+      ]
+    }
+  },
+  "safety_to_new_post": {
+    "final_vp": {
+      "mean": -0.3333333333333333,
+      "bootstrap_95_ci": [
+        -0.6527777777777778,
+        -0.041666666666666664
+      ]
+    },
+    "final_rank": {
+      "mean": 0.1875,
+      "bootstrap_95_ci": [
+        0.06944444444444445,
+        0.3263888888888889
+      ]
+    },
+    "policy_steps": {
+      "mean": 1.6111111111111112,
+      "bootstrap_95_ci": [
+        -1.4031249999999997,
+        4.680555555555555
+      ]
+    }
+  },
+  "identical_action_trace_games": {
+    "old_vs_new_pre": 68,
+    "new_pre_vs_post": 69
+  },
+  "zero_percent_parity": 72,
+  "hard_safety": "PASS",
+  "profile_seat_balanced": true
+}

@@ -1,0 +1,103 @@
+{
+  "fixed_heldout_states": 218,
+  "plan_available": 217,
+  "old_post1_per_plan": {
+    "states_with_two_plans": 212,
+    "pairwise_tv_mean": 0.00021889725840597784,
+    "pairwise_tv_p95": 0.0003824685627478175,
+    "pairwise_tv_max": 0.000990346074104309,
+    "conditional_log_probability_std_mean": 0.0003399832505306651,
+    "raw_plan_logit_std_mean": null,
+    "family_probability_std_by_plan": {
+      "0": null,
+      "1": null,
+      "2": 0.00010890534672539288,
+      "3": 0.0001958020162419416,
+      "4": 0.00013378311091439188,
+      "5": null,
+      "6": 0.0001416011128245407
+    }
+  },
+  "new_per_plan": {
+    "states_with_two_plans": 212,
+    "pairwise_tv_mean": 0.010415834359899338,
+    "pairwise_tv_p95": 0.016478839330375195,
+    "pairwise_tv_max": 0.04138147830963135,
+    "conditional_log_probability_std_mean": 0.016478753608062793,
+    "raw_plan_logit_std_mean": 0.01912701979525528,
+    "family_probability_std_by_plan": {
+      "0": null,
+      "1": null,
+      "2": 0.005812074134567964,
+      "3": 0.0037290728010702877,
+      "4": 0.009252822729015425,
+      "5": null,
+      "6": 0.007225380613543269
+    }
+  },
+  "old_plan_entropy_gap_to_uniform_mean": 8.043663056519867e-08,
+  "new_plan_entropy_gap_to_uniform_mean": 8.043663056519867e-08,
+  "parent_gradient_norm": {
+    "l3": 0.2695891223847866,
+    "priority": 5.1352061564102766e-05,
+    "plan_scorer": 1.6270150717900832e-05
+  },
+  "new_ablation": {
+    "plan_uniform": {
+      "n": 218,
+      "kl_mean": 1.0400396347264744e-08,
+      "kl_p95": 5.960466692662834e-08,
+      "tv_mean": 1.4891249871035235e-06,
+      "tv_p95": 8.872896432876586e-06,
+      "tv_max": 1.882016658782959e-05,
+      "argmax_flips": 0
+    },
+    "priority_neutral": {
+      "n": 218,
+      "kl_mean": 1.5888389206550845e-08,
+      "kl_p95": 6.106802821908028e-08,
+      "tv_mean": 1.5605241060256958e-05,
+      "tv_p95": 3.380328416824341e-05,
+      "tv_max": 4.477798938751221e-05,
+      "argmax_flips": 0
+    },
+    "both_neutral": {
+      "n": 218,
+      "kl_mean": 1.2582716391752746e-08,
+      "kl_p95": 6.063944251494516e-08,
+      "tv_mean": 1.683496280547676e-05,
+      "tv_p95": 3.749988973140715e-05,
+      "tv_max": 5.136430263519287e-05,
+      "argmax_flips": 0
+    }
+  },
+  "new_plan_a_vs_b": {
+    "n": 212,
+    "kl_mean": 0.0004002103861049206,
+    "kl_p95": 0.0009424101053449036,
+    "tv_mean": 0.012522750903131827,
+    "tv_p95": 0.02169704884290695,
+    "tv_max": 0.031420767307281494,
+    "argmax_flips": 67
+  },
+  "old_vs_new": {
+    "n": 218,
+    "kl_mean": 0.0011288254015294,
+    "kl_p95": 0.003985118625833662,
+    "tv_mean": 0.018610574305057526,
+    "tv_p95": 0.041119296848773926,
+    "tv_max": 0.05518275499343872,
+    "argmax_flips": 126
+  },
+  "new_entropy_mean": 0.8489340543746948,
+  "interaction_scale": 0.10000000149011612,
+  "embedding_scale": {
+    "state_rms_mean": 0.9999764561653137,
+    "plan_rms_mean_available": 0.9998801946640015,
+    "query_rms_mean": 0.6737305521965027,
+    "base_logit_std_mean": 0.06055657938122749,
+    "interaction_logit_std_mean": 0.059622690081596375
+  },
+  "model_name": "Plan-Action-Interaction-Pre",
+  "model_sha256": "59653b9a96f30b456c2e8ac7c66396455949079067a6846f25695dbaae12660b"
+}

@@ -60,7 +60,8 @@ class HierarchicalInvestmentCritic(nn.Module):
         nn.init.zeros_(self.value_head.bias)
 
     def forward(self, latent: torch.Tensor, runtime: torch.Tensor,
-                global_features: torch.Tensor, bridge, family_mask: torch.Tensor):
+                global_features: torch.Tensor, bridge, family_mask: torch.Tensor,
+                *, route_one_hot: torch.Tensor | None = None):
         scales = bridge.weighted_features.new_tensor((10., 10., 1., 1., 11., 1.))
         features = torch.cat((latent.detach(), runtime, global_features,
                               bridge.weighted_features.detach() / scales,
@@ -136,9 +137,10 @@ def _batch(decisions: list[dict]) -> dict[str, torch.Tensor | L3DecisionFacts]:
 
     mask = tensor("family_mask", torch.bool)
     route = torch.zeros((len(decisions), len(ROUTE_ORDER)), dtype=torch.float32)
-    route[:, ROUTE_ORDER.index(HierarchicalRoute.INVESTMENT)] = 1
-    # INVESTMENT has no buildable S/C, so its diagnostic mask is exactly the
-    # L3 legal input used at rollout; the four-way comparison mask is narrower.
+    for index, decision in enumerate(decisions):
+        route[index, ROUTE_ORDER.index(HierarchicalRoute(decision["route"]))] = 1
+    # The diagnostic family mask is the rollout's legal L3 input; the actual
+    # sampled comparison mask remains narrower and route-specific.
     legal = tensor("diagnostic_family_mask", torch.bool)
     facts = L3DecisionFacts(route, legal, mask,
                             torch.zeros((len(decisions), 1)),
@@ -172,13 +174,17 @@ def _forward(policy: HierarchicalInvestmentPolicy,
         batch["latent"], batch["runtime"], batch["global"],
         batch["candidates"], batch["plan_mask"], batch["facts"])
     value = critic(batch["latent"], batch["runtime"], batch["global"],
-                   bridge, batch["family_mask"])
+                   bridge, batch["family_mask"],
+                   route_one_hot=batch["facts"].route_one_hot)
     return plan, bridge, l3, value
 
 
 def preflight(champion, policy: HierarchicalInvestmentPolicy,
               critic: HierarchicalInvestmentCritic, episodes: list[dict],
-              *, minimum_transitions: int = 256) -> tuple[dict, dict, np.ndarray, np.ndarray]:
+              *, minimum_transitions: int = 256,
+              route: HierarchicalRoute = HierarchicalRoute.INVESTMENT,
+              allowed_families: tuple[str, ...] = INVESTMENT_FAMILIES,
+              delegation_probability: float = .10) -> tuple[dict, dict, np.ndarray, np.ndarray]:
     """No optimizer exists until all episode, reward and stored-policy checks pass."""
     if not episodes or any(not item["terminal"] or item["truncated"] for item in episodes):
         raise ValueError("All training episodes must terminate without truncation")
@@ -186,7 +192,7 @@ def preflight(champion, policy: HierarchicalInvestmentPolicy,
     transitions = [t for episode in episodes for t in episode["transitions"]]
     if len(decisions) != len(transitions) or len(decisions) < minimum_transitions:
         raise ValueError("Missing/off-policy or insufficient delegated transitions")
-    if any(item["delegation_probability"] != .10 for item in episodes):
+    if any(item["delegation_probability"] != delegation_probability for item in episodes):
         raise ValueError("Training delegation rate changed")
     for episode in episodes:
         if len(episode["decisions"]) != len(episode["transitions"]):
@@ -195,13 +201,17 @@ def preflight(champion, policy: HierarchicalInvestmentPolicy,
                 episode["decisions"], episode["transitions"], strict=True)):
             mask = decision["family_mask"]
             diagnostic = decision["diagnostic_family_mask"]
-            if (decision["route"] != HierarchicalRoute.INVESTMENT.value or
+            if (decision["route"] != route.value or
                     decision["phase"] != "action" or
-                    decision["selected_family"] not in INVESTMENT_FAMILIES or
+                    decision["selected_family"] not in allowed_families or
                     not mask[decision["selected_index"]] or
                     len(mask) != len(FAMILY_ORDER) or
                     len(diagnostic) != len(FAMILY_ORDER) or
-                    any(diagnostic[index] for index in (0, 1)) or
+                    diagnostic[0] or
+                    (route is HierarchicalRoute.INVESTMENT and diagnostic[1]) or
+                    (route is HierarchicalRoute.CITY_VALUE_COMPARISON and not diagnostic[1]) or
+                    any(enabled and FAMILY_ORDER[index] not in allowed_families
+                        for index, enabled in enumerate(mask)) or
                     any(enabled and not diagnostic[index]
                         for index, enabled in enumerate(mask)) or
                     mask[FAMILY_ORDER.index("PLAYER_TRADE")] or
@@ -256,14 +266,14 @@ def preflight(champion, policy: HierarchicalInvestmentPolicy,
         raise AssertionError("Trainable/Frozen parameter ID overlap")
     done = np.asarray([t["done"] for t in transitions], dtype=bool)
     family_counts = {name: sum(d["selected_family"] == name for d in decisions)
-                     for name in INVESTMENT_FAMILIES}
+                     for name in allowed_families}
     report = {
         "games": len(episodes), "transitions": len(transitions),
         "family_selected": family_counts,
         "family_available": {name: sum(d["family_mask"][FAMILY_ORDER.index(name)]
-                                      for d in decisions) for name in INVESTMENT_FAMILIES},
+                                      for d in decisions) for name in allowed_families},
         "candidate_count": {str(n): sum(sum(d["family_mask"]) == n for d in decisions)
-                            for n in range(1, 5)},
+                            for n in range(1, len(allowed_families) + 1)},
         "l3_entropy": distribution(np.asarray([d["l3_entropy"] for d in decisions])),
         "plan_entropy": distribution(np.asarray([d["plan_entropy"] for d in decisions])),
         "macro_duration": distribution(np.asarray([t["macro_duration"] for t in transitions])),
@@ -282,7 +292,7 @@ def preflight(champion, policy: HierarchicalInvestmentPolicy,
             np.abs(advantages[done]).sum() / np.abs(advantages).sum()),
         "family_advantage": {name: distribution(advantages[np.asarray(
             [d["selected_family"] == name for d in decisions])])
-            for name in INVESTMENT_FAMILIES},
+            for name in allowed_families},
         "critic_pre_mse": float(np.mean((returns - batch["old_value"].numpy()) ** 2)),
         "stored_replay_error": {"latent": latent_error, "log_prob": log_error,
                                 "probability": probability_error, "value": value_error,
@@ -300,10 +310,15 @@ def one_guarded_update(
     minibatch_seed: int, actor_lr: float = 1e-4, critic_lr: float = 3e-4,
     batch_size: int = 64, epochs: int = 2, clip_range: float = .1,
     entropy_coef: float = .005, minimum_transitions: int = 256,
+    route: HierarchicalRoute = HierarchicalRoute.INVESTMENT,
+    allowed_families: tuple[str, ...] = INVESTMENT_FAMILIES,
+    delegation_probability: float = .10,
 ) -> UpdateResult:
     """Exactly one two-epoch PPO pass; rejected candidates roll back in memory."""
     report, batch, advantages, returns = preflight(
-        champion, policy, critic, episodes, minimum_transitions=minimum_transitions)
+        champion, policy, critic, episodes, minimum_transitions=minimum_transitions,
+        route=route, allowed_families=allowed_families,
+        delegation_probability=delegation_probability)
     old_actor, old_critic = deepcopy(policy.state_dict()), deepcopy(critic.state_dict())
     old_probability = batch["old_probability"].clone()
     normalized = torch.as_tensor((advantages - advantages.mean()) /
@@ -349,7 +364,8 @@ def one_guarded_update(
                     minibatch["candidates"], minibatch["plan_mask"], minibatch["facts"])
             prediction = critic(minibatch["latent"], minibatch["runtime"],
                                 minibatch["global"], detached_bridge,
-                                minibatch["family_mask"])
+                                minibatch["family_mask"],
+                                route_one_hot=minibatch["facts"].route_one_hot)
             value_loss = ((prediction - target[indices]) ** 2).mean()
             critic_optimizer.zero_grad(set_to_none=True)
             value_loss.backward()
@@ -422,7 +438,7 @@ def one_guarded_update(
                "clip_fraction": float(np.mean(clips)),
                "ratio": distribution(ratios), "kl": distribution(kl),
                "kl_by_candidate_count": {str(n): distribution(kl[counts == n])
-                                         for n in range(1, 5)},
+                                         for n in range(1, len(allowed_families) + 1)},
                "l3_entropy_after": distribution(entropy_after),
                "entropy_by_candidate_count": {str(n): {
                    "before": distribution(np.asarray([
@@ -430,7 +446,7 @@ def one_guarded_update(
                            [item for episode in episodes for item in episode["decisions"]],
                            counts, strict=True) if count == n])),
                    "after": distribution(entropy_after[counts == n])}
-                   for n in range(1, 5)},
+                   for n in range(1, len(allowed_families) + 1)},
                "family_probability_shift": family_shift,
                "peaked_before": peaked_before, "peaked_after": peaked_after,
                "family_collapse": bool(family_collapse),

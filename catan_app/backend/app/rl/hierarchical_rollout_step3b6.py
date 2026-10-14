@@ -16,6 +16,7 @@ from app.domain.actions import ProposeTradeAction
 from app.domain.game import legal_actions
 
 from .action_space import ACTION_CATALOG, get_action_mask
+from .city_value_ppo_step3b10 import city_value_training_mask
 from .construction_timing_rollout import _HeuristicRollOrder, _TradeResponseOnly, _normalized_state
 from .diagnostics_metrics import endgame_rank
 from .env import CatanEnv, CatanEnvConfig
@@ -37,7 +38,7 @@ from .victory_plan_context import build_victory_plan_context
 from .victory_plan_policy import encode_victory_plan_features
 
 
-_EXECUTABLE = ("BUILD_ROAD", "BUY_DEVELOPMENT", "BANK_TRADE", "END_TURN")
+_EXECUTABLE = ("BUILD_CITY", "BUILD_ROAD", "BUY_DEVELOPMENT", "BANK_TRADE", "END_TURN")
 _ACTION_IDS = {family: tuple(item.id for item in ACTION_CATALOG
                              if family_of(item.action) == family)
                for family in _EXECUTABLE}
@@ -76,12 +77,29 @@ def _close(pending: dict, *, next_mask: tuple[bool, ...] | None,
             "close_policy_step": policy_step}
 
 
+def _finish_city_opportunity(active: dict, trace_turns: list[tuple]) -> dict:
+    actions = [family_of(action) for _turn, player_id, action in
+               trace_turns[active["trace_index"]:]
+               if player_id == active["learner_id"]]
+    if not actions:
+        raise AssertionError("City opportunity has no learner Action")
+    return {key: value for key, value in active.items()
+            if key not in {"trace_index", "learner_id"}} | {
+                "action_families": actions,
+                "city_same_turn": "BUILD_CITY" in actions,
+                "city_immediately": actions[0] == "BUILD_CITY",
+                "actions_before_city": actions.index("BUILD_CITY")
+                if "BUILD_CITY" in actions else None,
+            }
+
+
 def run_hierarchical_episode(
     champion_policy, robber_policy, policy: HierarchicalInvestmentPolicy,
     critic: HierarchicalInvestmentCritic, *, seed: int, seat: int,
     profile: str, delegation_probability: float,
     delegation_seed: int, family_seed: int,
     multi_choice_only: bool = False,
+    delegated_route: HierarchicalRoute = HierarchicalRoute.INVESTMENT,
     max_policy_steps: int = 5000,
 ) -> dict:
     if profile not in PROFILE_ROLES or not 0 <= delegation_probability <= 1:
@@ -102,12 +120,16 @@ def run_hierarchical_episode(
             **(planning if role == "champion" else robber_planning)))
         opponents[player_id] = _HeuristicRollOrder(delegate)
     trace = []
+    trace_turns = []
+    def record_action(game, player_id, action):
+        trace.append((player_id, action))
+        trace_turns.append((game.turn_number, player_id, action))
     env = CatanEnv(
         CatanEnvConfig(learning_player_id=learner_id, allow_player_trades=True,
                        observation_version="v2", max_policy_steps=max_policy_steps),
         initial_placement_agent=champion, opponent_agents=opponents,
         learner_auxiliary_agent=_TradeResponseOnly(champion),
-        action_observer=lambda _game, player_id, action: trace.append((player_id, action)),
+        action_observer=record_action,
     )
     env.reset(seed=seed)
     delegation_rng, family_rng = random.Random(delegation_seed), random.Random(family_seed)
@@ -118,6 +140,9 @@ def run_hierarchical_episode(
     action_families = Counter()
     routes = Counter()
     protected = resolver = eligible = lottery = single_choice_skipped = 0
+    city_opportunities: list[dict] = []
+    active_city = None
+    seen_city_turns: set[int] = set()
     terminal = truncated = False
     try:
         while not (terminal or truncated):
@@ -145,19 +170,31 @@ def run_hierarchical_episode(
                     route = classify_hierarchical_route(
                         game, learner_id, legal=legal, immediate_win_available=False)
                     routes[route.route.value] += 1
+                    if (route.build_class == "CITY_ONLY" and
+                            game.turn_number not in seen_city_turns):
+                        seen_city_turns.add(game.turn_number)
+                        active_city = {
+                            "turn": game.turn_number, "revision": game.revision,
+                            "policy_step": pre_step, "trace_index": len(trace_turns),
+                            "learner_id": learner_id, "first_action_family": None,
+                            "first_action_delegated": False,
+                        }
                     champion_action = champion.select_action(game, learner_id)
                     action = champion_action
                     if isinstance(champion_action, ProposeTradeAction):
                         protected += 1
                         if pending is not None:
                             pending["protected_crossed"] += 1
-                    elif route.route is HierarchicalRoute.INVESTMENT:
+                    elif route.route is delegated_route:
                         catalog_mask = get_action_mask(game, learner_id)
                         executable = tuple(
                             any(catalog_mask[index] for index in _ACTION_IDS[family])
                             if family in _EXECUTABLE else False for family in FAMILY_ORDER)
-                        training_mask = investment_training_mask(
+                        training_mask = (city_value_training_mask(
                             route.route, route.comparison_family_mask, executable)
+                            if delegated_route is HierarchicalRoute.CITY_VALUE_COMPARISON
+                            else investment_training_mask(
+                                route.route, route.comparison_family_mask, executable))
                         if multi_choice_only and sum(training_mask) == 1:
                             single_choice_skipped += 1
                         if _delegation_candidate(training_mask, multi_choice_only):
@@ -182,9 +219,10 @@ def run_hierarchical_episode(
                                         latent, runtime, global_features, candidates,
                                         plan_mask, facts)
                                     value = critic(latent, runtime, global_features,
-                                                   bridge, facts.comparison_family_mask)
+                                                   bridge, facts.comparison_family_mask,
+                                                   route_one_hot=facts.route_one_hot)
                                 if not bool(l3.available[0]):
-                                    raise AssertionError("Eligible Investment lost its Actor mask")
+                                    raise AssertionError("Eligible route lost its Actor mask")
                                 probabilities = l3.probabilities[0].cpu().numpy()
                                 family_index = _sample(probabilities, family_rng)
                                 family = FAMILY_ORDER[family_index]
@@ -249,9 +287,16 @@ def run_hierarchical_episode(
                 }
             if game.phase == "action":
                 action_families[family_of(action)] += 1
+            if active_city is not None and active_city["first_action_family"] is None:
+                active_city["first_action_family"] = family_of(action)
+                active_city["first_action_delegated"] = delegated
             if game.random_source.counter != pre_rng:
                 raise AssertionError("Controller arbitration consumed GameState RNG")
             _, reward, terminal, truncated, info = env.step_action(action)
+            if (active_city is not None and
+                    (terminal or truncated or env.game.turn_number != active_city["turn"])):
+                city_opportunities.append(_finish_city_opportunity(active_city, trace_turns))
+                active_city = None
             if not isfinite(reward):
                 raise AssertionError("Nonfinite environment reward")
             if delegated:
@@ -266,6 +311,8 @@ def run_hierarchical_episode(
                                               policy_step=env.policy_steps))
                     pending = None
         scores = {player.id: actual_score(env.game, player.id) for player in env.game.players}
+        if active_city is not None:
+            city_opportunities.append(_finish_city_opportunity(active_city, trace_turns))
         rank, _ = endgame_rank(scores, learner_id, env.game.winner_id)
         return {
             "seed": seed, "seat": seat, "profile": profile,
@@ -282,6 +329,7 @@ def run_hierarchical_episode(
             "actual_delegated": len(decisions), "protected_preemption": protected,
             "resolver_count": resolver, "route_counts": dict(routes),
             "learner_action_families": dict(action_families),
+            "city_opportunities": city_opportunities,
             "decisions": decisions, "transitions": transitions,
         }
     finally:

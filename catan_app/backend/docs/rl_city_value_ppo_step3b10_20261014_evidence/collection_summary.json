@@ -1,0 +1,26 @@
+{
+  "games": 324,
+  "transitions": 132,
+  "profile_games": {
+    "rule": 108,
+    "champion": 108,
+    "mixed": 108
+  },
+  "seat_games": {
+    "1": 81,
+    "2": 81,
+    "3": 81,
+    "4": 81
+  },
+  "family_selected": {
+    "BANK_TRADE": 32,
+    "BUILD_CITY": 42,
+    "END_TURN": 31,
+    "BUY_DEVELOPMENT": 24,
+    "BUILD_ROAD": 3
+  },
+  "city_opportunities": 547,
+  "protected_preemption": 3771,
+  "target_reached": true,
+  "parent_unchanged": true
+}

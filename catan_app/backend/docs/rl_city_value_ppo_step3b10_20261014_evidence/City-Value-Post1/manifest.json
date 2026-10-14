@@ -1,0 +1,60 @@
+{
+  "schema": "city_value_ppo_step3b10_v1",
+  "step": "3B-10",
+  "name": "City-Value-Post1",
+  "parent": "Plan-Action-Interaction-Post1",
+  "parent_sha256": "8325e0c91cd6a047480d3f02645bfbfeddfec1ed7c4af5ad6fb418ae4af347b6",
+  "champion_digest": "4225902d41a83540eb1f1552826ec623706e778b99ad4ae8ec015f976644392a",
+  "robber_digest": "ecde7fa9e9d67370bb76686ecd767d2d532a76d467c0051aaebdf8d4aff702bf",
+  "city_critic_initialization_seed": 3910,
+  "actor_parent": "3B-9 Post1 L1/L2/L3 exactly",
+  "critic_parent": null,
+  "train_route": "CITY_VALUE_COMPARISON",
+  "investment_delegation": 0.0,
+  "city_training_delegation": 0.25,
+  "city_evaluation_delegation": 0.1,
+  "training_seed_bases": {
+    "rule": 35800000,
+    "champion": 35801000,
+    "mixed": 35802000
+  },
+  "evaluation_seed_bases": {
+    "rule": 35900000,
+    "champion": 35901000,
+    "mixed": 35902000
+  },
+  "minibatch_seed": 3910001,
+  "target_transitions": 128,
+  "max_games": 492,
+  "evaluation_games_per_variant": 144,
+  "family_order": [
+    "BUILD_CITY",
+    "BUILD_ROAD",
+    "BUY_DEVELOPMENT",
+    "BANK_TRADE",
+    "END_TURN"
+  ],
+  "executor": "step3a14_B_FROZEN_PPO",
+  "player_trade": "protected_champion_preemption",
+  "reward": {
+    "win": 1,
+    "loss": -1,
+    "victory_point_delta": 0.05,
+    "gamma": 0.99,
+    "gae_lambda": 0.95
+  },
+  "ppo": {
+    "actor_lr": 0.0001,
+    "critic_lr": 0.0003,
+    "batch_size": 64,
+    "epochs": 2,
+    "clip_range": 0.1,
+    "entropy_coef": 0.005
+  },
+  "policy_digest": "a714dad11dc2ff6b7bc37ee7237a9a0fe109e750c42ff17dd047ed28d12c5f57",
+  "critic_digest": "1db6ce3eacf6a0165ce99616dbfff018e17435ce7e6d200fae9124ece4b23aaf",
+  "training_games": 324,
+  "training_transitions": 132,
+  "pre_sha256": "f4ca0e9ac44ce638be45ef4bab7b218c792ce08552a844373f023c3dba90634d",
+  "update_count": 1
+}

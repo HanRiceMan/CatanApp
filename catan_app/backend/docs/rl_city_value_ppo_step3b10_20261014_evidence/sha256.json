@@ -1,0 +1,14 @@
+{
+  "collection_summary.json": "919340ae458d478aa022946cea5cd103a53e350cf9b1bb6fd40d4070392a434c",
+  "evaluation_summary.json": "64e5811c6b8a16c6120a6b39844891772048011948e374d5ac60711f8fa7c427",
+  "fixed_state_diagnosis.json": "81d78975bd5581dc5227e9dbf4e8a566581ba598b75e097d17026010263048ee",
+  "heldout_games.json.gz": "c5ef3cc2821ba075e3ee63d9e3f8c136d282d7750e18d059ade5e74a90e04c34",
+  "preflight.json": "b55ef434a467e3c44584938df33df398479bf5695b1ee062d7cadaea6c1afa86",
+  "training_rollout.json.gz": "e480654013bf3a2701271e21cf53a0e0bf4cc9702f3dbc0a8df9340cfe484dc1",
+  "update_attempt.json": "f9b3c68d9d787bfa529b39f0e8c2f85d0c444ebf1dcc89392e5dcee5e309683a",
+  "update_result.json": "9da90472f59b1ae7b2321d7e63e6d3806162c836395de3f84689b81da3b2bbdc",
+  "City-Value-Post1\\manifest.json": "a47eb2b39d6104314962ba29efafba039a46577addd03862e373f125125d6def",
+  "City-Value-Post1\\weights.pt": "ef6641a1308bdf3f5196bd96ce64a78f4fe57dda9b4db3bef01e880480e09ba6",
+  "City-Value-Pre\\manifest.json": "448eddcdcff4d12e611c00c5673f512f73046e54e0d4c39bcc1021a526050382",
+  "City-Value-Pre\\weights.pt": "f4ca0e9ac44ce638be45ef4bab7b218c792ce08552a844373f023c3dba90634d"
+}

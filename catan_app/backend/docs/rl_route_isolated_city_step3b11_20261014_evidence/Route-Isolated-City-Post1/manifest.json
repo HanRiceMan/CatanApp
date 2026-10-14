@@ -1,0 +1,67 @@
+{
+  "schema": "route_isolated_city_step3b11_v1",
+  "step": "3B-11",
+  "name": "Route-Isolated-City-Post1",
+  "parent": "Plan-Action-Interaction-Post1",
+  "parent_sha256": "8325e0c91cd6a047480d3f02645bfbfeddfec1ed7c4af5ad6fb418ae4af347b6",
+  "champion_digest": "4225902d41a83540eb1f1552826ec623706e778b99ad4ae8ec015f976644392a",
+  "robber_digest": "ecde7fa9e9d67370bb76686ecd767d2d532a76d467c0051aaebdf8d4aff702bf",
+  "city_critic_initialization_seed": 3911,
+  "actor_parent": "3B-9 Post1 L1/L2/L3 frozen; City adapter zero-init",
+  "critic_parent": null,
+  "train_route": "CITY_VALUE_COMPARISON",
+  "investment_delegation": 0.0,
+  "city_training_delegation": 0.25,
+  "city_evaluation_delegation": 0.1,
+  "training_seed_bases": {
+    "rule": 36000000,
+    "champion": 36001000,
+    "mixed": 36002000
+  },
+  "evaluation_seed_bases": {
+    "rule": 36100000,
+    "champion": 36101000,
+    "mixed": 36102000
+  },
+  "minibatch_seed": 3911001,
+  "target_transitions": 192,
+  "max_games": 648,
+  "evaluation_games_per_variant": 144,
+  "family_order": [
+    "BUILD_CITY",
+    "BUILD_ROAD",
+    "BUY_DEVELOPMENT",
+    "BANK_TRADE",
+    "END_TURN"
+  ],
+  "executor": "step3a14_B_FROZEN_PPO",
+  "player_trade": "protected_champion_preemption",
+  "trainable_actor_parameters": 2727,
+  "reward": {
+    "win": 1,
+    "loss": -1,
+    "victory_point_delta": 0.05,
+    "gamma": 0.99,
+    "gae_lambda": 0.95
+  },
+  "ppo": {
+    "actor_lr": 0.0001,
+    "critic_lr": 0.0003,
+    "batch_size": 64,
+    "epochs": 2,
+    "clip_range": 0.1,
+    "entropy_coef": 0.005
+  },
+  "policy_digest": "1e79553e6b5b5d88c9d14ef035a2c653817ac90b38b528920c49e2f4312f8590",
+  "critic_digest": "1944413787eb11a272cf2e804ac8689f838c62d3ffb469ac9370d3b2e242dbc1",
+  "investment_parity_pre": {
+    "states": 218,
+    "max_abs_probability_difference": 0.0,
+    "top_family_flips": 0,
+    "exact": true
+  },
+  "training_games": 420,
+  "training_transitions": 193,
+  "pre_sha256": "8fb798da7f4802331a3d8cbf201468f00d4807e60eed955aafce43a907c2fe24",
+  "update_count": 1
+}

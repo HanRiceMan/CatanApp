@@ -298,6 +298,8 @@ def preflight(champion, policy: HierarchicalInvestmentPolicy,
                                 "probability": probability_error, "value": value_error,
                                 "plan_entropy": plan_entropy_error},
         "actor_parameters": sum(p.numel() for p in policy.parameters()),
+        "actor_trainable_parameters": sum(p.numel() for p in policy.parameters()
+                                          if p.requires_grad),
         "critic_parameters": sum(p.numel() for p in critic.parameters()),
         "frozen_parameter_ids_disjoint": True,
     }
@@ -324,9 +326,12 @@ def one_guarded_update(
     normalized = torch.as_tensor((advantages - advantages.mean()) /
                                  (advantages.std() + 1e-8), dtype=torch.float32)
     target = torch.as_tensor(returns, dtype=torch.float32)
-    actor_ids = {id(p) for p in policy.parameters()}
+    trainable_actor = [p for p in policy.parameters() if p.requires_grad]
+    actor_ids = {id(p) for p in trainable_actor}
+    if not trainable_actor:
+        raise ValueError("Actor has no trainable parameters")
     critic_ids = {id(p) for p in critic.parameters()}
-    actor_optimizer = torch.optim.Adam(policy.parameters(), lr=actor_lr)
+    actor_optimizer = torch.optim.Adam(trainable_actor, lr=actor_lr)
     critic_optimizer = torch.optim.Adam(critic.parameters(), lr=critic_lr)
     optimizer_ids = {id(p) for group in actor_optimizer.param_groups + critic_optimizer.param_groups
                      for p in group["params"]}
@@ -334,7 +339,13 @@ def one_guarded_update(
         raise AssertionError("Optimizer trainable boundary mismatch")
     generator = torch.Generator().manual_seed(minibatch_seed)
     losses, value_losses, entropy_losses, clips = [], [], [], []
-    gradients = {"l3": [], "priority": [], "plan_scorer": []}
+    gradient_modules = {
+        "l3": policy.l3_actor, "priority": policy.plan_heads.priority_head,
+        "plan_scorer": policy.plan_heads.plan_scorer,
+    }
+    if hasattr(policy, "city_adapter"):
+        gradient_modules["city_adapter"] = policy.city_adapter
+    gradients = {name: [] for name in gradient_modules}
     for _ in range(epochs):
         order = torch.randperm(len(advantages), generator=generator).tolist()
         for start in range(0, len(order), batch_size):
@@ -349,13 +360,11 @@ def one_guarded_update(
             entropy_loss = -entropy_coef * l3.entropy.mean()
             actor_optimizer.zero_grad(set_to_none=True)
             (actor_loss + entropy_loss).backward()
-            for name, module in (("l3", policy.l3_actor),
-                                 ("priority", policy.plan_heads.priority_head),
-                                 ("plan_scorer", policy.plan_heads.plan_scorer)):
-                gradients[name].append(float(torch.sqrt(sum(
-                    (p.grad.detach() ** 2).sum() for p in module.parameters()
-                    if p.grad is not None))))
-            nn.utils.clip_grad_norm_(policy.parameters(), .5)
+            for name, module in gradient_modules.items():
+                gradients[name].append(sum(float((p.grad.detach() ** 2).sum())
+                                           for p in module.parameters()
+                                           if p.grad is not None) ** .5)
+            nn.utils.clip_grad_norm_(trainable_actor, .5)
             actor_optimizer.step()
             # Critic sees detached L1/L2 representation; actor loss alone trains those heads.
             with torch.no_grad():
@@ -429,6 +438,9 @@ def one_guarded_update(
         "plan_scorer_delta": module_delta(policy.plan_heads.plan_scorer,
                                           old_actor, "plan_heads.plan_scorer."),
     }
+    if hasattr(policy, "city_adapter"):
+        deltas["city_adapter_delta"] = module_delta(
+            policy.city_adapter, old_actor, "city_adapter.")
     if reason != "ACCEPTED":
         policy.load_state_dict(old_actor)
         critic.load_state_dict(old_critic)

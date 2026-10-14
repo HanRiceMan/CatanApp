@@ -1,0 +1,200 @@
+{
+  "city_fixed": {
+    "states": 30,
+    "plan_available": 30,
+    "per_plan_post": {
+      "states_with_two_plans": 30,
+      "pairwise_tv_mean": 0.012123462449138363,
+      "pairwise_tv_p95": 0.020811201632022856,
+      "pairwise_tv_max": 0.03755591809749603,
+      "conditional_log_probability_std_mean": 0.018139485782012344,
+      "raw_plan_logit_std_mean": 0.020334915226946273,
+      "family_probability_std_by_plan": {
+        "0": null,
+        "1": 0.003033530587951342,
+        "2": 0.003559366520494223,
+        "3": 0.002877844924417635,
+        "4": 0.008787465729535772,
+        "5": null,
+        "6": 0.00617549562205871
+      }
+    },
+    "pre_to_post": {
+      "n": 30,
+      "kl_mean": 5.747613945134452e-06,
+      "kl_p95": 9.494797470983058e-06,
+      "tv_mean": 0.0014704038699467977,
+      "tv_p95": 0.0019828073680400846,
+      "tv_max": 0.002520740032196045,
+      "argmax_flips": 0
+    },
+    "pre_to_parent": {
+      "n": 30,
+      "kl_mean": 0.0,
+      "kl_p95": 0.0,
+      "tv_mean": 0.0,
+      "tv_p95": 0.0,
+      "tv_max": 0.0,
+      "argmax_flips": 0
+    },
+    "plan_uniform": {
+      "n": 30,
+      "kl_mean": 2.5746236151337726e-08,
+      "kl_p95": 9.144149630782849e-08,
+      "tv_mean": 1.0627756516138713e-05,
+      "tv_p95": 4.051700234413146e-05,
+      "tv_max": 4.7340989112854004e-05,
+      "argmax_flips": 0
+    },
+    "priority_neutral": {
+      "n": 30,
+      "kl_mean": 3.42727084652801e-08,
+      "kl_p95": 1.4230619812231715e-07,
+      "tv_mean": 1.4801820119222006e-07,
+      "tv_p95": 2.1271407604217527e-07,
+      "tv_max": 2.384185791015625e-07,
+      "argmax_flips": 0
+    },
+    "both_neutral": {
+      "n": 30,
+      "kl_mean": 2.116446974773524e-08,
+      "kl_p95": 1.0433436421676588e-07,
+      "tv_mean": 1.0589261849721273e-05,
+      "tv_p95": 4.044882953166961e-05,
+      "tv_max": 4.729628562927246e-05,
+      "argmax_flips": 0
+    },
+    "plan_a_vs_b": {
+      "n": 30,
+      "kl_mean": 0.0003900624335532363,
+      "kl_p95": 0.000692425906709096,
+      "tv_mean": 0.01206979900598526,
+      "tv_p95": 0.01851246431469917,
+      "tv_max": 0.027610719203948975,
+      "argmax_flips": 9
+    },
+    "priority_zero_vs_one": {
+      "n": 30,
+      "kl_mean": 3.909154558511996e-08,
+      "kl_p95": 1.322960804888495e-07,
+      "tv_mean": 0.00011702155073483785,
+      "tv_p95": 0.00015494637191295623,
+      "tv_max": 0.00018902122974395752,
+      "argmax_flips": 0
+    },
+    "plan_entropy_post": 1.9109151363372803,
+    "plan_entropy_gap_to_uniform_post": 1.2957696395939541e-06,
+    "priority_post_mean": [
+      0.4989680349826813,
+      0.5000515580177307,
+      0.5007597208023071,
+      0.5014975666999817
+    ],
+    "priority_post_std": [
+      0.0001691701472736895,
+      0.0001664458541199565,
+      0.0002404184779152274,
+      0.0003145337977912277
+    ]
+  },
+  "investment_fixed": {
+    "states": 218,
+    "plan_available": 217,
+    "per_plan_post": {
+      "states_with_two_plans": 212,
+      "pairwise_tv_mean": 0.010702423917191138,
+      "pairwise_tv_p95": 0.016796451341360805,
+      "pairwise_tv_max": 0.04181908071041107,
+      "conditional_log_probability_std_mean": 0.01701038420521039,
+      "raw_plan_logit_std_mean": 0.019402577120037574,
+      "family_probability_std_by_plan": {
+        "0": null,
+        "1": null,
+        "2": 0.006154103821489154,
+        "3": 0.0036276223905588267,
+        "4": 0.009367613959274873,
+        "5": null,
+        "6": 0.007609413703354427
+      }
+    },
+    "pre_to_post": {
+      "n": 218,
+      "kl_mean": 0.0,
+      "kl_p95": 0.0,
+      "tv_mean": 0.0,
+      "tv_p95": 0.0,
+      "tv_max": 0.0,
+      "argmax_flips": 0
+    },
+    "pre_to_parent": {
+      "n": 218,
+      "kl_mean": 0.0,
+      "kl_p95": 0.0,
+      "tv_mean": 0.0,
+      "tv_p95": 0.0,
+      "tv_max": 0.0,
+      "argmax_flips": 0
+    },
+    "plan_uniform": {
+      "n": 218,
+      "kl_mean": 0.0,
+      "kl_p95": 0.0,
+      "tv_mean": 0.0,
+      "tv_p95": 0.0,
+      "tv_max": 0.0,
+      "argmax_flips": 0
+    },
+    "priority_neutral": {
+      "n": 218,
+      "kl_mean": 0.0,
+      "kl_p95": 0.0,
+      "tv_mean": 0.0,
+      "tv_p95": 0.0,
+      "tv_max": 0.0,
+      "argmax_flips": 0
+    },
+    "both_neutral": {
+      "n": 218,
+      "kl_mean": 0.0,
+      "kl_p95": 0.0,
+      "tv_mean": 0.0,
+      "tv_p95": 0.0,
+      "tv_max": 0.0,
+      "argmax_flips": 0
+    },
+    "plan_a_vs_b": {
+      "n": 212,
+      "kl_mean": 0.0,
+      "kl_p95": 0.0,
+      "tv_mean": 0.0,
+      "tv_p95": 0.0,
+      "tv_max": 0.0,
+      "argmax_flips": 0
+    },
+    "priority_zero_vs_one": {
+      "n": 218,
+      "kl_mean": 0.0,
+      "kl_p95": 0.0,
+      "tv_mean": 0.0,
+      "tv_p95": 0.0,
+      "tv_max": 0.0,
+      "argmax_flips": 0
+    },
+    "plan_entropy_post": 2.0743329524993896,
+    "plan_entropy_gap_to_uniform_post": 8.054020201875289e-07,
+    "priority_post_mean": [
+      0.4989858567714691,
+      0.4999810755252838,
+      0.5007500648498535,
+      0.5015754699707031
+    ],
+    "priority_post_std": [
+      0.00015303835971280932,
+      0.0001855048321885988,
+      0.00021476390247698873,
+      0.0002901866682805121
+    ]
+  },
+  "investment_delegation_during_city_training": 0,
+  "investment_delegation_during_city_evaluation": 0
+}

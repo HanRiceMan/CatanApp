@@ -1,0 +1,27 @@
+{
+  "round": 1,
+  "games": 240,
+  "transitions": 264,
+  "target_reached": true,
+  "within_normal_upper_bound": true,
+  "profile_games": {
+    "rule": 80,
+    "champion": 80,
+    "mixed": 80
+  },
+  "seat_games": {
+    "1": 60,
+    "2": 60,
+    "3": 60,
+    "4": 60
+  },
+  "selected_families": {
+    "BUILD_CITY": 85,
+    "BANK_TRADE": 65,
+    "BUILD_ROAD": 12,
+    "END_TURN": 74,
+    "BUY_DEVELOPMENT": 28
+  },
+  "protected_preemptions": 2801,
+  "parent_version": "Route-Isolated-City-Post1"
+}

@@ -1,0 +1,762 @@
+{
+  "variants": {
+    "safety": {
+      "games": 288,
+      "wins": 137,
+      "win_rate": 0.4756944444444444,
+      "mean_vp": 7.961805555555555,
+      "mean_rank": 1.9947916666666667,
+      "mean_policy_steps": 73.625,
+      "terminal_rate": 1.0,
+      "actual_delegated": 0,
+      "action_families": {
+        "END_TURN": 4862,
+        "PROTECTED_PLAYER_TRADE": 3209,
+        "BUILD_ROAD": 1667,
+        "BUY_DEVELOPMENT": 591,
+        "BUILD_SETTLEMENT": 814,
+        "BANK_TRADE": 975,
+        "BUILD_CITY": 458
+      },
+      "delegated_families": {},
+      "protected_preemption": 3209,
+      "resolver_count": 131,
+      "mean_plan_entropy": null,
+      "mean_l3_entropy": null,
+      "mean_priority": null,
+      "opportunities": 412,
+      "same_turn_city": 376,
+      "same_turn_city_rate": 0.912621359223301,
+      "immediate_city": 350,
+      "other_score_build_without_city": 5,
+      "deferred_without_city": 36,
+      "first_action_families": {
+        "BUILD_CITY": 350,
+        "END_TURN": 17,
+        "PROTECTED_PLAYER_TRADE": 15,
+        "BUILD_ROAD": 20,
+        "BANK_TRADE": 10
+      },
+      "delegated_opportunities": 0,
+      "delegated_same_turn_city_rate": null,
+      "delegated_first_action_families": {}
+    },
+    "post1": {
+      "games": 288,
+      "wins": 137,
+      "win_rate": 0.4756944444444444,
+      "mean_vp": 7.940972222222222,
+      "mean_rank": 2.001736111111111,
+      "mean_policy_steps": 73.67708333333333,
+      "terminal_rate": 1.0,
+      "actual_delegated": 42,
+      "action_families": {
+        "END_TURN": 4876,
+        "PROTECTED_PLAYER_TRADE": 3170,
+        "BUILD_ROAD": 1669,
+        "BUY_DEVELOPMENT": 597,
+        "BUILD_SETTLEMENT": 811,
+        "BANK_TRADE": 981,
+        "BUILD_CITY": 453
+      },
+      "delegated_families": {
+        "BUILD_CITY": 13,
+        "END_TURN": 14,
+        "BANK_TRADE": 9,
+        "BUY_DEVELOPMENT": 5,
+        "BUILD_ROAD": 1
+      },
+      "protected_preemption": 3170,
+      "resolver_count": 130,
+      "mean_plan_entropy": 1.8482542406945002,
+      "mean_l3_entropy": 1.2214315547829582,
+      "mean_priority": [
+        0.4990126625412986,
+        0.5000929158358347,
+        0.5008553451015836,
+        0.5016197491259802
+      ],
+      "opportunities": 429,
+      "same_turn_city": 374,
+      "same_turn_city_rate": 0.8717948717948718,
+      "immediate_city": 344,
+      "other_score_build_without_city": 5,
+      "deferred_without_city": 55,
+      "first_action_families": {
+        "BUILD_CITY": 344,
+        "END_TURN": 30,
+        "BANK_TRADE": 18,
+        "PROTECTED_PLAYER_TRADE": 15,
+        "BUILD_ROAD": 18,
+        "BUY_DEVELOPMENT": 4
+      },
+      "delegated_opportunities": 39,
+      "delegated_same_turn_city_rate": 0.48717948717948717,
+      "delegated_first_action_families": {
+        "BUILD_CITY": 12,
+        "END_TURN": 13,
+        "BANK_TRADE": 9,
+        "BUILD_ROAD": 1,
+        "BUY_DEVELOPMENT": 4
+      }
+    },
+    "round1": {
+      "games": 288,
+      "wins": 137,
+      "win_rate": 0.4756944444444444,
+      "mean_vp": 7.940972222222222,
+      "mean_rank": 2.001736111111111,
+      "mean_policy_steps": 73.67708333333333,
+      "terminal_rate": 1.0,
+      "actual_delegated": 42,
+      "action_families": {
+        "END_TURN": 4876,
+        "PROTECTED_PLAYER_TRADE": 3170,
+        "BUILD_ROAD": 1669,
+        "BUY_DEVELOPMENT": 597,
+        "BUILD_SETTLEMENT": 811,
+        "BANK_TRADE": 981,
+        "BUILD_CITY": 453
+      },
+      "delegated_families": {
+        "BUILD_CITY": 13,
+        "END_TURN": 14,
+        "BANK_TRADE": 9,
+        "BUY_DEVELOPMENT": 5,
+        "BUILD_ROAD": 1
+      },
+      "protected_preemption": 3170,
+      "resolver_count": 130,
+      "mean_plan_entropy": 1.8482542406945002,
+      "mean_l3_entropy": 1.2217742885862077,
+      "mean_priority": [
+        0.4990126625412986,
+        0.5000929158358347,
+        0.5008553451015836,
+        0.5016197491259802
+      ],
+      "opportunities": 429,
+      "same_turn_city": 374,
+      "same_turn_city_rate": 0.8717948717948718,
+      "immediate_city": 344,
+      "other_score_build_without_city": 5,
+      "deferred_without_city": 55,
+      "first_action_families": {
+        "BUILD_CITY": 344,
+        "END_TURN": 30,
+        "BANK_TRADE": 18,
+        "PROTECTED_PLAYER_TRADE": 15,
+        "BUILD_ROAD": 18,
+        "BUY_DEVELOPMENT": 4
+      },
+      "delegated_opportunities": 39,
+      "delegated_same_turn_city_rate": 0.48717948717948717,
+      "delegated_first_action_families": {
+        "BUILD_CITY": 12,
+        "END_TURN": 13,
+        "BANK_TRADE": 9,
+        "BUILD_ROAD": 1,
+        "BUY_DEVELOPMENT": 4
+      }
+    },
+    "round2": {
+      "games": 288,
+      "wins": 137,
+      "win_rate": 0.4756944444444444,
+      "mean_vp": 7.940972222222222,
+      "mean_rank": 2.001736111111111,
+      "mean_policy_steps": 73.67708333333333,
+      "terminal_rate": 1.0,
+      "actual_delegated": 42,
+      "action_families": {
+        "END_TURN": 4876,
+        "PROTECTED_PLAYER_TRADE": 3170,
+        "BUILD_ROAD": 1669,
+        "BUY_DEVELOPMENT": 597,
+        "BUILD_SETTLEMENT": 811,
+        "BANK_TRADE": 981,
+        "BUILD_CITY": 453
+      },
+      "delegated_families": {
+        "BUILD_CITY": 13,
+        "END_TURN": 14,
+        "BANK_TRADE": 9,
+        "BUY_DEVELOPMENT": 5,
+        "BUILD_ROAD": 1
+      },
+      "protected_preemption": 3170,
+      "resolver_count": 130,
+      "mean_plan_entropy": 1.8482542406945002,
+      "mean_l3_entropy": 1.2219917234920321,
+      "mean_priority": [
+        0.4990126625412986,
+        0.5000929158358347,
+        0.5008553451015836,
+        0.5016197491259802
+      ],
+      "opportunities": 429,
+      "same_turn_city": 374,
+      "same_turn_city_rate": 0.8717948717948718,
+      "immediate_city": 344,
+      "other_score_build_without_city": 5,
+      "deferred_without_city": 55,
+      "first_action_families": {
+        "BUILD_CITY": 344,
+        "END_TURN": 30,
+        "BANK_TRADE": 18,
+        "PROTECTED_PLAYER_TRADE": 15,
+        "BUILD_ROAD": 18,
+        "BUY_DEVELOPMENT": 4
+      },
+      "delegated_opportunities": 39,
+      "delegated_same_turn_city_rate": 0.48717948717948717,
+      "delegated_first_action_families": {
+        "BUILD_CITY": 12,
+        "END_TURN": 13,
+        "BANK_TRADE": 9,
+        "BUILD_ROAD": 1,
+        "BUY_DEVELOPMENT": 4
+      }
+    }
+  },
+  "safety_to_city": {
+    "post1": {
+      "final_vp": {
+        "mean": -0.020833333333333332,
+        "bootstrap_95_ci": [
+          -0.0798611111111111,
+          0.034722222222222224
+        ]
+      },
+      "final_rank": {
+        "mean": 0.006944444444444444,
+        "bootstrap_95_ci": [
+          -0.020833333333333332,
+          0.034722222222222224
+        ]
+      },
+      "policy_steps": {
+        "mean": 0.052083333333333336,
+        "bootstrap_95_ci": [
+          -0.3993055555555556,
+          0.5347222222222222
+        ]
+      }
+    },
+    "round1": {
+      "final_vp": {
+        "mean": -0.020833333333333332,
+        "bootstrap_95_ci": [
+          -0.0798611111111111,
+          0.034722222222222224
+        ]
+      },
+      "final_rank": {
+        "mean": 0.006944444444444444,
+        "bootstrap_95_ci": [
+          -0.020833333333333332,
+          0.034722222222222224
+        ]
+      },
+      "policy_steps": {
+        "mean": 0.052083333333333336,
+        "bootstrap_95_ci": [
+          -0.3993055555555556,
+          0.5347222222222222
+        ]
+      }
+    },
+    "round2": {
+      "final_vp": {
+        "mean": -0.020833333333333332,
+        "bootstrap_95_ci": [
+          -0.0798611111111111,
+          0.034722222222222224
+        ]
+      },
+      "final_rank": {
+        "mean": 0.006944444444444444,
+        "bootstrap_95_ci": [
+          -0.020833333333333332,
+          0.034722222222222224
+        ]
+      },
+      "policy_steps": {
+        "mean": 0.052083333333333336,
+        "bootstrap_95_ci": [
+          -0.3993055555555556,
+          0.5347222222222222
+        ]
+      }
+    }
+  },
+  "post1_to_round1": {
+    "final_vp": {
+      "mean": 0.0,
+      "bootstrap_95_ci": [
+        0.0,
+        0.0
+      ]
+    },
+    "final_rank": {
+      "mean": 0.0,
+      "bootstrap_95_ci": [
+        0.0,
+        0.0
+      ]
+    },
+    "policy_steps": {
+      "mean": 0.0,
+      "bootstrap_95_ci": [
+        0.0,
+        0.0
+      ]
+    }
+  },
+  "round1_to_round2": {
+    "final_vp": {
+      "mean": 0.0,
+      "bootstrap_95_ci": [
+        0.0,
+        0.0
+      ]
+    },
+    "final_rank": {
+      "mean": 0.0,
+      "bootstrap_95_ci": [
+        0.0,
+        0.0
+      ]
+    },
+    "policy_steps": {
+      "mean": 0.0,
+      "bootstrap_95_ci": [
+        0.0,
+        0.0
+      ]
+    }
+  },
+  "post1_to_round2": {
+    "final_vp": {
+      "mean": 0.0,
+      "bootstrap_95_ci": [
+        0.0,
+        0.0
+      ]
+    },
+    "final_rank": {
+      "mean": 0.0,
+      "bootstrap_95_ci": [
+        0.0,
+        0.0
+      ]
+    },
+    "policy_steps": {
+      "mean": 0.0,
+      "bootstrap_95_ci": [
+        0.0,
+        0.0
+      ]
+    }
+  },
+  "action_trace_changes": {
+    "post1_to_round1": 0,
+    "round1_to_round2": 0,
+    "post1_to_round2": 0
+  },
+  "profile_seat_balanced": true,
+  "games_per_variant": 288,
+  "hard_safety": "PASS",
+  "zero_percent_parity": 288,
+  "investment_fixed": [
+    {
+      "states": 218,
+      "max_abs_probability_difference": 0.0,
+      "top_family_flips": 0,
+      "exact": true
+    },
+    {
+      "states": 218,
+      "max_abs_probability_difference": 0.0,
+      "top_family_flips": 0,
+      "exact": true
+    },
+    {
+      "states": 218,
+      "max_abs_probability_difference": 0.0,
+      "top_family_flips": 0,
+      "exact": true
+    }
+  ],
+  "fixed_city_diagnosis": [
+    {
+      "version": 0,
+      "states": 34,
+      "policy": {
+        "family": {
+          "BUILD_SETTLEMENT": {
+            "mean_available_probability": null,
+            "top_count": 0
+          },
+          "BUILD_CITY": {
+            "mean_available_probability": 0.2787246108055115,
+            "top_count": 0
+          },
+          "BUILD_ROAD": {
+            "mean_available_probability": 0.2448188066482544,
+            "top_count": 7
+          },
+          "BUY_DEVELOPMENT": {
+            "mean_available_probability": 0.22504599392414093,
+            "top_count": 0
+          },
+          "BANK_TRADE": {
+            "mean_available_probability": 0.2811598479747772,
+            "top_count": 13
+          },
+          "PLAYER_TRADE": {
+            "mean_available_probability": null,
+            "top_count": 0
+          },
+          "END_TURN": {
+            "mean_available_probability": 0.32669347524642944,
+            "top_count": 14
+          }
+        },
+        "entropy": {
+          "n": 34,
+          "mean": 1.2248141677940594,
+          "std": 0.29246389948308166,
+          "median": 1.2385748624801636,
+          "p5": 0.68653983771801,
+          "p95": 1.6071242988109589,
+          "mae": 1.2248141677940594
+        },
+        "plan_entropy": {
+          "n": 34,
+          "mean": 2.020497013540829,
+          "std": 0.40085056175191225,
+          "median": 2.0126745104789734,
+          "p5": 1.0986078977584839,
+          "p95": 2.4283488273620604,
+          "mae": 2.020497013540829
+        },
+        "probabilities_sha256": "9a421e01732730a484715661f55b48b9e30c41afa275c84337499d4033866a57"
+      },
+      "critic": {
+        "mse": 0.7841361483513134,
+        "mae": 0.875373506626693,
+        "mean_bias": -0.16165999483373572,
+        "prediction": {
+          "n": 34,
+          "mean": 0.0957042309729492,
+          "std": 0.0028766725138460706,
+          "median": 0.09527864307165146,
+          "p5": 0.0913199320435524,
+          "p95": 0.10039182789623737,
+          "mae": 0.0957042309729492
+        },
+        "realized_return": {
+          "n": 34,
+          "mean": 0.2573642258066849,
+          "std": 0.8710803360406387,
+          "median": 0.9205274581281326,
+          "p5": -0.920009082631813,
+          "p95": 1.0680258190292415,
+          "mae": 0.8928169043117018
+        },
+        "prediction_quartile_calibration": [
+          {
+            "n": 9,
+            "mean_prediction": 0.09224696705738704,
+            "mean_realized_return": 0.08281729322983472,
+            "mse": 0.5659553164544202
+          },
+          {
+            "n": 9,
+            "mean_prediction": 0.09478748010264502,
+            "mean_realized_return": -0.25466491829442506,
+            "mse": 0.8240301533587024
+          },
+          {
+            "n": 8,
+            "mean_prediction": 0.09665270615369081,
+            "mean_realized_return": 1.003667275138018,
+            "mse": 0.8242573447538579
+          },
+          {
+            "n": 8,
+            "mean_prediction": 0.0996765224263072,
+            "mean_realized_return": 0.2834592627380569,
+            "mse": 0.9445876321994613
+          }
+        ],
+        "correlation": 0.15704138810698698
+      }
+    },
+    {
+      "version": 1,
+      "states": 34,
+      "policy": {
+        "family": {
+          "BUILD_SETTLEMENT": {
+            "mean_available_probability": null,
+            "top_count": 0
+          },
+          "BUILD_CITY": {
+            "mean_available_probability": 0.2819337844848633,
+            "top_count": 0
+          },
+          "BUILD_ROAD": {
+            "mean_available_probability": 0.24386420845985413,
+            "top_count": 7
+          },
+          "BUY_DEVELOPMENT": {
+            "mean_available_probability": 0.22392447292804718,
+            "top_count": 0
+          },
+          "BANK_TRADE": {
+            "mean_available_probability": 0.282225102186203,
+            "top_count": 14
+          },
+          "PLAYER_TRADE": {
+            "mean_available_probability": null,
+            "top_count": 0
+          },
+          "END_TURN": {
+            "mean_available_probability": 0.32370418310165405,
+            "top_count": 13
+          }
+        },
+        "entropy": {
+          "n": 34,
+          "mean": 1.225179745870478,
+          "std": 0.2921974859773393,
+          "median": 1.2387717366218567,
+          "p5": 0.687536609172821,
+          "p95": 1.607097965478897,
+          "mae": 1.225179745870478
+        },
+        "plan_entropy": {
+          "n": 34,
+          "mean": 2.020497013540829,
+          "std": 0.40085056175191225,
+          "median": 2.0126745104789734,
+          "p5": 1.0986078977584839,
+          "p95": 2.4283488273620604,
+          "mae": 2.020497013540829
+        },
+        "probabilities_sha256": "918988a4d6808c1e3bed9b0d0c06373763c9f8822d240b01c017e0fe6926b0e9"
+      },
+      "critic": {
+        "mse": 0.7570046979070979,
+        "mae": 0.8527718620633686,
+        "mean_bias": -0.04300915149918711,
+        "prediction": {
+          "n": 34,
+          "mean": 0.2143550743074978,
+          "std": 0.00489507735670614,
+          "median": 0.2151493802666664,
+          "p5": 0.20611378327012062,
+          "p95": 0.22032050639390946,
+          "mae": 0.2143550743074978
+        },
+        "realized_return": {
+          "n": 34,
+          "mean": 0.2573642258066849,
+          "std": 0.8710803360406387,
+          "median": 0.9205274581281326,
+          "p5": -0.920009082631813,
+          "p95": 1.0680258190292415,
+          "mae": 0.8928169043117018
+        },
+        "prediction_quartile_calibration": [
+          {
+            "n": 9,
+            "mean_prediction": 0.20791794856389365,
+            "mean_realized_return": -0.1821775690496373,
+            "mse": 0.7416401951128596
+          },
+          {
+            "n": 9,
+            "mean_prediction": 0.21278204520543417,
+            "mean_realized_return": 0.03362826327830986,
+            "mse": 0.7916065451366499
+          },
+          {
+            "n": 8,
+            "mean_prediction": 0.21770485863089561,
+            "mean_realized_return": 0.7181431393233624,
+            "mse": 0.6690055655537919
+          },
+          {
+            "n": 8,
+            "mean_prediction": 0.2200167141854763,
+            "mean_realized_return": 0.5427727893477919,
+            "mse": 0.8233618177706759
+          }
+        ],
+        "correlation": 0.42800164238861527
+      }
+    },
+    {
+      "version": 2,
+      "states": 34,
+      "policy": {
+        "family": {
+          "BUILD_SETTLEMENT": {
+            "mean_available_probability": null,
+            "top_count": 0
+          },
+          "BUILD_CITY": {
+            "mean_available_probability": 0.2833035886287689,
+            "top_count": 0
+          },
+          "BUILD_ROAD": {
+            "mean_available_probability": 0.2427213191986084,
+            "top_count": 6
+          },
+          "BUY_DEVELOPMENT": {
+            "mean_available_probability": 0.22437281906604767,
+            "top_count": 0
+          },
+          "BANK_TRADE": {
+            "mean_available_probability": 0.282483845949173,
+            "top_count": 15
+          },
+          "PLAYER_TRADE": {
+            "mean_available_probability": null,
+            "top_count": 0
+          },
+          "END_TURN": {
+            "mean_available_probability": 0.3222317397594452,
+            "top_count": 13
+          }
+        },
+        "entropy": {
+          "n": 34,
+          "mean": 1.2254092710859634,
+          "std": 0.2921394306520069,
+          "median": 1.2388992309570312,
+          "p5": 0.6879838019609451,
+          "p95": 1.607224315404892,
+          "mae": 1.2254092710859634
+        },
+        "plan_entropy": {
+          "n": 34,
+          "mean": 2.020497013540829,
+          "std": 0.40085056175191225,
+          "median": 2.0126745104789734,
+          "p5": 1.0986078977584839,
+          "p95": 2.4283488273620604,
+          "mae": 2.020497013540829
+        },
+        "probabilities_sha256": "faf67989b0f62251dc3a060ad8ef2a2cc19b03143c97801d58c81c5706cca191"
+      },
+      "critic": {
+        "mse": 0.7541955400233192,
+        "mae": 0.8396975832318867,
+        "mean_bias": 0.02691096060578976,
+        "prediction": {
+          "n": 34,
+          "mean": 0.2842751864124747,
+          "std": 0.0052103436053883585,
+          "median": 0.284024715423584,
+          "p5": 0.2771399736404419,
+          "p95": 0.29146861732006074,
+          "mae": 0.2842751864124747
+        },
+        "realized_return": {
+          "n": 34,
+          "mean": 0.2573642258066849,
+          "std": 0.8710803360406387,
+          "median": 0.9205274581281326,
+          "p5": -0.920009082631813,
+          "p95": 1.0680258190292415,
+          "mae": 0.8928169043117018
+        },
+        "prediction_quartile_calibration": [
+          {
+            "n": 9,
+            "mean_prediction": 0.2777642673916287,
+            "mean_realized_return": -0.6365252672484245,
+            "mse": 1.103266221412807
+          },
+          {
+            "n": 9,
+            "mean_prediction": 0.2823578582869636,
+            "mean_realized_return": 0.6346089310899597,
+            "mse": 0.5036903824946399
+          },
+          {
+            "n": 8,
+            "mean_prediction": 0.28702323138713837,
+            "mean_realized_return": 0.07920919671846965,
+            "mse": 0.8665129142546473
+          },
+          {
+            "n": 8,
+            "mean_prediction": 0.29100891947746277,
+            "mean_realized_return": 1.0167446411382142,
+            "mse": 0.5309919514485819
+          }
+        ],
+        "correlation": 0.5879265122356323
+      }
+    }
+  ],
+  "fixed_city_policy_shift": {
+    "post1_to_round1": {
+      "states": 34,
+      "mean_total_variation": 0.003929773811250925,
+      "max_total_variation": 0.005242839455604553,
+      "top_family_flips": 1,
+      "mean_probability_change_by_family": {
+        "BUILD_SETTLEMENT": null,
+        "BUILD_CITY": 0.003209180198609829,
+        "BUILD_ROAD": -0.0009545997017994523,
+        "BUY_DEVELOPMENT": -0.0011215083068236709,
+        "BANK_TRADE": 0.0010652289493009448,
+        "PLAYER_TRADE": null,
+        "END_TURN": -0.002989295171573758
+      }
+    },
+    "round1_to_round2": {
+      "states": 34,
+      "mean_total_variation": 0.0018154056742787361,
+      "max_total_variation": 0.0023346692323684692,
+      "top_family_flips": 1,
+      "mean_probability_change_by_family": {
+        "BUILD_SETTLEMENT": null,
+        "BUILD_CITY": 0.0013698163675144315,
+        "BUILD_ROAD": -0.0011428773868829012,
+        "BUY_DEVELOPMENT": 0.0004483334778342396,
+        "BANK_TRADE": 0.00025875671417452395,
+        "PLAYER_TRADE": null,
+        "END_TURN": -0.0014724468346685171
+      }
+    },
+    "post1_to_round2": {
+      "states": 34,
+      "mean_total_variation": 0.005475838202983141,
+      "max_total_variation": 0.0075765252113342285,
+      "top_family_flips": 2,
+      "mean_probability_change_by_family": {
+        "BUILD_SETTLEMENT": null,
+        "BUILD_CITY": 0.004578996449708939,
+        "BUILD_ROAD": -0.0020974769722670317,
+        "BUY_DEVELOPMENT": -0.0006731748580932617,
+        "BANK_TRADE": 0.0013239856343716383,
+        "PLAYER_TRADE": null,
+        "END_TURN": -0.004461742006242275
+      }
+    }
+  },
+  "frozen": {
+    "champion": "4225902d41a83540eb1f1552826ec623706e778b99ad4ae8ec015f976644392a",
+    "robber": "ecde7fa9e9d67370bb76686ecd767d2d532a76d467c0051aaebdf8d4aff702bf",
+    "plan_heads": "8dd0354cd3783d7f5cf93bf0ae8212d0973ddbf22b09eb2b522d19cf46b79907",
+    "base_actor": "ef1e2e57359ef834a584360606289e147f44ddf894a476cf5fe2902097fea80f",
+    "parent_sha256": "4b02fbe801bad824888a267e4a54b35a36545905dc1b3e453089196caf308648"
+  }
+}

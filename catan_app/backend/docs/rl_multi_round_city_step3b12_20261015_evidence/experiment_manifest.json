@@ -1,0 +1,70 @@
+{
+  "step": "3B-12",
+  "parent": "Route-Isolated-City-Post1",
+  "training_bases": {
+    "1": {
+      "rule": 36200000,
+      "champion": 36201000,
+      "mixed": 36202000
+    },
+    "2": {
+      "rule": 36300000,
+      "champion": 36301000,
+      "mixed": 36302000
+    }
+  },
+  "validation_bases": {
+    "rule": 36500000,
+    "champion": 36501000,
+    "mixed": 36502000
+  },
+  "evaluation_bases": {
+    "rule": 36400000,
+    "champion": 36401000,
+    "mixed": 36402000
+  },
+  "round_target_transitions": 256,
+  "round_max_transitions": 384,
+  "round_max_games": 600,
+  "training_delegation": 0.5,
+  "evaluation_delegation": 0.1,
+  "investment_delegation": 0.0,
+  "route": "CITY_VALUE_COMPARISON",
+  "frozen": {
+    "champion": "4225902d41a83540eb1f1552826ec623706e778b99ad4ae8ec015f976644392a",
+    "robber": "ecde7fa9e9d67370bb76686ecd767d2d532a76d467c0051aaebdf8d4aff702bf",
+    "plan_heads": "8dd0354cd3783d7f5cf93bf0ae8212d0973ddbf22b09eb2b522d19cf46b79907",
+    "base_actor": "ef1e2e57359ef834a584360606289e147f44ddf894a476cf5fe2902097fea80f",
+    "parent_sha256": "4b02fbe801bad824888a267e4a54b35a36545905dc1b3e453089196caf308648"
+  },
+  "parent_policy_digest": "1e79553e6b5b5d88c9d14ef035a2c653817ac90b38b528920c49e2f4312f8590",
+  "parent_critic_digest": "1944413787eb11a272cf2e804ac8689f838c62d3ffb469ac9370d3b2e242dbc1",
+  "optimizer": {
+    "actor_lr": 0.0001,
+    "critic_lr": 0.0003,
+    "batch_size": 64,
+    "epochs": 2,
+    "clip_range": 0.1,
+    "entropy_coef": 0.005
+  },
+  "reward": {
+    "win": 1.0,
+    "loss": -1.0,
+    "vp_delta": 0.05,
+    "gamma": 0.99,
+    "gae_lambda": 0.95
+  },
+  "minibatch_seeds": {
+    "1": 3912001,
+    "2": 3912002
+  },
+  "family_order": [
+    "BUILD_CITY",
+    "BUILD_ROAD",
+    "BUY_DEVELOPMENT",
+    "BANK_TRADE",
+    "END_TURN"
+  ],
+  "executor": "step3a14_B_FROZEN_PPO",
+  "player_trade": "protected_champion_preemption"
+}

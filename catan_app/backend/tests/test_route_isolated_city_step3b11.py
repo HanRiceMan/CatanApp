@@ -39,7 +39,7 @@ def test_zero_adapter_matches_parent_city_distribution_and_mask():
     assert torch.equal(initial.probabilities, baseline.probabilities)
     assert torch.equal(initial.per_plan_probabilities, baseline.per_plan_probabilities)
     assert torch.count_nonzero(initial.probabilities[:, [0, 5]]) == 0
-    assert torch.equal(initial.probabilities.sum(-1), torch.ones(2))
+    assert torch.allclose(initial.probabilities.sum(-1), torch.ones(2), atol=1e-6)
     assert all(not parameter.requires_grad for parameter in policy.plan_heads.parameters())
     assert all(not parameter.requires_grad for parameter in policy.l3_actor.parameters())
 

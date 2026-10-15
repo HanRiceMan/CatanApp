@@ -1,0 +1,22 @@
+{
+  "evaluation_summary.json": "4c02109a83dbd0fe8d85d27b1a9e03f45b8bf5044f6d645cf57a3cb9f5071213",
+  "experiment_manifest.json": "c539d9393a3ed6cd1febd9d96a3fa5b4a2331698f2426ad55d0851163153ee8e",
+  "heldout_games.json.gz": "f32fa5da4b454531a9232ebecded85218fd88c960039c2ea238fe4e89e2bf651",
+  "round1_collection.json": "7d36ff3f23db693765afcb4e31c209b932021141f5dad69039c97fdfa0caa33a",
+  "round1_preflight.json": "a65da6a370458731e58df83c6f5c9f72265f8830354cdb764bb2f4862da03581",
+  "round1_rollout.json.gz": "94dea4e9934bba6c0c0cf95c5e18377bc043e4386236f2f1cd614f04ed0e034d",
+  "round1_update_attempt.json": "11214587770cb1f09c101e7b2feceaaccc00b82673b269982597018a802c04e5",
+  "round1_update_result.json": "6a03783cb1bbb08f7256689ca71f7068f1cab881419c7a54d9ddf7606af6ad79",
+  "round2_collection.json": "23e762299ac44892cc00c245a552228ec187ad82dcfbc283d7bb4807f582bfe2",
+  "round2_preflight.json": "aefc929c38de58e2267673ce008da377b421210584de423a83155cbdd6521660",
+  "round2_rollout.json.gz": "5ddac2e97a9a9af72b107364de46d22ac6a9f468eb6ea8286ebef0db578f4a38",
+  "round2_update_attempt.json": "23c6475635b96046942023913274e126ab7efe21e5712fea1cc5d972a36d0c91",
+  "round2_update_result.json": "70c14894311a137eb8527788ba38a4eb347badac10a11651452dfdb598d4621c",
+  "validation_rollout.json.gz": "24d0cc6494402eaf5f55a9dc6b3d4124737a92cd3cc2d9ec0e95d4368efe9f4b",
+  "Multi-Round-City-Round1\\manifest.json": "59589bcb6d34f3c83709e9e2d9711a978c21759557e30f42762db22a99dbaaca",
+  "Multi-Round-City-Round1\\optimizer.pt": "d303a45c5497ed1c082bbd9dbca2a9fd665ed08880380bf933abec6c56360762",
+  "Multi-Round-City-Round1\\weights.pt": "1eb2d3fc34a2343d08f20070195cb9d1fcdbb04715c3fe68dd0438d3995e802d",
+  "Multi-Round-City-Round2\\manifest.json": "1fbc51bc6f571a0accd1f2ef06a437cbcdcfb5df3fa258ff9ab4e03d7c2ccf20",
+  "Multi-Round-City-Round2\\optimizer.pt": "2ab826a04265b5a04d3f9b66c6db74185318572fe37be81fa7fcef00515f085e",
+  "Multi-Round-City-Round2\\weights.pt": "156184f56385b71720dfce160e8da9e2d3857f10d58be218a474458d9353713c"
+}

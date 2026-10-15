@@ -1,0 +1,24 @@
+{
+  "step": "3B-12",
+  "name": "Multi-Round-City-Round1",
+  "policy_version": 1,
+  "parent": "Route-Isolated-City-Post1",
+  "parent_sha256": "4b02fbe801bad824888a267e4a54b35a36545905dc1b3e453089196caf308648",
+  "training_seed_bases": {
+    "rule": 36200000,
+    "champion": 36201000,
+    "mixed": 36202000
+  },
+  "training_games": 240,
+  "training_transitions": 264,
+  "training_data_sha256": "94dea4e9934bba6c0c0cf95c5e18377bc043e4386236f2f1cd614f04ed0e034d",
+  "training_delegation": 0.5,
+  "minibatch_seed": 3912001,
+  "optimizer_sha256": "d303a45c5497ed1c082bbd9dbca2a9fd665ed08880380bf933abec6c56360762",
+  "champion_digest": "4225902d41a83540eb1f1552826ec623706e778b99ad4ae8ec015f976644392a",
+  "robber_digest": "ecde7fa9e9d67370bb76686ecd767d2d532a76d467c0051aaebdf8d4aff702bf",
+  "plan_heads_digest": "8dd0354cd3783d7f5cf93bf0ae8212d0973ddbf22b09eb2b522d19cf46b79907",
+  "base_actor_digest": "ef1e2e57359ef834a584360606289e147f44ddf894a476cf5fe2902097fea80f",
+  "city_adapter_digest": "ee5017a814e572dadb4756a55755bd2bf98866c59d10f88a6d94eac51b43005a",
+  "city_critic_digest": "cc53210b58c8f8bb25cad4516937cdf333019039c9ddaf027a755f1eceb96a0a"
+}

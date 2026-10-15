@@ -1,0 +1,27 @@
+{
+  "round": 2,
+  "games": 228,
+  "transitions": 267,
+  "target_reached": true,
+  "within_normal_upper_bound": true,
+  "profile_games": {
+    "rule": 76,
+    "champion": 76,
+    "mixed": 76
+  },
+  "seat_games": {
+    "1": 57,
+    "2": 57,
+    "3": 57,
+    "4": 57
+  },
+  "selected_families": {
+    "BANK_TRADE": 59,
+    "END_TURN": 92,
+    "BUILD_CITY": 70,
+    "BUY_DEVELOPMENT": 31,
+    "BUILD_ROAD": 15
+  },
+  "protected_preemptions": 2667,
+  "parent_version": "Multi-Round-City-Round1"
+}

@@ -12,3 +12,6 @@ catan_app/backend/docs/rl_city_value_ppo_step3b10_20261014_evidence/City-Value-P
 catan_app/backend/docs/rl_route_isolated_city_step3b11_20261014_evidence/*.json -text
 catan_app/backend/docs/rl_route_isolated_city_step3b11_20261014_evidence/Route-Isolated-City-Pre/*.json -text
 catan_app/backend/docs/rl_route_isolated_city_step3b11_20261014_evidence/Route-Isolated-City-Post1/*.json -text
+catan_app/backend/docs/rl_multi_round_city_step3b12_20261015_evidence/*.json -text -diff
+catan_app/backend/docs/rl_multi_round_city_step3b12_20261015_evidence/Multi-Round-City-Round1/*.json -text -diff
+catan_app/backend/docs/rl_multi_round_city_step3b12_20261015_evidence/Multi-Round-City-Round2/*.json -text -diff

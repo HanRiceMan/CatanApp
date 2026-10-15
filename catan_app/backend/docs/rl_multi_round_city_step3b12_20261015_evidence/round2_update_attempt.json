@@ -1,0 +1,7 @@
+{
+  "round": 2,
+  "policy_version": "Multi-Round-City-Round1",
+  "data_sha256": "5ddac2e97a9a9af72b107364de46d22ac6a9f468eb6ea8286ebef0db578f4a38",
+  "minibatch_seed": 3912002,
+  "prior_optimizer_sha256": "d303a45c5497ed1c082bbd9dbca2a9fd665ed08880380bf933abec6c56360762"
+}

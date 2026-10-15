@@ -1,0 +1,7 @@
+{
+  "round": 1,
+  "policy_version": "Route-Isolated-City-Post1",
+  "data_sha256": "94dea4e9934bba6c0c0cf95c5e18377bc043e4386236f2f1cd614f04ed0e034d",
+  "minibatch_seed": 3912001,
+  "prior_optimizer_sha256": null
+}

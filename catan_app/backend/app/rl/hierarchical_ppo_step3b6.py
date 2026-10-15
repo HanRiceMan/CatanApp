@@ -129,6 +129,8 @@ class UpdateResult:
     accepted: bool
     reason: str
     metrics: dict
+    actor_optimizer_state: dict | None = None
+    critic_optimizer_state: dict | None = None
 
 
 def _batch(decisions: list[dict]) -> dict[str, torch.Tensor | L3DecisionFacts]:
@@ -223,6 +225,8 @@ def preflight(champion, policy: HierarchicalInvestmentPolicy,
             expected = sum(GAMMA ** j * reward for j, reward in enumerate(
                 transition["reward_steps"]))
             if (len(transition["reward_steps"]) != transition["macro_duration"] or
+                    transition["close_policy_step"] -
+                    transition["start_policy_step"] != transition["macro_duration"] or
                     abs(expected - transition["reward_accumulated"]) > 1e-8 or
                     transition["truncated"] or
                     (transition["done"] and transition["discount"] != 0.) or
@@ -315,6 +319,8 @@ def one_guarded_update(
     route: HierarchicalRoute = HierarchicalRoute.INVESTMENT,
     allowed_families: tuple[str, ...] = INVESTMENT_FAMILIES,
     delegation_probability: float = .10,
+    actor_optimizer_state: dict | None = None,
+    critic_optimizer_state: dict | None = None,
 ) -> UpdateResult:
     """Exactly one two-epoch PPO pass; rejected candidates roll back in memory."""
     report, batch, advantages, returns = preflight(
@@ -333,6 +339,10 @@ def one_guarded_update(
     critic_ids = {id(p) for p in critic.parameters()}
     actor_optimizer = torch.optim.Adam(trainable_actor, lr=actor_lr)
     critic_optimizer = torch.optim.Adam(critic.parameters(), lr=critic_lr)
+    if actor_optimizer_state is not None:
+        actor_optimizer.load_state_dict(deepcopy(actor_optimizer_state))
+    if critic_optimizer_state is not None:
+        critic_optimizer.load_state_dict(deepcopy(critic_optimizer_state))
     optimizer_ids = {id(p) for group in actor_optimizer.param_groups + critic_optimizer.param_groups
                      for p in group["params"]}
     if optimizer_ids != actor_ids | critic_ids:
@@ -468,4 +478,8 @@ def one_guarded_update(
                "critic_post_mse": float(np.mean((returns - values.numpy()) ** 2)),
                "minibatches": len(losses), "epochs": epochs,
                "optimizer_parameter_ids_verified": True}
-    return UpdateResult(reason == "ACCEPTED", reason, metrics)
+    return UpdateResult(reason == "ACCEPTED", reason, metrics,
+                        deepcopy(actor_optimizer.state_dict()) if reason == "ACCEPTED"
+                        else deepcopy(actor_optimizer_state),
+                        deepcopy(critic_optimizer.state_dict()) if reason == "ACCEPTED"
+                        else deepcopy(critic_optimizer_state))

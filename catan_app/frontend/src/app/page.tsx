@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useRef, useState } from "react";
+import { useCallback, useEffect, useRef, useState } from "react";
 import { Board, type BuildMode } from "../components/Board";
 import { PlayerSeat } from "../components/PlayerSeat";
 import { InitialPlacementPanel } from "../components/InitialPlacementPanel";
@@ -11,12 +11,14 @@ import { DiceCutIn } from "../components/DiceCutIn";
 import { DevelopmentCutIn } from "../components/DevelopmentCutIn";
 import { BuildCutIn } from "../components/BuildCutIn";
 import { CommerceCutIn } from "../components/CommerceCutIn";
+import { IncidentCutIn } from "../components/IncidentCutIn";
 import { ActivityHistory } from "../components/ActivityHistory";
 import { DiceHistory } from "../components/DiceHistory";
 import { buildUnavailableReason } from "../lib/actions";
 import { ApiError, advanceAi, bankTrade, buildPiece, counterTrade, createGame, discardCards, endTurn, getAiModels, getGame, moveRobber, placeInitialPiece, proposeTrade, respondTrade, rollForOrder, rollTurnDice, setPlayerController, startPlay, stealCard, useDevelopment } from "../lib/api";
 import type { TradeOffer } from "../lib/api";
 import { createRequestId } from "../lib/requestId";
+import { presentationKinds, type PresentationKind } from "../lib/presentation";
 import { DEFAULT_RULES, TERRAIN_INFO, type AiModel, type BoardRules, type GameSetup, type Player, type PlayerAccess, type Tile, type PlacementSelection } from "../lib/types";
 
 type Session = { id: string; token?: string };
@@ -62,6 +64,11 @@ function modelDisplayName(model: AiModel) {
 export default function Home() {
   const [session, setSession] = useState<Session | null>(null);
   const [game, setGame] = useState<GameSetup | null>(null);
+  const [shownGame, setShownGame] = useState<GameSetup | null>(null);
+  const [presentationPending, setPresentationPending] = useState(false);
+  const latestGame = useRef<GameSetup | null>(null);
+  const latestShownGame = useRef<GameSetup | null>(null);
+  const awaitingPresentation = useRef<Set<PresentationKind>>(new Set());
   const [access, setAccess] = useState<PlayerAccess[]>([]);
   const [rules, setRules] = useState<BoardRules>(DEFAULT_RULES);
   const [aiPlayerIds, setAiPlayerIds] = useState<number[]>([]);
@@ -76,7 +83,8 @@ export default function Home() {
   const [developmentAnimating, setDevelopmentAnimating] = useState(false);
   const [buildAnimating, setBuildAnimating] = useState(false);
   const [commerceAnimating, setCommerceAnimating] = useState(false);
-  const cutInAnimating = diceAnimating || developmentAnimating || buildAnimating || commerceAnimating;
+  const [incidentAnimating, setIncidentAnimating] = useState(false);
+  const cutInAnimating = presentationPending || diceAnimating || developmentAnimating || buildAnimating || commerceAnimating || incidentAnimating;
   const [busy, setBusy] = useState(false);
   const [error, setError] = useState("");
   const [connectionError, setConnectionError] = useState("");
@@ -92,6 +100,50 @@ export default function Home() {
   const aiControllerAuto = useRef(false);
   const aiPausedByUser = useRef(false);
 
+  const receiveGame = useCallback((next: GameSetup) => {
+    const current = latestGame.current;
+    if (current?.id === next.id && current.revision > next.revision) return;
+    if (current?.id === next.id && current.revision === next.revision) return;
+    latestGame.current = next;
+    setGame(next);
+    const shown = latestShownGame.current;
+    if (!shown || shown.id !== next.id) {
+      awaitingPresentation.current.clear();
+      latestShownGame.current = next;
+      setShownGame(next);
+      setPresentationPending(false);
+      return;
+    }
+    // 表示保留中に別の操作が届いても、既に演出を開始したイベントを再登録しない。
+    const kinds = presentationKinds(current?.id === next.id ? current : shown, next);
+    if (kinds.length) {
+      kinds.forEach(kind => awaitingPresentation.current.add(kind));
+      setPresentationPending(true);
+    } else if (!awaitingPresentation.current.size) {
+      latestShownGame.current = next;
+      setShownGame(next);
+    }
+  }, []);
+
+  const animationChange = useCallback((kind: PresentationKind, playing: boolean) => {
+    if (kind === "dice") setDiceAnimating(playing);
+    else if (kind === "development") setDevelopmentAnimating(playing);
+    else if (kind === "build") setBuildAnimating(playing);
+    else if (kind === "commerce") setCommerceAnimating(playing);
+    else setIncidentAnimating(playing);
+    if (playing || !awaitingPresentation.current.has(kind)) return;
+    awaitingPresentation.current.delete(kind);
+    if (awaitingPresentation.current.size || !latestGame.current) return;
+    latestShownGame.current = latestGame.current;
+    setShownGame(latestGame.current);
+    setPresentationPending(false);
+  }, []);
+  const onDiceChange = useCallback((playing: boolean) => animationChange("dice", playing), [animationChange]);
+  const onDevelopmentChange = useCallback((playing: boolean) => animationChange("development", playing), [animationChange]);
+  const onBuildChange = useCallback((playing: boolean) => animationChange("build", playing), [animationChange]);
+  const onCommerceChange = useCallback((playing: boolean) => animationChange("commerce", playing), [animationChange]);
+  const onIncidentChange = useCallback((playing: boolean) => animationChange("incident", playing), [animationChange]);
+
   useEffect(() => {
     if (game?.phase === "robber_move") setSelectedTile(null);
   }, [game?.phase, game?.turn_number, game?.viewer_id]);
@@ -103,6 +155,11 @@ export default function Home() {
       const token = params.get("token") ?? undefined;
       setSession(id ? { id, token } : null);
       setGame(null);
+      setShownGame(null);
+      latestGame.current = null;
+      latestShownGame.current = null;
+      awaitingPresentation.current.clear();
+      setPresentationPending(false);
       setSelectedTile(null);
       setBuildMode(null);
       setBoardExpanded(false);
@@ -156,7 +213,7 @@ export default function Home() {
           AbortSignal.any([controller.signal, AbortSignal.timeout(10000)]));
         if (disposed) return;
         // 操作の応答より古いポーリング結果で画面を巻き戻さない。
-        setGame(previous => !previous || previous.id !== next.id || previous.revision <= next.revision ? next : previous);
+        receiveGame(next);
         setConnectionError("");
       } catch (failure) {
         if (disposed) return;
@@ -167,7 +224,7 @@ export default function Home() {
     }
     void poll();
     return () => { disposed = true; clearTimeout(timer); controller.abort(); };
-  }, [session]);
+  }, [session, receiveGame]);
 
   useEffect(() => {
     // 観戦モードだけでなく、個別プレイヤー画面でそのプレイヤーがAIの場合も
@@ -190,7 +247,7 @@ export default function Home() {
     setError("");
     try {
       const created = await createGame(rules, aiPlayerIds, watchAi && aiPlayerIds.length > 0, aiAgentNames);
-      setGame(created.game);
+      receiveGame(created.game);
       const createdViewer = created.game.players.find(player => player.id === created.game.viewer_id);
       aiPausedByUser.current = false;
       setAiPlaying(created.game.ai.can_step && (created.game.ai.watch_mode || Boolean(createdViewer?.is_ai)));
@@ -211,7 +268,7 @@ export default function Home() {
     try {
       const { game: publicView } = await advanceAi(session.id, 1);
       const next = session.token ? await getGame(session.id, session.token) : publicView;
-      setGame(previous => !previous || previous.revision <= next.revision ? next : previous);
+      receiveGame(next);
       if (!next.ai.can_step || next.phase === "game_over") setAiPlaying(false);
     } catch (failure) {
       setError(errorMessage(failure));
@@ -233,7 +290,7 @@ export default function Home() {
     const attempt = pendingRoll.current;
     try {
       const next = await rollForOrder(session.id, session.token, attempt.revision, attempt.requestId);
-      setGame(previous => !previous || previous.revision <= next.revision ? next : previous);
+      receiveGame(next);
       pendingRoll.current = null;
     } catch (failure) {
       setError(errorMessage(failure));
@@ -241,17 +298,18 @@ export default function Home() {
     } finally { pending.current = false; setBusy(false); }
   }
 
-  const players = game?.players ?? EMPTY_PLAYERS;
-  const viewerId = game?.viewer_id ?? null;
+  const visibleGame = shownGame ?? game;
+  const players = visibleGame?.players ?? EMPTY_PLAYERS;
+  const viewerId = visibleGame?.viewer_id ?? null;
   const viewerPlayer = players.find(player => player.id === viewerId);
   const manualControlsDisabled = busy || cutInAnimating || Boolean(viewerPlayer?.is_ai);
-  const activeBuildMode = game && buildMode && !buildUnavailableReason(game, buildMode) ? buildMode : null;
-  const seatOrder = game?.seat_order ?? [1, 2, 3, 4];
-  const canRoll = game?.phase === "rolling_order" && viewerId !== null && game.next_roller_id === viewerId;
-  const canPlace = game?.phase === "setup_ready" && viewerId !== null && game.initial_placement.player_id === viewerId;
-  const placementSelection = game && canPlace && placementChoice?.revision === game.revision
-    && placementChoice.kind === game.initial_placement.piece
-    && (placementChoice.kind === "settlement" ? game.initial_placement.legal_vertex_ids : game.initial_placement.legal_edge_ids).includes(placementChoice.targetId)
+  const activeBuildMode = visibleGame && buildMode && !buildUnavailableReason(visibleGame, buildMode) ? buildMode : null;
+  const seatOrder = visibleGame?.seat_order ?? [1, 2, 3, 4];
+  const canRoll = visibleGame?.phase === "rolling_order" && viewerId !== null && visibleGame.next_roller_id === viewerId;
+  const canPlace = visibleGame?.phase === "setup_ready" && viewerId !== null && visibleGame.initial_placement.player_id === viewerId;
+  const placementSelection = visibleGame && canPlace && placementChoice?.revision === visibleGame.revision
+    && placementChoice.kind === visibleGame.initial_placement.piece
+    && (placementChoice.kind === "settlement" ? visibleGame.initial_placement.legal_vertex_ids : visibleGame.initial_placement.legal_edge_ids).includes(placementChoice.targetId)
     ? placementChoice : null;
   const selectedInfo = selectedTile ? TERRAIN_INFO[selectedTile.terrain] : null;
 
@@ -267,7 +325,7 @@ export default function Home() {
     const attempt = pendingPlacement.current!;
     try {
       const next = await placeInitialPiece(session.id, session.token, attempt.revision, attempt.requestId, attempt.kind, attempt.targetId);
-      setGame(previous => !previous || previous.revision <= next.revision ? next : previous);
+      receiveGame(next);
       setPlacementChoice(null);
       pendingPlacement.current = null;
     } catch (failure) {
@@ -296,7 +354,7 @@ export default function Home() {
       else if (kind === "bank") next = await bankTrade(session.id, session.token, game.revision, requestId, payload.give_resource as "wood" | "brick" | "sheep" | "wheat" | "ore", payload.receive_resource as "wood" | "brick" | "sheep" | "wheat" | "ore");
       else if (kind === "development") next = await useDevelopment(session.id, session.token, game.revision, requestId, payload.card as "knight" | "road_building" | "year_of_plenty" | "monopoly", payload.resources as ("wood" | "brick" | "sheep" | "wheat" | "ore")[] | undefined);
       else next = await endTurn(session.id, session.token, game.revision, requestId);
-      setGame(previous => !previous || previous.revision <= next.revision ? next : previous);
+      receiveGame(next);
       if (["build", "end", "development", "robber"].includes(kind)) setBuildMode(null);
       if (next.phase === "robber_move" || kind === "robber") setSelectedTile(null);
     } catch (failure) { setError(errorMessage(failure)); }
@@ -306,19 +364,19 @@ export default function Home() {
   async function submitTrade(targetId: number, offers: TradeOffer[]) {
     if (!session?.token || !game || pending.current) return;
     pending.current = true; setBusy(true); setError("");
-    try { const next = await proposeTrade(session.id, session.token, game.revision, createRequestId(), targetId, offers); setGame(previous => !previous || previous.revision <= next.revision ? next : previous); }
+    try { const next = await proposeTrade(session.id, session.token, game.revision, createRequestId(), targetId, offers); receiveGame(next); }
     catch (failure) { setError(errorMessage(failure)); } finally { pending.current = false; setBusy(false); }
   }
   async function answerTrade(decision: "accept" | "decline" | "counter", offerIndex?: number) {
     if (!session?.token || !game || pending.current) return;
     pending.current = true; setBusy(true); setError("");
-    try { const next = await respondTrade(session.id, session.token, game.revision, createRequestId(), decision, offerIndex); setGame(previous => !previous || previous.revision <= next.revision ? next : previous); }
+    try { const next = await respondTrade(session.id, session.token, game.revision, createRequestId(), decision, offerIndex); receiveGame(next); }
     catch (failure) { setError(errorMessage(failure)); } finally { pending.current = false; setBusy(false); }
   }
   async function submitCounterTrade(offers: TradeOffer[]) {
     if (!session?.token || !game || pending.current) return;
     pending.current = true; setBusy(true); setError("");
-    try { const next = await counterTrade(session.id, session.token, game.revision, createRequestId(), offers); setGame(previous => !previous || previous.revision <= next.revision ? next : previous); }
+    try { const next = await counterTrade(session.id, session.token, game.revision, createRequestId(), offers); receiveGame(next); }
     catch (failure) { setError(errorMessage(failure)); } finally { pending.current = false; setBusy(false); }
   }
 
@@ -331,7 +389,7 @@ export default function Home() {
     try {
       const changed = await setPlayerController(session.id, playerToken, playerId, game.revision, createRequestId(), isAi, agentName);
       const next = session.token ? changed : await getGame(session.id);
-      setGame(previous => !previous || previous.revision <= next.revision ? next : previous);
+      receiveGame(next);
       const nextViewer = next.players.find(player => player.id === next.viewer_id);
       // 操作画面からAIへ切り替えた瞬間は、観戦モードでなくても自動再生を開始する。
       aiControllerAuto.current = isAi;
@@ -341,7 +399,7 @@ export default function Home() {
     finally { pending.current = false; setBusy(false); }
   }
 
-  return <main className={`table-app ${game ? "in-game" : ""} ${game?.ai.watch_mode ? "watch-mode" : ""} ${boardExpanded ? "board-expanded" : ""}`}>
+  return <main className={`table-app ${visibleGame ? "in-game" : ""} ${visibleGame?.ai.watch_mode ? "watch-mode" : ""} ${boardExpanded ? "board-expanded" : ""}`}>
     <header className="topbar">
       <a className="brand" href="/"><span className="brand-symbol">⬡</span> CATAN<span className="brand-divider" /><span className="brand-subtitle">LOCAL TABLE</span></a>
       <div className="topbar-actions">
@@ -354,48 +412,49 @@ export default function Home() {
       </div>
     </header>
     <section className="page-heading">
-      <div><p className="eyebrow">ONE ISLAND, FOUR EXPLORERS</p><h1>{!game ? "この島から、はじめよう。" : game.phase === "game_over" ? "島の覇者が、決まった。" : game.phase === "ready_to_play" ? "8つの開拓地から、はじまる。" : game.phase === "setup_ready" ? "島に、最初の一歩を。" : game.phase === "rolling_order" ? "サイコロで、席を決めよう。" : "島を、ひろげよう。"}</h1>
-        <p className="intro">{game?.ai.watch_mode ? "観戦モード：どの視点でも4人全員の手札を公開しています。" : viewerId ? "あなたは6時の席。自分の手札だけが見える画面です。" : "12時から時計回りに着席。各プレイヤー用のタブで操作します。"}</p></div>
+      <div><p className="eyebrow">ONE ISLAND, FOUR EXPLORERS</p><h1>{!visibleGame ? "この島から、はじめよう。" : visibleGame.phase === "game_over" ? "島の覇者が、決まった。" : visibleGame.phase === "ready_to_play" ? "8つの開拓地から、はじまる。" : visibleGame.phase === "setup_ready" ? "島に、最初の一歩を。" : visibleGame.phase === "rolling_order" ? "サイコロで、席を決めよう。" : "島を、ひろげよう。"}</h1>
+        <p className="intro">{visibleGame?.ai.watch_mode ? "観戦モード：どの視点でも4人全員の手札を公開しています。" : viewerId ? "あなたは6時の席。自分の手札だけが見える画面です。" : "12時から時計回りに着席。各プレイヤー用のタブで操作します。"}</p></div>
       {session && <a className="quiet-link" href="/">新しい対局を作る</a>}
     </section>
 
     <div className="game-layout">
       <section className="board-section" aria-label="4人のテーブル">
         <div className="board-heading">
-          <div className="board-title-tools"><h2>カタン島</h2>{game && <><DiceHistory game={game} /><ActivityHistory game={game} /></>}</div>
-          <span className="board-status"><i className={game ? "ready" : ""} />{game?.phase === "game_over" ? `ゲーム終了・P${game.winner_id}勝利` : game?.phase === "ready_to_play" ? "初期配置完了" : game?.phase === "setup_ready" ? `初期配置 ${game.initial_placement.completed_pairs}/8組` : game?.phase === "rolling_order" ? `順番決め・第${game.round_number}ラウンド` : game ? `第${game.turn_number}手番` : session ? "接続中…" : "スタート待ち"}</span>
+          <div className="board-title-tools"><h2>カタン島</h2>{visibleGame && <><DiceHistory game={visibleGame} /><ActivityHistory game={visibleGame} /></>}</div>
+          <span className="board-status"><i className={visibleGame ? "ready" : ""} />{visibleGame?.phase === "game_over" ? `ゲーム終了・P${visibleGame.winner_id}勝利` : visibleGame?.phase === "ready_to_play" ? "初期配置完了" : visibleGame?.phase === "setup_ready" ? `初期配置 ${visibleGame.initial_placement.completed_pairs}/8組` : visibleGame?.phase === "rolling_order" ? `順番決め・第${visibleGame.round_number}ラウンド` : visibleGame ? `第${visibleGame.turn_number}手番` : session ? "接続中…" : "スタート待ち"}</span>
         </div>
         <div className="island-stage">
-          <PlayerRoster players={players} order={seatOrder} rankingPending={!game || game.phase === "rolling_order"} viewerId={viewerId}
-            turnPlayerId={!game || game.phase === "game_over" ? null : game.phase === "rolling_order" ? game.next_roller_id : game.phase === "setup_ready" ? game.initial_placement.player_id : game.phase === "ready_to_play" ? game.first_player_id : game.current_player_id} />
-          <div className={`board-wrap ${busy && !game ? "generating" : ""}`} aria-busy={busy && !game}>
-            {game && <div className="board-corner-controls">
+          <PlayerRoster players={players} order={seatOrder} rankingPending={!visibleGame || visibleGame.phase === "rolling_order"} viewerId={viewerId}
+            turnPlayerId={!visibleGame || visibleGame.phase === "game_over" ? null : visibleGame.phase === "rolling_order" ? visibleGame.next_roller_id : visibleGame.phase === "setup_ready" ? visibleGame.initial_placement.player_id : visibleGame.phase === "ready_to_play" ? visibleGame.first_player_id : visibleGame.current_player_id} />
+          <div className={`board-wrap ${busy && !visibleGame ? "generating" : ""}`} aria-busy={busy && !visibleGame}>
+            {visibleGame && <div className="board-corner-controls">
               <button className="board-zoom-toggle" type="button" aria-pressed={boardExpanded}
                 aria-label={boardExpanded ? "盤面を縮小表示に戻す" : "盤面を拡大表示する"}
                 onClick={() => setBoardExpanded(expanded => !expanded)}>
                 <span aria-hidden="true">{boardExpanded ? "⊖" : "⊕"}</span>{boardExpanded ? "縮小" : "拡大"}
               </button>
             </div>}
-            <Board board={game?.board ?? null} selectedId={selectedTile?.id ?? null} onSelect={setSelectedTile}
-              game={game} selection={placementSelection} placementDisabled={manualControlsDisabled || !!connectionError || !canPlace}
+            <Board board={visibleGame?.board ?? null} selectedId={selectedTile?.id ?? null} onSelect={setSelectedTile}
+              game={visibleGame} selection={placementSelection} placementDisabled={manualControlsDisabled || !!connectionError || !canPlace}
               onSelectPlacement={choice => { setPlacementChoice(choice); setError(""); }} buildMode={activeBuildMode}
-              buildDisabled={manualControlsDisabled || !!connectionError || game?.phase !== "action" || viewerId !== game.current_player_id}
+              buildDisabled={manualControlsDisabled || !!connectionError || visibleGame?.phase !== "action" || viewerId !== visibleGame.current_player_id}
               onSelectBuild={(kind, targetId) => void normalAction("build", { kind, target_id: targetId })} />
-            {game && <DiceCutIn key={`dice-${game.id}`} game={game} onPlayingChange={setDiceAnimating} />}
-            {game && <DevelopmentCutIn key={`development-${game.id}`} game={game} onPlayingChange={setDevelopmentAnimating} />}
-            {game && <BuildCutIn key={`build-${game.id}`} game={game} onPlayingChange={setBuildAnimating} />}
-            {game && <CommerceCutIn key={`commerce-${game.id}`} game={game} onPlayingChange={setCommerceAnimating} />}
+            {game && <DiceCutIn key={`dice-${game.id}`} game={game} onPlayingChange={onDiceChange} />}
+            {game && <DevelopmentCutIn key={`development-${game.id}`} game={game} onPlayingChange={onDevelopmentChange} />}
+            {game && <BuildCutIn key={`build-${game.id}`} game={game} onPlayingChange={onBuildChange} />}
+            {game && <CommerceCutIn key={`commerce-${game.id}`} game={game} onPlayingChange={onCommerceChange} />}
+            {game && <IncidentCutIn key={`incident-${game.id}`} game={game} onPlayingChange={onIncidentChange} />}
           </div>
         </div>
         {viewerId !== null && (() => {
           const index = seatOrder.indexOf(viewerId);
           const player = players.find(p => p.id === viewerId)!;
           return <div className="own-hand-column" aria-label="自分の手札">
-            <PlayerSeat player={player} position="south" isMe revealHand={Boolean(game?.ai.watch_mode)}
+            <PlayerSeat player={player} position="south" isMe revealHand={Boolean(visibleGame?.ai.watch_mode)}
               handOnly
-              active={(game?.phase === "setup_ready" ? game.initial_placement.player_id : game?.phase === "rolling_order" ? game?.next_roller_id : game?.phase === "game_over" ? null : game?.current_player_id) === viewerId}
-              statusText={game?.phase === "setup_ready" && game.initial_placement.player_id === viewerId ? "初期配置の番" : game?.current_player_id === viewerId && !["rolling_order", "game_over"].includes(game.phase) ? "手番" : undefined}
-              rank={game && game.phase !== "rolling_order" ? index + 1 : undefined} />
+              active={(visibleGame?.phase === "setup_ready" ? visibleGame.initial_placement.player_id : visibleGame?.phase === "rolling_order" ? visibleGame?.next_roller_id : visibleGame?.phase === "game_over" ? null : visibleGame?.current_player_id) === viewerId}
+              statusText={visibleGame?.phase === "setup_ready" && visibleGame.initial_placement.player_id === viewerId ? "初期配置の番" : visibleGame?.current_player_id === viewerId && !["rolling_order", "game_over"].includes(visibleGame.phase) ? "手番" : undefined}
+              rank={visibleGame && visibleGame.phase !== "rolling_order" ? index + 1 : undefined} />
           </div>;
         })()}
       </section>
@@ -435,22 +494,22 @@ export default function Home() {
           <p className="muted">港の位置・種類は固定です。</p>
           <button className="start-button" disabled={busy} onClick={startGame}>{busy ? "盤面を生成中…" : "ゲームスタート"}</button>
         </section> : <section className="setup-card action-dock">
-          <p className="eyebrow">{game?.phase === "rolling_order" ? "SEATING ROUND" : game?.phase === "setup_ready" ? "FIRST SETTLEMENTS" : "CATAN GAME"}</p><h2>{game?.phase === "ready_to_play" ? "初期配置が完了しました" : game?.phase === "setup_ready" ? "開拓地と道の初期配置" : game?.phase === "rolling_order" ? "サイコロで順番決め" : "通常手番"}</h2>
-          {game?.phase === "rolling_order" && <>
-            <p className="turn-message" role="status">プレイヤー {game.next_roller_id} の番です</p>
-            <p className="muted">2個の合計が大きい順に着席。{game.round_number > 1 ? "同点の人だけ、もう一度振ります。" : "同点の場合は、その人たちだけ振り直します。"}</p>
+          <p className="eyebrow">{visibleGame?.phase === "rolling_order" ? "SEATING ROUND" : visibleGame?.phase === "setup_ready" ? "FIRST SETTLEMENTS" : "CATAN GAME"}</p><h2>{visibleGame?.phase === "ready_to_play" ? "初期配置が完了しました" : visibleGame?.phase === "setup_ready" ? "開拓地と道の初期配置" : visibleGame?.phase === "rolling_order" ? "サイコロで順番決め" : "通常手番"}</h2>
+          {visibleGame?.phase === "rolling_order" && <>
+            <p className="turn-message" role="status">プレイヤー {visibleGame.next_roller_id} の番です</p>
+            <p className="muted">2個の合計が大きい順に着席。{visibleGame.round_number > 1 ? "同点の人だけ、もう一度振ります。" : "同点の場合は、その人たちだけ振り直します。"}</p>
             {viewerId !== null ? <button className="start-button" onClick={rollDice} disabled={!canRoll || manualControlsDisabled || !!connectionError}>
               {busy ? "サイコロを振っています…" : canRoll ? "サイコロを振る" : "他のプレイヤーの番です"}
             </button> : <p className="observer-note">下のリンクから、各プレイヤー用タブを開いて振ってください。</p>}
           </>}
-          {game?.phase === "setup_ready" && <InitialPlacementPanel game={game} selection={placementSelection}
+          {visibleGame?.phase === "setup_ready" && <InitialPlacementPanel game={visibleGame} selection={placementSelection}
             busy={manualControlsDisabled} disconnected={!!connectionError} onConfirm={confirmPlacement} />}
-          {game?.phase === "ready_to_play" && <>
+          {visibleGame?.phase === "ready_to_play" && <>
             <p className="turn-message" role="status">全員が開拓地2つ・道2本を配置しました。</p>
             <p className="muted">2つ目の開拓地から開始資源を配りました。全員2点でスタートです。</p>
-            {viewerId === game.first_player_id ? <button className="start-button" disabled={manualControlsDisabled} onClick={() => normalAction("start")}>プレイヤー {game.first_player_id} としてゲームを開始</button> : <p className="muted">最初の手番はプレイヤー {game.first_player_id}。本人のタブでゲームを開始します。</p>}
+            {viewerId === visibleGame.first_player_id ? <button className="start-button" disabled={manualControlsDisabled} onClick={() => normalAction("start")}>プレイヤー {visibleGame.first_player_id} としてゲームを開始</button> : <p className="muted">最初の手番はプレイヤー {visibleGame.first_player_id}。本人のタブでゲームを開始します。</p>}
           </>}
-          {game && ["turn_pre_roll", "discarding", "robber_move", "robber_steal", "action", "trade_response", "trade_counter_offer", "game_over"].includes(game.phase) && <NormalTurnPanel key={`${game.id}-${game.turn_number}-${game.viewer_id}`} game={game} selectedTile={selectedTile} busy={manualControlsDisabled || !!connectionError} onAction={normalAction} onPropose={submitTrade} onRespond={answerTrade} onCounter={submitCounterTrade} />}
+          {visibleGame && ["turn_pre_roll", "discarding", "robber_move", "robber_steal", "action", "trade_response", "trade_counter_offer", "game_over"].includes(visibleGame.phase) && <NormalTurnPanel key={`${visibleGame.id}-${visibleGame.turn_number}-${visibleGame.viewer_id}`} game={visibleGame} selectedTile={selectedTile} busy={manualControlsDisabled || !!connectionError} onAction={normalAction} onPropose={submitTrade} onRespond={answerTrade} onCounter={submitCounterTrade} />}
         </section>}
 
         {(error || connectionError) && <p className="error" role="alert">{error || connectionError}</p>}
@@ -459,7 +518,7 @@ export default function Home() {
           <p className="eyebrow">PLAYER TABS</p><h2>4人の操作画面</h2>
           <p className="muted">AI担当を含む全員の個別画面を開けます。観戦再生は切り替え時に自動で一時停止します。</p>
           <div className="player-links">{access.map(item => {
-            const player = game?.players.find(candidate => candidate.id === item.player_id) ?? EMPTY_PLAYERS[item.player_id - 1];
+            const player = visibleGame?.players.find(candidate => candidate.id === item.player_id) ?? EMPTY_PLAYERS[item.player_id - 1];
             return <div className="player-link-row" key={item.player_id}><a
               className={`player-${EMPTY_PLAYERS[item.player_id - 1].color}`} href={accessLink(session.id, item.token)}
               target="_blank" rel="noopener noreferrer" referrerPolicy="no-referrer">
@@ -474,9 +533,9 @@ export default function Home() {
           })}</div>
           <small>個別リンクには手札を見る権限があります。本人またはデバッグ担当だけが使用してください。</small>
         </section>}
-        {game?.ai.watch_mode && <AiPlaybackPanel game={game} playing={aiPlaying} stepping={aiStepping || cutInAnimating} speed={aiSpeed}
+        {visibleGame?.ai.watch_mode && <AiPlaybackPanel game={visibleGame} playing={aiPlaying} stepping={aiStepping || cutInAnimating} speed={aiSpeed}
           onPlayingChange={playing => { aiPausedByUser.current = !playing; setAiPlaying(playing); }} onSpeedChange={setAiSpeed} onStep={() => { void stepAi(); }} />}
-        {game && game.ai.player_ids.length > 0 && !game.ai.watch_mode && <details className="game-settings ai-log"><summary>コンピューターの自動操作記録（{game.ai.actions}操作）</summary><p>AI担当：{game.ai.player_ids.map(id => `P${id}`).join("・")}</p><ol>{game.ai.recent_log.map((line, index) => <li key={`${index}-${line}`}>{line}</li>)}</ol></details>}
+        {visibleGame && visibleGame.ai.player_ids.length > 0 && !visibleGame.ai.watch_mode && <details className="game-settings ai-log"><summary>コンピューターの自動操作記録（{visibleGame.ai.actions}操作）</summary><p>AI担当：{visibleGame.ai.player_ids.map(id => `P${id}`).join("・")}</p><ol>{visibleGame.ai.recent_log.map((line, index) => <li key={`${index}-${line}`}>{line}</li>)}</ol></details>}
         {session?.token && <a className="quiet-link" href={accessLink(session.id)} target="_blank" rel="noopener noreferrer">全体表示を別タブで開く ↗</a>}
         {session && !session.token && access.length === 0 && <p className="muted">観戦用の全体表示です。操作には作成者から受け取ったプレイヤー用リンクが必要です。</p>}
 
@@ -487,9 +546,9 @@ export default function Home() {
           <p className="muted">{selectedTile.number ? `出る確率は ${6 - Math.abs(7 - selectedTile.number)}/36。` : "砂漠は資源を生産しません。"}</p>
         </section>}
 
-        {game && <details className="game-settings"><summary>この対局の生成条件</summary>
-          <ul>{RULE_OPTIONS.map(option => <li key={option.key}>{game.rules[option.key] ? "✓" : "−"} {option.label}</li>)}</ul>
-          <p>生成番号：<code>{game.seed}</code></p>
+        {visibleGame && <details className="game-settings"><summary>この対局の生成条件</summary>
+          <ul>{RULE_OPTIONS.map(option => <li key={option.key}>{visibleGame.rules[option.key] ? "✓" : "−"} {option.label}</li>)}</ul>
+          <p>生成番号：<code>{visibleGame.seed}</code></p>
         </details>}
         <div className="milestone-note"><span>現在の実装範囲</span><p>通常手番のダイス、生産、7と盗賊、建設、銀行交易、プレイヤー間の交渉・逆交渉、発展カード、10点勝利まで。</p></div>
       </aside>

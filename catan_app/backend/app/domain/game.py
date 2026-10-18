@@ -144,13 +144,15 @@ def _finish(game: GameState, player_id: int, request_id: str, fingerprint: tuple
 
 
 def _record_activity(game: GameState, player_id: int, kind: str, text: str, *, card: str | None = None,
-                     trade: dict | None = None, bank: dict | None = None) -> None:
+                     trade: dict | None = None, bank: dict | None = None,
+                     details: dict | None = None) -> None:
     """全員に見せてよい行動だけを、確定済みのリビジョンに紐づける。"""
     entry = {"sequence": game.revision, "turn_number": game.turn_number,
              "player_id": player_id, "kind": kind, "text": text}
     if card is not None: entry["card"] = card
     if trade is not None: entry["trade"] = trade
     if bank is not None: entry["bank"] = bank
+    if details is not None: entry["details"] = details
     game.activity_log.append(entry)
 
 
@@ -364,6 +366,7 @@ def discard_for_seven(game: GameState, player_id: int, cards: dict[str, int], ex
     _record_activity(
         game, player_id, "discard",
         f"{_resource_summary(normalized)}を捨てました。",
+        details={"resources": {resource: count for resource, count in normalized.items() if count}},
     )
 
 
@@ -402,7 +405,8 @@ def steal_with_robber(game: GameState, player_id: int, victim_id: int, expected_
     next_phase = "turn_pre_roll" if game.robber_reason == "knight" and game.last_roll is None else "action"
     game.robber_victim_ids = []; game.robber_reason = None; game.phase = next_phase
     _finish(game, player_id, request_id, fingerprint)
-    _record_activity(game, player_id, "steal", f"プレイヤー {victim_id} から資源カードを1枚奪いました。")
+    _record_activity(game, player_id, "steal", f"プレイヤー {victim_id} から資源カードを1枚奪いました。",
+                     details={"victim_id": victim_id})
 
 
 def _pay_build_cost(game: GameState, player: Player, kind: str) -> None:
@@ -611,6 +615,7 @@ def use_development(game: GameState, player_id: int, card: str, expected_revisio
         if any(game.bank[resource] < count for resource, count in requested.items()): raise GameActionError("銀行の資源が不足しています。")
     elif card == "monopoly":
         if not isinstance(resources, list) or len(resources) != 1 or resources[0] not in RESOURCES: raise GameActionError("独占では資源を1種類選んでください。")
+    development_details: dict = {}
     player.development_cards.remove(card); game.used_development_this_turn = True
     if card == "knight":
         player.played_knights += 1; highest = max(p.played_knights for p in game.players); leaders = [p.id for p in game.players if p.played_knights == highest]
@@ -622,26 +627,31 @@ def use_development(game: GameState, player_id: int, card: str, expected_revisio
         if not game.free_road_remaining and game.last_roll is None: game.phase = "turn_pre_roll"
     elif card == "year_of_plenty":
         plenty = dict(Counter(resources))
+        development_details = {"resources": plenty}
         _take_from_bank(game, player, plenty)
         _record_resource_event(game, "year_of_plenty", deltas={player_id: plenty})
     elif card == "monopoly":
         resource = resources[0]
         monopoly_deltas: dict[int, dict[str, int]] = {}
+        taken_from: dict[str, int] = {}
         for other in game.players:
             if other.id != player_id:
                 amount = other.resources[resource]
                 player.resources[resource] += amount; other.resources[resource] = 0
                 if amount:
+                    taken_from[str(other.id)] = amount
                     monopoly_deltas[other.id] = {resource: -amount}
                     monopoly_deltas.setdefault(player_id, {})[resource] = (
                         monopoly_deltas.get(player_id, {}).get(resource, 0) + amount
                     )
         if monopoly_deltas:
             _record_resource_event(game, "monopoly", deltas=monopoly_deltas)
+        development_details = {"resource": resource, "taken_from": taken_from}
     else: raise GameActionError("発展カードの種類が不正です。")
     player.used_development_cards.append(card)
     _check_winner(game, player_id); _finish(game, player_id, request_id, fingerprint)
-    _record_activity(game, player_id, "development", f"{DEVELOPMENT_NAMES[card]}を使いました。", card=card)
+    _record_activity(game, player_id, "development", f"{DEVELOPMENT_NAMES[card]}を使いました。",
+                     card=card, details=development_details or None)
 
 
 def end_turn(game: GameState, player_id: int, expected_revision: int, request_id: str) -> None:

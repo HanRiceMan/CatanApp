@@ -260,7 +260,7 @@ summary { cursor: pointer; }
 @media (prefers-reduced-motion: reduce) { * { transition: none !important; } }
 
 .commerce-cut-in { position: fixed; inset: 0; z-index: 20; }
-.board-expanded .dice-cut-in { display: none; }
+.board-expanded .dice-cut-in { z-index: 25; }
 .commerce-stage { width: min(91%, 440px); max-height: calc(100dvh - 16px); overflow: hidden; display: grid; gap: 9px; justify-items: stretch; padding: 18px; border: 1px solid #f1d59e; border-radius: 16px; background: linear-gradient(145deg, #fffaf0f2, #efe4d0f2); color: #253f3c; box-shadow: 0 18px 45px #061f2c8c; animation: commerce-arrive .35s ease-out both; }
 .commerce-kicker { margin: 0; text-align: center; font-size: 10px; letter-spacing: 2px; font-weight: 800; color: #946334; }
 .commerce-stage h3 { margin: 0; text-align: center; font: 700 clamp(14px, 3vw, 21px)/1.35 "Yu Mincho", Georgia, serif; }
@@ -872,7 +872,7 @@ summary { cursor: pointer; }
 }
 
 /* CSS 3Dの立方体を回転させ、サーバーで確定した面へ着地させる。 */
-.dice-cut-in { position: absolute; inset: 0; z-index: 5; display: grid; place-items: center; background: #112d38a6; backdrop-filter: blur(2px); pointer-events: none; }
+.dice-cut-in { position: fixed; inset: 0; z-index: 18; display: grid; place-items: center; background: #112d38a6; backdrop-filter: blur(2px); pointer-events: none; }
 .dice-stage { width: min(90%, 310px); text-align: center; color: #fff5d4; padding: 24px 10px; }
 .dice-stage p { font-size: 13px; margin: 0 0 26px; }
 .tumbling-dice { display: flex; justify-content: center; gap: 40px; perspective: 650px; padding: 12px 0 26px; }
@@ -883,8 +883,8 @@ summary { cursor: pointer; }
 .face-0 { transform: translateZ(26px); }.face-1 { transform: rotateY(180deg) translateZ(26px); }
 .face-2 { transform: rotateY(90deg) translateZ(26px); }.face-3 { transform: rotateY(-90deg) translateZ(26px); }
 .face-4 { transform: rotateX(90deg) translateZ(26px); }.face-5 { transform: rotateX(-90deg) translateZ(26px); }
-.rolling .dice-cube { animation: dice-spin .9s ease-out both; }
-.rolling .die-tumbler { animation: dice-bounce .9s ease-out both; }
+.rolling .dice-cube { animation: dice-spin .45s ease-out both; }
+.rolling .die-tumbler { animation: dice-bounce .45s ease-out both; }
 .rolling .die-tumbler:nth-child(2) { animation-name: dice-bounce-second; }
 .rolling .die-tumbler:nth-child(2) .dice-cube { animation-name: dice-spin-second; }
 .dice-total { display: block; min-height: 30px; font-size: 23px; font-variant-numeric: tabular-nums; }
@@ -898,17 +898,25 @@ summary { cursor: pointer; }
 .development-stage { display: grid; justify-items: center; gap: 10px; color: #fff5d4; text-align: center; }
 .development-stage p { margin: 0 0 4px; font-size: 13px; }
 .development-stage > strong { font: 700 27px/1.3 "Yu Mincho", Georgia, serif; }
-.development-cut-card { display: grid; place-items: center; width: 92px; height: 122px; border: 3px solid #f5dca2; border-radius: 10px; background: linear-gradient(145deg, #f9f0d6, #e5c98c); color: #694931; box-shadow: 0 12px 35px #061f2c80; animation: development-reveal .8s ease-out both; }
+.development-cut-card { display: grid; place-items: center; width: 92px; height: 122px; border: 3px solid #f5dca2; border-radius: 10px; background: linear-gradient(145deg, #f9f0d6, #e5c98c); color: #694931; box-shadow: 0 12px 35px #061f2c80; animation: development-reveal .4s ease-out both; }
 .development-cut-card span { font-size: 52px; line-height: 1; }
+.development-detail { display: grid; gap: 3px; max-width: min(92vw, 340px); padding: 7px 12px; border-radius: 8px; background: #102e3dc9; color: #fff4d6; font-size: 13px; line-height: 1.4; }
 @keyframes development-reveal { from { transform: translateY(34px) rotate(-12deg) scale(.6); opacity: 0; } to { transform: translateY(0) rotate(0) scale(1); opacity: 1; } }
 
-.build-cut-in { position: absolute; inset: 0; z-index: 18; }
+.incident-cut-in { z-index: 21; background: #100e13db; backdrop-filter: blur(4px); }
+.incident-stage { display: grid; justify-items: center; gap: 9px; width: min(88%, 380px); padding: 24px 18px; border: 1px solid #a4504a; border-radius: 12px; background: linear-gradient(145deg, #241c22, #101216); box-shadow: 0 18px 45px #0009, inset 0 0 30px #6b202022; color: #f9e5d9; text-align: center; }
+.incident-kicker { margin: 0; color: #ed8279; font-size: 11px; letter-spacing: .22em; }
+.incident-mark { display: grid; place-items: center; width: 51px; height: 51px; border: 2px solid #ad4a45; border-radius: 50%; color: #f8b4a6; font-size: 30px; }
+.incident-stage strong { font: 700 20px/1.45 "Yu Mincho", Georgia, serif; }
+.incident-stage span, .incident-stage small { color: #e7c4ba; font-size: 13px; line-height: 1.5; }
+
+.build-cut-in { z-index: 18; }
 .build-commerce-stage { width: min(88%, 360px); max-height: calc(100% - 12px); }
 .build-commerce-content { display: flex; align-items: center; justify-content: center; gap: 13px; padding: 8px; border: 1px solid #d6cab4; border-radius: 10px; background: #fffdf8; }
 .build-description { display: grid; gap: 4px; text-align: left; }
 .build-description strong { color: #253f3c; font: 700 20px/1.35 "Yu Mincho", Georgia, serif; }
-.build-mark { display: grid; place-items: center; flex: 0 0 auto; width: 57px; height: 57px; border: 2px solid #c38b57; border-radius: 50%; background: radial-gradient(circle at 36% 30%, #f8edcf, #b56a3f); color: #fff7e4; font: 700 35px/1 Georgia, serif; animation: build-appear .45s ease-out both; }
-.build-card-back { display: grid; place-items: center; flex: 0 0 auto; width: 48px; height: 64px; border: 2px solid #d8bd79; border-radius: 6px; background: repeating-linear-gradient(-45deg, #3f6185 0 4px, #567796 4px 8px); color: #f9ebbb; font: 700 29px/1 Georgia, serif; animation: build-appear .45s ease-out both; }
+.build-mark { display: grid; place-items: center; flex: 0 0 auto; width: 57px; height: 57px; border: 2px solid #c38b57; border-radius: 50%; background: radial-gradient(circle at 36% 30%, #f8edcf, #b56a3f); color: #fff7e4; font: 700 35px/1 Georgia, serif; animation: build-appear .225s ease-out both; }
+.build-card-back { display: grid; place-items: center; flex: 0 0 auto; width: 48px; height: 64px; border: 2px solid #d8bd79; border-radius: 6px; background: repeating-linear-gradient(-45deg, #3f6185 0 4px, #567796 4px 8px); color: #f9ebbb; font: 700 29px/1 Georgia, serif; animation: build-appear .225s ease-out both; }
 @keyframes build-appear { from { transform: translateY(18px) scale(.75) rotate(-8deg); opacity: 0; } to { transform: translateY(0) scale(1) rotate(0); opacity: 1; } }
 
 /* 対局中の共通レイアウト：相手を12時側に並べ、盤面の直下に操作欄を置く。 */

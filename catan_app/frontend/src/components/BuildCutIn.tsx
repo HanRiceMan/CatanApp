@@ -3,7 +3,7 @@
 import { useCallback, useEffect, useRef, useState } from "react";
 import type { ActivityEntry, GameSetup } from "../lib/types";
 
-const DISPLAY_MS = 3000;
+const DISPLAY_MS = 1500;
 
 function buildDetail(entry: ActivityEntry) {
   if (entry.text.includes("発展カード")) {
@@ -33,7 +33,7 @@ export function BuildCutIn({ game, onPlayingChange }: {
     active.current = Boolean(next);
     onPlayingChange(Boolean(next));
     if (next) {
-      const duration = window.matchMedia("(prefers-reduced-motion: reduce)").matches ? 650 : DISPLAY_MS;
+      const duration = window.matchMedia("(prefers-reduced-motion: reduce)").matches ? 325 : DISPLAY_MS;
       timer.current = setTimeout(showNext, duration);
     }
   }, [onPlayingChange]);

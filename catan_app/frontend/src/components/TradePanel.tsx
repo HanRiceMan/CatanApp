@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react";
 import type { TradeOffer } from "../lib/api";
-import { TERRAIN_INFO, type GameSetup, type Resource } from "../lib/types";
+import { TERRAIN_INFO, type ActivityEntry, type GameSetup, type Resource } from "../lib/types";
+import { lastOwnTradeOffers } from "../lib/tradeDraft";
 
 const RESOURCES: Resource[] = ["wood", "brick", "sheep", "wheat", "ore"];
 const EMPTY = (): Record<Resource, number> => ({ wood: 0, brick: 0, sheep: 0, wheat: 0, ore: 0 });
@@ -22,11 +23,15 @@ function ResourceEditor({ title, values, opposite, max, onChange }: {
   })}</div>;
 }
 
-function OffersEditor({ resources, onSubmit, submitLabel, busy }: {
+function OffersEditor({ resources, onSubmit, submitLabel, busy, initialOffers }: {
   resources: Record<Resource, number>; onSubmit: (offers: TradeOffer[]) => void; submitLabel: string; busy: boolean;
+  initialOffers?: NonNullable<ActivityEntry["trade"]>["offers"];
 }) {
-  const [count, setCount] = useState(1);
-  const [offers, setOffers] = useState<TradeOffer[]>([blankOffer()]);
+  const previous = initialOffers?.length ? initialOffers.slice(0, 3).map(offer => ({
+    give: { ...EMPTY(), ...offer.give }, want: { ...EMPTY(), ...offer.want },
+  })) : [blankOffer()];
+  const [count, setCount] = useState(previous.length);
+  const [offers, setOffers] = useState<TradeOffer[]>(previous);
   useEffect(() => setOffers(previous => previous.length === count ? previous : Array.from({ length: count }, (_, index) => previous[index] ?? blankOffer())), [count]);
   function change(index: number, side: "give" | "want", resource: Resource, next: number) {
     setOffers(previous => previous.map((offer, offerIndex) => offerIndex !== index ? offer : { ...offer, [side]: { ...offer[side], [resource]: next } }));
@@ -57,6 +62,7 @@ export function TradePanel({ game, busy, onPropose, onRespond, onCounter }: {
   const me = game.players.find(player => player.id === game.viewer_id);
   const trade = game.pending_trade;
   const [targetId, setTargetId] = useState(1);
+  const lastOwnOffers = lastOwnTradeOffers(game.activity_log, game.viewer_id);
   useEffect(() => { if (game.viewer_id && targetId === game.viewer_id) setTargetId(game.players.find(player => player.id !== game.viewer_id)?.id ?? 1); }, [game.viewer_id, game.players, targetId]);
   if (!me?.resources || game.viewer_id === null) return null;
   if (game.phase === "action" && game.current_player_id === game.viewer_id) {
@@ -64,13 +70,15 @@ export function TradePanel({ game, busy, onPropose, onRespond, onCounter }: {
     return <section className="turn-card trade-panel"><h3>プレイヤーと交渉</h3>
       {game.trade_count >= game.trade_limit ? <p className="muted">この手番の交渉は5回に達しました。</p> : <>
         <label>交渉相手 <select value={targetId} onChange={event => setTargetId(Number(event.target.value))}>{targets.map(player => <option value={player.id} key={player.id}>プレイヤー {player.id}</option>)}</select></label>
-        <OffersEditor resources={me.resources} busy={busy} submitLabel="この内容で提案する" onSubmit={offers => onPropose(targetId, offers)} />
+        <OffersEditor resources={me.resources} busy={busy} initialOffers={lastOwnOffers}
+          submitLabel="この内容で提案する" onSubmit={offers => onPropose(targetId, offers)} />
       </>}
     </section>;
   }
   if (!trade?.offers) return trade ? <section className="turn-card trade-panel"><p>交渉中</p></section> : null;
   if (game.phase === "trade_counter_offer" && trade.recipient_id === game.viewer_id) {
-    return <section className="turn-card trade-panel"><h3>逆交渉を提案</h3><OffersEditor resources={me.resources} busy={busy} submitLabel="逆交渉を送る" onSubmit={onCounter} /></section>;
+    return <section className="turn-card trade-panel"><h3>逆交渉を提案</h3><OffersEditor resources={me.resources} busy={busy} initialOffers={lastOwnOffers}
+      submitLabel="逆交渉を送る" onSubmit={onCounter} /></section>;
   }
   if (game.phase === "trade_response" && trade.recipient_id === game.viewer_id) {
     return <section className="turn-card trade-panel"><h3>{trade.is_counter ? "逆交渉が届きました" : "交渉が届きました"}</h3>

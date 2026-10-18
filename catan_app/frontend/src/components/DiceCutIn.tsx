@@ -24,8 +24,8 @@ export function DiceCutIn({ game, onPlayingChange }: { game: GameSetup; onPlayin
     if (hideTimer.current) clearTimeout(hideTimer.current);
     const reduced = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
     setEvent(next); setRolling(!reduced); onPlayingChange(true);
-    settleTimer.current = setTimeout(() => setRolling(false), reduced ? 0 : 900);
-    hideTimer.current = setTimeout(() => { setEvent(null); onPlayingChange(false); }, reduced ? 650 : 1700);
+    settleTimer.current = setTimeout(() => setRolling(false), reduced ? 0 : 450);
+    hideTimer.current = setTimeout(() => { setEvent(null); onPlayingChange(false); }, reduced ? 325 : 850);
   }, [game.id, game.latest_dice_event?.sequence, onPlayingChange]);
   useEffect(() => () => {
     if (settleTimer.current) clearTimeout(settleTimer.current);

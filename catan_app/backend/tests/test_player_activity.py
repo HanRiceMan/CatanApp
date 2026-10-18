@@ -35,6 +35,7 @@ class PlayerActivityTests(unittest.TestCase):
         self.assertEqual(event["deltas"]["1"], {"wood": -4})
         self.assertNotIn("unknown_loss", event)
         self.assertIn("木材4枚", self.game.activity_log[-1]["text"])
+        self.assertEqual(self.game.activity_log[-1]["details"], {"resources": {"wood": 4}})
         self.assertEqual(set(pending_player_actions(self.game)), {3})
         discard_for_seven(self.game, 3, {"wood": 4}, self.game.revision, "discard-3")
         self.assertEqual(pending_player_actions(self.game), {2: "盗賊を移動"})

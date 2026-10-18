@@ -64,6 +64,7 @@ export type AiModelsResponse = { models: AiModel[]; ppo_runtime_available: boole
 export type OrderRoll = { player_id: number; round: number; dice: [number, number]; total: number };
 export type ActivityEntry = {
   sequence: number; turn_number: number; player_id: number; kind: string; text: string; card?: string;
+  details?: { resources?: Partial<Record<Resource, number>>; resource?: Resource; taken_from?: Record<string, number>; victim_id?: number };
   trade?: {
     proposer_id: number; recipient_id: number; is_counter: boolean;
     outcome: "proposed" | "accepted" | "declined" | "counter_requested";

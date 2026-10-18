@@ -57,6 +57,8 @@ class TurnAndTradeTests(unittest.TestCase):
         self.assertEqual(self.game.phase, "turn_pre_roll")
         self.assertIsNone(self.game.last_roll)
         self.assertNotIn("木材", self.game.activity_log[-1]["text"])
+        self.assertEqual(self.game.activity_log[-1]["details"], {"victim_id": victim_id})
+        self.assertNotIn("wood", str(self.game.activity_log[-1]))
 
     def test_road_building_before_roll_places_two_then_returns_to_dice(self):
         player_id = self.game.current_player_id
@@ -89,6 +91,19 @@ class TurnAndTradeTests(unittest.TestCase):
         self.assertEqual(self.game.phase, "turn_pre_roll")
         self.assertEqual(player.resources["wood"], 1)
         self.assertEqual(player.resources["ore"], 1)
+        self.assertEqual(self.game.activity_log[-1]["details"], {"resources": {"wood": 1, "ore": 1}})
+
+    def test_monopoly_public_event_names_resource_and_each_victim_count(self):
+        player_id = self.game.current_player_id
+        player_for(self.game, player_id).development_cards = ["monopoly"]
+        others = [player for player in self.game.players if player.id != player_id]
+        for player, amount in zip(others, (2, 0, 3)):
+            player.resources["wheat"] = amount
+        use_development(self.game, player_id, "monopoly", self.game.revision,
+                        "public-monopoly", resources=["wheat"])
+        expected = {"resource": "wheat", "taken_from": {str(others[0].id): 2, str(others[2].id): 3}}
+        for viewer in (None, 1, 2, 3, 4):
+            self.assertEqual(game_view(self.game, viewer)["activity_log"][-1]["details"], expected)
 
     def test_used_cards_are_public_and_retry_does_not_duplicate_them(self):
         from app.domain.game import game_view
